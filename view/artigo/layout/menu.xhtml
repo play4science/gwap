@@ -1,0 +1,96 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j">
+
+	<ui:include src="mainMenuOnly.xhtml" />
+    <s:fragment rendered="#{!languageBean.languageChangeDisabled}">
+    <div id="navSub">
+    	<h1><h:outputText value="#{messages['menu.games']}" /></h1>
+	    <ul>
+	    <!-- 
+		   	<li>
+	   		   	<s:link id="menuTaggingId" 
+	   		   	        value="Tagging"
+	   		   	        view="/tagging.xhtml" 
+   		   	        	propagation="none"
+	   		   	        />
+	   		</li>
+	     -->
+		   	<li>
+	   		   	<s:link id="menuTaggingGameId" 
+	   		   	        value="#{messages['menu.game.tagging']}"
+	   		   	        view="/taggingGame.xhtml" 
+   		   	        	propagation="none"
+	   		   	        />
+	   		   	<s:link view="/about.xhtml" styleClass="helpLink" propagation="none">
+	   		   		<f:param name="selectedTab" value="artigo"/>
+	   		   	</s:link>
+	   		</li>
+   			<li>
+   		   		<s:link id="menuTabooTaggingGameId" 
+		   	        	view="/tabooTaggingGame.xhtml"
+		   	        	value="#{messages['game.tabooImageLabeler']}"
+	   		        	propagation="none"/>
+	   	    	<s:link view="/about.xhtml" styleClass="helpLink" propagation="none">
+	   		   		<f:param name="selectedTab" value="artigo"/>
+		   		</s:link>
+   			</li>
+    		<li>
+   		   		<s:link id="menuMemoryGameId" 
+   		   	        	view="/memorySelection.xhtml"
+   		   	        	value="#{messages['game.gwapGameMemory']}"
+   		   	        	propagation="none"/>
+   		   	    <s:link view="/about.xhtml" styleClass="helpLink" propagation="none">
+	   		   		<f:param name="selectedTab" value="karido"/>
+	   		   	</s:link>
+   			</li>
+   			<s:fragment rendered="#{s:hasPermission('tagatag', 'test')}"> 
+    			<li>
+	   		   		<s:link id="menuTagATagGameId" 
+   			   	        	view="/tagATag.xhtml"
+   			   	        	value="#{messages['game.gwapGameTagATag']}"
+   		   		        	propagation="none"/>
+   		   	    	<s:link view="/about.xhtml" styleClass="helpLink" propagation="none">
+		   		   		<f:param name="selectedTab" value="tagATag"/>
+	   		   		</s:link>
+   				</li>
+   			</s:fragment>
+   			<s:fragment rendered="#{s:hasPermission('sentiment', 'test')}"> 
+    			<li>
+	   		   		<s:link id="menuSentimentGameId" 
+   			   	        	view="/sentiment.xhtml"
+   			   	        	value="#{messages['game.gwapGameSentiment']}"
+   		   		        	propagation="none"/>
+   		   	    	<s:link view="/about.xhtml" styleClass="helpLink" propagation="none">
+		   		   		<f:param name="selectedTab" value="sentiment"/>
+	   		   		</s:link>
+   				</li>
+ 			</s:fragment>
+ 			<s:fragment rendered="#{s:hasPermission('combino', 'test')}">
+          	<li>
+            	<s:link id="menuCombineGameId" 
+                	view="/combino.xhtml"
+					value="#{messages['game.gwapGameCombine']}"
+					propagation="none"/>
+                <s:link view="/about.xhtml" styleClass="helpLink" propagation="none">
+               		<f:param name="selectedTab" value="combino"/>
+              	</s:link>
+			</li>
+			</s:fragment>
+<!--  
+   			<li>
+   		   		<s:link view="/testGame.xhtml"
+   		   	        	action="#{gwapGameTestPlayerMatcher.enqueue()}" 
+   		   	        	value="Testspiel" />
+   			</li>
+-->			  	   			   			
+	   	</ul>
+	   	</div>
+   	</s:fragment>
+</ui:composition>

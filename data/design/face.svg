@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="138.00008"
+   height="254.90445"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.47 r22583"
+   sodipodi:docname="face.svg"
+   inkscape:export-filename="/usr/local/home/kneissl/workspace/GWAP/view/common/img/face.png"
+   inkscape:export-xdpi="17.65"
+   inkscape:export-ydpi="17.65">
+  <defs
+     id="defs4">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       id="perspective10" />
+    <inkscape:perspective
+       id="perspective2854"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective2910"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective2927"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4"
+     inkscape:cx="-102.23445"
+     inkscape:cy="80.950343"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1895"
+     inkscape:window-height="1148"
+     inkscape:window-x="25"
+     inkscape:window-y="25"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Original"
+     style="display:none">
+    <image
+       y="-33.086945"
+       x="-251.6227"
+       id="image2912"
+       height="382.65353"
+       width="268.42859"
+       xlink:href="file:///usr/local/home/kneissl/workspace/GWAP/data/design/inkscape_pasted_image_20120123_163906.png"
+       transform="scale(-1,1)" />
+  </g>
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-98.45461,-50.338408)"
+     style="display:inline">
+    <path
+       style="fill:#b8c9e1;stroke:none;stroke-width:1.69238209999999967px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1"
+       d="m 122.97246,304.3966 -23.611759,-0.005 -0.0599,-211.626366 113.764739,-0.651707 c 8.07938,15.118953 9.38599,20.621923 7.92564,39.699523 -2.59062,9.62466 -10.59942,12.90301 -7.52643,21.01619 1.97492,6.69015 9.38167,17.10731 12.65695,22.08695 5.84182,8.07221 12.32373,14.747 8.16901,20.20735 -5.69635,5.38656 -8.6555,7.10687 -17.20919,9.92349 -3.29158,3.03164 2.23369,7.45917 3.52435,14.58984 -1.47558,7.96507 -21.89392,6.98095 -17.54143,11.5745 5.59794,1.28987 10.02135,6.8502 5.62989,10.30294 -7.23187,4.36211 -11.46029,10.38262 -9.95288,16.52915 1.16231,7.33963 1.68042,17.76808 -8.87424,20.92054 -13.6644,0.10042 -25.53463,1.59339 -48.39245,-5.77707 -10.31901,-3.32734 -16.23453,21.5504 -18.50229,31.20896 l 0,7.8e-4 -1e-5,-7e-5 z"
+       id="path2842"
+       sodipodi:nodetypes="ccccccccccccccsccc"
+       inkscape:export-filename="/usr/local/home/kneissl/workspace/GWAP/view/common/img/path2842.png"
+       inkscape:export-xdpi="17"
+       inkscape:export-ydpi="17" />
+  </g>
+</svg>

@@ -1,0 +1,90 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="../layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="tag" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{adminTagHome.managed ? 'Edit' : 'Add'} Tag</f:facet>
+
+
+
+            <s:decorate id="blacklistedField" template="../layout/edit.xhtml">
+                <ui:define name="label">Blacklisted</ui:define>
+                <h:selectBooleanCheckbox id="blacklisted"
+                                      value="#{adminTagHome.instance.blacklisted}"/>
+            </s:decorate>
+
+
+            <s:decorate id="languageField" template="../layout/edit.xhtml">
+                <ui:define name="label">Language</ui:define>
+                <h:inputTextarea id="language"
+                               cols="80"
+                               rows="3"
+                              value="#{adminTagHome.instance.language}"/>
+            </s:decorate>
+
+
+            <s:decorate id="nameField" template="../layout/edit.xhtml">
+                <ui:define name="label">Name</ui:define>
+                <h:inputText id="name"
+                           size="50"
+                      maxlength="50"
+                          value="#{adminTagHome.instance.name}">
+                    <a:support event="onblur" reRender="nameField" bypassUpdates="true" ajaxSingle="true"/>
+                </h:inputText>
+            </s:decorate>
+
+            <div style="clear:both">
+                <span class="required">*</span>
+                required fields
+            </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="Save"
+                         action="#{adminTagHome.persist}"
+                       disabled="#{!adminTagHome.wired}"
+                       rendered="#{!adminTagHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="Save"
+                         action="#{adminTagHome.update}"
+                       rendered="#{adminTagHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="Delete"
+                         action="#{adminTagHome.remove}"
+                      immediate="true"
+                       rendered="#{adminTagHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="Cancel"
+             propagation="end"
+                    view="/admin/tag.xhtml"
+                rendered="#{adminTagHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Cancel"
+             propagation="end"
+                    view="/admin/#{empty tagFrom ? 'tagList' : tagFrom}.xhtml"
+                rendered="#{!adminTagHome.managed}"/>
+
+        </div>
+    </h:form>
+
+</ui:define>
+
+</ui:composition>

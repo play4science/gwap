@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<pageflow-definition
+  xmlns="http://jboss.com/products/seam/pageflow"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://jboss.com/products/seam/pageflow http://jboss.com/products/seam/pageflow-2.0.xsd"
+  name="mitStatementLabeler">
+  
+	<start-page name="start" view-id="/statementLabeler.xhtml">
+		<action expression="#{mitStatementLabelerBean.startGameSession()}" />
+		<transition name="next" to="roundToPlay">
+			<action expression="#{mitStatementLabelerBean.assignLocation()}" />
+ 		</transition>
+	</start-page>
+	
+	<page name="game" view-id="/statementLabeler.xhtml">
+ 		<transition name="next" to="roundToPlay">
+			<action expression="#{mitStatementLabelerBean.assignLocation()}" />
+ 		</transition>
+	</page>
+	
+	<decision name="roundToPlay" expression="#{mitStatementLabelerBean.roundsLeft > 0}">
+		<transition name="true" to="game">
+			<action expression="#{mitStatementLabelerBean.endRound()}" />
+			<action expression="#{mitStatementLabelerBean.startRound()}" />
+		</transition>
+		<transition name="false" to="scoring">
+			<action expression="#{mitStatementLabelerBean.endRound()}" />
+			<action expression="#{mitStatementLabelerBean.endGameSession()}" />
+		</transition>
+	</decision>	
+	<page name="scoring" view-id="/statementLabelerScoring.xhtml">
+	</page>
+</pageflow-definition>

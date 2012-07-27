@@ -1,0 +1,89 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:p4s="http://play4science.org/facelets"
+    template="/layout/adminTemplate.xhtml">
+
+    <ui:define name="body">
+		<div id="content">
+			<rich:panel rendered="#{statement == null or statement.id == null}">
+				<h:outputFormat value="#{messages['admin.statementOverview.idNotFound']} ">
+					<f:param value="#{statementId}"/>
+				</h:outputFormat>
+	
+			</rich:panel>
+			<rich:panel rendered="#{statement != null and statement.id != null}">
+				<p4s:speechbubble statement="#{statement}" />
+				<h:outputText value="#{messages['admin.statements.statement']} #{statement.id}" />	
+				<br></br><br></br>
+				<a href="javascript:history.back()"><h:outputText value="#{messages['back']}" /></a>
+				<br></br><br></br>
+					<ui:include src="/widget/googlemap.xhtml" />
+					<script type="text/javascript">
+					__addLoadEvent(function() { 
+							map.displayPercentagesForAdmin(#{statement.id});
+							jQuery('#gmap').width(600);
+							map.percentageView = true;
+							jQuery('#gmap').height(401);
+							
+					 });
+		
+					function swich(selection){
+						var selectedDiv = jQuery("#" + selection);
+						if (selectedDiv.css("display") == 'none') {
+						     selectedDiv.fadeIn();
+						 } else {
+							 selectedDiv.fadeOut();
+						    }		    
+					}
+		
+	
+				</script>	
+				<div id="betScoringLegend">
+					<ui:include src="../widget/mapLegend.xhtml"/>
+				</div>
+				<a href="#" onclick="swich('statementPercentages')" >
+					<h:outputText value="#{messages['statements.list.othersHeader']} ..." />
+				</a>
+				<div id="statementPercentages" style="display:none;">
+					<ui:include src="/widget/betPercentages.xhtml">
+						<ui:param name="percentages" value="#{mitPokerScoring.getStatementPercentages(statement)}"/>
+					</ui:include>
+				</div>
+				<br></br>
+				<div style="margin-top: 10px">
+					<a href="#" onclick="swich('statementsBets')" >
+						<h:outputText value="#{messages['menu.bets']}:  ..." />
+					</a>
+				</div>
+				<div id="statementsBets" style="margin-left: 10px; display: none;">
+				<ui:repeat var="_bet" value="#{mitBetList.retrieveBetsFromStatement(statement)}"> 
+					<h:outputText value="#{_bet.points}% #{_bet.location.name}"/>
+					<br/>
+				</ui:repeat>
+				</div>
+				
+				<div id="statementCharacterization" style="margin-top: 20px;">
+					<h4><h:outputText value="#{messages['admin.statementOverview.characterization']}:" /></h4> 
+					<ui:include src="../widget/statementCharacterization.xhtml">
+						<ui:param name="statement" value="#{statement}"/>
+					</ui:include>
+				</div>
+				
+				<div id="statementHighlighting" style="margin-top: 20px;">
+					<h4><h:outputText value="#{messages['admin.statementOverview.highlighting']}:" /></h4>
+					<ui:include src="../widget/statementHighlightingWidget.xhtml">
+						<ui:param name="statement" value="#{statement}"/>
+					</ui:include>
+				</div>
+			  	<br class="clear" />
+			</rich:panel>
+	 	</div>
+	</ui:define>
+</ui:composition>

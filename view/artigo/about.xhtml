@@ -1,0 +1,45 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    template="layout/template.xhtml">
+
+    <ui:define name="body">
+		<div id="related">
+			<ui:include src="layout/logo.xhtml" />
+			<ui:include src="layout/menu.xhtml" />
+		</div>
+		
+		<div id="content">
+			<rich:tabPanel selectedTab="#{selectedTab}">
+        		<rich:tab name="about" label="#{messages['description.artigo.label']}">
+        			<img src="img/logo-artigo-bird.png" style="float:right;" />
+		            <h:outputText escape="false" value="#{messages['description.artigo.text']}" />
+		            <h2><h:outputText value="#{messages['description.contributors.label']}" /></h2>
+					<h:outputText escape="false" value="#{messages['description.contributors.text']}" />
+		            <h2><h:outputText value="#{messages['description.revisionhistory.label']}" /></h2>
+					<h:outputText escape="false" value="#{messages['description.revisionhistory.text']}" />
+        		</rich:tab>
+        		<rich:tab name="artigo" label="#{messages['description.manual.artigo.label']}">
+		            <h:outputText escape="false" value="#{messages['description.manual.artigo.text']}" />
+        		</rich:tab>
+        		<rich:tab name="karido" label="#{messages['description.manual.karido.label']}">
+		            <h:outputText escape="false" value="#{messages['description.manual.karido.text']}" />
+        		</rich:tab>
+        		<!--<rich:tab name="tagATag" label="#{messages['description.manual.tagATag.label']}">
+		            <h:outputText escape="false" value="#{messages['description.manual.tagATag.text']}" />
+        		</rich:tab>-->
+        		<rich:tab name="privacy" label="#{messages['description.privacy.label']}">
+	            	<h:outputText escape="false" value="#{messages['description.privacy.text']}" />
+        		</rich:tab>
+    		</rich:tabPanel>
+		</div>
+		
+        <br class="clear" />
+    </ui:define>
+</ui:composition>

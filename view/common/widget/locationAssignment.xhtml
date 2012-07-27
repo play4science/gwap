@@ -1,0 +1,28 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j">
+
+	<ui:include src="/widget/googlemap.xhtml" />
+	<script type="text/javascript">
+	map.rootLocationId = 8324;
+	map.breadcrumbLocations = 'breadcrumbLocations';
+	map.mouseOver = function(object, event) {
+		$('locationName').innerHTML = object.title;
+	};
+	map.mouseOut = function(object, event) {
+		$('locationName').innerHTML = "";
+	};
+	map.mouseClick = function(object, event) {
+		$('locationName').innerHTML = "";
+		jQuery('#submitLocation').show();
+		jQuery('#clickOnMap').hide();
+		jQuery('#morePrecisely').show(); 
+	};
+	</script>
+</ui:composition>

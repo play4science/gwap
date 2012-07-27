@@ -1,0 +1,205 @@
+Virtuelle Maschine
+------------------
+CPU 2
+RAM 4096 MB
+HD  20 G
+
+Autostart:
+cd /etc/libvirt/qemu/autostart
+ln -s /etc/libvirt/qemu/HOSTNAME.xml
+
+Firewall
+--------
+tcp/80
+tcp/25
+
+Images
+------
+in /images anlegen
+
+ARTigo
+------
+cd ~
+yes | apt-get install subversion
+svn --username gwap_ro --password oofeeP2i co https://svn.pms.ifi.lmu.de/svn/projects.gwap/trunk gwap
+cp ~/gwap/INSTALL/build.properties ~/gwap
+
+Sun Java 6
+----------
+echo "deb http://archive.canonical.com/ maverick partner" >> /etc/apt/sources.list
+apt-get update
+yes | apt-get install sun-java6-jdk
+java -version
+yes | apt-get install ant
+
+JBoss
+-----
+cd ~
+wget http://sourceforge.net/projects/jboss/files/JBoss/JBoss-4.2.3.GA/jboss-4.2.3.GA-jdk6.zip/download -O ~/jboss-4.2.3.GA-jdk6.zip
+yes | apt-get install unzip
+unzip jboss-4.2.3.GA-jdk6.zip
+
+adduser --system jboss --home /opt/jboss --shell /bin/sh
+mv jboss-4.2.3.GA/* /opt/jboss/ && rmdir jboss-4.2.3.GA/
+chown -R jboss /opt/jboss/
+chmod -R o-rwx /opt/jboss/
+
+cp ~/gwap/INSTALL/run.conf /opt/jboss/bin/run.conf
+
+### Start/Stop
+chmod 770 ~/gwap/INSTALL/jboss.sh
+cp ~/gwap/INSTALL/jboss.sh /etc/init.d/
+update-rc.d jboss.sh defaults 20
+#Should generate the following symlinks
+#ln -s /etc/init.d/jboss.sh /etc/rc0.d/K20jboss.sh
+#ln -s /etc/init.d/jboss.sh /etc/rc1.d/K20jboss.sh
+#ln -s /etc/init.d/jboss.sh /etc/rc6.d/K20jboss.sh
+#ln -s /etc/init.d/jboss.sh /etc/rc2.d/S20jboss.sh
+#ln -s /etc/init.d/jboss.sh /etc/rc3.d/S20jboss.sh
+#ln -s /etc/init.d/jboss.sh /etc/rc4.d/S20jboss.sh
+#ln -s /etc/init.d/jboss.sh /etc/rc5.d/S20jboss.sh
+
+### Logrotate
+chmod 775 ~/gwap/INSTALL/jboss-logrotate
+cp ~/gwap/INSTALL/jboss-logrotate /etc/cron.daily/
+
+### Postgres vacuum
+chmod 775 ~/gwap/INSTALL/vacuumdb
+cp ~/gwap/INSTALL/vacuumdb /etc/cron.daily/
+
+### Postgres backup
+chmod 775 ~/gwap/INSTALL/backup-postgres-gwap
+mkdir /var/backups/postgres
+mv ~/gwap/INSTALL/backup-postgres-gwap /etc/cron.daily/
+
+### Logging INFO
+vi +25 /opt/jboss/server/default/conf/jboss-log4j.xml
+<appender name="FILE" class="org.jboss.logging.appender.DailyRollingFileAppender">
+   <param name="Threshold" value="INFO"/>  <!-- INSERT -->
+
+### Securing JBoss   (see http://community.jboss.org/wiki/SecureJBoss)
+cd /opt/jboss/server/default/deploy/
+rm -rf jmx-console.war/ management/ http-invoker.sar/ httpha-invoker.sar/ monitoring-service.xml jms/ ../deploy-hasingleton/jms/   #security relevant
+rm -rf mail-service.xml scheduler-service.xml schedule-manager-service.xml uuid-key-generator.sar quartz-ra.rar   #not needed
+
+vi +206 ../conf/jboss-service.xml
+erste WebServer-mbean auskommentieren
+
+vi +307 ejb-deployer.xml
+"depends...WebService" auskommentieren
+
+### Artigo im Projekt Root
+in build.properties profile=prod eintragen
+vi ~/gwap/resources/META-INF/application.xml
+-   <!-- @@subproject01@@ -->
+-   <!-- @@subproject02@@ -->
+-   <!-- @@subproject03@@ -->
++   <module> <web> <web-uri>artigo.war</web-uri> <context-root>/</context-root> </web> </module>
++   <module> <web> <web-uri>metropolitalia.war</web-uri> <context-root>/</context-root> </web> </module>   
++   <module> <web> <web-uri>accentiurbani.war</web-uri> <context-root>/accentiurbani</context-root> </web> </module>   
+
+### UTF-8 Request Parameter
+vi /opt/jboss/server/default/deploy/jboss-web.deployer/server.xml
+#In jedem Connector-Tag Folgendes hinzufügen:
+ useBodyEncodingForURI="true" URIEncoding="UTF-8"
+#Am Ende die weiteren VHosts eintragen: 
+         <Host name="artigo"
+           autoDeploy="false" deployOnStartup="false" deployXML="false"
+           configClass="org.jboss.web.tomcat.security.config.JBossContextConfig">
+            <Alias>www.artigo.org</Alias>
+            <Alias>www3.artigo.org</Alias>
+            <Alias>www4.artigo.org</Alias>
+            <DefaultContext cookies="true" crossContext="true" override="true"/>
+         </Host>
+         <Host name="play4science-labs"
+           autoDeploy="false" deployOnStartup="false" deployXML="false"
+           configClass="org.jboss.web.tomcat.security.config.JBossContextConfig">
+            <Alias>labs.play4science.org</Alias>
+            <DefaultContext cookies="true" crossContext="true" override="true"/>
+         </Host>
+         <Host name="metropolitalia"
+           autoDeploy="false" deployOnStartup="false" deployXML="false"
+           configClass="org.jboss.web.tomcat.security.config.JBossContextConfig">
+            <Alias>beta.metropolitalia.org</Alias>
+            <DefaultContext cookies="true" crossContext="true" override="true"/>
+         </Host>
+
+### Cache-Verzeichnis für kleine Bilder
+## ACHTUNG erst Bilder kopieren
+mkdir /images
+for dir in /images/*; do mkdir -p $dir/CACHE; chown jboss $dir/CACHE; done
+
+Postgres
+--------
+yes | apt-get install postgresql-8.4
+su - postgres
+psql
+create user gwap password 'gwap';
+create database gwap owner gwap;
+create database gwaptest owner gwap;
+psql -h localhost gwap gwap
+Dump laden / Index setzen
+
+Apache
+------
+yes | apt-get install apache2
+yes | apt-get install libapache2-mod-jk
+cp ~/gwap/INSTALL/artigo.org /etc/apache2/sites-available/artigo.org
+a2enmod rewrite
+a2ensite artigo.org
+cp ~/gwap/INSTALL/jk.conf /etc/apache2/conf.d/jk.conf
+/etc/init.d/apache2 restart
+
+Run
+---
+cd ~/gwap
+ant
+/etc/init.d/jboss.sh start
+tail -f /opt/jboss/server/default/log/server.log
+
+Wartung
+-------
+
+yes | apt-get install apticron
+vi +6 /etc/apticron/apticron.conf # root -> webmaster@artigo.org
+
+yes | apt-get install munin-node
+
+Clustering
+----------
+siehe http://community.jboss.org/wiki/UsingModjk12WithJBoss oder data/doc/UsingMod_jk12WithJBoss.pdf
+Apache in der site-config
+  JkMount / loadbalancer
+  JkMount /* loadbalancer
+In der /etc/libapache2-mod-jk/workers.properties
+  worker.list=loadbalancer
+  worker.www3.port=8009
+  worker.www3.host=www3.artigo.org
+  worker.www3.type=ajp13
+  worker.www3.lbfactor=1
+  // Für alle anderen worker auch
+  worker.loadbalancer.type=lb
+  worker.loadbalancer.balance_workers=www3,www4,www5
+  worker.loadbalancer.sticky_session=true
+JBoss:
+in /opt/jboss/server/default/deploy/jboss-web.deployer/server.xml
+  [...] emptySessionPath="false" [...]
+  <Engine name="jboss.web" defaultHost="localhost" jvmRoute="www3"> // bzw. www4/www5
+in /opt/jboss/server/default/deploy/jboss-web.deployer/META-INF/jboss-service.xml (nur <JBoss5)
+  <attribute name="UseJK">true</attribute>
+
+Solr
+----
+Master/Slave: configure appropriately in build.properties
+Securing the solr interface: copy INSTALL/users.properties and roles.properties to the JBoss-server-default-conf directory and restart JBoss
+ant solr-deploy
+chown -R jboss $SOLR-HOME
+Access http://localhost:8080/solr and login with the credentials in the users.properties file
+On the master:
+Access once: http://localhost:8080/solr/artigo/dataimport?command=full-import
+Only on master: copy INSTALL/solr-update to /etc/cron.d/
+
+Postfix
+-------
+/etc/postfix/main.cf
+relayhost = smtp.ifi.lmu.de

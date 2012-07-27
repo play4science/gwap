@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pages login-view-id="/login.xhtml"
+ no-conversation-view-id="/home.xhtml"
+ xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+
+ <page view-id="/home.xhtml">
+  <rewrite pattern="/"/>
+ </page>
+ <page view-id="/solrSearchResults.html">
+  <rewrite pattern="/search"/>
+ </page>
+ 
+ <page view-id="*">
+  <action execute="#{authenticator.tryLogin()}"/>
+  <navigation>
+   <rule if-outcome="home">
+    <redirect view-id="/home.xhtml"/>
+   </rule>
+   <rule if-outcome="password">
+    <redirect view-id="/password.xhtml"/>
+   </rule>
+   <rule if-outcome="register">
+    <redirect view-id="/register.xhtml"/>
+   </rule>
+   <rule if-outcome="scoring">
+    <redirect view-id="/scoring.xhtml"/>
+   </rule>
+   <rule if-outcome="show">
+    <redirect view-id="/show.xhtml"/>
+   </rule>
+  </navigation>
+ </page>
+ <page view-id="/statements.xhtml">
+  <restrict>#{identity.loggedIn}</restrict>
+ </page>
+ <page view-id="/bets.xhtml">
+  <restrict>#{identity.loggedIn}</restrict>
+ </page>
+ <page view-id="/admin/*" login-required="true">
+  <restrict>#{s:hasPermission('metropolitalia', 'view-admin-interface')}</restrict>
+ </page>
+ 
+ <exception class="org.jboss.seam.framework.EntityNotFoundException">
+  <redirect view-id="/error.xhtml">
+   <message severity="warn">#{messages['org.jboss.seam.framework.EntityNotFoundException']}</message>
+  </redirect>
+ </exception>
+ <exception class="javax.persistence.EntityNotFoundException">
+  <redirect view-id="/error.xhtml">
+   <message severity="warn">#{messages['org.jboss.seam.framework.EntityNotFoundException']}</message>
+  </redirect>
+ </exception>
+ <exception class="javax.persistence.EntityExistsException">
+  <redirect view-id="/error.xhtml">
+   <message severity="warn">#{messages['org.jboss.seam.framework.EntityExistsException']}</message>
+  </redirect>
+ </exception>
+ <exception class="javax.persistence.OptimisticLockException">
+  <end-conversation/>
+  <redirect view-id="/error.xhtml">
+   <message severity="warn">#{messages['org.jboss.seam.'OptimisticLockException]}</message>
+  </redirect>
+ </exception>
+ <exception class="org.jboss.seam.security.AuthorizationException">
+  <redirect view-id="/error.xhtml">
+   <message severity="error">#{messages['org.jboss.seam.security.AuthorizationException']}</message>
+  </redirect>
+ </exception>
+ <exception class="org.jboss.seam.security.NotLoggedInException">
+  <redirect view-id="/login.xhtml">
+   <message severity="warn">#{messages['org.jboss.seam.NotLoggedIn']}</message>
+  </redirect>
+ </exception>
+ <exception class="javax.faces.application.ViewExpiredException">
+  <redirect view-id="/home.xhtml">
+   <message severity="warn">#{messages['org.jboss.seam.ViewExpired']}</message>
+  </redirect>
+ </exception>
+ <exception class="org.jboss.seam.ConcurrentRequestTimeoutException" log-level="trace">
+  <http-error error-code="503"/>
+ </exception>
+ <exception>
+  <redirect view-id="/error.xhtml">
+   <message severity="error">#{messages['org.jboss.seam.unexpected.error']}</message>
+  </redirect>
+ </exception>
+</pages>

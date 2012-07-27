@@ -1,0 +1,10 @@
+#!/bin/sh
+
+JBOSS_LOG_DIR=/opt/jboss/server/default/log
+DELETE_AFTER_DAYS=31
+
+[ -e "$JBOSS_LOG_DIR" ] || exit 0
+
+find $JBOSS_LOG_DIR -type f -name '*.log.*' -mtime +1 -not -name '*.log.*.gz' -exec gzip -9 '{}' ';'
+find $JBOSS_LOG_DIR -type f -name '*.log.*.gz' -mtime +$DELETE_AFTER_DAYS -exec rm -f '{}' ';'
+

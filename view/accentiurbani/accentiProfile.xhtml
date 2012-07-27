@@ -1,0 +1,125 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    template="layout/template.xhtml">
+
+    <ui:define name="body">
+		<div id="related">
+			<!-- game ui -->
+			<div class="messages">
+				<rich:messages id="gameMessages"></rich:messages>
+				<dl id="fillProfile"><dt><h:outputText value="#{messages['game.accenti.profile.caption']}"/></dt></dl>
+			</div>
+			
+			<ui:include src="/widget/round.xhtml"/>
+			
+			<div>
+				<span class="ongoingGameStatsCaption"><h:outputText value="#{messages['score']}" /></span>
+				<a4j:outputPanel id="score" styleClass="ongoingGameStatsContent">
+					<h:outputText value="#{mitAccenti.score}" /> 
+				</a4j:outputPanel>
+			</div>
+			
+			<div>
+				<h:form id="profileForm">
+					<s:decorate id="genderField" template="/layout/editInSidebar.xhtml">
+						<ui:define name="label">
+							<h:outputText value="#{messages['person.gender']}" />
+						</ui:define>
+						<h:selectOneMenu id="gender" value="#{person.gender}">
+							<s:selectItems value="#{profile.genders}" var="gender" label="#{messages[gender.key]}" noSelectionLabel="#{messages['general.pleaseSelect']}" />
+						</h:selectOneMenu>
+					</s:decorate>
+					<div class="clear"/>
+					<s:decorate id="birthyearField" template="/layout/editInSidebar.xhtml">
+						<ui:define name="label">
+							<h:outputText value="#{messages['person.birthyear']}" />
+						</ui:define>
+						<h:selectOneMenu id="birthyear" value="#{person.birthyear}">
+							<s:selectItems value="#{profile.birthyears}" var="birthyear" label="#{birthyear}" noSelectionLabel="#{messages['general.pleaseSelect']}" />
+						</h:selectOneMenu>
+					</s:decorate>
+					<div class="clear"/>
+					<s:decorate id="hometownField" template="/layout/editInSidebar.xhtml">
+						<ui:define name="label">
+							<h:outputText value="#{messages['person.hometown']}" />
+						</ui:define>
+						<h:selectOneMenu id="hometownSelectId" onchange="selectHometownChanged();">
+							<s:selectItems value="#{mitAccenti.hometownSelectItems}" var="location" label="#{location.name}" itemValue="#{location.id}" noSelectionLabel="#{messages['general.pleaseSelect']}" />
+						</h:selectOneMenu>
+						<h:inputHidden id="locationId" value="#{mitAccenti.locationId}" />
+						<script type="text/javascript">
+						function selectHometownChanged() {
+							$('profileForm:hometownField:locationId').value = $('profileForm:hometownField:hometownSelectId').value;
+							jQuery('#fillProfile').hide();
+							if ($('profileForm:hometownField:hometownSelectId').value == #{mitAccenti.locationItaly.id}) {
+								jQuery('#clickOnMap').show();
+								new Effect.Pulsate($('clickOnMap'));
+								jQuery('#hideGmap').hide();
+							} else {
+								jQuery('#clickOnMap').hide();
+								jQuery('#morePrecisely').hide();
+								jQuery('#hideGmap').show();
+								$('locationName').innerHTML = "";
+								map.resetSelection();
+							}
+							if ($('profileForm:hometownField:hometownSelectId').value == "org.jboss.seam.ui.NoSelectionConverter.noSelectionValue")
+								$('profileForm:hometownField:locationId').value = "";
+						}
+						$('profileForm:hometownField:hometownSelectId').value = $('profileForm:hometownField:locationId').value;
+						</script>
+						<div class="clear"/>
+						<div id="breadcrumbLocations" class="ongoingGameStatsContent"> </div>
+						<div id="locationName" class="ongoingGameStatsContent" style="clear:right; height:20px;"> </div>
+						<div class="clear"/>
+						<div class="messages" id="clickOnMap" style="display: none;">
+							<dl><dt class="withRightArrow"><h:outputText value="#{messages['game.accenti.profile.clickOnMap']}" /></dt></dl>
+						</div>
+						<div class="messages" id="morePrecisely" style="display: none;">
+							<dl><dt class="withRightArrow"><h:outputText value="#{messages['game.accenti.profile.morePrecisely']}"/></dt></dl>
+						</div>
+					</s:decorate>
+					<div class="clear"/>
+					<h:commandButton action="next" class="ongoingGameStatsContent"
+						value="#{messages['game.accenti.next']}"
+						style="margin-right: 0; background: #9f9; border: 1px solid #f66;" />
+				</h:form>
+			</div>
+		</div>
+
+		<div id="content">
+			<div id="hideGmap" style="display: block;"/>
+			<ui:include src="/widget/googlemap.xhtml" />
+			<script type="text/javascript">
+			map.rootLocationId = 8310;
+			map.enabled = true;
+			map.breadcrumbLocations = 'breadcrumbLocations';
+			map.hierarchyName = 'mit.accenti.profile';
+			map.mouseOver = function(object, event) {
+				$('locationName').innerHTML = object.title;
+			};
+			map.mouseOut = function(object, event) {
+				$('locationName').innerHTML = "";
+			};
+			map.mouseClick = function(object, event) {
+				$('profileForm:hometownField:hometownSelectId').value = #{mitAccenti.locationItaly.id};
+				$('locationName').innerHTML = "";
+				$('profileForm:hometownField:locationId').value = object.id;
+				jQuery('#fillProfile').hide();
+				jQuery('#clickOnMap').hide();
+				jQuery('#morePrecisely').show();
+				new Effect.Pulsate($('morePrecisely'));
+			};
+			</script>
+		</div>
+		 
+		<br class="clear" />
+		
+    </ui:define>
+</ui:composition>

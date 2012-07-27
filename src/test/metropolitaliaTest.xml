@@ -1,0 +1,12 @@
+<!DOCTYPE suite SYSTEM "http://beust.com/testng/testng-1.0.dtd" >
+
+<suite name="All" verbose="2" parallel="false">
+
+   <!--<test name="Home">
+      <classes>
+        <class name="gwap.test.HomeTest"/>
+      </classes>
+   </test> -->
+   <test name="Location"><classes><class name="gwap.test.PokerScoringTest"/></classes></test>
+
+ </suite>

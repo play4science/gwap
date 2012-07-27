@@ -1,0 +1,33 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:c="http://java.sun.com/jstl/core">
+    			<rich:tabPanel switchType="client" width="1%">
+				<c:forEach items="#{highscoreBean.highscores}" var="_highscore">
+					<rich:tab label="#{messages['game.'.concat(_highscore.gameType.name)]}">
+						<rich:dataTable styleClass="highscoreTable" summary="Highscore" value="#{_highscore.highscoreAll}" var="_score" rendered="#{_highscore.highscoreAll.size() > 0}">			
+							<f:facet name="header"><h:outputText value="#{messages['score.all']}" /></f:facet>
+							<rich:column width="80%" styleClass="#{_score.personId == person.id ? 'self' : null}">
+								<f:facet name="header">
+									<h:outputText value="#{messages['score.user']}"/>
+								</f:facet>
+								<h:outputText value="#{_score.username}" rendered="#{_score.username.length() > 0}" />
+								<h:outputText value="#{messages['general.guest']}" rendered="#{_score.username.length() == 0}" />
+							</rich:column>
+							<rich:column width="20%" styleClass="#{_score.personId == person.id ? 'self' : null}">
+								<f:facet name="header">
+									<h:outputText value="#{messages['score']}"/>
+								</f:facet>
+								<h:outputText value="#{_score.score}" />
+							</rich:column>
+						</rich:dataTable>
+	        		</rich:tab>
+				</c:forEach>
+    		</rich:tabPanel>
+</ui:composition>

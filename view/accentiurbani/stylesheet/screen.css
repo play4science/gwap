@@ -1,0 +1,324 @@
+@CHARSET "UTF-8";
+
+/*
+ * CSS for Screen
+ * 
+ * Styles for artigo
+ * 
+ * © Letspool AG, 16.03.2010
+ * Autor: Fabian Krumbholz
+ */
+
+/* =Reset
+-----------------------------------------------------------------------------*/
+body                                    { font-family:Arial, Verdana, Tahoma, sans-serif; }
+dt                                      { clear:both }
+a img                                   { border: 0; }
+
+/* =Structure
+-----------------------------------------------------------------------------*/
+body                                    { margin: 0; padding:0px 24px 220px 24px; background:#f9f9f9 }
+
+#navLanguage                            { float:left }
+#navHeader                              { float:right }
+#search                                 { float:right }
+#logo                                   { float:left; margin:12px 0 }
+#ad                                     { float:right; margin:24px 0 }
+#related                                { float:left; width:300px; margin-right:24px; }
+#content                                { margin-left: 324px; }
+#content li                             { margin-bottom:.3em }
+#content h2                             { margin-bottom: .7em;}
+
+/* =Navigation
+-----------------------------------------------------------------------------*/
+#navLanguage li                         { float:left; margin-right:.1em; margin-bottom:1em }
+#navLanguage li a                       { font-size:.8em; color:#000; font-weight:bold; text-transform:uppercase; text-decoration:none; background:#cdcdcd; line-height:1.5em; padding:.3em }
+#navLanguage a:hover,
+#navLanguage li.active a                { background:#b8c9e1; font-size:1em }
+
+#navHeader li                           { list-style-type:none; float:left; margin-left: 0px; margin-right:1em }
+#navHeader li a                         { font-size:.8em; color:#000; font-weight:bold; text-transform:uppercase; text-decoration:none }
+
+#ad p                                   { float:left; margin-right:2em; text-transform:uppercase; font-weight:bold; font-size:.9em; padding-top:.75em }
+#ad img                                 { float:left }
+
+#related li                             { list-style-type:none; margin-left: 0px; }
+#related ul                             { margin-left: 0px; padding: 0px; }
+
+#navMenu                                { padding: 92px 0px 0px 324px; margin: 0; }
+#navMenu ul                             { margin: 0; padding: 0;}
+#navMenu li                             { display: inline; padding: 0; margin:0 20px 0 0; list-style-type:none; }
+#navMenu li a                           { padding: 0; }
+
+#navMain li                             { line-height:1.2em }
+#navMain a                              { color:#000; font-size:1em; line-height:1.2em; text-transform:uppercase; text-decoration:none; font-weight:bold; padding:0 .2em }
+#navMain a:hover,
+#navMain li.active a                    { background:#b8c9e1 }
+
+#navSub                                 { width:230px; margin:60px 0 25px 0 }
+#navSub li                              { line-height:1.2em; padding:0; background:url(../img/arrowBig.gif) no-repeat 0 0; margin-bottom:.25em }
+#navSub a                               { font-size:1.1em; color:#000; line-height:1.2em; text-decoration:none; padding-left:30px; margin:0; text-transform:uppercase; font-weight:bold }
+
+/* =Forms
+-----------------------------------------------------------------------------*/
+#search input                           { background:url(../img/lupe.gif) no-repeat right center; width:180px }
+#game                                   { margin-top:25px }
+#game input[type=text]                  { width:215px }
+#game td                                { vertical-align:top; }
+input[type="button"],
+input[type="submit"]                    { color:#000; font-weight:bold; padding:.3em; background:#b8c9e1; border:none; cursor:pointer }
+#register                               { border-top:6px solid #000; border-bottom:3px solid #000; padding:2em 0; width:575px; background:#fff } 
+form h1                                 { padding-left:24px; line-height:2em; background:#fff }
+h2.error                                { padding-left:24px; color:#a7103d }
+.left                                   { float:left; width:220px; margin-left:24px }
+.right                                  { float:left; width:220px; margin-left:24px }
+label                                   { display:block; line-height:1.4em }
+#register input[type="submit"]          { margin-top:2.4em }
+#register input[type="text"]            { width:191px }
+label.required                          { color:#9dadc4 }
+label.error                             { color:#a7103d }
+#recommendedTags, #opponentTags         { text-transform:uppercase }
+
+/* =Content
+-----------------------------------------------------------------------------*/
+#navContent li                          { float:left; margin-right:.1em; margin-bottom:1px }
+#navContent a                           { font-size:1em; color:#000; font-weight:bold; text-decoration:none; background:#cdcdcd; line-height:1.5em; padding:.3em 1.3em }
+#navContent a:hover,        
+#navContent li.active a                 { background:#b8c9e1 }
+
+.contentBox                             { border-top:6px solid #000; border-bottom:3px solid #000; padding:20px 24px; width:527px; background:#fff }
+.contentBox h1                          { line-height:1.25em; font-size:1.2em; margin-bottom:1.25em }
+.contentBox p                           { line-height:1.25em; font-size:1em; margin-bottom:1.25em }
+
+.images ul                              { width:575px }
+.images li                              { float:left; width:175px; height:127px; background:url(../img/bgCanvasSmall.png) no-repeat; margin:0 20px 7px 0; text-align:center }
+.images li.lastInRow                    { margin-right:0 }
+.images img                             { padding:4px 7px 0 4px }
+
+.popup                                  { width:260px; z-index:10; background:url(../img/bgArrowPopup.png) no-repeat 15px bottom; border-top:7px solid #000; padding-bottom:20px }
+.popup li                               { width:230px; padding:5px 15px; border-bottom:1px solid #000 }
+.popup li.last                          { border-bottom:2px solid #000 }
+.popup h2                               { font-size:1.2em; line-height:1.2em }
+.popup p                                { font-size:1em; line-height:1.2em }
+.popup .game li                         { background:#fff }
+.popup .imageDescription li             { background:#9dadc4 }
+
+/* =Game
+-----------------------------------------------------------------------------*/
+.tags                                   { padding-bottom:1em; text-transform:uppercase; }
+.round                                  { margin-bottom:1em; border-bottom:1px solid #9dadc4; }
+#progressbar, .progressbar              { float: right; }
+.rich-progress-bar-completed            { background-color: #b8c9e1; background-image: none; font-weight: normal; text-align: right; }
+.rich-progress-bar-remained             { text-align: right; font-weight: normal; }
+.rich-progress-bar-width                { width: 150px; }
+.ongoingGameStats                       { clear: both; margin-top: .8em; } 
+.ongoingGameStatsCaption                { display: inline; }
+.ongoingGameStatsContent                { float: right; text-align: right; }
+.ongoingGameStatsContent table tr td    { text-align: center; }
+.matching								{ font-weight: bold; color: blue; }
+#currentStatement						{ font-size:1.8em; margin-top:0.3em; margin-bottom:1em; text-align: center; vertical-align: middle; font-style:italic; text-transform: none; }
+.messages                           { height: 4em; margin-bottom: 1em; }
+.messages dt { 
+	margin-bottom: 5px;
+	font-weight: bold;
+	border:2px solid #ff0000;
+	padding:2px;
+}
+.messages dl { margin: 0px; }
+
+.messages dt.withRightArrow {
+	background-image:url('../img/rightarrow.png');
+	background-repeat:no-repeat;
+	background-position: 99% 50%; 
+	padding: 5px 25px 5px 2px;
+	min-height:46px;
+	text-align:middle;
+}
+
+/* =Canvas
+-----------------------------------------------------------------------------*/
+.canvas                                 { border: 1px solid #ddd; -moz-box-shadow: 5px 5px 7px #888; -webkit-box-shadow: 5px 5px 7px #888 }
+.canvas-inner                           { text-align: center; background-color: #000; border: 10px solid #fff; }
+
+#description                            { margin:1em 0 0 1em }
+#description h1                         { font-size:1.2em; line-height:1.8em; color:#9dadc4 }
+#description p                          { font-size:1em; line-height:1.5em; color:#000 }
+
+/* =Tag cloud
+-----------------------------------------------------------------------------*/
+.tagCloud                               { width:350px; margin-bottom:30px }
+.tagCloud h1                            { padding-bottom:3px }
+.tagCloud a                             { white-space:nowrap; padding-right:.25em; text-decoration:none }
+a.tagCloudItem0                         { font-size:0.8em; color:#a6b8d2 }
+a.tagCloudItem1                         { font-size:1em; color:#96a8c2 }
+a.tagCloudItem2                         { font-size:1.2em; color:#a2b5d0 }
+a.tagCloudItem3                         { font-size:1.4em; color:#b8c9e1 }
+a.tagCloudItem4                         { font-size:1.6em; color:#586d8b }
+a.tagCloudItem5                         { font-size:2em; color:#495A73 }
+
+/* =Scoring
+-----------------------------------------------------------------------------*/
+dt                                      { font-weight: bold; }
+dd                                      { margin: 0 0 5px 10px; }
+
+/* =Table
+-----------------------------------------------------------------------------*/
+.highscoreTable                         { border-top:4px solid #000; border-bottom:2px solid #000; border-left:none; border-right:none; width:375px; padding-bottom:10px; margin-bottom:10px; background:#fff }
+.highscoreTable th                      { border-left:none; border-right:none; text-align:left; padding:3px 0 20px 0; padding:3px 2px 20px 2px; font-size:12px; }
+.highscoreTable td                      { border-top:1px solid #000; border-left:none; border-right:none; padding:5px 2px; font-size:12px;  }
+.highscoreTable tr                      { background:#fff }       
+.highscoreTable tr.active               { background:#b9c9e2 }
+.highscoreTable .rich-table-subheadercell { background-image:none }
+.highscoreTable td.self	                { background-color: #b9c9e2; font-weight: bold; color: #000; }
+.ranking                                { text-align:right }
+.ranking a                              { background:url(../img/arrowSmall.gif) no-repeat left center; font-size:1em; text-transform:uppercase; color:#000; font-weight:bold; text-decoration:none; line-height:22px; padding:1px 0 1px 20px }  
+
+/* =About
+-----------------------------------------------------------------------------*/
+.rich-tabpanel .rich-tab-active                 { background-image:none; background-color:#b8c9e1 }
+.rich-tabpanel .rich-tab-inactive               { background-image:none; background-color:#cdcdcd }
+.rich-tabpanel .dr-tbpnl-tb-act                 { border:none }
+.rich-tabpanel .dr-tbpnl-tbtopbrdr,
+.rich-tabpanel .rich-tabhdr-side-cell           { border:none }
+.rich-tabpanel .rich-tab-header                 { color:#000000; font-size:1em; font-weight:bold; line-height:1.5em; padding:0.3em 1.3em; text-decoration:none }
+.rich-tabpanel .rich-tabhdr-side-border         { background-color:transparent }
+
+.rich-tabpanel .rich-tabpanel-content,
+.rich-tabpanel .dr-tbpnl-cntnt                 { border:none }
+
+.rich-tabpanel .rich-tabpanel-content          { border-bottom:3px solid #000000; border-top:6px solid #000000; padding:20px 24px; width:527px }
+.rich-tabpanel .rich-tabpanel-content,
+.rich-tabpanel .rich-tabpanel-content p        { font-size:1.2em; line-height:1.25em; margin-bottom:1.25em }
+.rich-tabpanel .rich-tabpanel-content h1       { font-size:1.4em; line-height:1.25em; margin-bottom:1.25em }
+
+.rich-tabpanel .rich-tabpanel-content ul li    { font-size:1.2em; color: #474747; }
+.rich-tabpanel .rich-tabpanel-content ul       { padding-left: 2em; list-style-type:disc; }
+
+
+/* =Helper
+-----------------------------------------------------------------------------*/
+.searchResult                           { vertical-align:center }
+
+/* =Helper
+-----------------------------------------------------------------------------*/
+.clear                                  { clear:both; line-height:0; height:0; margin:0; padding:0; font-size:.1em; overflow:hidden }
+.hide                                   { position:absolute; left:-10000em; width:20em }
+.hr                                     { margin:0; padding:0; line-height:1.18182em; height:1.18182em; font-size:.91667em; clear:both }
+.nb                                     { white-space:nowrap }
+
+/* =Gmap
+-----------------------------------------------------------------------------*/
+#gmapBack								{ margin: 5px; padding: 2px; background: #fff; border: 1px solid #333; cursor: pointer;}
+#hideGmap { display: none; width:500px; height:500px; position:absolute; z-index:1; background:white; opacity:0.9; filter: 'progid:DXImageTransform.Microsoft.Alpha(opacity=90)'; }
+#ratingDiv { width:200px; margin:150px auto; text-align: center; font-weight: bold; background:#f9f9f9; 
+border: 5px solid #B8C9E1;
+-moz-border-radius: 20px;
+-webkit-border-radius: 20px;
+border-radius: 20px; }
+#ratingDiv div { height: 47px; margin-left: 37px; }
+#ratingDiv a { width: 32px; height: 32px; margin: 5px; display: block; float: left; }
+#ratingDiv a.smiling { background-image: url('../img/smiley_smiling.png'); }
+#ratingDiv a.smiling:hover { background-image: url('../img/smiley_smiling_selected.png'); }
+#ratingDiv a.indifferent { background-image: url('../img/smiley_indifferent.png'); }
+#ratingDiv a.indifferent:hover { background-image: url('../img/smiley_indifferent_selected.png'); }
+#ratingDiv a.sad { background-image: url('../img/smiley_sad.png'); }
+#ratingDiv a.sad:hover { background-image: url('../img/smiley_sad_selected.png'); }
+#gmap { width:500px; height:500px; }
+#scoreeffect       { position: absolute; display:none;}  
+
+/* =Pure CSS Speech bubble (rectangle-speech-border), adapted
+License: MIT + GNU GPLv2 by Nicolas Gallagher, http://nicolasgallagher.com/pure-css-speech-bubbles/
+-----------------------------------------------------------------------------*/
+.speechbubble {
+	position:relative; 
+	padding:20px 15px 10px 15px; 
+	margin:1em 0 3em;
+	border:5px solid #B8C9E1; 
+	text-align:center; 
+	color:#333;
+	background:#f9f9f9; 
+
+	/* css3 */
+	-moz-border-radius:20px;
+	-webkit-border-radius:20px;
+	border-radius:20px;
+}
+
+/* creates larger curve */
+.speechbubble:before {
+	content:""; 
+	position:absolute; 
+	z-index:10; 
+	bottom:-40px; 
+	left:50px; 
+	width:50px; 
+	height:30px;
+	border-style:solid; 
+	border-width:0 5px 5px 0; 
+	border-color:#B8C9E1; 
+	background:transparent;
+
+	/* css3 */
+	-moz-border-radius-bottomright:80px 50px;
+	-webkit-border-bottom-right-radius:80px 50px;
+	border-bottom-right-radius:80px 50px;
+}
+
+/* creates smaller curve */
+.speechbubble:after {
+	content:""; 
+	position:absolute; 
+	z-index:10; 
+	bottom:-40px; 
+	left:50px; 
+	width:20px; 
+	height:30px; 
+	border-style:solid; 
+	border-width:0 5px 5px 0; 
+	border-color:#B8C9E1; 
+	background:transparent;
+
+	/* css3 */
+	-moz-border-radius-bottomright:40px 50px; 
+	-webkit-border-bottom-right-radius:40px 50px; 
+	border-bottom-right-radius:40px 50px; 
+}
+
+/* creates a small circle to produce a rounded point where the two curves meet */
+.speechbubble>:first-child:before {
+	content:""; 
+	position:absolute; 
+	bottom:-40px; 
+	left:46px; 
+	width:5px; 
+	height:5px;
+	background:#B8C9E1;
+
+	/* css3 */
+	-moz-border-radius:10px;
+	-webkit-border-radius:10px;
+	border-radius:10px;
+}
+
+/* creates a white rectangle to cover part of the oval border */
+.speechbubble>:first-child:after {
+	content:""; 
+	position:absolute; 
+	bottom:-10px; 
+	left:75px; 
+	width:25px; 
+	height:15px; 
+	background:#f9f9f9;
+}
+
+/* Speechbubble after */
+.speechbubble-speaker {
+	background: url(../img/face.gif) no-repeat;  height: 50px; width: 40px; margin: -35px 0 0 10px;
+}
+
+/* =GameSession rating
+-----------------------------------------------------------------------------*/
+.ratingstar								{width:24px; height:23px;}
+.ratingfilled							{background-image:url('../img/star_full_y_24px.png');}
+.ratingempty							{background-image:url('../img/star_24px.png');}
+.ratinghover							{background-image:url('../img/star_half_y_24px.png');}

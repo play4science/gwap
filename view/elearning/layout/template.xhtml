@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:s="http://jboss.com/products/seam/taglib" contentType="text/html">
+	<html>
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>Termina</title>
+
+		<link rel="shortcut icon" href="#{internalBasePath}img/favicon.ico" />
+		<a:loadStyle src="/stylesheet/theme.css" />
+		<a:loadStyle src="/stylesheet/screen.css" media="all" />
+		<a:loadScript src="/javascript/common.js"/>
+		<ui:insert name="head" />
+	</head>
+
+	<body id="body">
+
+		<div id="wrapper">
+			<ui:include src="header.xhtml" />
+			<ui:insert name="body" />
+			<ui:include src="footer.xhtml" />
+			
+			<s:fragment rendered="#{init.debug}">
+				<div style="position: fixed; bottom: 10px; left: 0px; width: 100%; text-align: center;">
+					<a:log hotkey="D" />
+					<p style="margin-tog: -0.5em;">
+					  	Conversation: id = #{conversation.id},
+					   	#{conversation.longRunning ? 'long running' : 'temporary'}
+					   	#{conversation.nested ? ', nested, parent id = '.concat(conversation.parentId) : ''} 
+				   		#{' - '} 
+				   		Ajax4jsf Log (Ctrl+Shift+D)  
+						#{' - '} 
+						<s:link id="debugConsole" view="/debug.xhtml" value="Debug console" target="debugConsole" />
+						#{' - '} 
+						<s:link id="resetSession" view="/home.xhtml" action="#{org.jboss.seam.web.session.invalidate}" propagation="none" value="Terminate session" />
+					</p>
+				</div>
+			</s:fragment>
+		</div>
+	</body>
+	
+	</html>
+</f:view>

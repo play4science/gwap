@@ -1,0 +1,81 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    template="../layout/adminTemplate.xhtml">
+
+    <ui:define name="body">
+		<div id="related">
+			<ui:include src="/layout/logo.xhtml" />
+			<ui:include src="/layout/menu.xhtml" />
+		</div>
+
+		<div id="content">
+			<div style="border-bottom:1px solid black; margin-bottom: 3px;">
+				<s:link action="#{artResourceTeaserBean.chooseResourceWithoutTeaser}">#{messages['admin.resourceTeaser.nextResourceWithoutTeaser']}</s:link> | 
+				<s:link action="#{artResourceTeaserBean.chooseNotTranslatedResource('fr')}">#{messages['admin.resourceTeaser.nextResourceNotTranslated']} (fr)</s:link> | 
+				<s:link action="#{artResourceTeaserBean.chooseNotTranslatedResource('en')}">#{messages['admin.resourceTeaser.nextResourceNotTranslated']} (en)</s:link> | 
+				<h:form style="display:inline; vertical-align: middle">
+					<h:outputText value="#{messages['admin.resourceTeaser.resourceId']}"/>:
+					<h:inputText value="#{artResourceTeaserBean.resourceIdNoRequestParameter}" size="4" />
+					<h:commandButton action="#{artResourceTeaserBean.chooseResource()}" value="#{messages['admin.resourceTeaser.chooseResource']}"/>
+				</h:form>
+			</div>
+			<s:fragment rendered ="#{artResourceTeaserBean.resource != null}">
+				<div style="float: left;"><h:graphicImage url="#{artResourceTeaserBean.resource.url}" /></div>
+				<div style="float: left;">
+					<dl style="margin-left:5px;">
+						<ui:include src="/widget/scoringResourceDetails.xhtml">
+							<ui:param name="_resource" value="#{artResourceTeaserBean.resource}" />
+						</ui:include>
+					</dl>
+				</div>
+				<div style="clear: left; padding:5px 0 3px 0;">
+					<strong>#{messages['admin.resourceTeaser.description']}</strong>
+					<s:fragment rendered="#{teaserList.rowCount == 0}">#{messages['admin.resourceTeaser.description.notFound']}</s:fragment>
+					<h:form id="form">
+						<rich:dataTable value="#{teaserList}" var="_teaser" id="teaserList">
+							<rich:column style="width:15px;">
+								<h:outputText value="#{_teaser.language}"/>
+							</rich:column>
+							<rich:column style="width:250px;">
+								<h:outputText value="#{_teaser.description}"/>
+							</rich:column>
+							<rich:column style="width:20px;">
+								<a4j:commandLink action="#{artResourceTeaserBean.editTeaser(_teaser.id)}" value="#{messages['admin.resourceTeaser.editTeaser']}" reRender="form" />
+							</rich:column>
+							<rich:column style="width:20px;">
+								<a4j:commandLink action="#{artResourceTeaserBean.deleteTeaser(_teaser.id)}" value="#{messages['admin.resourceTeaser.deleteTeaser']}" reRender="form" />
+							</rich:column>
+						</rich:dataTable>
+						<a4j:commandLink id="newTeaserButton" action="#{artResourceTeaserBean.newTeaser()}" 
+							value="#{messages['admin.resourceTeaser.newTeaser']}"
+							reRender="form" />
+						<div style="padding-top:2px;">
+		       				<h:selectOneMenu value="#{artResourceTeaserBean.artResourceTeaser.language}">
+		    					<f:selectItems value="#{localeSelector.supportedLocales}"/>
+							</h:selectOneMenu>
+							<h:inputTextarea value="#{artResourceTeaserBean.artResourceTeaser.description}" rows="3" cols="50" />
+							<a4j:commandButton
+								action="#{artResourceTeaserBean.modifyTeaser}" 
+								value="#{messages['admin.resourceTeaser.saveTeaser']}" 
+								reRender="form"
+								/>
+						</div>
+					</h:form>
+					
+					<script type="text/javascript">
+					__addLoadEvent($('form:newTeaserButton').onclick());
+					</script>
+				</div>
+			</s:fragment>
+		</div>
+		
+        <br class="clear" />
+    </ui:define>
+</ui:composition>

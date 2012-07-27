@@ -1,0 +1,46 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    template="/layout/adminTemplate.xhtml">
+
+    <ui:define name="body">
+		<div id="content">
+			<s:link view="/admin/statementList.xhtml" value="#{messages['admin.statementAnnotations.new']}"/>
+			<br/>
+			<h:outputText value="#{messages['admin.statementAnnotations.noResourceFound']}" rendered="#{empty mitAdminStatementAnnotationList.resultList}" />
+			
+			<rich:dataTable id="statementAnnotationList" value="#{mitAdminStatementAnnotationList.resultList}" var="_resource"
+				rendered="#{!empty mitAdminStatementAnnotationList.resultList}">
+			    <rich:column width="10px">
+			    	<s:link view="/admin/statementAnnotation.xhtml" propagation="none" value="#{messages['edit']}">
+			    		<f:param name="statementAnnotationId" value="#{_resource.id}"/>
+			    	</s:link>
+			    </rich:column>
+			    <rich:column width="10px">
+			    	<s:link action="#{mitAdminStatementAnnotationHome.remove}" value="#{messages['delete']}">
+			    		<f:param name="statementAnnotationId" value="#{_resource.id}"/>
+			    	</s:link>
+			    </rich:column>
+			    <rich:column>
+			        <f:facet name="header">
+			            <h:outputText value="#{messages['admin.statements.statement']}"/>
+			        </f:facet>
+			        <h:outputText value="#{_resource.statement.asText()}"/>
+			    </rich:column>
+			    <rich:column>
+			        <f:facet name="header">
+			            <h:outputText value="#{messages['admin.statementAnnotations.text']}"/>
+			        </f:facet>
+			        <h:outputText value="#{_resource.text}"/>
+			    </rich:column>
+			</rich:dataTable>
+		</div>
+        <br class="clear" />
+    </ui:define>
+</ui:composition>

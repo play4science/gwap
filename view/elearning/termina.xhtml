@@ -1,0 +1,48 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    template="layout/template.xhtml">
+
+    <ui:define name="body">
+		<div id="related">
+			<ui:include src="layout/menu.xhtml" />
+		</div>
+
+
+		<div id="content">
+			
+			<h:form>
+				<f:view>
+					Hier kannst Du das Spiel starten! <br></br>Wähle Deine Anfangskonfiguration:
+					<br></br>
+					<br></br>
+					#{messages['elearn.ansage.anzahl']}<h:outputText value="#{gameConfiguration.bid}"/>
+					<h:commandButton action="#{elearnGameConfigurationBean.riseBid()}" value="+"/>
+					<h:commandButton action="#{elearnGameConfigurationBean.lowerBid()}" value="-"/>*
+					<br></br>
+					#{messages['elearn.zeit.anzahl']}<h:outputText value="#{gameConfiguration.roundDuration}"/>
+					<h:commandButton action="#{elearnGameConfigurationBean.riseRoundDuration()}" value="+"/>
+					<h:commandButton action="#{elearnGameConfigurationBean.lowerRoundDuration()}" value="-"/>**
+					<br></br>
+					<!--  <s:link action="continueGame" value="#{messages['OK']}" propagation="none" />-->
+					<br></br>
+					<h:commandButton action="continueGame" image="/img/ok.png" value="OK"></h:commandButton>
+					<br></br>
+					<br></br>
+					<p class="configlow">*: Ansage ist die Zahl an Assoziationen die Du Dir pro Runde zutraust.
+					<br></br>
+					**: Zeit ist die Dauer an Sekunden die Du pro Runde benötigst.</p>
+				</f:view>
+		</h:form>
+		
+		</div>
+		
+        <br class="clear" />
+    </ui:define>
+</ui:composition>

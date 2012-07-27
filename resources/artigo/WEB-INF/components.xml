@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://jboss.com/products/seam/components"
+ xmlns:core="http://jboss.com/products/seam/core"
+ xmlns:drools="http://jboss.com/products/seam/drools"
+ xmlns:mail="http://jboss.com/products/seam/mail"
+ xmlns:persistence="http://jboss.com/products/seam/persistence"
+ xmlns:security="http://jboss.com/products/seam/security"
+ xmlns:bpm="http://jboss.com/products/seam/bpm"
+ xmlns:web="http://jboss.com/products/seam/web"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://jboss.com/products/seam/core http://jboss.com/products/seam/core-2.2.xsd
+                     http://jboss.com/products/seam/persistence http://jboss.com/products/seam/persistence-2.2.xsd
+                     http://jboss.com/products/seam/drools http://jboss.com/products/seam/drools-2.2.xsd
+                     http://jboss.com/products/seam/bpm http://jboss.com/products/seam/bpm-2.2.xsd
+                     http://jboss.com/products/seam/security http://jboss.com/products/seam/security-2.2.xsd
+                     http://jboss.com/products/seam/mail http://jboss.com/products/seam/mail-2.2.xsd
+                     http://jboss.com/products/seam/web http://jboss.com/products/seam/web-2.2.xsd
+                     http://jboss.com/products/seam/components http://jboss.com/products/seam/components-2.2.xsd">
+ 
+ 	<core:init
+ 		debug="@debug@"
+ 		jndi-pattern="@jndiPattern@"/>
+  
+ 	<core:manager
+	 	concurrent-request-timeout="5000"
+	  	conversation-id-parameter="cid"
+	  	conversation-timeout="300000"
+	  	parent-conversation-id-parameter="pid"/>
+ 
+ 	<!-- Make sure this URL pattern is the same as that used by the Faces Servlet -->
+ 	<web:hot-deploy-filter url-pattern="*.html"/>
+	
+	<web:rewrite-filter view-mapping="*.html"/>	
+ 
+ 	<persistence:managed-persistence-context
+	 	auto-create="true"
+	  	name="entityManager"
+	  	persistence-unit-jndi-name="@puJndiName@"/>
+ 
+ 	<drools:rule-base
+	 	name="securityRules">
+	  	<drools:rule-files>
+ 	  		<value>/security.drl</value>
+ 		</drools:rule-files>
+ 	</drools:rule-base>
+ 
+ 	<security:rule-based-permission-resolver security-rules="#{securityRules}"/>
+ 
+	<security:identity
+		authenticate-method="#{authenticator.authenticate}"
+		remember-me="true"/>
+ 
+	<security:jpa-identity-store 
+		user-class="gwap.model.Person"
+		role-class="gwap.model.Role"/>
+ 
+ 	<security:jpa-token-store token-class="gwap.model.AuthenticationToken"/>  
+ 	<security:remember-me mode="autoLogin"/>
+ 
+ 	<event type="org.jboss.seam.security.notLoggedIn">
+		<action execute="#{redirect.captureCurrentView}"/>
+		<action execute="#{authenticator.tryLogin()}"/>
+	</event>
+	
+ 	<event type="org.jboss.seam.security.loginSuccessful">
+  		<action execute="#{redirect.returnToCapturedView}"/>
+ 	</event>
+
+	<mail:mail-session
+		host="localhost"
+		port="25"
+		ssl="false"
+		tls="false" />
+ 
+	<bpm:jbpm>
+		<bpm:pageflow-definitions>
+			<value>imageLabeler.jpdl.xml</value>
+			<value>tabooImageLabeler.jpdl.xml</value>
+			<value>combino.jpdl.xml</value>
+		</bpm:pageflow-definitions>
+	</bpm:jbpm>
+	
+	<web:cache-control-filter name="imageCacheControlFilter"
+		regex-url-pattern=".*(\.gif|\.png|\.jpg|\.jpeg)"
+		value="max-age=86400"/>
+
+	<web:cache-control-filter name="textCacheControlFilter"
+		regex-url-pattern=".*(\.css|\.js)"
+		value="max-age=3600"/>
+
+	<factory
+		name="internalBasePath"
+		value="#{facesContext.externalContext.request.scheme}://#{facesContext.externalContext.request.serverName}:#{facesContext.externalContext.request.serverPort}#{facesContext.externalContext.request.contextPath}/"
+	/>
+
+	<factory
+		name="basePath"
+		value="http://www.artigo.org/"
+	/>
+	<!-- TODO: set basePath via build.properties
+		value="@basePath@"
+	-->
+	<factory
+		name="platform"
+		value="artigo"
+	/>
+
+	<component name="solrServerBean">
+		<property name="solrUsername">@solrUsername@</property>
+		<property name="solrPassword">@solrPassword@</property>
+	</component>
+
+</components>

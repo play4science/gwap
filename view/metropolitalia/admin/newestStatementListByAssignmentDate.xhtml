@@ -1,0 +1,36 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	template="/layout/adminTemplate.xhtml">
+
+	<ui:define name="body">
+		<div id="content">
+		<h:form>
+			<h:selectOneMenu
+				value="#{mitAdminStatementListByAssignmentDate.maximumResults}"
+				id="dateRestriction" onchange="submit()">
+				<f:selectItem itemLabel="10" itemValue="10" />
+				<f:selectItem itemLabel="20" itemValue="20" />
+				<f:selectItem itemLabel="50" itemValue="50" />
+				<f:selectItem itemLabel="100" itemValue="100" />
+				
+			</h:selectOneMenu>
+			<rich:dataTable id="newestStatementList"
+				value="#{mitAdminStatementListByAssignmentDate.resultList}"
+				var="_resource">
+				<ui:include src="/widget/newestStatementTable.xhtml">
+					<ui:param name="locationAssignment" value="#{_resource}" />
+					<ui:param name="resource" value="#{_resource.resource}"/>
+				</ui:include>
+			</rich:dataTable>
+			</h:form>
+		</div>
+		<br class="clear" />
+	</ui:define>
+</ui:composition>

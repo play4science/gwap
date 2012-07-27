@@ -1,0 +1,100 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j">
+
+	<a4j:outputPanel layout="block" id="gamesessionrating">
+	
+	<script type="text/javascript" language="javascript">
+	var ratings=#{gameSessionRatingBean.ratingArray};
+
+	function pulse()
+	{
+		new Effect.Pulsate('#{rich:clientId('gamesessionrating')}', { pulses: 5, duration: 0.5 });
+	}
+	
+	function starClick(idx)
+	{		
+		for (i=0;#{gameSessionRatingBean.maxRating}>i;i++)
+		{
+			ratings[i]=idx>=i;
+		}	
+		starOut();
+		//pulse();
+		
+	}
+		
+	function starIn(idx)
+	{		
+		for (i=0;#{gameSessionRatingBean.maxRating}>i;i++)
+		{
+			var e=$$('.star'+i)[0];
+			if (idx>=i)
+			{
+	        	e.removeClassName('ratingempty');
+	        	e.removeClassName('ratingfilled');
+	        	e.addClassName('ratinghover');
+			}
+			else
+			{
+				e.removeClassName('ratingfilled');
+				e.removeClassName('ratinghover');
+	        	e.addClassName('ratingempty');	        	
+			}			
+		}
+	}	
+
+	function starOut()
+	{		
+		for (i=0;#{gameSessionRatingBean.maxRating}>i;i++)
+		{			
+			var e=$$('.star'+i)[0];
+			if (ratings[i])
+			{
+	        	e.removeClassName('ratingempty');
+	        	e.removeClassName('ratinghover');
+	        	e.addClassName('ratingfilled');
+			}
+			else
+			{
+				e.removeClassName('ratingfilled');
+				e.removeClassName('ratinghover');
+	        	e.addClassName('ratingempty');	        	
+			}			
+		}
+
+		
+	}	
+	</script>
+		
+	
+		<a4j:repeat value="#{gameSessionRatingBean.ratingArray}" var="_rating" rowKeyVar="idx">
+		
+		<!-- <div class="ratingstar #{_rating?'ratingfilled':'ratingempty'} star#{idx}" onmouseover="starIn(#{idx})" onmouseout="starOut()">
+		</div> -->
+		
+		<a4j:commandLink 
+		onclick="starClick(#{idx})"
+		onmouseover="starIn(#{idx})"
+		onmouseout="starOut()"
+		action="#{gameSessionRatingBean.setRating(idx+1)}">
+		
+		<!-- This is an ugly hack.
+			For some reason, a4j does not accept block elements in commandLink (they work only once)
+			Therefore, I must use img instead of a div and css background-image
+			Because I don't want to hardcore the names of the images here,
+			I'm using a transparent img and css			
+		 -->
+		<h:graphicImage styleClass="ratingstar #{_rating?'ratingfilled':'ratingempty'} star#{idx}" url="img/empty.png"/>
+		</a4j:commandLink>
+		</a4j:repeat>		
+	</a4j:outputPanel>
+
+
+
+</ui:composition>

@@ -1,0 +1,102 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+	
+
+	<script type="text/javascript" language="javascript">	
+	function cloneTag(e, target)
+	{		
+		var tag = e.value;		
+		target.value = tag;
+		e.value = '';
+		return tag;		
+	}
+
+	function onSubmitTag(target) {
+		var tag = cloneTag(#{rich:element('recommendedTagName')}, target);
+		#{rich:element('descriptionDescriber')}.innerHTML += '<span class="tag"> '+tag+' &nbsp; </span>';
+		
+		#{rich:element('recommendTagButton')}.disabled=#{gwapGameMemorySharedGame.moveMode};
+		var tagEdit = #{rich:element('recommendedTagName')}; 
+		tagEdit.disabled=#{gwapGameMemorySharedGame.moveMode};
+		tagEdit.focus();
+	}	
+    </script>
+	
+		<div class="round noborder">
+		#{messages['game.memory.describer']}
+		</div>
+	   <h2>#{messages[gwapGameMemorySharedGame.getHeading(gwapGameMemoryPlayer.guesser)]}</h2>
+	   <br />
+			<br />
+
+			<a4j:outputPanel
+				rendered="#{gwapGameMemorySharedGame.allowDescriptions}" styleClass="#{gwapGameMemorySharedGame.disableEditDescription?'inactive':''}">
+				<div class="round noborder"><h:outputText
+					value="#{messages['game.memory.description_enter']} " /></div>
+
+				<a4j:outputPanel id="descriptionDescriber" styleClass="tags" layout="block">
+				<ui:include src="taglist.xhtml" />
+				</a4j:outputPanel>
+
+				<a4j:form>
+						<h:inputHidden id="enteredTag"
+						value="#{gwapGameMemoryPlayer.enteredTag}" />
+				
+					<div class="game"><h:inputText id="recommendedTagName"					
+						disabled="#{gwapGameMemorySharedGame.disableEditDescription}" />
+					<a4j:commandButton id="recommendTagButton"
+						action="#{gwapGameMemoryPlayer.sendTag(gwapGameMemorySharedGame.currentRound)}"
+						onclick="onSubmitTag(#{rich:element('enteredTag')});"
+						reRender="descriptionDescriber"
+						value="#{messages['taggingBean.recommendTagButton']}"						
+						disabled="#{gwapGameMemorySharedGame.disableEditDescription}">
+						<s:defaultAction />
+					</a4j:commandButton></div>
+					
+					<script type="text/javascript" language="javascript">	
+					#{rich:element('recommendedTagName')}.focus();
+					</script>										
+				</a4j:form>
+				<br />
+				<br />
+				
+			</a4j:outputPanel>
+
+			<a4j:outputPanel
+				rendered="#{gwapGameMemorySharedGame.allowQuestions}" styleClass="#{gwapGameMemorySharedGame.disableAnswerQuestion?'inactive':''}">
+				<div class="round noborder"><h:outputText
+					value="#{messages['game.memory.questions']} " /></div>
+
+				<a4j:form>
+					<div class="tags"><a4j:outputPanel id="questionsDescriber">
+						<a4j:repeat value="#{gwapGameMemorySharedGame.questions}"
+							var="_ques" rowKeyVar="idx">
+	
+							<div class="questionline#{idx%2}"><h:outputText
+								value="#{_ques.question.name}?" /> <a4j:commandLink
+								action="#{gwapGameMemoryPlayer.answerQuestion(_ques, 1, gwapGameMemorySharedGame.currentRound)}"
+								focus="recommendedTagName"
+								reRender="questionsDescriber">
+								<h:graphicImage value="img/checkmark_yes#{gwapGameMemorySharedGame.disableAnswerQuestion?'_gray':''}.png"
+									styleClass="questionimage" />
+							</a4j:commandLink> <a4j:commandLink
+								action="#{gwapGameMemoryPlayer.answerQuestion(_ques, 2, gwapGameMemorySharedGame.currentRound)}"
+								focus="recommendedTagName"
+								reRender="questionsDescriber">
+								<h:graphicImage value="img/checkmark_no#{gwapGameMemorySharedGame.disableAnswerQuestion?'_gray':''}.png"
+									styleClass="questionimage" />
+							</a4j:commandLink></div>
+						</a4j:repeat>
+					</a4j:outputPanel></div>
+					<a4j:outputPanel rendered="#{gwapGameMemorySharedGame.questions.size()>0}">#{messages['game.memory.answer']}</a4j:outputPanel>
+				</a4j:form>
+			</a4j:outputPanel>
+
+</ui:composition>

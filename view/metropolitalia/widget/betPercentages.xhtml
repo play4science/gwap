@@ -1,0 +1,35 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:p4s="http://play4science.org/facelets">
+
+	<table>
+	<ui:repeat var="_percentage" value="#{percentages}">
+		<tr>
+			<td>
+				<h:outputFormat value="#{messages['bets.list.othersText.singular']}" rendered="#{_percentage.sum == 1}">
+					<f:param value="#{_percentage.sum}"/>
+					<f:param value="#{_percentage.total}"/>
+					<f:param value="#{_percentage.toString()}"/>
+				</h:outputFormat>
+				<h:outputFormat value="#{messages['bets.list.othersText.plural']}" rendered="#{_percentage.sum > 1}">
+					<f:param value="#{_percentage.sum}"/>
+					<f:param value="#{_percentage.total}"/>
+					<f:param value="#{_percentage.toString()}"/>
+					<f:param value="#{locationHelper.getCascadedLocationName(_percentage.location)}"/>
+				</h:outputFormat>
+			</td>
+			<td>
+				<h:outputText value="#{locationHelper.getCascadedLocationName(_percentage.location)}"/>
+			</td>
+		</tr>
+	</ui:repeat>
+	</table>
+	<h:outputText value="#{messages['bets.list.othersText.notEnoughData']}" rendered="#{empty(percentages)}" />
+</ui:composition>

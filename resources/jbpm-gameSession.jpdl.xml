@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process-definition name="todo">
+   <start-state name="start">
+		<transition to="fork1"></transition>
+	</start-state>
+
+   <task-node name="task1">
+      <task name="myTask1" description="#{task.description}">
+         <description>
+				My Task 1 von Christoph
+			</description>
+			<assignment actor-id="#{gameSessionBean.getPlayerId(0)}"/>
+      </task>
+		<transition to="join1"></transition>
+   </task-node>
+   <task-node name="task2">
+      <task name="myTask2" description="#{task.description}">
+         <description>
+				My Task 2 von Christoph
+			</description>
+			<assignment actor-id="#{gameSessionBean.getPlayerId(1)}"/>
+      </task>
+		<transition to="join1"></transition>
+   </task-node>
+
+	<fork name="fork1">
+		<transition to="task1"></transition>
+		<transition to="task2" name="to task2"></transition>
+	</fork>
+
+	<join name="join1">
+		<transition to="task3"></transition>
+	</join>
+
+	<task-node name="task3">
+	<task name="myTask3" description="#{task.description}">
+         <description>
+				My Task 3 von Christoph
+			</description>
+			<assignment actor-id="#{actor.id}"/>
+      </task>
+		<transition to="done"></transition>
+	</task-node>
+
+   <end-state name="done"/>
+</process-definition>

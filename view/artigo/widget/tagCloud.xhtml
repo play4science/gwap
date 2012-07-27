@@ -1,0 +1,54 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j">
+	
+	<script type="text/javascript">
+	function swich(){
+		var allCloud = jQuery("#tagCloudAll");
+		if (allCloud.css("display") == 'none') {
+		     allCloud.fadeIn();
+		 } else {
+			 allCloud.fadeOut();
+		    }		    
+	}
+	</script>
+	
+	<div class="tagCloud" id="tagCloud" style="display: block;">
+		<h1><h:outputText rendered="#{tagCloud.rowCount > 0}" value="#{messages['general.tags']}" /></h1>
+		<ui:include src="/widget/tagCloudOnly.xhtml" />
+		<a href="#" onclick="swich()" style="float: right; margin-top: 20px; color:black;"><h:outputText rendered="#{tagCloud.rowCount > 0}" value="#{messages['general.showAllTags']}"/></a>
+		<br />
+		<s:link
+			value="#{messages['game.addTags']}"
+			view="/tagging.xhtml"
+			rendered="#{s:hasPermission('artigo', 'tag-image')}"
+			propagation="join">
+			<f:param name="resourceId" value="#{resource.id}"/>
+		</s:link>
+		<br /> 
+		<s:link
+			value="#{messages['game.addVirtualTags']}"
+			view="/virtualTagging.xhtml"
+			rendered="#{s:hasPermission('artigo', 'virtual-tag-image')}"
+			propagation="join">
+			<f:param name="resourceId" value="#{resource.id}"/>
+		</s:link>
+	</div>
+	
+	<div id="tagCloudAll" class="tagCloud" style="display:none; border:1px solid #ddd; background-color:white; position:absolute; top:100px; height: 400px">
+		<div style="margin-bottom:10px;">
+			<a href="#" class="closeAllTagCloud" onclick="swich()" style="float: right; color:black;"><h:outputText value="X"/></a>
+			<h1><h:outputText value="#{messages['general.tags']}" /></h1>
+		</div>
+		<ui:include src="/widget/tagCloudOnly.xhtml">
+			<ui:param name="tagCloud" value="#{tagCloudAll}" />
+		</ui:include>
+		<br />
+	</div>
+</ui:composition>

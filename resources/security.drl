@@ -1,0 +1,126 @@
+package Permissions;
+
+import java.security.Principal;
+
+import org.jboss.seam.security.permission.PermissionCheck;
+import org.jboss.seam.security.Role;
+
+
+rule AdminsCanDoAnything
+when
+	c: PermissionCheck()
+	Role(name == "admin")
+then
+	c.grant();
+end
+
+rule ArtigoAdminsCanDoAnything
+when
+	c: PermissionCheck(target == "artigo")
+	Role(name == "artigo.admin")
+then
+	c.grant();
+end
+
+rule MetropolitaliaAdminsCanDoAnything
+when
+	c: PermissionCheck(target == "metropolitalia")
+	Role(name == "metropolitalia.admin")
+then
+	c.grant();
+end
+
+///////////////////////////////////////////////////////////////////////
+// Artigo
+///////////////////////////////////////////////////////////////////////
+rule ArtigoCanAccessTagging
+when
+	c: PermissionCheck(target == "artigo", action == "tag-image")
+	Role(name == "artigo.hiwi")
+then
+	c.grant();
+end
+
+rule ArtigoCanAccessVirtualTagging
+when
+	c: PermissionCheck(target == "artigo", action == "virtual-tag-image")
+	Role(name == "artigo.hiwi")
+then
+	c.grant();
+end
+
+rule ArtigoCanAccessDetailedHighscore
+when
+	c: PermissionCheck(target == "artigo", action == "highscore-kunsthalle-karlsruhe")
+	Role(name == "artigo.kunsthalle-karlsruhe")
+then
+	c.grant();
+end
+
+rule ArtigoCanEditTeasers
+when
+	c: PermissionCheck(target == "artigo", action == "edit-teaser")
+	Role(name == "artigo.translator" || == "artigo.hiwi")
+then
+	c.grant();
+end
+
+rule ArtigoCanViewAdminInterface
+when
+	c: PermissionCheck(target == "artigo", action == "view-admin-interface")
+	Role(name == "artigo.translator" || == "artigo.hiwi")
+then
+	c.grant();
+end
+
+rule ArtigoCanAccessRestData
+when
+	c: PermissionCheck(target == "artigo", action == "rest-data")
+	Role(name == "artigo.kunsthalle-karlsruhe" || == "artigo.dadaweb-koeln")
+then
+	c.grant();
+end
+
+///////////////////////////////////////////////////////////////////////
+// TagATag
+///////////////////////////////////////////////////////////////////////
+rule TagATagCanAccessTest
+when
+	c: PermissionCheck(target == "tagatag", action == "test")
+	Role(name == "tagatag.tester")
+then
+	c.grant();
+end
+
+///////////////////////////////////////////////////////////////////////
+// Sentiment
+///////////////////////////////////////////////////////////////////////
+rule SentimentCanAccessTest
+when
+	c: PermissionCheck(target == "sentiment", action == "test")
+	Role(name == "sentiment.tester")
+then
+	c.grant();
+end
+
+///////////////////////////////////////////////////////////////////////
+// Combine game
+///////////////////////////////////////////////////////////////////////
+rule CombinoCanAccessTest
+when
+	c: PermissionCheck(target == "combino", action == "test")
+	Role(name == "combino.tester")
+then
+	c.grant();
+end
+
+///////////////////////////////////////////////////////////////////////
+// Metropolitalia
+///////////////////////////////////////////////////////////////////////
+rule MetropolitaliaCanViewAdminInterface
+when
+	c: PermissionCheck(target == "metropolitalia", action == "view-admin-interface")
+	Role(name == "metropolitalia.hiwi")
+then
+	c.grant();
+end

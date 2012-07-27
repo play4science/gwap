@@ -1,0 +1,554 @@
+<?xml version="1.0"?>
+<project name="GWAP" default="deploy" basedir=".">
+
+    <!-- Give user a chance to override without editing this file or typing -D -->
+    <property file="${basedir}/build.properties"/>
+
+    <property name="profile" value="dev"/>
+    <property file="build-${profile}.properties"/>
+
+    <!-- set global properties for this build -->
+    <property name="project.name" value="GWAP"/>
+    <property name="project.ear" value="true"/>
+    <property name="richfaces.present" value="true"/>
+    <property name="dist.dir" value="dist"/>
+    <property name="src.model.dir" value="src/main"/>
+    <property name="src.action.dir" value="src/hot"/>
+    <property name="src.test.dir" value="src/test"/>
+    <property name="lib.dir" value="lib"/>
+    <property name="endorsed.dir" value="${lib.dir}/endorsed"/>
+    <property name="ear.dir" value="exploded-archives/${project.name}.ear"/>
+    <property name="exploded.archive.dir" value="${ear.dir}"/>
+    <property name="jar.dir" value="${ear.dir}/${project.name}_jar"/>
+    <property name="test.dir" value="test-build"/>
+    <property name="bootstrap.dir" value="${basedir}/bootstrap"/>
+    <property name="jboss.domain" value="default"/>
+    <property name="deploy.dir" value="${jboss.home}/server/${jboss.domain}/deploy"/>
+    <property name="ear.deploy.dir" value="${deploy.dir}/${project.name}.ear"/>
+    <property name="jar.deploy.dir" value="${ear.deploy.dir}/${project.name}.jar"/>
+    <property name="war.deploy.dir" value="${ear.deploy.dir}/${project.name}.war"/>
+    <property name="packaged.archive" value="${dist.dir}/${project.name}.ear"/>
+    <property name="testng.jar" value="${basedir}/lib/testng-jdk15.jar"/>
+    <property name="javac.debug" value="true"/>
+    <property name="javac.deprecation" value="false"/>
+	
+	<!-- Defaults values -->
+    <property name="debug" value="false"/>
+    <property name="basePath" value="http://localhost:8080/${project.name}/"/>
+	<property name="solr.username" value="solr"/>
+	<property name="solr.password" value="solr"/>
+	<property name="solr.master.enabled" value="false"/>
+	<property name="solr.slave.enabled" value="false"/>
+	<property name="solr.slave.masterhostandport" value=""/>
+	<property name="database.url" value="jdbc:postgresql:gwap"/>
+	<property name="database.username" value="gwap"/>
+	<property name="database.password" value="gwap"/>
+
+    <!--Properties for validating configuration files -->
+    <property name="validate.resources.dir" value="${basedir}/exploded-archives"/>
+    <property name="schema.dir" value="${basedir}/exploded-archives/schemas"/>
+    <property name="src.schema.dir" value="${schema.dir}/org/jboss/seam"/>
+    <property name="schema.version" value="2.2"/>
+
+	<propertyset id="loop.properties">
+		<propertyref name="basedir"/>
+		<propertyref name="ear.dir"/>
+		<propertyref name="profile"/>
+		<propertyref name="lib.dir"/>
+		<propertyref name="dist.dir"/>
+		<propertyref name="ear.deploy.dir"/>
+	</propertyset>
+
+    <fileset id="lib" dir="${lib.dir}">
+        <include name="*.jar"/>
+    	<exclude name="*wicket*.jar"/>
+    </fileset>
+
+    <path id="build.classpath">
+        <fileset refid="lib"/>
+    </path>
+
+    <!-- Import GlassFish deployment targets -->
+    <!--<import file="${basedir}/glassfish-build.xml"/>-->
+	
+	<target name="subproject">
+		<!-- FIXME: Can this be done without specifying each subproject individually? -->
+    	<ant antfile="subproject-build.xml" target="${target}" inheritrefs="true">
+			<propertyset refid="loop.properties" />
+    		<property name="subproject.name" value="${subproject01}"/>
+    		<property name="subproject.varname" value="subproject01"/>
+    	</ant>
+    	<ant antfile="subproject-build.xml" target="${target}" inheritrefs="true">
+			<propertyset refid="loop.properties" />
+    		<property name="subproject.name" value="${subproject02}"/>
+    		<property name="subproject.varname" value="subproject02"/>
+    	</ant>
+    	<ant antfile="subproject-build.xml" target="${target}" inheritrefs="true">
+			<propertyset refid="loop.properties" />
+    		<property name="subproject.name" value="${subproject03}"/>
+    		<property name="subproject.varname" value="subproject03"/>
+    	</ant>
+   	</target>
+	
+    <target name="init" description="Initialize the build">
+        <taskdef name="groovyc"
+            classname ="org.codehaus.groovy.ant.Groovyc"
+            classpathref="build.classpath"/> <!-- really only the groovy jar is necessary -->
+        <mkdir dir="${jar.dir}"/>
+        <mkdir dir="${ear.dir}"/>
+        <mkdir dir="${dist.dir}"/>
+
+        <condition property="is.debug" value="true">
+            <istrue value="${debug}"/>
+        </condition>
+        <condition property="is.prod" value="true">
+            <equals arg1="${profile}" arg2="prod" />
+        </condition>
+        <property name="transactionManagerLookupClass" value="org.hibernate.transaction.JBossTransactionManagerLookup"/>
+        <property name="ejbJndiPattern" value="${project.name}/#{ejbName}/local"/>
+        <property name="seamBootstrapsPu" value="false"/>
+        <property name="seamEmfRef" value="#{null}"/>
+        <condition property="puJndiName" value="java:comp/env/${project.name}/pu" else="java:/${project.name}EntityManagerFactory">
+            <available file="${jboss.home}/lib/jboss-vfs.jar"/> <!-- JBoss AS >= 5.0 -->
+        </condition>
+
+        <filterset id="persistence">
+            <filter token="transactionManagerLookupClass" value="${transactionManagerLookupClass}"/>
+        </filterset>
+        <filterset id="seam">
+            <filter token="ejbJndiPattern" value="${ejbJndiPattern}"/>
+            <filter token="seamBootstrapsPu" value="${seamBootstrapsPu}"/>
+            <filter token="seamEmfRef" value="${seamEmfRef}"/>
+            <filter token="puJndiName" value="${puJndiName}"/>
+            <filter token="basePath" value="${basePath}"/>
+            <filter token="solr.username" value="${solr.username}"/>
+            <filter token="solr.password" value="${solr.password}"/>
+        </filterset>
+        <filterset id="profile">
+            <filter token="debug" value="${debug}"/>
+        </filterset>
+    	<filterset id="datasource">
+    		<filter token="database.url" value="${database.url}"/>
+    		<filter token="database.username" value="${database.username}"/>
+    		<filter token="database.password" value="${database.password}"/>
+    	</filterset>
+        <filterset id="solr">
+            <filter token="solr.username" value="${solr.username}"/>
+            <filter token="solr.password" value="${solr.password}"/>
+        	<filter token="solr.master.enabled" value="${solr.master.enabled}"/>
+        	<filter token="solr.slave.enabled" value="${solr.slave.enabled}"/>
+        	<filter token="solr.slave.masterhostandport" value="${solr.slave.masterhostandport}"/>
+        </filterset>
+
+        <!-- if a .groovy file is in model or action, set groovy.present -->
+        <available property="groovy.present" value="true" file="" searchparents="true">
+            <filepath>
+                <fileset dir="${src.action.dir}">
+                    <include name="**/*.groovy"/>
+                </fileset>
+                <fileset dir="${src.model.dir}">
+                    <include name="**/*.groovy"/>
+                </fileset>
+            </filepath>
+        </available>
+        <condition property="groovy.test.present" value="true">
+            <or>
+                <isset property="groovy.present"/>
+                <available file="" searchparents="true">
+                    <filepath>
+                        <fileset dir="${src.test.dir}">
+                            <include name="**/*.groovy"/>
+                        </fileset>
+                    </filepath>
+                </available>
+            </or>
+        </condition>
+        <!-- NOTE: Seam does not properly detect uncompiled groovy classes in an EAR -->
+        <condition property="groovy.dynamic" value="true">
+            <and>
+                <isset property="groovy.present"/>
+                <istrue value="${debug}"/>
+            </and>
+        </condition>
+        <condition property="groovy.static" value="true">
+            <and>
+                <isset property="groovy.present"/>
+                <isfalse value="${debug}"/>
+            </and>
+        </condition>
+    </target>
+
+    <target name="groovy.compile" if="groovy.static">
+        <groovyc classpathref="build.classpath"
+            destdir="${jar.dir}"
+            srcdir="${src.model.dir}">
+        </groovyc>
+        <path id="groovy.action.classpath">
+            <path refid="build.classpath"/>
+            <dirset dir="${jar.dir}"/>
+        </path>
+        <groovyc classpathref="groovy.action.classpath"
+            destdir="${jar.dir}"
+            srcdir="${src.action.dir}">
+        </groovyc>
+    </target>
+
+    <target name="groovy.copy" if="groovy.dynamic">
+        <copy todir="${jar.dir}">
+            <fileset dir="${src.action.dir}">
+                <include name="**/*.groovy"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="compile" depends="init,groovy.compile,groovy.copy"
+        description="Compile the Java source code"
+        unless="eclipse.running">
+        <javac classpathref="build.classpath"
+            destdir="${jar.dir}"
+            debug="${javac.debug}"
+            deprecation="${javac.deprecation}"
+            nowarn="on"
+        	includeantruntime="false">
+            <src path="${src.model.dir}"/>
+            <src path="${src.action.dir}"/>
+        </javac>
+    </target>
+
+    <target name="copyclasses" depends="init"
+        description="Copy the classes that were compiled by eclipse"
+        if="eclipse.running">
+        <copy todir="${jar.dir}">
+            <fileset dir="classes/main">
+                <include name="**/*.class"/>
+            </fileset>
+            <fileset dir="classes/hot">
+                <include name="**/*.class"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="jar" depends="compile,copyclasses"
+        description="Build the JAR structure in a staging directory">
+        <copy todir="${jar.dir}">
+            <fileset dir="${src.model.dir}">
+                <include name="**/*.component.xml" />
+            </fileset>
+            <fileset dir="${basedir}/resources">
+                <include name="seam.properties"/>
+                <include name="*.drl"/>
+                <include name="META-INF/*.drl"/>
+            </fileset>
+        </copy>
+        <copy todir="${jar.dir}/META-INF">
+            <fileset dir="${basedir}/resources/META-INF">
+                <include name="ejb-jar.xml"/>
+                <include name="orm.xml"/>
+            </fileset>
+        </copy>
+        <copy tofile="${jar.dir}/META-INF/persistence.xml"
+            file="${basedir}/resources/META-INF/persistence-${profile}.xml">
+            <filterset refid="persistence"/>
+        </copy>
+        <copy tofile="${jar.dir}/import.sql"
+            file="${basedir}/resources/import-${profile}.sql"/>
+    </target>
+	
+    <target name="war" depends="compile"
+        description="Build the WAR structure in a staging directory">
+    	<antcall target="subproject" inheritrefs="true"><param name="target" value="war"/></antcall>
+    </target>
+
+    <target name="ear" description="Build the EAR structure in a staging directory">
+        <copy todir="${ear.dir}">
+            <fileset dir="${basedir}/resources">
+                <include name="*jpdl.xml"/>
+                <include name="*hibernate.cfg.xml"/>
+                <include name="jbpm.cfg.xml"/>
+            </fileset>
+            <fileset dir="${lib.dir}">
+                <include name="jboss-seam.jar"/>
+            </fileset>
+        </copy>
+        <copy todir="${ear.dir}/lib">
+            <fileset dir="${lib.dir}">
+                <includesfile name="deployed-jars-ear.list"/>
+                <exclude name="icefaces-ahs.jar" if="icefaces.present"/>
+            </fileset>
+        </copy>
+        <copy todir="${ear.dir}/META-INF">
+            <fileset dir="${basedir}/resources/META-INF">
+                <include name="application.xml"/>
+                <include name="jboss-app.xml"/>
+            </fileset>
+        </copy>
+    	<antcall target="subproject" inheritrefs="true"><param name="target" value="ear-application-xml"/></antcall>
+    </target>
+
+    <target name="clear-profile-artifacts" depends="init"
+        description="Clear compiled cache of profile-specific artifacts in anticipation of a profile change">
+        <delete file="${jar.dir}/META-INF/persistence.xml"/>
+        <delete file="${jar.dir}/import.sql"/>
+    	<antcall target="subproject" inheritrefs="true"><param name="target" value="clear-profile-artifacts"/></antcall>
+    </target>
+
+    <target name="stage" depends="jar,war,ear"/>
+
+    <target name="archive" depends="clear-profile-artifacts,stage"
+        description="Package the archives">
+        <jar jarfile="${dist.dir}/${project.name}.jar" basedir="${jar.dir}"/>
+        <jar jarfile="${dist.dir}/${project.name}.ear">
+            <fileset dir="${ear.dir}">
+                <exclude name="${project.name}_jar/**"/>
+                <exclude name="*_war/**"/>
+            </fileset>
+            <fileset dir="${dist.dir}">
+                <include name="${project.name}.jar"/>
+            </fileset>
+        </jar>
+    	<antcall target="subproject" inheritrefs="true"><param name="target" value="archive"/></antcall>
+    </target>
+	
+
+    <target name="datasource" depends="prepare-jboss">
+        <fail unless="jboss.home">jboss.home not set. Use "ant local-settings"!</fail>
+        <copy file="${basedir}/resources/${project.name}-${profile}-ds.xml"
+            tofile="${deploy.dir}/${project.name}-ds.xml">
+        	<filterset refid="datasource" />
+    	</copy>
+    </target>
+
+    <target name="explode" depends="stage,datasource"
+        description="Deploy the exploded archive">
+        <fail unless="jboss.home">jboss.home not set</fail>  
+    	<delete file="${deploy.dir}/${project.name}.ear"> </delete>   	
+        <copy todir="${ear.deploy.dir}">
+            <fileset dir="${ear.dir}">
+                <include name="**/*"/>
+                <exclude name="${project.name}_jar/**"/>
+                <exclude name="*_war/**"/>
+            </fileset>
+        </copy>
+        <copy todir="${jar.deploy.dir}">
+            <fileset dir="${jar.dir}"/>
+        </copy>
+    	<antcall target="subproject" inheritrefs="true"><param name="target" value="explode"/></antcall>
+    </target>
+
+    <target name="unexplode" description="Undeploy the exploded archive">
+        <delete failonerror="no">
+            <fileset dir="${ear.deploy.dir}">
+                <exclude name="**/*.jar"/>
+            </fileset>
+        </delete>
+        <delete file="${deploy.dir}/${project.name}-ds.xml" failonerror="no"/>
+        <delete dir="${ear.deploy.dir}" failonerror="no"/>
+    </target>
+
+    <target name="reexplode" depends="unexplode,clean,explode"
+        description="Undeploy the exploded archive, clean, then deploy the exploded archive"/>
+
+    <target name="check-deployed" description="Check to see if packaged archive is currently deployed">
+        <fail unless="jboss.home">jboss.home not set</fail>
+        <condition property="archive.deployed" value="true">
+            <available file="${ear.deploy.dir}" type="file"/>
+        </condition>
+    </target>
+
+    <target name="restart-exploded" unless="archive.deployed" description="Deploy exploded archive if not deployed as packaged archive">
+        <antcall target="explode"/>
+        <touch file="${ear.deploy.dir}/META-INF/application.xml"/>
+    </target>
+
+    <target name="restart-deployed" if="archive.deployed" description="Deploy packaged archive if deployed as packaged archive">
+        <antcall target="deploy"/>
+    </target>
+
+    <target name="restart" depends="check-deployed,clear-profile-artifacts,restart-exploded,restart-deployed" description="Restart the exploded archive"/>
+
+    <target name="deploy" depends="archive,datasource" description="Deploy the packaged archive">
+        <fail unless="jboss.home">jboss.home not set</fail>
+        <antcall target="explode"/>
+    </target>
+
+    <target name="undeploy" description="Undeploy the packaged archive">
+        <delete file="${deploy.dir}/${project.name}.ear"/>
+        <delete file="${deploy.dir}/${project.name}-ds.xml"/>
+    </target>
+
+    <target name="redeploy" depends="undeploy,clean,deploy"
+        description="Undeploy the packaged archive, clean, then deploy the packaged archive"/>
+
+    <target name="clean" description="Cleans up the staging directory">
+        <delete dir="${dist.dir}"/>
+        <delete dir="${basedir}/exploded-archives"/>
+        <delete dir="${src.schema.dir}" failonerror="no"/>
+        <delete dir="${basedir}/test-report"/>
+    	<delete includeemptydirs="true">
+    		<fileset dir="${basedir}">
+    			<include name="test-report-*/**/*"/>
+    		</fileset>
+    	</delete>
+        <delete dir="${basedir}/test-output"/>
+        <delete failonerror="no" includeemptydirs="true">
+            <fileset dir="${test.dir}">
+                <exclude name="**/*.class" if="eclipse.running"/>
+            </fileset>
+        </delete>
+    </target>
+
+    <target name="compiletest" depends="groovy.compiletest" unless="eclipse.running" description="Compile the Java source code for the tests">
+        <mkdir dir="${test.dir}"/>
+        <javac classpathref="build.classpath"
+            destdir="${test.dir}"
+            debug="${javac.debug}"
+            deprecation="${javac.deprecation}"
+            nowarn="on">
+            <src path="${src.action.dir}"/>
+            <src path="${src.model.dir}"/>
+            <src path="${src.test.dir}"/>
+        </javac>
+    </target>
+
+    <target name="groovy.compiletest" if="groovy.test.present" description="Compile the Groovy source code for the tests">
+        <mkdir dir="${test.dir}"/>
+        <groovyc classpathref="build.classpath"
+            destdir="${test.dir}">
+            <src path="${src.action.dir}"/>
+            <src path="${src.model.dir}"/>
+            <src path="${src.test.dir}"/>
+        </groovyc>
+    </target>
+
+    <target name="copytestclasses" if="eclipse.running" description="Copy classes compiled by eclipse to the test dir">
+    <mkdir dir="${test.dir}"/>
+        <copy todir="${test.dir}">
+            <fileset dir="classes/main">
+                <include name="**/*.class"/>
+            </fileset>
+        </copy>
+        <copy todir="${test.dir}">
+            <fileset dir="classes/hot">
+                <include name="**/*.class"/>
+            </fileset>
+        </copy>
+        <copy todir="${test.dir}">
+            <fileset dir="classes/test">
+                <include name="**/*.class"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="buildtest" depends="init,compiletest,copytestclasses" description="Build the tests">
+    	<antcall target="subproject" inheritrefs="true"><param name="target" value="buildtest"/></antcall>
+    </target>
+
+    <target name="test" depends="init,compiletest,copytestclasses" description="Run the tests">
+        <fail message="Cannot run tests because path to project contains spaces.">
+            <condition>
+                <contains string="${basedir}" substring=" "/>
+            </condition>
+        </fail>
+        <condition property="incompatible.jdk" value="true">
+            <and>
+                <equals arg1="${ant.java.version}" arg2="1.6"/>
+                <not><available classname="javax.xml.bind.JAXB"/></not>
+            </and>
+        </condition>
+        <fail if="incompatible.jdk">You are using an incompatible JDK 6. Please use Sun JDK 6 Update 4 (1.6.0_04) or newer or use Open JDK 6.</fail>
+        <taskdef resource="testngtasks" classpath="${testng.jar}"/>
+
+    	<antcall target="subproject" inheritrefs="true"><param name="target" value="test"/></antcall>
+    </target>
+
+    <target name="javadoc" depends="compile">
+        <mkdir dir="${dist.dir}/apidoc"/>
+        <javadoc classpathref="build.classpath" destdir="${dist.dir}/apidoc" use="true" protected="true" version="true" windowtitle="${project.name} API Documentation" doctitle="${project.name} API Documentation" link="http://java.sun.com/j2se/5.0/docs/api">
+            <packageset dir="${src.action.dir}" defaultexcludes="yes">
+                <include name="*/**"/>
+            </packageset>
+            <packageset dir="${src.model.dir}" defaultexcludes="yes">
+                <include name="*/**"/>
+            </packageset>
+        </javadoc>
+    </target>
+
+    <!-- deprecated -->
+    <target name="validateConfiguration" depends="validate"/>
+
+    <target name="validate" depends="stage" description="Validate the XML configuration files">
+        <mkdir dir="${schema.dir}"/>
+        <unjar src="${lib.dir}/jboss-seam.jar" dest="${schema.dir}">
+            <patternset>
+                <include name="org/jboss/seam/*.xsd"/>
+                <include name="org/jboss/seam/*.dtd"/>
+            </patternset>
+        </unjar>
+        <ant antfile="validate.xml" target="validateConfiguration"/>
+    </target>
+
+    <target name="purge" depends="undeploy" description="Clean out JBoss AS temporary deployment files">
+        <delete dir="${jboss.home}/server/${jboss.domain}/tmp/deploy"/>
+        <mkdir dir="${jboss.home}/server/${jboss.domain}/tmp/deploy/"/>
+        <delete dir="${jboss.home}/server/${jboss.domain}/tmp/sessions"/>
+        <mkdir dir="${jboss.home}/server/${jboss.domain}/tmp/sessions"/>
+        <delete dir="${jboss.home}/server/${jboss.domain}/work/jboss.web/localhost/${project.name}"/>
+    </target>
+
+    <target name="local-settings" description="Sets up the local configuration files based on user-provided values">
+        <property name="prop.file" value="build.properties" />
+
+        <input message="JBoss home directory:" addproperty="jboss.home" defaultvalue="/opt/jboss-5.1.0.GA" />
+
+        <copy file="${basedir}/${prop.file}.tmpl" tofile="${basedir}/${prop.file}" />
+
+        <replace file="${basedir}/${prop.file}">
+            <replacefilter token="@@jboss.home@@" value="${jboss.home}" />
+
+            <replacefilter token="@@warning@@" value="WARNING: This is a generated file. Do not edit it but use the Ant target 'local-settings' instead" />
+        </replace>
+    </target>
+
+    <target name="prepare-jboss">
+        <fail unless="jboss.home">jboss.home not set. Use "ant local-settings"!</fail>
+
+        <echo message="*********************************************************************" level="info"/>
+        <echo message="preparing JBoss installation in ${jboss.home}" level="info"/>
+        <echo message="*********************************************************************" level="info"/>
+
+        <!-- copy updated libraries, particularly Hibernate, and database drivers -->
+        <echo message="copying updated libraries and database drivers ..." level="info"/>
+        <copy todir="${deploy.dir}/../lib" overwrite="false">
+            <fileset dir="${lib.dir}">
+                <include name="postgresql.jar"/>
+            </fileset>
+        </copy>
+    </target>
+	
+	<target name="solr-deploy" depends="init">
+        <fail unless="jboss.home">jboss.home not set. Use "ant local-settings"!</fail>
+		
+		<echo message="copying solr configuration and solr.war ..." level="info"/>
+		<mkdir dir="${solr.home}"/>
+        <copy todir="${solr.home}" overwrite="true">
+            <fileset dir="INSTALL/solr" />
+        </copy>
+		<copy todir="${solr.home}" overwrite="true">
+			<fileset dir="INSTALL/solr">
+				<include name="*/conf/solrconfig.xml"/>
+			</fileset>
+        	<filterset refid="solr"/>
+		</copy>
+		<copy todir="${deploy.dir}" overwrite="true">
+			<fileset file="INSTALL/solr.war"/>
+		</copy>
+		<copy todir="${jboss.home}/server/${jboss.domain}/conf" overwrite="true">
+			<fileset dir="INSTALL">
+				<include name="users.properties"/>
+				<include name="roles.properties"/>
+			</fileset>
+			<filterset refid="solr"/>
+		</copy>
+	</target>
+	
+</project>

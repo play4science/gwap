@@ -1,0 +1,48 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j">
+
+	<script type="text/javascript"></script>
+	<noscript><div class="noscript"><h:outputText value="#{messages['general.javascriptDisabled']}" /></div></noscript>
+
+	<div id="navHeader">
+		<ul>
+			<li>
+    		   	<s:link id="headerDescriptionId" view="/about.xhtml" value="#{messages['menu.description']}" propagation="none" includePageParams="false"/>
+			</li>
+			<li>
+    		   	<s:link view="/about.xhtml" value="#{messages['menu.feedback']}" propagation="none">
+    		   		<f:param name="selectedTab" value="contact"/>
+    		   	</s:link>
+			</li>
+			<li>
+    	    	<s:link id="menuRegisterId" view="/register.xhtml" value="#{messages['menu.register']}" rendered="#{not identity.loggedIn}" propagation="none"/>
+        	</li>
+			<li>
+    		   	<s:link id="menuLoginId" view="/login.xhtml" value="#{messages['menu.login']}" rendered="#{not identity.loggedIn}" propagation="none"/>
+        	</li>
+			<li>
+				<s:link id="menuEditProfileId" view="/profile.xhtml" value="#{messages['menu.editProfile']}" rendered="#{identity.loggedIn}" propagation="none"/>
+			</li>
+			<li>		
+				<s:link id="headerLogoutId" view="/home.xhtml" action="#{identity.logout}" value="#{messages['menu.logout']}" rendered="#{identity.loggedIn}" propagation="none"/>
+			</li>
+		</ul>
+		<span class="right">
+			<h:outputText value="#{mitCoins.getCurrentFunds()} #{messages['game.coins']}" styleClass="coins" rendered="#{mitCoins.getCurrentFunds() != null}" id="coins" />
+			<h:outputText value="#{messages['menu.signedInAs']}: " rendered="#{identity.loggedIn}" style="padding-left: 30px"/>
+			<strong>
+				<h:outputText value="#{credentials.username}" id="headerWelcomeId" rendered="#{identity.loggedIn}" />
+			</strong>
+		</span>
+	
+	</div>
+
+	<br class="clear" />
+</ui:composition>

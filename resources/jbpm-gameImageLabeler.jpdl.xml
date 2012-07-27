@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process-definition name="gameImageLabeler">
+	<start-state name="start">
+		<transition to="end" name="start game">
+			<action name="[logTransition] start round" expression="#{gameSessionBean.logTransition('start round')}"></action>
+		</transition>
+	</start-state>
+
+	<task-node name="(player 1) label image">
+		<task name="labelImage" description="Player A">
+			<assignment actor-id="#{gameSessionBean.getPlayerId(0)}" />
+		</task>
+		<timer duedate="3 seconds" name="test">
+			<action expression="#{gameSessionBean.taskTimeout()}"></action>
+		</timer>
+		<transition to="join1" name="(player A) wait for player B">
+			<action name="[logTransition] (player A) join1"
+				expression="#{gameSessionBean.logTransition('(player A) join1')}"></action>
+		</transition>
+	</task-node>
+
+	<task-node name="(player 2) label image">
+		<task name="labelImage" description="Player B">
+			<assignment actor-id="#{gameSessionBean.getPlayerId(1)}" />
+		</task>
+		<transition to="join1" name="(player B) wait for player B">
+			<action name="[logTransition] (player B) join1"
+				expression="#{gameSessionBean.logTransition('(player B) join1')}"></action>
+		</transition>
+	</task-node>
+
+	<fork name="fork1">
+		<transition to="(player 1) label image" name="(player A) label image">
+			<action name="[logTransition] (player A) label image"
+				expression="#{gameSessionBean.logTransition('(player A) label image')}"></action>
+		</transition>
+		<transition to="(player 2) label image" name="(player B) label image">
+			<action name="[logTransition] (player B) label image"
+				expression="#{gameSessionBean.logTransition('(player B) label image')}"></action>
+		</transition>
+	</fork>
+
+	<join name="join1">
+		<transition to="new or end" name="end round">
+			<action name="[logTransition] new or end" expression="#{gameSessionBean.logTransition('new or end')}"></action>
+			<action name="end round" expression="#{gameSessionBean.endRound()}"></action>
+		</transition>
+	</join>
+
+	<node name="start round">
+		<transition to="fork1" name="init round">
+			<action name="[logTransition] fork1" expression="#{gameSessionBean.logTransition('fork1')}"></action>
+			<action name="init round" expression="#{gameSessionBean.startRound()}"></action>
+		</transition>
+	</node>
+
+	<decision name="new or end"
+		expression="#{(gameSessionBean.hasNextRound()) ? 'to init round' : 'end game session'}">
+		<transition to="end" name="end game session">
+			<action name="[logTransition] end" expression="#{gameSessionBean.logTransition('end')}"></action>
+		</transition>
+		<transition to="start round" name="to init round">
+			<action name="[logTransition] start round" expression="#{gameSessionBean.logTransition('start round')}"></action>
+		</transition>
+	</decision>
+
+	<end-state name="end"></end-state>
+</process-definition>

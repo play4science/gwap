@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<pageflow-definition
+  xmlns="http://jboss.com/products/seam/pageflow"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://jboss.com/products/seam/pageflow http://jboss.com/products/seam/pageflow-2.0.xsd"
+  name="elearnTermina">
+ 
+  
+	<start-page name="startpage" view-id="/termina.xhtml">
+		<transition name="continueGame" to="game">
+			<action expression="#{elearnTermina.startGameSession()}" />
+		</transition>
+	</start-page>
+	
+	<page name="game" view-id="/termina_normal.xhtml">
+ 		<transition name="next" to="roundToPlay">
+ 			<action expression="#{elearnTermina.endRound()}" />
+ 		</transition>
+ 		<transition name="beenden" to="highscorepage">
+ 			<action expression="#{elearnTermina.endRound()}" />
+ 		</transition>
+	</page>
+	
+	<page name="palette" view-id="/termina_palette.xhtml">
+ 		<transition name="next" to="roundToPlay">
+ 			<action expression="#{elearnTermina.endRound()}" />
+ 		</transition>
+ 		<transition name="beenden" to="highscorepage">
+ 			<action expression="#{elearnTermina.endRound()}" />
+ 		</transition>
+	</page>
+	
+	<decision name="isgameover" expression="#{0 > gameSessionScore}">
+		<transition name="true" to="gameoverpage"/>
+      	<transition name="false" to="whichmode"/>
+ 	</decision>
+	
+	<decision name="roundToPlay" expression="#{elearnTermina.roundsLeft > 0}">
+		<transition name="true" to="isgameover"/>
+		<transition name="false" to="highscorepage">
+			<action expression="#{elearnTermina.endGameSession()}" />
+			<!--  <action expression="#{elearnGameConfiguration.setAllVariablesBack()}" />-->
+		</transition>
+	</decision>	
+	
+	<decision name="whichmode" expression="#{gameRound.number % 3 == 0}">
+    	<transition name="true" to="palette">
+    	<!--  Bei jedem Switch nächste Runde, sowie Termchange -->
+			<!-- <action expression="#{elearnCheckAssociation.setSaidTermsArrayBack()}" />-->
+			<action expression="#{elearnTermina.startRoundPalette()}" />
+		</transition>
+    	<transition name="false" to="game">
+			<!-- <action expression="#{elearnCheckAssociation.setSaidTermsArrayBack()}" />-->
+			<action expression="#{elearnTermina.startRound()}" />
+		</transition>
+	</decision>
+	
+	<page name="highscorepage" view-id="/highscore.xhtml">
+	</page>
+	
+	<page name="gameoverpage" view-id="/gameover.xhtml">
+	</page>
+
+</pageflow-definition>

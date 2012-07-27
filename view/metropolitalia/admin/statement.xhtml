@@ -1,0 +1,57 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    template="/layout/adminTemplate.xhtml">
+
+    <ui:define name="body">
+		<div id="content">
+			<h:form id="statementForm">
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label"><h:outputText value="#{messages['admin.statements.statement']}" /></ui:define>
+					<h:inputText id="text" value="#{mitAdminStatementHome.text}"/>
+				</s:decorate>
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label"><h:outputText value="#{messages['admin.statements.enabled']}" /></ui:define>
+					<h:selectBooleanCheckbox value="#{mitAdminStatementHome.instance.enabled}" />
+				</s:decorate>
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label"><h:outputText value="#{messages['admin.statements.locations']}" /></ui:define>
+					<rich:dataTable id="locationAssignmentsTable" value="#{mitAdminStatementHome.locationAssignments}" var="_sal">
+						<h:column>
+							<h:outputText value="#{_sal.location.name}" />
+						</h:column>
+					</rich:dataTable>
+				</s:decorate>
+				
+				<div style="clear: both;">
+					<h:commandButton 
+						value="#{messages['save']}"
+						action="#{mitAdminStatementHome.persist}" 
+						rendered="#{!mitAdminStatementHome.managed}" />
+					<h:commandButton 
+						value="#{messages['save']}"
+						action="#{mitAdminStatementHome.update}" 
+						rendered="#{mitAdminStatementHome.managed}" />
+					<s:button
+						propagation="end" 
+						value="#{messages['back']}"
+						view="/admin/statementList.xhtml" />
+				</div>
+				<hr />
+				
+				<s:link view="/admin/statementAnnotation.xhtml" 
+					value="#{messages['admin.statementAnnotations.new']}" 
+					rendered="#{mitAdminStatementHome.managed}"> 
+					<f:param name="statementId" value="#{mitAdminStatementHome.instance.id}"/>
+				</s:link>
+			</h:form>
+		</div>
+        <br class="clear" />
+    </ui:define>
+</ui:composition>

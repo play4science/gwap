@@ -1,0 +1,33 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j">
+
+	<div id="navMenu">
+		<ul id="navMain">
+			<!-- <li class="#{menuBean.getCssClass('/home.xhtml')}">
+				<s:link view="/home.xhtml" value="#{messages['menu.home']}" propagation="none" />
+        	</li>-->
+			<li class="#{menuBean.getCssClass('/about.xhtml')}">
+	        	<s:link view="/about.xhtml" value="#{messages['menu.description']}" propagation="none"/>
+        	</li>
+			<li class="#{menuBean.getCssClass('/highscore.xhtml')}">
+	        	<s:link view="/highscore.xhtml" value="#{messages['menu.highscore']}" propagation="none"/>
+        	</li>
+    	</ul>
+    	<!-- 
+    	<s:fragment rendered="#{!hideSubmenu}">
+    	<ul id="navSub">
+    		<li>
+    			<s:link view="/accenti.xhtml" value="#{messages['menu.accenti']}" propagation="none" />
+    		</li>
+    	</ul>
+    	</s:fragment>
+    	 -->
+    </div>
+</ui:composition>

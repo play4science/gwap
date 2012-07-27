@@ -1,0 +1,22 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    
+<m:message xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:m="http://jboss.com/products/seam/mail"
+           xmlns:h="http://java.sun.com/jsf/html"
+           xmlns:f="http://java.sun.com/jsf/core"
+           urlBase="#{basePath}">
+           
+    <m:header name="X-Sent-From" value="Seam" />
+    <m:from name="seam" address="p4s@play4science.org" />
+    <m:to name="play4science" address="p4s@play4science.org" />
+    <m:subject><h:outputText value="Feedback: #{feedbackForm.subject}" /></m:subject>
+
+    <m:body>
+    	<h:outputText value="#{feedbackForm.name}"/> (Email: <h:outputText value="#{feedbackForm.email}"/>) sends the following feedback to you from page<br/>
+    	<h:outputText value="#{feedbackForm.referer}"/>
+    	<br/>
+    	<br/>
+        <h:outputText value="#{feedbackForm.comment}" />
+    </m:body>
+</m:message>

@@ -1,0 +1,92 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:a="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+    template="../layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="person" styleClass="edit">
+
+        <rich:panel>
+            <f:facet name="header">#{adminPersonHome.managed ? 'Edit' : 'Add'} Person</f:facet>
+
+
+
+            <s:decorate id="emailField" template="../layout/edit.xhtml">
+                <ui:define name="label">Email</ui:define>
+                <h:inputTextarea id="email"
+                               cols="80"
+                               rows="3"
+                              value="#{adminPersonHome.instance.email}"/>
+            </s:decorate>
+
+
+            <s:decorate id="passwordField" template="../layout/edit.xhtml">
+                <ui:define name="label">Password</ui:define>
+                <h:inputTextarea id="password"
+                               cols="80"
+                               rows="3"
+                              value="#{adminPersonHome.instance.password}"/>
+            </s:decorate>
+
+
+
+            <s:decorate id="usernameField" template="../layout/edit.xhtml">
+                <ui:define name="label">Username</ui:define>
+                <h:inputTextarea id="username"
+                               cols="80"
+                               rows="3"
+                           required="true"
+                              value="#{adminPersonHome.instance.username}"/>
+            </s:decorate>
+
+            <div style="clear:both">
+                <span class="required">*</span>
+                required fields
+            </div>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+
+            <h:commandButton id="save"
+                          value="Save"
+                         action="#{adminPersonHome.persist}"
+                       disabled="#{!adminPersonHome.wired}"
+                       rendered="#{!adminPersonHome.managed}"/>
+
+            <h:commandButton id="update"
+                          value="Save"
+                         action="#{adminPersonHome.update}"
+                       rendered="#{adminPersonHome.managed}"/>
+
+            <h:commandButton id="delete"
+                          value="Delete"
+                         action="#{adminPersonHome.remove}"
+                      immediate="true"
+                       rendered="#{adminPersonHome.managed}"/>
+
+            <s:button id="cancelEdit"
+                   value="Cancel"
+             propagation="end"
+                    view="/admin/person.xhtml"
+                rendered="#{adminPersonHome.managed}"/>
+
+            <s:button id="cancelAdd"
+                   value="Cancel"
+             propagation="end"
+                    view="/admin/#{empty personFrom ? 'personList' : personFrom}.xhtml"
+                rendered="#{!adminPersonHome.managed}"/>
+
+        </div>
+    </h:form>
+
+</ui:define>
+
+</ui:composition>

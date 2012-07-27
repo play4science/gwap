@@ -1,0 +1,77 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    template="/layout/adminTemplate.xhtml">
+
+    <ui:define name="body">
+		<div id="content">
+			<ui:include src="/widget/googlemap.xhtml" />
+			<script type="text/javascript">
+			map.gmapOptions['disableDefaultUI'] = true;
+			map.gmapOptions['disableDoubleClickZoom'] = true;
+			map.gmapOptions['draggable'] = false;
+			map.gmapOptions['scrollwheel'] = false;
+			
+			function addMarker(component) {
+				var latInput = component.parentNode.childNodes[0];
+				var lngInput = component.parentNode.childNodes[1];
+				var position = gmap.getCenter();
+				if (latInput.getValue() &amp;&amp; lngInput.getValue())
+					position = new google.maps.LatLng(latInput.getValue(), lngInput.getValue());
+				var marker = new google.maps.Marker({position:position, map:gmap, title: 'Move to correct position', draggable:true});
+				google.maps.event.addListener(marker, 'dragend', function() {
+					var pos = marker.getPosition();
+					latInput.setValue(pos.lat());
+					lngInput.setValue(pos.lng());
+				});
+			}
+			</script>
+			<a4j:form id="statementsTeaserForm">
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label"><h:outputText value="#{messages['admin.statementsTeaser.text']}" /></ui:define>
+					<h:inputText id="text" value="#{mitAdminStatementsTeaserHome.instance.teaser}" size="60"/>
+				</s:decorate>
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label"><h:outputText value="#{messages['admin.statements.statement']}" /></ui:define>
+					<rich:dataTable id="statementsTable" value="#{mitAdminStatementsTeaserHome.currentStatements}" var="_statementWithGeoPoint">
+						<h:column>
+							<h:selectOneMenu value="#{_statementWithGeoPoint.statement.id}" >
+								<s:selectItems value="#{mitAdminStatementsTeaserHome.allStatements()}" label="#{_s.text}" itemValue="#{_s.id}" var="_s" 
+									noSelectionLabel="#{messages['admin.statementsTeaser.selectStatement']}"/>
+							</h:selectOneMenu>
+						</h:column>
+						<h:column>
+							<h:inputText value="#{_statementWithGeoPoint.geoPoint.latitude}" />
+							<h:inputText value="#{_statementWithGeoPoint.geoPoint.longitude}" />
+							<a href="#" onclick="addMarker(this)"><h:outputText value="#{messages['admin.statementsTeaser.editPosition']}" /></a>
+						</h:column>
+					</rich:dataTable>
+					<h:commandButton action="#{mitAdminStatementsTeaserHome.addStatement()}" 
+						value="#{messages['admin.statementsTeaser.addStatement']}"/>
+				</s:decorate>
+				
+				<div style="clear: both;">
+					<h:commandButton 
+						value="#{messages['save']}"
+						action="#{mitAdminStatementsTeaserHome.persist}" 
+						rendered="#{!mitAdminStatementsTeaserHome.managed}" />
+					<h:commandButton 
+						value="#{messages['save']}"
+						action="#{mitAdminStatementsTeaserHome.update}" 
+						rendered="#{mitAdminStatementsTeaserHome.managed}" />
+					<s:button
+						propagation="end" 
+						value="#{messages['back']}"
+						view="/admin/statementsTeaserList.xhtml" />
+				</div>
+			</a4j:form>
+		</div>
+        <br class="clear" />
+    </ui:define>
+</ui:composition>

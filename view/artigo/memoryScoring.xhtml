@@ -1,0 +1,113 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:c="http://java.sun.com/jstl/core"
+    template="layout/template.xhtml">
+
+    <ui:define name="body">
+		<div id="related">
+			<ui:include src="layout/logo.xhtml" />
+			<ui:include src="layout/menu.xhtml" />
+			<ul id="navSub">
+			   	<s:fragment rendered="#{!identity.loggedIn}">
+			   	<li>
+		   		   	<s:link value="#{messages['menu.game.save_points']}"
+		   		   	        view="/login.xhtml" 
+		   		   	        propagation="none"
+		   		   	        />
+		   		</li>
+			   	</s:fragment>
+	   		</ul>
+		</div>
+		
+		<div id="content">
+			<div class="heading">#{messages['score']}: #{gwapGameMemorySharedGame.score}</div>
+			
+	       	<a4j:form id="scoreform">
+	    		<a4j:queue/>
+	    		
+	    		<div class="subheading">	    			
+	    			#{messages['game.rate']}:<br /><br />
+	    			<ui:include src="widget/gameSessionRating.xhtml" />	    					
+	    		</div>    	
+	        </a4j:form>
+	        
+			<div class="linkbox" style="margin-left: 10%; margin-top: 30px">
+			<a4j:outputPanel rendered="#{gwapGameMemorySharedGame.gameType.name=='gwapGameMemory'}">
+		  		<s:link view="/memoryLobby.xhtml" 
+		  	        	action="#{gwapGameMemoryPlayerMatcher.enqueue(0)}"
+		  	        	value="#{messages['menu.game.play_again']}"
+		  	        	propagation="none"		  	        	
+		  	        	styleClass="biglink"     	
+		  	        	/>
+			</a4j:outputPanel>
+			
+			<a4j:outputPanel rendered="#{gwapGameMemorySharedGame.gameType.name!='gwapGameMemory'}">
+			  		   		<s:link view="/memoryLobby.xhtml" 
+			  		   	        	action="#{gwapGameMemoryPlayerMatcher.enqueue(1)}"
+			  		   	        	value="#{messages['menu.game.play_again']}"
+			  		   	        	propagation="none"			  		   	        	
+			  		   	        	styleClass="biglink"     	
+			  		   	        	/>		
+			</a4j:outputPanel>										
+			</div>			
+					
+			<h:form>
+				<rich:tabPanel switchType="client" width="70%" style="margin-left: 10%; margin-top: 30px">
+					<c:forEach items="#{gwapGameMemorySharedGame.gameRounds}" var="_gameRound">
+						<rich:tab label="#{messages['game.round']} #{_gameRound.number}">
+			
+						<rich:dataTable id="resourcesTable#{_gameRound.number}"
+							                value="#{_gameRound.resources}"
+							                var="_resource"
+							                rows="1"
+							                style="border:none; background: transparent;"
+							                >
+							                
+							<rich:column width="80%" style="border:none;">
+								<div class="canvas">
+									<div class="canvas-inner">
+										<h:graphicImage value="#{_resource.url}"											
+											alt=""
+											/>
+									</div>
+								</div>
+							</rich:column>
+							
+							<rich:column width="20%" style="border:none;">
+								<dl style="margin-left:5px;">
+									<ui:include src="widget/scoringResourceDetails.xhtml">
+										<ui:param name="_resource" value="#{_resource}" />
+									</ui:include>
+									<dt><h:outputText value="#{messages['game.enteredTags']}" /></dt>
+									<dd class="tags">
+										<a4j:repeat value="#{_resource.taggings.toArray()}" var="_tag">
+											<div>#{_tag.tag}</div>											
+										</a4j:repeat>
+										<h:outputText value="#{messages['game.noTagsEntered']}" rendered="#{_resource.taggings.size()==0}" />
+									</dd>
+								</dl>
+							</rich:column>
+						</rich:dataTable>
+						<rich:datascroller for="resourcesTable#{_gameRound.number}"
+		  		                   page="1"   />
+		  		       </rich:tab>
+	  		       </c:forEach>
+				</rich:tabPanel>
+			</h:form>
+			
+			<a4j:outputPanel rendered="#{s:hasPermission('artigo', 'view-admin-interface')}">
+			GameSession ID: #{gwapGameMemorySharedGame.gameSessionBeanNew.gameSession.id}
+			</a4j:outputPanel>
+		</div>
+        <br class="clear" />
+        
+        
+    </ui:define>
+</ui:composition>

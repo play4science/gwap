@@ -1,0 +1,46 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    template="/layout/adminTemplate.xhtml">
+
+    <ui:define name="body">
+		<div id="content">
+			<h:form id="statementAnnotationForm">
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label"><h:outputText value="#{messages['admin.statements.statement']}" /></ui:define>
+					<h:inputText value="#{mitAdminStatementAnnotationHome.instance.statement.asText()}" disabled="true" />
+				</s:decorate>
+				
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label"><h:outputText value="#{messages['admin.statementAnnotations.text']}" /></ui:define>
+					<h:inputText value="#{mitAdminStatementAnnotationHome.instance.text}" />
+				</s:decorate>
+				
+				<div style="clear: both;">
+					<h:commandButton 
+						value="#{messages['save']}"
+						action="#{mitAdminStatementAnnotationHome.persist}" 
+						view="/admin/statement.xhtml"
+						rendered="#{!mitAdminStatementAnnotationHome.managed}" />
+					<h:commandButton 
+						value="#{messages['save']}"
+						action="#{mitAdminStatementAnnotationHome.update}" 
+						view="/admin/statement.xhtml"
+						rendered="#{mitAdminStatementAnnotationHome.managed}" />
+					<s:button
+						value="#{messages['back']}"
+						view="/admin/statement.xhtml">
+						<f:param name="statementId" value="#{mitAdminStatementAnnotationHome.instance.statement.id}"/>
+					</s:button>
+				</div>
+			</h:form>
+		</div>
+        <br class="clear" />
+    </ui:define>
+</ui:composition>

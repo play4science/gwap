@@ -1,0 +1,160 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+	<div class="canvas-no-shadow">
+	
+	<a4j:form style="width: 100%; height:100%;">
+	
+	<div class="canvas-inner-white" id="gridcanvas"> 
+	
+	 	<!-- Don't remove this! Needed for flicker avoidance -->
+		<a4j:outputPanel id="memorygridscreen" styleClass="memorygridscreen">
+		</a4j:outputPanel>
+			
+  		<a4j:outputPanel id="memorygrid" style="display:none">
+ 			<script type="text/javascript" language="javascript">
+				function guesserClick(idx)
+				{
+					var e=$$('.gridcell'+idx)[0];
+					
+					var set=!e.hasClassName('focussed_guesser');
+			
+					var img=$$('.img'+idx)[0];		
+					imageGridOut(img);
+						
+					
+					$$('.gridcell').each(
+							function (e)
+							{
+								e.removeClassName('focussed_guesser');
+							}
+					);
+			
+					$$('.gridnote').each(
+							function (e)
+							{
+								e.setStyle({display: 'none'});
+							}
+					);
+			
+					
+					if (set)
+					{
+						$$('.gridcell'+idx).each(
+								function (e)
+								{
+									e.addClassName('focussed_guesser');
+								}
+						);
+			
+						$$('.gridnote'+idx).each(
+								function (e)
+								{
+									e.setStyle({display: 'block'});
+								}
+						);
+					}
+				}	
+			
+				var describerClicked=false;
+				function describerClick(idx)
+				{
+					if (!#{gwapGameMemorySharedGame.resourceGridBean.noGoal})
+						return;
+					if (describerClicked)
+						return;
+					describerClicked=true;
+					
+					$$('.gridcell'+idx).each(
+							function (e)
+							{
+								e.addClassName('focussed');
+							}
+					);
+				}
+				
+				</script>
+		
+	 			<a4j:outputPanel id="memorygridcontent">	
+	 				 			
+				<a4j:outputPanel rendered="#{gwapGameMemoryPlayer.guesser}" >			    			    
+			    <a4j:repeat
+					value="#{gwapGameMemorySharedGame.resourceGridBean.resources}"
+					var="res"
+					rowKeyVar="idx"
+					>
+			
+						<div class="gridcell gridcell#{idx}
+								#{gwapGameMemorySharedGame.resourceGridBean.isSelected(res)?'focussed_guesser':''}">
+					
+													
+						<a4j:commandLink reRender="memoryform,memorygrid"
+							action="#{gwapGameMemorySharedGame.resourceClicked(res,gwapGameMemorySharedGame.currentRound)}"
+							onclick="guesserClick(#{idx});"
+							focus="questionName"
+							oncomplete="score();">				
+							
+							<h:graphicImage value="#{res.url}"  rendered="#{res!=null}" alt="#{res.url}"
+							class="gridimage img#{idx}"/>								
+								
+						</a4j:commandLink>
+			
+			
+						<div class="gridnote gridnote#{idx}" style="#{gwapGameMemorySharedGame.resourceGridBean.isSelected(res)?'':'display:none'}">							
+							#{messages['game.memory.sure']}</div>			
+					</div>
+			
+				</a4j:repeat>
+							
+				</a4j:outputPanel>
+
+
+				<a4j:outputPanel rendered="#{!gwapGameMemoryPlayer.guesser}">		
+						
+			    <a4j:repeat
+					value="#{gwapGameMemorySharedGame.resourceGridBean.resources}"
+					var="res"
+					rowKeyVar="idx"
+					>
+				
+					<div class="gridcell gridcell#{idx} 
+						#{gwapGameMemorySharedGame.resourceGridBean.isGoal(res)?'focussed':''}">
+			
+						<a4j:commandLink reRender="memoryform,memorygrid"
+						onclick="describerClick(#{idx});"
+						action="#{gwapGameMemorySharedGame.resourceClicked(res,gwapGameMemorySharedGame.currentRound)}"
+						oncomplete="score();"
+						focus="recommendedTagName"
+						>
+						
+						<h:graphicImage value="#{res.url}" rendered="#{res!=null}" alt="#{res.url}"
+							class="gridimage" />
+							 
+					</a4j:commandLink> 
+					</div>
+				</a4j:repeat>			
+					
+				</a4j:outputPanel>
+
+
+		
+		</a4j:outputPanel>
+ 		
+		<script type="text/javascript">updateGridImages(#{rich:element('memorygridscreen')}, #{rich:element('memorygridcontent')});</script> 			
+		
+	</a4j:outputPanel>
+ 
+	</div>
+	</a4j:form>
+
+	</div>
+	
+	
+</ui:composition>

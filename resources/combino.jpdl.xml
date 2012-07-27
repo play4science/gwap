@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<pageflow-definition
+  xmlns="http://jboss.com/products/seam/pageflow"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://jboss.com/products/seam/pageflow http://jboss.com/products/seam/pageflow-2.0.xsd"
+  name="combino">
+  
+	<start-page name="start" view-id="/combino.xhtml">
+		<action expression="#{combineGameSessionBean.startGameSession()}" />
+		<transition name="next" to="endOfRound"/>
+	</start-page>
+	
+	<page name="game" view-id="/combino.xhtml">
+ 		<transition name="next" to="endOfRound"/>
+	</page>
+	
+	<decision name="endOfRound" expression="#{combineGameSessionBean.roundExpired()}">
+		<transition name="true" to="roundToPlay">
+			<action expression="#{combineGameSessionBean.endRound()}" />
+		</transition>
+		<transition name="false" to="game"/>
+	</decision>
+	
+	<decision name="roundToPlay" expression="#{combineGameSessionBean.roundsLeft > 0}">
+		<transition name="true" to="game">
+			<action expression="#{combineGameSessionBean.startRound()}" />
+		</transition>
+		<transition name="false" to="scoring">
+			<action expression="#{combineGameSessionBean.endGameSession()}" />
+		</transition>
+	</decision>
+	
+	<page name="scoring" view-id="/combinoScoring.xhtml">
+	
+	<!-- 
+		<end-conversation/>
+	 -->
+	</page>
+</pageflow-definition>

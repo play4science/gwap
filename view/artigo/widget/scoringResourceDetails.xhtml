@@ -1,0 +1,30 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j">
+
+	<dt><h:outputText value="#{messages['image.artist']}" /></dt>
+	<dd><h:outputText value="#{_resource.artistName}" rendered="#{!empty(_resource.artistName)}"/>
+		<h:outputText value="#{messages['image.artist.anonymous']}" rendered="#{empty(_resource.artistName)}"/>
+	</dd>
+	<dt><h:outputText value="#{messages['image.title']}" /></dt>
+	<dd><h:outputText value="#{_resource.defaultTitle}" rendered="#{!empty(_resource.defaultTitle)}"/>
+		<h:outputText value="#{messages['image.title.unknown']}" rendered="#{empty(_resource.defaultTitle)}"/>
+	</dd>
+	<dt><h:outputText value="#{messages['image.location']}" /></dt>
+	<dd>
+		<h:outputText value="#{_resource.location} / #{_resource.institution}" rendered="#{!empty(_resource.location) and !empty(_resource.institution)}"/>
+		<h:outputText value="#{_resource.location}" rendered="#{!empty(_resource.location) and empty(_resource.institution)}"/>
+		<h:outputText value="#{_resource.institution}" rendered="#{empty(_resource.location) and !empty(_resource.institution)}"/>
+		<h:outputText value="#{messages['image.location.unknown']}" rendered="#{empty(_resource.location) and empty(_resource.institution)}"/>
+	</dd>
+	<dt><h:outputText value="#{messages['image.dateCreated']}" /></dt>
+	<dd><h:outputText value="#{_resource.dateCreated}" rendered="#{!empty(_resource.dateCreated)}"/>
+		<h:outputText value="#{messages['image.dateCreated.unknown']}" rendered="#{empty(_resource.dateCreated)}"/>
+	</dd>
+</ui:composition>

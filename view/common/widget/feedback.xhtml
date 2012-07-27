@@ -1,0 +1,37 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich">
+
+	<div class="dialog">
+		<h:form id="feedbackForm">
+			<h:panelGrid columns="1">
+				<s:decorate id="nameField" template="/layout/edit.xhtml">
+					<ui:define name="label">
+						<h:outputText value="#{messages['feedback.name']}" />
+					</ui:define>
+					<h:inputText id="name" value="#{feedbackForm.name}" />
+				</s:decorate>
+				<s:decorate id="emailField" template="/layout/edit.xhtml">
+					<ui:define name="label">
+						<h:outputText value="#{messages['feedback.email']}" />
+					</ui:define>
+					<h:inputText id="email" value="#{feedbackForm.email}" />
+				</s:decorate>
+				<s:decorate id="commentField" template="/layout/edit.xhtml" required="true">
+					<ui:define name="label">
+						<h:outputText value="#{messages['feedback.comment']}" />
+					</ui:define>
+					<h:inputTextarea id="comment" value="#{feedbackForm.comment}" style="width:350px;height:100px;" />
+				</s:decorate>
+				<div class="actionButtons">
+					<h:commandButton id="submit" value="#{messages['feedback.send']}" action="#{feedbackForm.send}"/>
+				</div>
+			</h:panelGrid>
+	    </h:form>
+	</div>
+</ui:composition>

@@ -1,0 +1,38 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:p4s="http://play4science.org/facelets">
+
+	<div id="characterizationResult" style="display: none;">
+		<a4j:form id="characterizationResultForm">
+			<ui:include src="characterizationMainPanel.xhtml">
+				<ui:param name="disabled" value="true"/>
+			</ui:include>
+
+			<div class="right">
+				<h:commandLink id="nextButton" action="next" styleClass="button">
+					<span><span class="checkmark-yes"/><h:outputText value="#{messages['next']}" /></span>
+				</h:commandLink>
+			</div>
+
+			<script type="text/javascript">
+			if (#{mitRecognize.skipCharacterizationResult}) {
+				$('characterizationResultForm:nextButton').onclick();
+			}
+			</script>
+						
+			<style type="text/css">
+#characterizationResultForm .rich-inslider-track-decor-2 img { width:0; height:8px; background-color: lightblue; }
+#characterizationResultForm .genderSlider .rich-inslider-track-decor-2 img { width:#{mitRecognize.getCharacterizationAsPercentage('gender')}%; }
+#characterizationResultForm .maturitySlider .rich-inslider-track-decor-2 img { width:#{mitRecognize.getCharacterizationAsPercentage('maturity')}%; }
+#characterizationResultForm .cultivationSlider .rich-inslider-track-decor-2 img { width:#{mitRecognize.getCharacterizationAsPercentage('cultivation')}%; }
+			</style>
+		</a4j:form>
+	</div>
+</ui:composition>

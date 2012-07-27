@@ -1,0 +1,56 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    template="layout/template.xhtml">
+
+    <ui:define name="body">
+		<div id="related">
+			<ui:include src="layout/logo.xhtml" />
+			<ui:include src="layout/mainMenuOnly.xhtml" />
+			<ul id="navSub" />
+<!-- 
+			<ui:include src="widget/tagCloud.xhtml" />
+			<ui:include src="tagATag/tagList.xhtml" />
+ -->
+			<div class="instruction">
+				<h:outputText escape="false" value="#{messages['game.tagatag.instruction']}" />
+			</div>
+			
+			<div>
+	 	 		<a4j:outputPanel id="recommendedTags" styleClass="ongoingGameStatsContent">
+					<a4j:repeat value="#{recommendedTags}" var="_recommendedTag">
+						<div class="#{_recommendedTag.matchType}">
+							<h:outputText value="#{_recommendedTag.tag}" />
+						</div>
+					</a4j:repeat>
+				</a4j:outputPanel>
+			</div>
+			
+			<div class="metaTaggingSuggestions">
+				<h1><h:outputText value="#{messages['general.suggestions']}" /></h1>
+				<a4j:outputPanel id="metaTaggingSuggestions" styleClass="">
+					<a4j:repeat value="#{metaTaggingSuggestions}" var="_metaTaggingSuggestion">
+						<span class="metaTaggingSuggestion#{_metaTaggingSuggestion.size}">
+							<a4j:commandLink
+							  value="#{_metaTaggingSuggestion.name}"
+							  onclick="#{rich:element('tagForm:tagInput')}.value='#{_metaTaggingSuggestion.name}';#{rich:element('tagForm:recommendTagButton')}.click()" />
+						</span>
+					</a4j:repeat>
+				</a4j:outputPanel>
+			</div>
+		</div>
+
+		<div id="content">
+			<ui:include src="widget/resourceImage.xhtml" />
+			<ui:include src="tagATag/tagForm.xhtml" />
+		</div>
+		
+        <br class="clear" />
+    </ui:define>
+</ui:composition>

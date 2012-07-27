@@ -1,0 +1,83 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jstl/core"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    template="layout/template.xhtml">
+
+    <ui:define name="body">
+		<div id="related">
+			<ui:include src="layout/logo.xhtml" />
+			<ui:include src="layout/menu.xhtml" />
+			<ul id="navSub">
+			   	<li>
+		   		   	<s:link value="#{messages['menu.game.play_again']}"
+		   		   	        propagation="none"
+		   		   	        view="/combino.xhtml" 
+		   		   	        />
+		   		</li>
+			   	<s:fragment rendered="#{!identity.loggedIn}">
+			   	<li>
+		   		   	<s:link value="#{messages['menu.game.save_points']}"
+		   		   	        view="/login.xhtml" 
+		   		   	        propagation="none"
+		   		   	        />
+		   		</li>
+			   	</s:fragment>
+	   		</ul>
+		</div>
+		
+		<div id="content">
+			<h:form>
+				<rich:dataTable id="gameRoundsTable"
+					                value="#{gameSession.gameRounds}"
+					                var="_gameRound"
+					                rows="1"
+					                style="border:none; background: transparent;"
+					                >
+					<rich:column width="60%" style="border:none;">
+						<div class="canvas">
+							<div class="canvas-inner">
+								<h:graphicImage value="#{_gameRound.resources[0].url}"
+									id="resource"
+									alt=""
+									/>
+							</div>
+						</div>
+					</rich:column>
+					<rich:column width="40%" style="border:none;">
+						<dl style="margin-left:5px;">
+							<ui:include src="widget/scoringResourceDetails.xhtml">
+								<ui:param name="_resource" value="#{_gameRound.resources[0]}" />
+							</ui:include>
+							<dt><h:outputText value="#{messages['score']}" /></dt>
+							<dd><h:outputText value="#{_gameRound.score}" /></dd>
+							 
+							<dt><h:outputText value="#{messages['game.combine.enteredCombinations']}" /></dt>
+							
+							<dd class="tags">
+								<a4j:repeat value="#{combineGameSessionBean.getCombinationsForGameRound(_gameRound.number)}" var="_combination">
+									<div class="#{combineGameSessionBean.getCssClass(_combination)}">
+										<h:outputText value="#{_combination.combinedTag.value}" />
+									</div>
+								</a4j:repeat>
+								<h:outputText
+									value="#{messages['game.combine.noCombinationsEntered']}"
+									rendered="#{combineGameSessionBean.getCombinationsForGameRound(_gameRound.number).size() == 0}" />
+							</dd>
+						</dl>
+					</rich:column>
+				</rich:dataTable>
+				<rich:datascroller for="gameRoundsTable"
+		  		                   page="1"
+		  		                   id="gameRoundsGridScroller" />
+			</h:form>
+		</div>
+        <br class="clear" />
+    </ui:define>
+</ui:composition>

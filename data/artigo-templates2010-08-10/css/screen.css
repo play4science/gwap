@@ -1,0 +1,137 @@
+@CHARSET "UTF-8";
+
+/*
+ * CSS for Screen
+ * 
+ * Styles for artigo
+ * 
+ * © Letspool AG, 16.03.2010
+ * Autor: Fabian Krumbholz
+ */
+
+/* =Reset
+-----------------------------------------------------------------------------*/
+html, body, div,
+table, caption, tbody, tfoot, thead, tr, th, td,
+h1, h2, h3, p, em, font, img,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend           { margin:0; padding:0; border:0; outline:0; font-size:12px; vertical-align:baseline; background:transparent; color:#000 }
+body                                    { line-height:1; font-family:Arial, Verdana, Tahoma, sans-serif; position:relative }
+ol, ul                                  { list-style-type:none }
+dt                                      { clear:both }
+
+/* =Structure
+-----------------------------------------------------------------------------*/
+body                                    { padding:0px 24px 220px 24px; background:#f9f9f9 url(../img/bg.jpg) repeat-x left bottom }
+
+#navLanguage                            { float:left }
+#navHeader                              { float:left }
+#search                                 { float:right }
+#logo                                   { float:left; margin:24px 0 }
+#ad                                     { float:right; margin:24px 0 }
+#related                                { float:left; width:375px; margin-right:24px; display:inline }
+#content,                                
+#content-image                          { float:right; display:inline }
+#content                                { width:575px; position:relative }
+
+/* =Navigation
+-----------------------------------------------------------------------------*/
+#navLanguage li                         { float:left; margin-right:.1em; margin-bottom:1em }
+#navLanguage li a                       { font-size:1em; color:#000; font-weight:bold; text-transform:uppercase; text-decoration:none; background:#cdcdcd; line-height:1.5em; padding:.3em }
+#navLanguage a:hover,
+#navLanguage li.active a                { background:#b8c9e1; font-size:1.2em }
+
+#navHeader li                           { float:left; margin-right:1em }
+#navHeader li a                         { font-size:1em; color:#000; font-weight:bold; text-transform:uppercase; text-decoration:none }
+
+#ad p                                   { float:left; margin-right:2em; text-transform:uppercase; font-weight:bold; font-size:.9em; padding-top:.75em }
+#ad img                                 { float:left }
+
+#navMain li                             { line-height:1.1em }
+#navMain a                              { color:#000; font-size:1.66667em; line-height:1.1em; text-transform:uppercase; text-decoration:none; font-weight:bold; padding:0 .2em }
+#navMain a:hover,
+#navMain li.active a                    { background:#b8c9e1 }
+
+#navSub                                 { width:230px; margin:60px 0 25px 0 }
+#navSub li                              { line-height:21px; padding:0; background:url(../img/arrowBig.gif) no-repeat 0 0; margin-bottom:.25em }
+#navSub a                               { font-size:1.16667em; color:#000; line-height:22px; text-decoration:none; padding-left:30px; margin:0; text-transform:uppercase; font-weight:bold }
+
+/* =Forms
+-----------------------------------------------------------------------------*/
+#search input                           { background:url(../img/lupe.gif) no-repeat right center; width:180px }
+#game                                   { margin-top:25px }
+#game input[type=text]                  { width:215px }
+input[type=submit]                      { color:#000; font-weight:bold; padding:.3em; background:#b8c9e1; border:none; cursor:pointer }
+#register                               { border-top:6px solid #000; border-bottom:3px solid #000; padding:2em 0; width:575px; background:#fff } 
+form h1                                 { padding-left:24px; line-height:2em; background:#fff }
+h2.error                                { padding-left:24px; color:#a7103d }
+.left                                   { float:left; width:220px; margin-left:24px }
+.right                                  { float:left; width:220px; margin-left:24px }
+label                                   { display:block; margin-top:1em; line-height:1.4em }
+#register input[type="submit"]          { margin-top:2.4em }
+#register input[type="text"]            { width:191px }
+label.required                          { color:#9dadc4 }
+label.error                             { color:#a7103d }
+
+/* =Content
+-----------------------------------------------------------------------------*/
+#navContent li                          { float:left; margin-right:.1em; margin-bottom:1px }
+#navContent a                           { font-size:1em; color:#000; font-weight:bold; text-decoration:none; background:#cdcdcd; line-height:1.5em; padding:.3em 1.3em }
+#navContent a:hover,        
+#navContent li.active a                 { background:#b8c9e1 }
+
+.contentBox                             { border-top:6px solid #000; border-bottom:3px solid #000; padding:20px 24px; width:527px; background:#fff }
+.contentBox h1                          { line-height:1.25em; font-size:1.2em; margin-bottom:1.25em }
+.contentBox p                           { line-height:1.25em; font-size:1em; margin-bottom:1.25em }
+
+.images ul                              { width:575px }
+.images li                              { float:left; width:175px; height:127px; background:url(../img/bgCanvasSmall.png) no-repeat; margin:0 20px 7px 0; text-align:center }
+.images li.lastInRow                    { margin-right:0 }
+.images img                             { padding:4px 7px 0 4px }
+
+.popup                                  { width:260px; z-index:10; background:url(../img/bgArrowPopup.png) no-repeat 15px bottom; border-top:7px solid #000; padding-bottom:20px }
+.popup li                               { width:230px; padding:5px 15px; border-bottom:1px solid #000 }
+.popup li.last                          { border-bottom:2px solid #000 }
+.popup h2                               { font-size:1.2em; line-height:1.2em }
+.popup p                                { font-size:1em; line-height:1.2em }
+.popup .game li                         { background:#fff }
+.popup .imageDescription li             { background:#9dadc4 }
+
+/* =Canvas
+-----------------------------------------------------------------------------*/
+.canvas                                 { background:url(../img/canvas-bottom-left.jpg) no-repeat left bottom }
+.canvas-outer                           { background:url(../img/canvas-bottom-right.jpg) no-repeat right bottom; padding-bottom:11px }
+.canvas-inner                           { background:url(../img/canvas-top-left.jpg) no-repeat left top }
+.canvas img                             { background:url(../img/canvas-top-right.jpg) no-repeat right top; padding:13px 17px 0px 17px }
+
+.description                            { width:500px; margin:1em 0 0 1em }
+.description h1                         { font-size:1.2em; line-height:1.8em; color:#9dadc4 }
+.description p                          { font-size:1em; line-height:1.5em; color:#000 }
+
+/* =Tag cloud
+-----------------------------------------------------------------------------*/
+.tagCloud                               { width:350px; margin-bottom:30px }
+.tagCloud h1                            {  }
+.tagCloud span                          { white-space:nowrap; padding-right:.25em }
+.tagCloud a                             { text-decoration:none }
+.tagCloudItem1 a                        { font-size:1em; color:#96a8c2 }
+.tagCloudItem2 a                        { font-size:1.2em; color:#a2b5d0 }
+.tagCloudItem3 a                        { font-size:1.4em; color:#b8c9e1 }
+.tagCloudItem4 a                        { font-size:1.6em; color:#586d8b }
+.tagCloudItem5 a                        { font-size:2em; color:#000 }
+
+/* =Table
+-----------------------------------------------------------------------------*/
+table                                   { border-top:4px solid #000; border-bottom:2px solid #000; width:375px; padding-bottom:10px; margin-bottom:10px; background:#fff }
+th                                      { text-align:left; padding:3px 0 20px 0; padding:3px 2px 20px 2px }
+td                                      { border-top:1px solid #000; padding:5px 2px }
+tr.active                               { background:#b9c9e2 }
+.ranking                                { text-align:right }
+.ranking a                              { background:url(../img/arrowSmall.gif) no-repeat left center; font-size:1em; text-transform:uppercase; color:#000; font-weight:bold; text-decoration:none; line-height:22px; padding:1px 0 1px 20px }
+
+/* =Helper
+-----------------------------------------------------------------------------*/
+.clear                                  { clear:both; line-height:0; height:0; margin:0; padding:0; font-size:.1em; overflow:hidden }
+.hide                                   { position:absolute; left:-10000em; width:20em }
+.hr                                     { margin:0; padding:0; line-height:1.18182em; height:1.18182em; font-size:.91667em; clear:both }
+.nb                                     { white-space:nowrap }

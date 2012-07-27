@@ -1,0 +1,61 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    template="../layout/adminTemplate.xhtml">
+
+    <ui:define name="body">
+		<div id="related">
+			<ui:include src="/layout/logo.xhtml" />
+			<ui:include src="/layout/menu.xhtml" />
+		</div>
+
+		<div id="content">
+			<!-- internalBasePath=#{internalBasePath}
+			<br />
+			basePath=#{basePath}
+			<br />
+			debug=#{init.debug}
+			<br /> -->
+			
+			<h1>GameSession erzwingen:</h1>
+			<br/>
+			<a4j:form id="forceForm">
+				GameSession-Id: <h:inputText id="forceGameSessionId" value="#{gwapGameMemoryForceBean.enteredId}"/>
+					<a4j:commandButton id="setForceGameSessionId"
+						action="#{gwapGameMemoryForceBean.updateForcedId()}"
+						reRender="forceForm"
+						value="Submit">
+						<s:defaultAction />
+					</a4j:commandButton>
+				<br />
+				Aktuell erzwungen: #{gwapGameMemoryForceBean.forcedId}
+			</a4j:form>
+			
+			<br/>
+			<br/>
+			<h1>Anzahl Bildbeschreibungen:</h1>
+			<h:dataTable value="#{adminHome.teaserCount}" var="_row">
+				<h:column>
+					<f:facet name="header">Sprache</f:facet>
+					<h:outputText value="#{_row[0]}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">Anzahl</f:facet>
+					<h:outputText value="#{_row[1]}" />
+				</h:column>
+			</h:dataTable>
+			<br />
+			<s:button action="#{adminArtResourceEnabled.calculateAll()}" value="Aktualisieren des enabled-Status von Kunstwerken (dauert etwas)" 
+				rendered="#{s:hasPermission('artigo', 'admin')}"/>
+			
+		</div>
+		
+        <br class="clear" />
+    </ui:define>
+</ui:composition>

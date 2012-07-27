@@ -1,0 +1,46 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j">
+	
+	
+	<div>
+	
+		<s:link view="/home.html" propagation="none">
+			<h:graphicImage value="/img/elearnlogo.gif"
+							id="logo"
+		               		alt="Termina"
+		               		height="102"
+		               		width="452"
+		               		/>
+		</s:link>
+	    
+	    <br class="clear"/>
+	    
+		<ul id="navMain">
+		
+			<li class="#{menuBean.getCssClass('/home.xhtml')}">
+				<s:link view="/home.xhtml" value="#{messages['Begrüßung']}" propagation="none" />
+        	</li>
+			<li class="#{menuBean.getCssClass('/termina.xhtml')}">
+	        	<s:link view="/termina.xhtml" value="#{messages['Spiel']}" propagation="none"/>
+        	</li>
+        	<li class="#{menuBean.getCssClass('/highscore.xhtml')}">
+	        	<s:link view="/highscore.xhtml" value="#{messages['Highscore']}" propagation="none"/>
+        	</li>
+        	<!--<li class="#{menuBean.getCssClass('/addword.xhtml')}">
+	        	<s:link view="/addword.xhtml" value="#{messages['Terme hinzufuegen']}" propagation="none"/>
+        	</li>-->
+			<s:fragment rendered="#{s:hasPermission('elearning', 'view-admin-interface')}"> 
+				<li class="#{menuBean.getCssClass('/admin/admin.xhtml')}">
+    			   	<s:link view="/admin/admin.xhtml" value="#{messages['mit.menu.administrator']}" propagation="none"/>
+        		</li>
+			</s:fragment>
+    	</ul>
+    </div>
+</ui:composition>

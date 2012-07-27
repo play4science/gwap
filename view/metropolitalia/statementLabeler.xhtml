@@ -1,0 +1,69 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:p4s="http://play4science.org/facelets"
+    template="layout/template.xhtml">
+
+    <ui:define name="body">
+		<div id="related">
+			<ui:include src="/layout/menu.xhtml">
+				<ui:param name="hideSubmenu" value="true" />
+			</ui:include>	
+			
+			<!-- game ui -->
+
+			<a4j:form><p4s:speechbubble statement="#{statement}"/></a4j:form>
+			<script type="text/javascript">
+			__addLoadEvent(function() { new Effect.Highlight($('#speechbubble')); }); 
+			</script>
+			<div >
+				<span class="ongoingGameStatsCaption"><h:outputText value="#{messages['game.statementLabeler.caption']}"/></span>
+				<div class="ongoingGameStatsContent">
+					<div id="breadcrumbLocations"> </div>
+					<div id="locationName" style="height: 20px;"> </div>
+					<h:form id="locationAssignmentForm">
+						<h:inputHidden id="locationId" value="#{mitStatementLabelerBean.locationId}" />
+						<div class="right">
+							<h:commandLink action="next" reRender="locations"
+								onclick="$('locationAssignmentForm:locationId').value = map.selected.id; return true;"
+								styleClass="button">
+									<span><span class="checkmark-yes"/><h:outputText value="#{messages['game.statementLabeler.next']}"/></span>
+							</h:commandLink>
+						</div>
+					</h:form>
+				</div>
+			</div>
+		</div>
+
+		<div id="content">
+			<div id="clickOnMap" style="margin-bottom: 5px;"><h:outputText value="#{messages['game.clickOnMap']}" /></div>
+			<div id="morePrecisely" style="margin-bottom: 5px; display: none;"><h:outputText value="#{messages['game.morePrecisely']}"/></div>
+			<ui:include src="/widget/googlemap.xhtml" />
+			<script type="text/javascript">
+			map.rootLocationId = 8310;
+			map.breadcrumbLocations = 'breadcrumbLocations';
+			map.mouseOver = function(object, event) {
+				$('locationName').innerHTML = object.title;
+			};
+			map.mouseOut = function(object, event) {
+				$('locationName').innerHTML = "";
+			};
+			map.mouseClick = function(object, event) {
+				$('locationName').innerHTML = "";
+				$('clickOnMap').style.display = "none";
+				$('morePrecisely').style.display = "block";
+				new Effect.Highlight($('morePrecisely'));
+			};
+			</script>
+		</div>
+		 
+		<br class="clear" />
+		
+    </ui:define>
+</ui:composition>

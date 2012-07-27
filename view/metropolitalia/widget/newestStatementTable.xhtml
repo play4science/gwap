@@ -1,0 +1,57 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:p4s="http://play4science.org/facelets">
+				
+				
+				<rich:column >
+					<f:facet name="header">
+						<h:outputText value="#{messages['admin.statements.createDate']}" rendered="#{locationAssignment != null}"/>
+					</f:facet>
+					<h:outputText value="#{locationAssignment.created}" />
+				</rich:column>
+				<rich:column >
+					<f:facet name="header">
+						<h:outputText value="#{messages['admin.statements.location']}" rendered="#{locationAssignment != null}"/>
+					</f:facet>
+					<h:outputText value="#{locationAssignment.location.name}" rendered="#{locationAssignment != null}"/>
+				</rich:column>
+
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="#{messages['admin.statements.createDate']}" />
+					</f:facet>
+					<h:outputText value="#{resource.createDate}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="#{messages['admin.statements.statement']}" />
+					</f:facet>
+					<s:link view="/admin/statementOverview.xhtml"
+						value="#{resource.asText()}">
+						<f:param name="statementId" value="#{resource.id}" />
+					</s:link>
+				</rich:column>
+				
+				<rich:column width="50px">
+					<f:facet name="header">
+						<h:outputText value="#{messages['admin.statements.id']}" />
+					</f:facet>
+					<h:outputText value="#{resource.id}" />
+				</rich:column>
+				
+				<rich:column width="10px">
+					<s:link view="/admin/statement.xhtml" propagation="none"
+						value="#{messages['edit']}">
+						<f:param name="statementId" value="#{resource.id}" />
+					</s:link>
+				</rich:column>
+				
+
+</ui:composition>

@@ -1,0 +1,157 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:p4s="http://play4science.org/facelets"
+    template="layout/template.xhtml">
+	
+	
+
+    <ui:define name="body">
+    
+    
+    <script type="text/javascript">
+		var activeOld = 0;
+		function colorChooser(active) {
+			jQuery('#' + activeOld).css('background-color','transparent');
+			jQuery('#' + active).css('background-color','#B8C9E1');
+			activeOld = active;
+		}
+	</script>
+	
+	
+	<div id="related">
+		<ui:include src="layout/logo.xhtml" />
+		<ui:include src="layout/menu.xhtml" />
+
+   
+		<h:outputText value="#{messages['search.noResults']}" rendered="#{mitSearchBean.emptyResult}"/>
+	    <div id="searchResults">
+	    	<div style="margin-bottom: 10px;">
+				<h:outputText value="#{messages['search.results']}" rendered="#{!mitSearchBean.emptyResult}" />
+	    	</div>
+			<h:form>
+				<p4s:pagination viewId="/solrSearchResults.xhtml" style="margin:0 0 10px 0;"/>
+				<rich:dataTable id="resultsList"
+				               value="#{mitSearchBean.results}"
+				               var="_doc"
+				               rendered="#{!mitSearchBean.emptyResult}"
+				               columnClasses="noBorder"
+				               styleClass="statementList"
+				               >
+					<rich:column>
+						<div id="#{_doc.getFieldValue('id')}">
+							<a4j:commandLink value="#{_doc.getFieldValue('statement')}" action="#{mitSearchBean.showDetail(_doc.getFieldValue('id'))}" reRender="searchResultDetail" styleClass="link" />
+						</div>
+				    </rich:column>
+				</rich:dataTable>
+				<p4s:pagination viewId="/solrSearchResults.xhtml" style="margin:10px 0 0 0;"/> 
+			</h:form>
+	    </div>
+	</div>
+		
+		
+		<div id="content">
+		
+			<ui:include src="/widget/googlemap.xhtml" />
+			
+			<script type="text/javascript">
+				__addLoadEvent(function() {
+					map.percentageView = true;
+					maxWidthPossible = 600;
+					jQuery('#gmap').height(401);
+					
+					
+				 });
+
+				
+				function swich(){
+					var betPercentages = jQuery("#betPercentages");
+					if (betPercentages.css("display") == 'none') {
+					     betPercentages.fadeIn();
+					 } else {
+						 betPercentages.fadeOut();
+					    }		    
+				}
+				
+				map.mouseOver = function(object, event) {
+					$('betDetailLocationName').innerHTML = object.title;
+					$('betDetailLocationPercentage').innerHTML = object.percentage + '%';
+				};
+				map.mouseOut = function(object, event) {
+					$('betDetailLocationName').innerHTML = "";
+					$('betDetailLocationPercentage').innerHTML = "";
+				};
+				map.mouseClick = function(object, event) {
+					$('betDetailLocationName').innerHTML = "";
+					$('betDetailLocationPercentage').innerHTML = "";
+				};
+			</script>	
+					
+			<a4j:outputPanel id="searchResultDetail">
+			
+				<div id="betScoringLegend" style="width: 700px">
+					<ui:include src="/widget/mapLegend.xhtml">
+						<ui:param name="withOwnChoice" value="#{mitSearchBean.selectedBet}" />
+					</ui:include>
+				</div>
+			
+			
+				<s:fragment rendered="#{mitSearchBean.selectedStatement != null}">
+					<s:fragment rendered="#{mitSearchBean.selectedBet == null}">
+						<script type="text/javascript">
+											
+							map.displayPercentages(#{mitSearchBean.selectedStatement.id});
+							colorChooser(#{mitSearchBean.selectedStatement.id});
+						</script>
+					</s:fragment>
+					<s:fragment rendered="#{mitSearchBean.selectedBet != null}">
+						<script type="text/javascript">
+											
+							map.displayPercentagesByBet(#{mitSearchBean.selectedBet.id});
+							colorChooser(#{mitSearchBean.selectedStatement.id});
+						</script>
+					</s:fragment>
+				
+					<!--  bei eigener Bet zu diesem Statement -->
+					
+					<table style="padding-bottom: 20px">
+						<ui:include src="/widget/betScoring.xhtml">
+							<ui:param name="bet" value="#{mitSearchBean.selectedBet}" />
+						</ui:include>
+					</table>
+		
+					
+					<!-- gesamte Prozentzahlen zu diesem Statement -->
+					<a href="#" onclick="swich()" class="link">
+						<span><h:outputText value="#{messages['statements.list.othersHeaderButton']}" /></span>
+					</a>
+					<div id="betPercentages" style="display:none;">
+						<ui:include src="/widget/betPercentages.xhtml">
+							<ui:param name="percentages" value="#{mitPokerScoring.getStatementPercentages(mitSearchBean.selectedStatement)}"/>
+						</ui:include>
+					</div>
+					
+					<div id="statementCharacterization" style="margin-top: 20px;">
+						<h4><h:outputText value="#{messages['admin.statementOverview.characterization']}:" /></h4> 
+						<ui:include src="/widget/statementCharacterization.xhtml">
+							<ui:param name="statement" value="#{mitSearchBean.selectedStatement}"/>
+						</ui:include>
+					</div>
+					
+					<div id="statementHighlighting" style="margin-top: 20px;">
+						<h4><h:outputText value="#{messages['admin.statementOverview.highlighting']}:" /></h4>
+						<ui:include src="/widget/statementHighlightingWidget.xhtml" >
+							<ui:param name="statement" value="#{mitSearchBean.selectedStatement}"/>
+						</ui:include>
+					</div>
+				</s:fragment>
+			</a4j:outputPanel>
+		</div>
+    </ui:define>
+</ui:composition>

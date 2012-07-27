@@ -1,0 +1,50 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j">
+
+	<script type="text/javascript">
+	function selectLocationInSuggestionbox() {
+		map.displayMarkers(#{rich:element('locationId')}.value);
+		jQuery('#submitLocation').show();
+		jQuery('#clickOnMap').hide();
+		#{rich:element('textLocation')}.value = '';
+	}
+	</script>
+	<h:inputHidden id="locationId" value="#{locationId}" converter="javax.faces.Long" />
+	<span class="ongoingGameStatsCaption"><h:outputText value="#{whereFromText}"/></span>
+	<div class="ongoingGameStatsContent">
+		<div id="breadcrumbLocations"/>
+		<div id="submitLocation" style="display:none; float:right;">
+			<a4j:commandLink action="#{mapsHelper.submitFunction(submitFunction)}" oncomplete="completed('location');" reRender="score,coins" styleClass="button paddingRight">
+				<span><span class="checkmark-yes"/><h:outputText value="#{messages['game.recognize.submitLocation']}" /></span>
+			</a4j:commandLink>
+			<a4j:commandLink onclick="map.displayParentMarkers(); if (!map.selected) { jQuery('#submitLocation').hide(); }" styleClass="button">
+				<span><span class="checkmark-no"/><h:outputText value="#{messages['game.recognize.lastLocation']}" /></span>
+			</a4j:commandLink>
+		</div>
+		<div class="clear" />
+		<div id="locationName" style="height: 20px;"> </div>
+		<div class="clear" style="height: 10px;"/>
+		<div class="messages" id="clickOnMap">
+			<dl><dt><h:outputText value="#{messages['game.recognize.clickOnMap']}" /></dt></dl>
+		</div>
+		<h:inputText value="" id="textLocation" />
+		<rich:suggestionbox for="textLocation" id="textLocationSuggestionbox" suggestionAction="#{geoBean.getLocationsByApproximateName}" var="location" 
+			fetchValue="#{location.name}" minChars="2" rowClasses="autocomplete" selectedClass="autocompleteSelected">
+			<rich:column><h:outputText value="#{location.name}" /></rich:column>
+			<rich:column><h:outputText value="#{messages['locationType.'.concat(location.type)]}" /></rich:column>
+			<a4j:support ajaxSingle="true" event="onselect" action="#{geoBean.doNothing()}" reRender="locationId" oncomplete="selectLocationInSuggestionbox()">
+				<f:setPropertyActionListener value="#{location.id}" target="#{locationId}" />
+			</a4j:support>
+		</rich:suggestionbox>
+		<div class="messages" id="morePrecisely" style="display: none;">
+			<dl><dt class="withRightArrow"><h:outputText value="#{messages['game.recognize.morePrecisely']}"/></dt></dl>
+		</div>
+	</div>
+</ui:composition>

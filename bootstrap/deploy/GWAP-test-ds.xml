@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE datasources
+    PUBLIC "-//JBoss//DTD JBOSS JCA Config 1.5//EN"
+    "http://www.jboss.org/j2ee/dtd/jboss-ds_1_5.dtd">
+<datasources>
+   
+   <local-tx-datasource>
+      <jndi-name>GWAPDatasource</jndi-name>
+<!--
+      <use-java-context>false</use-java-context>
+-->
+      <connection-url>jdbc:postgresql:gwaptest</connection-url>
+      <driver-class>org.postgresql.Driver</driver-class>
+      <user-name>gwap</user-name>
+      <password>gwap</password>
+   </local-tx-datasource>
+    
+</datasources>

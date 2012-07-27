@@ -1,0 +1,109 @@
+Index: resources/mitAccenti.jpdl.xml
+===================================================================
+--- resources/mitAccenti.jpdl.xml	(revision 854)
++++ resources/mitAccenti.jpdl.xml	(working copy)
+@@ -8,7 +8,7 @@
+   
+ 	<start-page name="start" view-id="/accenti.xhtml">
+ 		<action expression="#{mitAccenti.startGameSession()}" />
+-		<transition name="next" to="afterGameRound">
++		<transition name="next" to="profile">
+ 			<action expression="#{mitAccenti.endRound()}" />
+  		</transition>
+ 	</start-page>
+Index: view/accentiurbani/accentiProfile.xhtml
+===================================================================
+--- view/accentiurbani/accentiProfile.xhtml	(revision 856)
++++ view/accentiurbani/accentiProfile.xhtml	(working copy)
+@@ -52,28 +52,39 @@
+ 						<ui:define name="label">
+ 							<h:outputText value="#{messages['person.hometown']}" />
+ 						</ui:define>
+-						<h:selectOneMenu id="hometownSelectId" onchange="selectHometownChanged();">
++						<h:selectOneMenu id="hometownSelectId" value="#{hometownSelectId}">
+ 							<s:selectItems value="#{mitAccenti.hometownSelectItems}" var="location" label="#{location.name}" itemValue="#{location.id}" noSelectionLabel="#{messages['general.pleaseSelect']}" />
++							<a4j:support event="onchange" reRender="hometownSelectIdPanel2" oncomplete="selectHometownChanged(1);" />
+ 						</h:selectOneMenu>
++						<br/>
++						<a4j:outputPanel id="hometownSelectIdPanel2">
++							<h:selectOneMenu id="hometownSelectId2" value="#{hometownSelectId2}">
++								<f:selectItem itemLabel="#{messages['general.pleaseSelect']}" itemValue="org.jboss.seam.ui.NoSelectionConverter.noSelectionValue"/>
++								<f:selectItems value="#{geoBean.getLocationsAsSelectItems(hometownSelectId, 'mit')}" /> 
++								<a4j:support event="onchange" reRender="hometownSelectIdPanel3" oncomplete="selectHometownChanged(2);" />
++							</h:selectOneMenu>
++						</a4j:outputPanel>
++						<br/>
++						<a4j:outputPanel id="hometownSelectIdPanel3">
++							<h:selectOneMenu id="hometownSelectId3" value="#{hometownSelectId3}" onchange="selectHometownChanged(3);">
++								<f:selectItem itemLabel="#{messages['general.pleaseSelect']}" itemValue="org.jboss.seam.ui.NoSelectionConverter.noSelectionValue"/>
++								<f:selectItems value="#{geoBean.getLocationsAsSelectItems(hometownSelectId2, 'mit3')}" /> 
++							</h:selectOneMenu>
++						</a4j:outputPanel>
+ 						<h:inputHidden id="locationId" value="#{mitAccenti.locationId}" />
+ 						<script type="text/javascript">
+-						function selectHometownChanged() {
+-							$('profileForm:hometownField:locationId').value = $('profileForm:hometownField:hometownSelectId').value;
++						function selectHometownChanged(step) {
+ 							jQuery('#fillProfile').hide();
+-							if ($('profileForm:hometownField:hometownSelectId').value == #{mitAccenti.locationItaly.id}) {
+-								jQuery('#clickOnMap').show();
+-								new Effect.Highlight($('clickOnMap'));
+-								jQuery('#hideGmap').hide();
+-							} else {
+-								jQuery('#clickOnMap').hide();
+-								jQuery('#morePrecisely').hide();
+-								jQuery('#hideGmap').show();
+-								$('locationName').innerHTML = "";
+-								map.resetSelection();
++							if (step == 1) {
++								$('profileForm:hometownField:locationId').value = $('profileForm:hometownField:hometownSelectId').value;
++								if (this.value == "org.jboss.seam.ui.NoSelectionConverter.noSelectionValue")
++									$('profileForm:hometownField:locationId').value = "";
++							} else if (step == 2) {
++								$('profileForm:hometownField:locationId').value = $('profileForm:hometownField:hometownSelectId2').value;
++							} else if (step == 3) {
++								$('profileForm:hometownField:locationId').value = $('profileForm:hometownField:hometownSelectId3').value;
+ 							}
+-							if ($('profileForm:hometownField:hometownSelectId').value == "org.jboss.seam.ui.NoSelectionConverter.noSelectionValue")
+-								$('profileForm:hometownField:locationId').value = "";
+-						}
++						};
+ 						$('profileForm:hometownField:hometownSelectId').value = $('profileForm:hometownField:locationId').value;
+ 						</script>
+ 						<div class="clear"/>
+Index: src/hot/gwap/mit/GeoBean.java
+===================================================================
+--- src/hot/gwap/mit/GeoBean.java	(revision 854)
++++ src/hot/gwap/mit/GeoBean.java	(working copy)
+@@ -117,4 +117,15 @@
+ 		return locationsAsSelectItems;
+ 	}
+ 	
++	public List<SelectItem> getLocationsAsSelectItems(Long parentId, String hierarchyName) {
++		log.info("Get locations as select items for parent #0 and hierarchy #1", parentId, hierarchyName);
++		if (parentId != null) {
++			Query q = getEntityManager().createNamedQuery("location.containedInHierarchyAsSelectItems");
++			q.setParameter("id", parentId);
++			q.setParameter("hierarchyName", hierarchyName);
++			return q.getResultList();
++		}
++		return null;
++	}
++	
+ }
+Index: src/main/gwap/model/resource/Location.java
+===================================================================
+--- src/main/gwap/model/resource/Location.java	(revision 858)
++++ src/main/gwap/model/resource/Location.java	(working copy)
+@@ -40,7 +40,10 @@
+ 	@NamedQuery(name="location.orderedById", query="from Location l order by id", cacheable=true),
+ 	@NamedQuery(name="location.regionFromMunicipality", query="select p2.location from Location l " +
+ 			"join l.hierarchyParents p1 join p1.location.hierarchyParents p2 where l.id=:id", cacheable=true),
+-	@NamedQuery(name="location.asSelectItems", query="select new javax.faces.model.SelectItem(l.id, l.name||' ('||lower(l.type)||')') from Location l order by l.name", cacheable=true)
++	@NamedQuery(name="location.asSelectItems", query="select new javax.faces.model.SelectItem(l.id, l.name||' ('||lower(l.type)||')') " +
++			"from Location l order by l.name", cacheable=true),
++	@NamedQuery(name="location.containedInHierarchyAsSelectItems", query="select new javax.faces.model.SelectItem(l.id, l.name) " +
++			"from Location l join l.hierarchyParents p where p.location.id = :id and p.name = :hierarchyName group by l.id, l.name order by l.name", cacheable=true)
+ })
+ 
+ /**

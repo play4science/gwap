@@ -1,0 +1,34 @@
+<VirtualHost *:80>
+	ServerName www.artigo.org
+	ServerAlias artigo.org
+	ServerAdmin webmaster@artigo.org
+	HostnameLookups On
+
+	RewriteEngine On
+	RewriteCond %{REQUEST_METHOD} ^TRACE
+	RewriteRule .* - [F]
+
+	RewriteCond     %{HTTP_HOST} !=www.artigo.org   [NC]
+	RewriteCond     %{HTTP_HOST} !=localhost        [NC]
+	RewriteRule     ^/(.*) http://www.artigo.org/$1 [L,R]
+
+#	Redirect /index.html http://www.artigo.org/artigo/home.html
+#	Redirect /index.html http://artigo.gwi.uni-muenchen.de/
+#	DocumentRoot /var/www
+
+	# Mod_jk configuration:
+	# see /etc/apache2/conf.d/jk.conf
+
+	JkMount / ajp13_worker
+	JkMount /* ajp13_worker
+
+	#JkUnMount /images/* ajp13_worker
+
+#	ProxyPass /foo http://localhost:8080/artigo/
+#	ProxyPassReverse /foo http://localhost:8080/artigo/
+
+	ErrorLog /var/log/apache2/www.artigo.org-error.log
+	LogLevel warn
+	CustomLog /var/log/apache2/www.artigo.org-access.log combined
+</VirtualHost>
+

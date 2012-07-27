@@ -1,0 +1,37 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j">
+
+	<div class="round">
+		<h:outputText value="#{messages['game.round']} " />
+		<h:outputText value="#{gameRound.number} " />
+		<h:outputText value="#{messages['game.round_of']} " />
+		<h:outputText value="#{gameType.rounds}" />
+		<s:fragment rendered="#{displayProgressBar}">
+			<rich:progressBar
+				id="progressbar"
+				minValue="0" 
+				maxValue="#{gameSession.gameType.roundDuration}"
+				value="0"
+				label="#{gameSession.gameType.roundDuration} #{messages['game.seconds']}"
+				mode="client"
+			/>
+			<script type="text/javascript">
+			countdown.callbackStep = function() {
+				var value = this.duration - this.seconds;
+				if (value == 0)
+					value = 0.000001; // Fix for RichFaces ProgressBar not displaying with value 0
+				#{rich:component('progressbar')}.setValue(value);
+				#{rich:component('progressbar')}.setLabel(this.seconds + " #{messages['game.seconds']}");
+			};
+			countdown.start(#{gameType.roundDuration});
+			</script>
+		</s:fragment>
+	</div>
+</ui:composition>

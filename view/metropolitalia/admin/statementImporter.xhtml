@@ -1,0 +1,55 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    template="/layout/adminTemplate.xhtml">
+
+    <ui:define name="body">
+		<div id="content">
+			<h:form enctype="multipart/form-data">
+				<s:fileUpload id="file"
+					data="#{mitAdminStatementImporter.data}"
+					fileName="#{mitAdminStatementImporter.name}"
+					fileSize="#{mitAdminStatementImporter.size}"
+					contentType="#{mitAdminStatementImporter.contentType}"/>
+				<h:commandButton value="Upload" action="#{mitAdminStatementImporter.upload}" />
+				<br/>
+				<h:outputText value="#{mitAdminStatementImporter.statements.size()} #{messages['admin.statements.statementsLoaded']}" rendered="#{!empty mitAdminStatementImporter.statements}" />
+				<rich:dataTable value="#{mitAdminStatementImporter.statements}" var="_resource"
+					rendered="#{!empty mitAdminStatementImporter.statements}" styleClass="with-borders">
+					<rich:column>
+				    	<f:facet name="header">
+				            <h:outputText value="#{messages['admin.statements.statement']}"/>
+				        </f:facet>
+				        <h:outputText value="#{_resource.statement}" />
+				    </rich:column>
+					<rich:column>
+				    	<f:facet name="header">
+				            <h:outputText value="#{messages['admin.statements.location']}"/>
+				        </f:facet>
+				        <h:outputText value="#{_resource.location.name}" rendered="#{!empty _resource.location}" />
+				    </rich:column>
+					<rich:column>
+				    	<f:facet name="header">
+				            <h:outputText value="#{messages['admin.statements.annotation']}"/>
+				        </f:facet>
+				        <h:outputText value="#{_resource.description}" />
+				    </rich:column>
+					<rich:column>
+				    	<f:facet name="header">
+				            <h:outputText value="#{messages['admin.statements.italianStandard']}"/>
+				        </f:facet>
+				        <h:outputText value="#{_resource.italianoStandard}" />
+				    </rich:column>
+				</rich:dataTable>
+				<h:commandButton value="Import" action="#{mitAdminStatementImporter.doImport()}" rendered="#{!empty mitAdminStatementImporter.statements}" />
+			</h:form>
+		</div>
+        <br class="clear" />
+    </ui:define>
+</ui:composition>

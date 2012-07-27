@@ -1,0 +1,122 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j">
+
+	<div class="tags">
+		<ui:include src="/widget/score.xhtml"/>
+	</div>
+	
+	<div class="tags">
+		<span class="ongoingGameStatsCaption"><h:outputText value="#{messages['game.combine.opponentsCombinations']}" /></span>
+		<a4j:outputPanel id="opponentCombinedTags" styleClass="ongoingGameStatsContent">
+			<h:outputText value="#{opponentCombinedTags.size}" /> 
+		</a4j:outputPanel>
+	</div>
+
+	<div class="tags roundInfo">
+		<h:form>
+			<a4j:queue ignoreDupResponses="true" />
+			<a4j:commandButton
+				id="continueButton"
+				styleClass="nextRound"
+				value="#{messages['game.combine.nextRound']}"
+				reRender="reloadTagsForm"
+				action="#{combineGameSessionBean.forceRoundExpired}"/>
+		</h:form>
+		
+		<ui:include src="/widget/round.xhtml">
+			<ui:param name="displayProgressBar" value="true" />
+		</ui:include>
+	</div>
+	
+	<div class="tags combineHeadline">
+		<h:form id="reloadTagsForm">
+			<a4j:queue ignoreDupResponses="true" />
+			<a4j:commandButton
+				id="reloadTagsButton"
+				styleClass="reloadTags"
+				value="#{messages['game.combine.moreTags']}"
+				reRender="displayedTags,reloadTagsForm"
+				rendered="#{combinedTagBean.hasNewTags()}"
+				action="#{combinedTagBean.updateDisplayedTags}"/>
+		</h:form>
+		
+		<h3><h:outputText value="#{messages['game.combine.tagsToCombine']}" /></h3>
+	</div>
+	
+	<div class="tags tagList">	
+		<script type="text/javascript">
+		function onSelectTag(tagName) {
+			#{rich:element('recommendedTagName')}.value = tagName;
+		}
+		</script>
+		<script type="text/javascript">
+		function onShowCombination() {
+			new Effect.Highlight(jQuery(#{rich:element('combinations')}).find('td')[0]);
+		}
+		</script>
+	
+		<h:form>
+			<a4j:queue ignoreDupResponses="false" />
+			
+			<h:inputHidden value="#{recommendedTag.name}" id="recommendedTagName"><s:validate/></h:inputHidden>
+			
+			<a4j:outputPanel id="displayedTags"> 
+				<a4j:repeat value="#{displayedTags}" var="_tag" rowKeyVar="_index">
+					<ui:fragment rendered="${_index > 0 and _index % 5 == 0}"><br/></ui:fragment>
+				
+					<a4j:commandLink
+						value="#{_tag}"
+						onclick="onSelectTag('#{_tag.name}');"
+						oncomplete="onShowCombination();"
+						reRender="combinations"
+						action="#{combinedTagBean.selectTag}">
+					</a4j:commandLink>
+					
+					#{' '}
+				</a4j:repeat>
+			</a4j:outputPanel>
+			
+			<br/>
+		</h:form>
+	</div>
+	
+	<div class="tags">
+		<h3><h:outputText value="#{messages['game.combine.combinedTags']}" /></h3>
+	</div>
+	
+	<div class="tags combinedTags">
+		<a4j:outputPanel id="combinations" styleClass="ongoingGameStatsContent">
+			<table>
+				<a4j:repeat value="#{combinations}" var="_combination" rowKeyVar="_index">
+					<tr>
+						<td>
+							<h:outputText
+								value="#{_combination.combinedTag.getValue()}"
+								styleClass="#{combinedTagBean.getCssClass(_combination)}"/>
+						</td>
+						<td class="combinationScore">
+							<h:outputText value="#{_combination.score}" />
+						</td>
+					</tr>
+				</a4j:repeat>	
+			</table>
+		</a4j:outputPanel>
+	</div>
+	
+	<a4j:region>
+        <h:form>
+            <a4j:poll id="poll"
+                      interval="500" 
+                      action="#{combineOpponentBean.updateOpponentTags()}"
+                      reRender="#{combineOpponentBean.updated ? 'combinations,opponentCombinedTags,reloadTagsForm' : 'reloadTagsForm'}" />
+            <ui:remove><!-- TODO: rerender only part that is really needed --></ui:remove>
+        </h:form>
+    </a4j:region>
+</ui:composition>

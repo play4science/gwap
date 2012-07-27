@@ -1,0 +1,5 @@
+# cron entry for updating the artigo solr database
+
+# m h dow mon dow  command
+*/5 * * * * nobody wget -q -O /tmp/solr-update.log --user=@solr.username@ --password=@solr.password@ 'http://localhost:8080/solr/artigo/dataimport?command=delta-import' 2>&1 >/dev/null
+*/7 * * * * nobody wget -q -O /tmp/solr-update.log --user=@solr.username@ --password=@solr.password@ 'http://localhost:8080/solr/metropolitalia/dataimport?command=delta-import' 2>&1 >/dev/null

@@ -1,0 +1,29 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j">
+
+	<script type="text/javascript"></script>
+	<noscript><div class="noscript"><h:outputText value="#{messages['general.javascriptDisabled']}" /></div></noscript>
+
+	<div id="navHeader">
+		<ul>
+			<li>		
+    		   	<s:link id="headerImpressumId" view="/impressum.xhtml" value="#{messages['menu.impressum']}" propagation="none"/>
+			</li>
+		</ul> 
+	</div>
+    
+    <div id="logo">
+    <ui:include src="logoMIT.xhtml" />
+	</div>
+	
+	<ui:include src="menu.xhtml" />
+
+	<br class="clear" />
+</ui:composition>

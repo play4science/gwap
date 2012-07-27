@@ -1,0 +1,60 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+	<ui:define name="body">
+	
+		<div id="related">
+			<ui:include src="layout/logo.xhtml" />
+			<ui:include src="layout/menu.xhtml" />
+			<ul id="navSub">
+		   	</ul>
+		</div>
+			
+		<div id="content">
+			<rich:tabPanel>
+				<rich:tab label="#{messages['person.password']}" rendered="#{accountToken.isResetPassword()}">
+			        <div class="dialog">
+			    		<h:form id="passwordForm">
+							<h:panelGrid columns="1">
+								<s:decorate id="passwordField" template="/layout/edit.xhtml">
+									<ui:define name="label">
+				                    	<h:outputText value="#{messages['person.password']}" />
+									</ui:define>
+			                    	<h:inputSecret id="password" value="#{accountToken.password}" required="true" />
+			                    </s:decorate>
+			                    <s:decorate id="passwordConfirmationField" template="/layout/edit.xhtml">
+									<ui:define name="label">
+				                    	<h:outputText value="#{messages['person.passwordConfirmation']}" />
+			    					</ui:define>
+			                    	<h:inputSecret id="passwordConfirmation" value="#{accountToken.passwordConfirmation}" required="true" />
+			                    </s:decorate>
+						        <div class="actionButtons">
+						            <h:commandButton id="submit" value="#{messages['profile.doUpdatePassword']}" action="#{accountToken.updatePassword()}"/>
+						        </div>
+			               	</h:panelGrid>
+						</h:form>
+					</div>
+				</rich:tab>
+				<rich:tab label="#{messages['login.verifyEmail']}" rendered="#{accountToken.isVerifyEmail()}">
+		            <div class="dialog">
+ 			    		<h:outputText value="#{messages['login.verifyEmail.confirmed']} " />
+ 			    		<h:outputText value="#{messages['login.verifyEmail.login']}" escape="false" rendered="#{!identity.loggedIn}" />
+					</div>
+				</rich:tab>
+				<rich:tab label="#{messages['login.invalidToken.header']}" rendered="#{accountToken.isInvalidToken()}">
+		            <div class="dialog">
+ 			    		<h:outputText value="#{messages['login.invalidToken.text']}" />
+					</div>
+				</rich:tab>
+			</rich:tabPanel>
+		</div>
+		<br class="clear" />
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,146 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    template="layout/template.xhtml">
+
+	<ui:define name="body">
+		<div id="related">
+			<!-- game ui -->
+			<div class="messages">
+				<rich:messages id="gameMessages"></rich:messages>
+				<div id="clickOnMap" style="display:none;"><dl><dt><h:outputText value="#{messages['game.accenti.clickOnMap']}" /></dt></dl></div>
+			</div>
+			
+			<ui:include src="/widget/round.xhtml"/>
+			
+			<div class="ongoingGameStats">
+				<span class="ongoingGameStatsCaption"><h:outputText value="#{messages['score']}" /></span>
+				<div id="scoreeffect">EFFECT</div>
+				<a4j:outputPanel id="score" styleClass="ongoingGameStatsContent">
+					<h:outputText value="#{mitAccenti.score}" /> 
+				</a4j:outputPanel>
+			</div>
+			<blockquote id="statementBubble" class="speechbubble"><p id="currentStatement"><ui:include src="widget/jplayer.xhtml" /></p></blockquote>
+			<div class="speechbubble-speaker"></div>
+			<a4j:loadScript src="javascript/jquery.jplayer.min.js"></a4j:loadScript>
+			<script type="text/javascript">
+			( function($) {
+			    // we can now rely on $ within the safety of our “bodyguard” function
+			    $(document).ready( function() { 
+					$("#jquery_jplayer_1").jPlayer({
+				       ready: function () {
+				         $(this).jPlayer("setMedia", {
+				           mp3: "#{audioResource.url}"
+				         }).jPlayer("play");
+				       },
+				       swfPath: "javascript",
+				       solution: "flash, html",
+				       supplied: "mp3"
+				     });
+				   });
+			} ) ( jQuery );
+			 </script>
+			<script type="text/javascript">
+			__addLoadEvent(function() { new Effect.Highlight($('ratingDiv')); }); 
+			</script>
+			<div class="ongoingGameStats" id="locationDiv">
+				<span class="ongoingGameStatsCaption"><h:outputText value="#{messages['game.accenti.caption']}"/></span>
+				<div class="ongoingGameStatsContent">
+					<a4j:outputPanel id="breadcrumbLocations">
+						<ui:repeat var="assignment" value="#{mitAccenti.locationAssignments}">
+							<div style="text-decoration: #{assignment.location.id == audioResource.location.id ? 'none' : 'line-through'}"><h:outputText value="#{geoBean.getExtendedName(assignment.location)}" /></div>
+						</ui:repeat>
+					</a4j:outputPanel>
+					<div id="locationName" style="height: 20px;"> </div>
+					<a4j:form id="locationAssignmentForm">
+						<script type="text/javascript">
+							if (#{mitAccenti.nextEnabled}) {
+								map.enabled = false;
+							}
+							if (#{mitAccenti.guessedCorrectly == true}) {
+								var scoreDiv=$('score');
+								var effect=$('scoreeffect');
+								effect.update(#{gameRound.score});
+
+								var pos=scoreDiv.cumulativeOffset();
+								effect.setStyle({
+									top : pos.top + 'px',
+									left : pos.left + 'px',
+									display : 'block',
+									opacity: '1.0'
+								});
+								new Effect.DropUp('scoreeffect', { duration: 1.8 });
+							} else if (#{mitAccenti.guessedCorrectly == false}){
+								if (#{mitAccenti.guessingEnabled}) {
+									new Effect.Highlight($('gameMessages'));
+								}
+							}
+							new Effect.Highlight($('breadcrumbLocations').lastChild);
+						</script>
+						<h:inputHidden id="locationId" value="#{mitAccenti.locationId}" />
+						<a4j:jsFunction name="assignLocation" action="#{mitAccenti.assignLocation()}" reRender="gameMessages,breadcrumbLocations,score,locationAssignmentForm">
+							<a4j:actionparam name="locationId" assignTo="#{mitAccenti.locationId}" />
+						</a4j:jsFunction>
+						<h:commandButton action="next" 
+							value="#{messages['game.accenti.next']}" rendered="#{mitAccenti.nextEnabled}"
+							style="margin-right: 0; background: #9f9; border: 1px solid #f66;" />
+					</a4j:form>
+				</div>
+			</div>
+		</div>
+
+		<div id="content">
+			<div id="hideGmap">
+				<div id="ratingDiv">
+					<p><h:outputText value="#{messages['game.accenti.rating.text']}"/></p>
+					<div>
+						<a4j:form id="ratingForm">
+							<a4j:commandLink styleClass="sad" action="#{mitAccenti.setRating(-1)}" oncomplete="ratingCompleted();">
+							</a4j:commandLink>	
+							<a4j:commandLink styleClass="indifferent" action="#{mitAccenti.setRating(0)}" oncomplete="ratingCompleted();">
+							</a4j:commandLink>
+							<a4j:commandLink styleClass="smiling" action="#{mitAccenti.setRating(1)}" oncomplete="ratingCompleted();">
+							</a4j:commandLink>	
+						</a4j:form>
+					</div>
+					<script type="text/javascript">
+					$('hideGmap').style.display = "inline";
+					function ratingCompleted() {
+						$('hideGmap').style.display = "none";
+						$('clickOnMap').style.display = "block";
+					};				
+					</script>
+				</div>
+			</div>
+			<ui:include src="/widget/googlemap.xhtml" />
+			<script type="text/javascript">			
+			//map.rootLocationId = 8321;
+			map.hierarchyName = 'mit.accenti';
+			map.enabled = true;
+			map.extendedName = true;
+			map.mouseOver = function(object, event) {
+				$('locationName').innerHTML = object.title;
+			};
+			map.mouseOut = function(object, event) {
+				$('locationName').innerHTML = "";
+			};
+			map.mouseClick = function(object, event) {
+				$('locationName').innerHTML = "";
+				$('locationAssignmentForm:locationId').value = object.id; 
+				assignLocation(object.id);
+				$('clickOnMap').style.display = "none";
+				$('gameMessages').children[0].innerHTML = '';
+			};
+			</script>
+		</div>
+		 
+		<br class="clear" />
+		
+    </ui:define>
+</ui:composition>

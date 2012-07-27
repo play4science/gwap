@@ -1,0 +1,27 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j">
+
+	<div id="logo">
+		<s:link id="headerHomeId" view="/home.xhtml" propagation="none" action="#{customSourceBean.reset()}">
+		<h:graphicImage value="/img/logo.png"
+	               		id="logo"
+	               		alt="ARTigo"
+	               		height="74"
+	               		width="242"
+	               		/>
+		</s:link>
+		<br/>
+		<h:outputText value="#{messages['general.sponsoredBy']}" rendered="#{customSourceBean.customized}" />
+		<br/>
+		<h:outputLink value="#{customSource.homepage}" target="_blank" rendered="#{customSourceBean.customized}">
+			<h:graphicImage value="/img/logo-#{customSource.name}.png" />
+		</h:outputLink>
+	</div>   	
+</ui:composition>

@@ -1,0 +1,46 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j">
+
+	<div id="game">
+		<h:form id="tagForm">
+			<a4j:queue ignoreDupResponses="false" />
+			<script type="text/javascript">function onSubmitTag() {
+				tag = #{rich:element('tagForm:tagInput')}.value;
+				#{rich:element('tagForm:recommendedTagName')}.value = tag;
+				edit = #{rich:element('tagForm:tagInput')};
+				edit.value = '';
+				edit.focus();
+				var div = document.createElement("div");
+				div.appendChild(document.createTextNode(tag));
+				#{rich:element('recommendedTags')}.appendChild(div);
+				new Effect.Highlight(div);
+			};</script>
+
+			<h:inputText id="tagInput" value="" autocomplete="false" />
+			<h:inputHidden id="recommendedTagName"
+				value="#{recommendedTag.name}"><s:validate/></h:inputHidden>
+			<a4j:commandButton id="recommendTagButton" onclick="onSubmitTag()"
+				action="#{metaTaggingBean.recommendTagForTagging()}"
+				reRender="gameMessages,recommendedTags"
+				value="#{messages['taggingBean.recommendTagButton']}">
+				<s:defaultAction />
+			</a4j:commandButton>
+			<s:button id="continueButton"
+			    value="#{messages['taggingBean.continueButton']}"
+			    reRender="gameMessages,recommendedTags" />
+			<a4j:outputPanel id="gameMessages">
+				<h:messages id="messages" globalOnly="true" styleClass="messages"
+					errorClass="errormsg" infoClass="infomsg" warnClass="warnmsg"
+					rendered="#{showGlobalMessages != 'false'}" />
+			</a4j:outputPanel>
+		</h:form>
+		<script type="text/javascript">#{rich:element('tagForm:tagInput')}.focus();</script>
+	</div>
+</ui:composition>

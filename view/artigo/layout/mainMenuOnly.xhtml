@@ -1,0 +1,34 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j">
+
+	<div style="clear:both;">
+		<ul id="navMain">
+			<li class="#{menuBean.getCssClass('/about.xhtml')}">
+	        	<s:link id="menuDescriptionId" view="/about.xhtml" value="#{messages['menu.description']}" propagation="none"/>
+        	</li>
+			<li class="inactive">
+				<a href="http://blog.artigo.org"><h:outputText value="#{messages['menu.blog']}" /></a>
+        	</li>
+			<li class="#{menuBean.getCssClass('/scoring.xhtml')}">
+    		   	<s:link id="menuScoringId" view="/highscore.xhtml" value="#{messages['menu.highscore']}" propagation="none"/>
+        	</li>
+			<s:fragment rendered="#{s:hasPermission('artigo', 'view-admin-interface')}"> 
+				<li class="#{menuBean.getCssClass('/admin/admin.xhtml')}">
+    			   	<s:link id="menuAdminId" view="/admin/admin.xhtml" value="#{messages['menu.administrator']}" propagation="none"/>
+        		</li>
+        		<li>
+        			<ul style="padding-left: 15px; padding-top: 5px;">
+        				<li style="font-size:0.7em;"><s:link view="/admin/resourceTeaser.xhtml" value="#{messages['admin.resourceTeaser']}" rendered="#{s:hasPermission('artigo', 'edit-teaser')}"/></li>
+        			</ul>
+        		</li>
+			</s:fragment> 
+    	</ul>
+    </div>
+</ui:composition>

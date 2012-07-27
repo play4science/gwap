@@ -1,0 +1,46 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    template="/layout/adminTemplate.xhtml">
+
+    <ui:define name="body">
+		<div id="content">
+			<s:link view="/admin/statement.xhtml" value="#{messages['admin.statements.new']}"/>
+			
+			<h:dataTable id="statementListTest" value="#{mitAdminStatementList.resultList}" var="_resource" >
+			    <h:column width="10px" >
+			    	<s:link view="/admin/statement.xhtml" propagation="none" value="#{messages['edit']}">
+			    		<f:param name="statementId" value="#{_resource.id}"/>
+			    	</s:link>
+			    </h:column>
+			    <h:column width="50px">
+			        <f:facet name="header" >
+			            <h:outputText value="#{messages['admin.statements.id']}"/>
+			        </f:facet>
+			        <h:outputText value="#{_resource.id}"/>
+			    </h:column>
+			    <h:column width="50px">
+			        <f:facet name="header" >
+			            <h:outputText value="#{messages['admin.statements.enabled']}"/>
+			        </f:facet>
+			        <h:selectBooleanCheckbox value="#{_resource.enabled}" disabled="true" />
+			    </h:column>
+			    <h:column>
+			        <f:facet name="header" >
+			            <h:outputText value="#{messages['admin.statements.statement']}"/>
+			        </f:facet>
+			    	<s:link view="/admin/statementOverview.xhtml" propagation="none" value="#{_resource.asText()}">
+			    		<f:param name="statementId" value="#{_resource.id}"/>
+			    	</s:link>
+			    </h:column>
+			</h:dataTable>
+		</div>
+        <br class="clear" />
+    </ui:define>
+</ui:composition>

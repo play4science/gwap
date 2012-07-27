@@ -1,0 +1,124 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:p4s="http://play4science.org/facelets"
+    template="layout/template.xhtml">
+
+    <ui:define name="body">
+<script type="text/javascript">
+function completed(name, returnValue) {
+	switch (name) {
+		case "location": setActive("bet"); break;
+		case "bet": setActive("locationResults"); break;
+		case "locationResults": if(#{mitRecognize.enableHighlighting()}){ setActive("highlighting")} else {setActive("characterization")}; break;
+		case "highlighting": setActive("characterization"); break;
+		case "characterization": setActive("characterizationResult"); break;
+	}
+}
+function setActive(name) {
+	var divs = jQuery('#content').children();
+	for (var i = 0; i &lt; divs.length; ++i) {
+		var div = divs[i];
+		try {
+			if (div.id == name)
+				div.show();
+			else
+				div.hide();
+		} catch (err) { }
+	}
+	if (name == "location") {
+		jQuery('#locationBreadcrumbs').show();
+		jQuery('#locationAssignmentForm:textLocation').focus();
+	} else {
+		jQuery('#locationBreadcrumbs').hide();
+		jQuery('#locationFormLeft').hide();
+	}
+	if (name == "bet") {
+		jQuery('#bet').show();
+		jQuery('#location').show();
+	} else
+		jQuery('#bet').hide();
+	if (name == "locationResults") {
+		jQuery('#location').show();
+		jQuery('#locationFormLeft').show();
+		jQuery($('locationFormLeft:skipRound')).hide();
+		jQuery($('locationFormLeft:resultsFinished')).show();
+		map.enabled = false;
+		map.displayPercentages(#{statement.id});
+	}
+}
+</script>
+		<a4j:queue size="1" sizeExceededBehavior="dropNew" />
+		<div id="related">
+			<ui:include src="/layout/menu.xhtml">
+				<ui:param name="hideSubmenu" value="true" />
+			</ui:include>
+			
+			<ui:include src="/widget/round.xhtml"/>
+			<ui:include src="/widget/score.xhtml"/>
+			<br/>
+			
+			<div id="locationBreadcrumbs">
+				<a4j:form id="locationAssignmentForm">
+					<ui:include src="/widget/locationAssignmentBreadcrumbs.xhtml">
+						<ui:param name="submitFunction" value="mitRecognize.assignLocation" />
+						<ui:param name="whereFromText" value="#{messages['game.recognize.whereFrom']}" />
+					</ui:include>
+				</a4j:form>
+			</div>
+			
+			<div id="bet" style="display:none; margin-top: 1em;">
+				<a4j:form id="betForm">
+					<div class="ongoingGameStatsCaption instruction">
+						<h:outputText value="#{messages['game.recognize.bet.difficulty']}"/>
+					</div>
+					
+					<div class="ongoingGameStatsContent">
+						<rich:inputNumberSlider minValue="10" maxValue="100"
+								value="#{mitRecognize.points}"
+								showInput="true" showBoundaryValues="false" showToolTip="false" />
+					</div>
+					<a4j:commandLink action="#{mitRecognize.createBet()}" oncomplete="completed('bet');" reRender="score,coins" styleClass="button paddingRight">
+						<span><span class="checkmark-yes"/><h:outputText value="#{messages['game.recognize.bet.create']}" /></span>
+					</a4j:commandLink>
+					<a4j:commandLink action="#{mitRecognize.skipCreateBet()}" oncomplete="completed('bet')" reRender="score,coins" styleClass="button">
+						<span><span class="checkmark-no"/><h:outputText value="#{messages['game.recognize.bet.skip']}" /></span>
+					</a4j:commandLink>
+				</a4j:form>
+			</div>
+			
+			<br />
+			<rich:messages styleClass="messages" errorClass="error" infoClass="info" />
+			
+			<a4j:form id="locationFormLeft" styleClass="right" style="margin:15px 0 5px 0;">
+				<h:commandLink id="skipRound" action="next" styleClass="button">
+					<span><span class="checkmark-no"/><h:outputText value="#{messages['game.recognize.skipStatement']}" /></span>
+				</h:commandLink>
+				<a4j:commandLink id="resultsFinished" onclick="completed('locationResults')" styleClass="button" style="display:none;">
+					<span><span class="checkmark-yes"/><h:outputText value="#{messages['next']}" /></span>
+				</a4j:commandLink>
+			</a4j:form>
+		</div>
+
+		<div id="content">
+			<a4j:queue name="eventsQueue" ignoreDupResponses="true"/>
+			
+			<div id="location">
+				<p4s:speechbubble statement="#{statement}" />
+				<ui:include src="/widget/locationAssignment.xhtml" />
+			</div>
+			<ui:include src="recognizeGame/highlighting.xhtml" />
+			<ui:include src="recognizeGame/characterization.xhtml" />
+			<ui:include src="recognizeGame/characterizationResults.xhtml" />
+		</div>
+		 
+		<br class="clear" />
+		
+    </ui:define>
+</ui:composition>

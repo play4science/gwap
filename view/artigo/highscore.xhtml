@@ -1,0 +1,69 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:c="http://java.sun.com/jstl/core"
+    template="layout/template.xhtml">
+
+    <ui:define name="body">
+		<div id="related">
+			<ui:include src="layout/logo.xhtml" />
+			<ui:include src="layout/menu.xhtml" />
+		</div>
+
+		<div id="content">			
+			<rich:tabPanel switchType="client" width="1%">
+				<c:forEach items="#{highscoreBean.highscores}" var="_highscore">
+					<rich:tab label="#{messages['game.'.concat(_highscore.gameType.name)]}">
+					
+						<rich:dataTable styleClass="highscoreTable" summary="Highscore" value="#{_highscore.highscoreDaily}" var="_score" rendered="#{_highscore.highscoreDaily.size() > 0}">			
+							<f:facet name="header"><h:outputText value="#{messages['score.daily']}" /></f:facet>
+							<rich:column width="80%" styleClass="#{_score.personId == person.id ? 'self' : null}">
+								<f:facet name="header">
+									<h:outputText value="#{messages['score.user']}"/>
+								</f:facet>
+								<h:outputText value="#{_score.person.username}" rendered="#{_score.person.username.length() > 0}" />
+								<h:outputText value="#{messages['general.guest']}" rendered="#{_score.person.username.length() == 0}" />
+							</rich:column>
+							<rich:column width="20%" styleClass="#{_score.personId == person.id ? 'self' : null}">
+								<f:facet name="header">
+									<h:outputText value="#{messages['score']}"/>
+								</f:facet>
+								<h:outputText value="#{_score.score}" />
+							</rich:column>
+						</rich:dataTable>
+					
+				 		<rich:dataTable styleClass="highscoreTable" summary="Highscore" value="#{_highscore.highscoreMonthly}" var="_score" rendered="#{_highscore.highscoreMonthly.size() > 0}">
+							<f:facet name="header"><h:outputText value="#{messages['score.monthly']}" /></f:facet>
+							<rich:column width="80%" styleClass="#{_score.personId == person.id ? 'self' : null}">
+								<f:facet name="header">
+									<h:outputText value="#{messages['score.user']}"/>
+								</f:facet>
+											
+								<h:outputText value="#{_score.person.username}" rendered="#{_score.person.username.length() > 0}" />
+								<s:fragment rendered="#{_score.person.email.length()> 0 and s:hasPermission('artigo', 'highscore-'.concat(customSource.name))}">
+									<a href="mailto:#{_score.person.forename} #{_score.person.surname} &lt;#{_score.person.email}&gt;">E-Mail</a>
+								</s:fragment>
+								<h:outputText value="#{messages['general.guest']}" rendered="#{_score.person.username.length() == 0}" />
+							</rich:column>
+							<rich:column width="20%" styleClass="#{_score.personId == person.id ? 'self' : null}">
+								<f:facet name="header">
+									<h:outputText value="#{messages['score']}"/>
+								</f:facet>
+								<h:outputText value="#{_score.score}" />
+							</rich:column>
+						</rich:dataTable>
+						
+	        		</rich:tab>
+				</c:forEach>
+    		</rich:tabPanel>
+		</div>
+		 
+        <br class="clear" />
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a="http://richfaces.org/a4j"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:s="http://jboss.com/products/seam/taglib" contentType="text/html">
+	<html>
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>ARTigo - Social Image Tagging</title>
+
+    	<meta name="description" content="ARTigo: Das Kunstgeschichtsspiel – taggen, lernen, gewinnen!" />
+		<meta name="author" content="Play4Science - Ludwig Maximilians Universität München" />
+		<meta name="keywords" content="Social Software, Tagging, Image Labeler, Online Game, Play4Science, Universität, Informatik, Kunstgeschichte" />
+
+		<link rel="shortcut icon" href="/favicon.ico" />
+		<a:loadStyle src="resource:///stylesheet/theme.xcss" />
+		<a:loadStyle src="/stylesheet/theme.css" />
+		<a:loadStyle src="/stylesheet/screen.css" media="all" />
+		<c:if test="#{not empty customStylesheet}">
+			<a:loadStyle src="#{customStylesheet}" media="all" />
+		</c:if>
+		<ui:insert name="head" />
+
+		<a:loadScript src="/javascript/tools.js"/>
+		<a:loadScript src="/javascript/common.js"/>
+		<a:loadScript src="/javascript/spamspan.js"/>
+		<script src="http://www.play4science.org/piwik/piwik.js" type="text/javascript"/>
+	</head>
+
+	
+	<body id="body" onresize="bodyResize();">
+	
+	<script type="text/javascript" language="javascript">
+	document.observe("dom:loaded", bodyLoad);
+	</script>
+
+    		
+
+		<a:form ajaxSubmit="true">
+			<a:jsFunction name="updateServerWindowSize">
+				<a:actionparam name="windowWidth"  assignTo="#{layoutBean.windowWidth}" />
+				<a:actionparam name="windowHeight" assignTo="#{layoutBean.windowHeight}" />
+			</a:jsFunction>
+		</a:form>
+
+		<div id="wrapper">
+			<ui:include src="header.xhtml" />
+			<div id="main">
+				<ui:insert name="body" />
+			</div>
+			<ui:include src="footer.xhtml" />
+			
+			<s:fragment rendered="#{init.debug}">
+				<div style="position: fixed; top: 10px; left: 0px; width: 100%; text-align: center;">
+					<a:log hotkey="D" />
+					<p style="margin-tog: -0.5em;">
+					  	Conversation: id = #{conversation.id},
+					   	#{conversation.longRunning ? 'long running' : 'temporary'}
+					   	#{conversation.nested ? ', nested, parent id = '.concat(conversation.parentId) : ''} 
+				   		#{' - '} 
+				   		Ajax4jsf Log (Ctrl+Shift+D)  
+						#{' - '} 
+						<s:link id="debugConsole" view="/debug.xhtml" value="Debug console" target="debugConsole" />
+						#{' - '} 
+						<s:link id="resetSession" view="/home.xhtml" action="#{org.jboss.seam.web.session.invalidate}" propagation="none" value="Terminate session" />
+					</p>
+				</div>
+			</s:fragment>
+		</div>
+	</body>
+	
+	</html>
+</f:view>

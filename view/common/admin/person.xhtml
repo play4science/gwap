@@ -1,0 +1,50 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="../layout/template.xhtml">
+
+<ui:define name="body">
+
+    <rich:panel>
+        <f:facet name="header">Person Details</f:facet>
+
+
+        <s:decorate id="email" template="../layout/display.xhtml">
+            <ui:define name="label">Email</ui:define>
+            <h:outputText value="#{adminPersonHome.instance.email}"/>
+        </s:decorate>
+
+        <s:decorate id="password" template="../layout/display.xhtml">
+            <ui:define name="label">Password</ui:define>
+            <h:outputText value="#{adminPersonHome.instance.password}"/>
+        </s:decorate>
+
+        <s:decorate id="username" template="../layout/display.xhtml">
+            <ui:define name="label">Username</ui:define>
+            <h:outputText value="#{adminPersonHome.instance.username}"/>
+        </s:decorate>
+
+        <div style="clear:both"/>
+
+    </rich:panel>
+
+    <div class="actionButtons">
+
+        <s:button view="/admin/personEdit.xhtml"
+                    id="edit"
+                 value="Edit"/>
+
+        <s:button view="/admin/#{empty personFrom ? 'personList' : personFrom}.xhtml"
+                    id="done"
+                 value="Done"/>
+
+    </div>
+
+</ui:define>
+
+</ui:composition>

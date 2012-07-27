@@ -1,0 +1,2 @@
+INSERT INTO gametype (id, description, label, name, players, roundduration, rounds, workflow, platform) VALUES (5, 'An image labelling game similar to Memory, turn-based mode', 'Memory', 'gwapGameMemoryTurn', 2, 0, 2, NULL, 'artigo');
+INSERT INTO gametype (id, description, label, name, players, roundduration, rounds, workflow, platform) VALUES (6, 'An image labelling game similar to Memory, clustering mode', 'Memory', 'gwapGameMemoryCluster', 2, 0, 2, NULL, 'artigo');

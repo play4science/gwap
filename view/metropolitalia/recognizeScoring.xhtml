@@ -1,0 +1,133 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:p4s="http://play4science.org/facelets"
+    template="layout/template.xhtml">
+
+    <ui:define name="body">
+		<div id="related">
+			<ui:include src="/layout/menu.xhtml">
+				<ui:param name="hideSubmenu" value="true" />
+			</ui:include>
+			
+			<ui:include src="/widget/round.xhtml"/>
+			<ui:include src="/widget/score.xhtml"/>
+			
+		</div>
+
+		<div id="content">
+			<h2><h:outputText value="#{messages['game.recognize.scoringHeader']}"/></h2>
+			<a4j:outputPanel rendered="#{!identity.loggedIn}">
+				<div class="messages" style="margin-top:10px; padding:3px;">
+					<dl><dt>
+						<h:outputText value="#{messages['game.recognize.register']}" escape="false" />
+					</dt></dl>
+				</div>
+			</a4j:outputPanel>
+			<br/>
+			
+			<h:form id="recognizeScoringForm">
+				<ui:repeat var="_round" value="#{gameSession.gameRounds}">
+		    		<h3 style="padding-top:5px;"><h:outputText value="#{messages['game.recognizeScoring.list.roundHeader']} #{_round.number}"/> </h3>
+		    		<table class="listingTable">
+			    		<tr>
+			    		<td colspan="2" style="padding-right:20px;">
+				    		<p4s:speechbubble statement="#{_round.resources[0]}" />
+			    		</td>
+			    		<td>
+						 	<h:outputFormat value="#{messages['game.recognizeScoring.list.points']}" styleClass="coins">
+						 		<f:param value="#{mitRecognize.getBetAction(_round) != null ? mitRecognize.getBetAction(_round).score + _round.score : _round.score}"/>
+						 	</h:outputFormat>
+			    		</td>
+			    		</tr>
+						<ui:include src="/widget/betScoring.xhtml">
+							<ui:param name="allowChangeBet" value= "false" />	
+							<ui:param name="bet" value="#{mitRecognize.getBetAction(_round)}" />
+						</ui:include>
+					
+						<tr>
+							<td style="vertical-align:top;">
+								<dl>
+									<dt>
+										<h:outputText value="#{messages['game.recognizeScoring.list.playersAssignmentHeader']}" />
+									</dt>
+									<dd>
+										<h:outputText value="#{mitRecognize.getLocationAssignmentAction(_round).location.name}"/>
+									</dd>
+								</dl>
+							</td>
+							<td style="vertical-align:top; padding-right: 20px; padding-left: 50px;">
+								<dl>
+									<dt>
+										<h:outputText value="#{messages['bets.list.othersHeader']}" />
+									</dt>
+									<dd>
+										<ui:include src="/widget/betPercentages.xhtml">
+											<ui:param name="percentages" value="#{mitPokerScoring.getStatementPercentages(_round.resources[0])}"/>
+										</ui:include>
+									</dd>
+								</dl>
+							</td>
+							<td style="vertical-align:top;">
+								<h:outputFormat value="#{messages['game.recognizeScoring.list.points']}" styleClass="coins">
+						 			<f:param value="#{mitRecognize.getLocationAssignmentAction(_round).score}"/>
+						 		</h:outputFormat>
+							</td>
+						</tr>
+						
+						<s:fragment rendered="#{mitRecognize.getCharacterizationAction(_round) != null}">
+						<tr>
+							<td colspan="2">
+								<ui:include src="/widget/statementCharacterizationOwnValues.xhtml">
+									<ui:param name="statement" value="#{mitRecognize.getCharacterizationAction(_round).statement}" />
+								</ui:include>
+							</td>
+							<td>
+								<h:outputFormat value="#{messages['game.recognizeScoring.list.points']}" styleClass="coins">
+						 			<f:param value="#{mitRecognize.getCharacterizationAction(_round).score}"/>
+						 		</h:outputFormat>
+							</td>
+						</tr>
+						</s:fragment>
+						
+						<s:fragment rendered="#{mitRecognize.getAnnotationAction(_round) != null}">
+						<tr>
+							<td colspan="2" style="padding-top: 0.5em;">
+								<ui:include src="/widget/statementHighlightingWidget.xhtml">
+									<ui:param name="statement" value="#{mitRecognize.getAnnotationAction(_round).statement}" />
+								</ui:include>
+							</td>
+							<td>
+								<h:outputFormat value="#{messages['game.recognizeScoring.list.points']}" styleClass="coins">
+						 			<f:param value="#{mitRecognize.getAnnotationAction(_round).score}"/>
+						 		</h:outputFormat>
+							</td>
+						</tr>
+						</s:fragment>
+					</table>
+			    </ui:repeat>
+			</h:form>
+			
+			<div style="clear: both; height:20px;"/>
+			<h:form id="endForm">
+				<s:link view="/recognize.xhtml" propagation="none" styleClass="button">
+					<span><h:outputText value="#{messages['game.recognize.nextRound']}" /></span>
+				</s:link>
+				<br/>
+				<br/>
+				<s:link view="/newstatement.xhtml" propagation="none" styleClass="button" rendered="#{mitCoins.canEnterStatement()}">
+					<span><h:outputText value="#{messages['game.recognize.newStatement']}" /></span>
+				</s:link>
+			</h:form>
+		</div>
+		 
+		<br class="clear" />
+		
+    </ui:define>
+</ui:composition>

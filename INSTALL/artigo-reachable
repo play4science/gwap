@@ -1,0 +1,5 @@
+# /etc/cron.d/artigo-reachable: crontab script for testing artigo.org
+
+# Every 15 minutes
+*/15 *     * * *     root   /usr/bin/wget -qO - http://www.artigo.org > /dev/null || (sleep 60; /usr/bin/wget -qO - http://www.artigo.org > /dev/null || (echo "Artigo not reachable."; /usr/bin/wget -O - http://www.artigo.org))
+

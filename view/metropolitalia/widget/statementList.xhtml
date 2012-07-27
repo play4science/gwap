@@ -1,0 +1,64 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:p4s="http://play4science.org/facelets">
+
+	<h:form>
+		<s:fragment rendered="#{empty(mitStatementList)}">
+			<h:outputText value="#{messages['statements.none']}" />
+			<br />
+			<s:link view="/newstatement.xhtml" value="#{messages['statements.new']}" rendered="#{mitCoins.canEnterStatement()}"></s:link>
+			<s:link view="/recognize.xhtml" value="#{messages['statements.recognize']}" rendered="#{!mitCoins.canEnterStatement()}"></s:link>
+		</s:fragment>
+		<s:fragment rendered="#{!empty(mitStatementList)}">
+			<rich:datascroller for="statements" rendered="#{mitStatementList.size() > 10}" />
+			<rich:spacer height="30" rendered="#{mitStatementList.size() > 20}" />
+		    <rich:dataTable value="#{mitStatementList}" var="_statement" id="statements" rows="10" style="width:100%">
+		    	<rich:column>
+		    		<p4s:speechbubble statement="#{_statement}" />
+					<table>
+						<tr>
+						<td>
+						<dl>
+							<dt>
+								<h:outputText value="#{messages['statements.list.betHeader']}" />
+							</dt>
+							<dd>
+								<h:outputFormat value="#{messages['statements.list.betText']}">
+									<f:param value="#{_statement.points}"/>
+									<f:param value="#{mitPokerScoring.getBet(_statement, person).location.name}"/>
+								</h:outputFormat>
+							</dd>
+						</dl>
+						</td><td>
+						<dl>
+							<dt>
+								<h:outputText value="#{messages['statements.list.othersHeader']}" />
+							</dt>
+							<dd>
+								<h:outputFormat value="#{messages['statements.list.othersText']}">
+									<f:param value="#{mitPokerScoring.getStatementPercentageCorrect(_statement)}"/>
+									<f:param value="TODO"/>
+								</h:outputFormat>
+							</dd>
+						</dl>
+						</td>
+						</tr>
+					</table>
+					<!-- <h:outputText value="#{messages['statements.list.points']}" styleClass="coins" />
+						<h:outputText value="#{messages['statements.list.percentageCorrect']}"/>
+					<h:outputFormat value="#{mitPokerScoring.getStatementPercentageCorrect(_statement)}">
+						<f:convertNumber integerOnly="true" pattern="# %" />
+					</h:outputFormat>
+					-->
+				</rich:column>
+		    </rich:dataTable>
+		</s:fragment>
+	</h:form>
+</ui:composition>

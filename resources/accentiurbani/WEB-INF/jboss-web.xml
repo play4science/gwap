@@ -1,0 +1,4 @@
+<jboss-web>
+	<context-root>/accentiurbani</context-root>
+	<virtual-host>play4science-labs</virtual-host>
+</jboss-web>

@@ -1,0 +1,1 @@
+update gametype set roundduration=0 where name='gwapGameMemoryTurn';

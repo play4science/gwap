@@ -1,0 +1,73 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j">
+
+	<ui:include src="/widget/round.xhtml">
+		<ui:param name="displayProgressBar" value="true" /> 
+	</ui:include>
+	
+	<div class="tags">
+		<ui:include src="/widget/score.xhtml"/>
+	</div>
+	<div class="tags">
+		<span class="ongoingGameStatsCaption"><h:outputText value="#{messages['game.opponentTags']}" /></span>
+		<a4j:outputPanel id="opponentTags" styleClass="ongoingGameStatsContent">
+			<h:outputText value="#{opponentTags.size}" /> 
+		    <!-- 
+			<a4j:repeat value="# {opponentTags}" var="_opponentTags">
+				<span>
+					<h:outputText value="# {_opponentTags}" />						
+					&nbsp;
+				</span>
+			</a4j:repeat>
+		    -->
+		</a4j:outputPanel>
+	</div>
+	<div class="tags">
+		<span class="ongoingGameStatsCaption"><h:outputText value="#{messages['game.enteredTags']}" /></span>
+		<a4j:outputPanel id="recommendedTags" styleClass="ongoingGameStatsContent">
+			<h:form>
+			<a4j:queue sizeExceededBehavior="dropNew" size="1"/>
+			<table>
+				<a4j:repeat value="#{recommendedTags}" var="_recommendedTag">
+					<tr>
+						<td>
+							<ui:repeat value="#{_recommendedTag.alternativeTags}" var="_alternativeTag">
+								<span class="correctionTag">
+									<h:outputText value="#{_alternativeTag}?"/>
+									<a4j:commandButton action="#{gameSessionBean.acceptTagCorrection(_recommendedTag.tag, _alternativeTag)}" 
+										reRender="recommendedTags" styleClass="yes"/>
+									<a4j:commandButton action="#{gameSessionBean.rejectTagCorrection(_recommendedTag.tag, _alternativeTag)}" 
+										reRender="recommendedTags" styleClass="no"/>
+								</span>
+							</ui:repeat>
+							<span class="#{_recommendedTag.cssClass}" id="tag_#{_recommendedTag.tag}">
+								<h:outputText value="#{_recommendedTag.tag}" />
+							</span>
+						</td>
+						<td style="vertical-align: top;">
+							<h:outputText value="#{_recommendedTag.score}" />
+						</td>
+					</tr>
+				</a4j:repeat>
+			</table>
+			</h:form>
+		</a4j:outputPanel>
+	</div>
+	
+    <a4j:region>
+        <h:form>
+            <a4j:poll id="poll"
+                      interval="500" 
+                      action="#{opponentBean.updateOpponentTags()}"
+                      reRender="#{opponentBean.updated ? 'opponentTags,recommendedTags,score' : null}" />
+            <ui:remove><!-- TODO: rerender only part that is really needed --></ui:remove>
+        </h:form>
+    </a4j:region>
+</ui:composition>

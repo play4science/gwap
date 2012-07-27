@@ -1,0 +1,5 @@
+build.properties
+classes
+dist
+exploded-archives
+test-*

@@ -1,0 +1,11 @@
+#!/bin/sh
+
+VACUUMDB=/usr/bin/vacuumdb
+
+$VACUUMDB --host localhost \
+          --username gwap \
+          --dbname gwap \
+          --full \
+          --analyze \
+          gwap
+

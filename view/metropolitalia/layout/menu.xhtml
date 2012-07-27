@@ -1,0 +1,61 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:p4s="http://play4science.org/facelets">
+
+    <div id="logo">
+    	<ui:include src="logoMIT.xhtml" />
+	</div>
+	
+	<div>	
+		<ul id="navMain">
+			<s:fragment rendered="#{s:hasPermission('metropolitalia', 'view-admin-interface')}">
+        		<li>
+					<s:link view="/admin/index.xhtml" value="#{messages['admin.menu.index']}" propagation="none"/>
+        		</li>
+        	</s:fragment>
+        	<s:fragment rendered="#{identity.loggedIn}">
+				<li>
+		        	<s:link view="/bets.xhtml" value="#{messages['menu.bets']}" propagation="none" includePageParams="false"/>
+	        	</li>
+        	</s:fragment>
+        </ul>
+    	<ul id="navSub">
+    	<s:fragment rendered="#{!hideSubmenu}">
+    		<li>
+    			<s:link view="/recognize.xhtml" value="#{messages['menu.recognize']}" propagation="none" />
+    		</li>
+    		<li>
+    			<s:link view="/newstatement.xhtml" value="#{messages['menu.newstatement']}" propagation="none" rendered="#{mitCoins.canEnterStatement()}" />
+    		</li>
+    	</s:fragment>
+    	</ul>
+
+		<s:fragment rendered="#{!hideSubmenu}">
+		    <div id="search">  	
+				<h:form>
+					<h:inputText value="#{mitSearchBean.queryString}" id="searchField" required="true" />
+					<h:commandButton id="resourceSearch-submit"
+					                   type="submit"
+					                   action="#{mitSearchBean.search()}"
+					                   value=" " >
+						<s:defaultAction />
+					</h:commandButton>
+				</h:form>
+			</div>
+			<div class="clear" style="height:10px;"/>
+			
+			<rich:messages styleClass="messages" globalOnly="true"
+		       	errorClass="errormsg" infoClass="infomsg" warnClass="warnmsg"
+	    	   	rendered="#{showGlobalMessages != 'false'}"
+	    	/>
+		</s:fragment>
+    	
+    </div>
+</ui:composition>

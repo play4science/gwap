@@ -1,0 +1,35 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    template="layout/template.xhtml">
+
+    <ui:define name="body">
+
+    	<a4j:form id="gameform">
+    	
+    	<a4j:queue size="5" sizeExceededBehavior="dropNext"/>
+    	
+		<div id="related">
+			<ui:include src="layout/logo.xhtml" />
+			<ui:include src="layout/menu.xhtml" />
+			<ul id="navSub">
+		   	</ul>
+		</div>
+	 <div id="content">
+				<ui:include src="widget/waitPlayer.xhtml"/>					
+			</div>
+		 
+				
+ 		<a4j:push action="#{gwapGameMemoryPlayer.notified}" eventProducer="#{gwapGameMemoryPlayer.addListener}" interval="500"/>		
+		<a4j:poll action="#{gwapGameMemoryPlayer.poll(gwapGameMemorySharedGame.currentRound)}" interval="2000"/>
+		</a4j:form>
+			
+		<br class="clear" />	
+    </ui:define>
+</ui:composition>

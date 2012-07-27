@@ -1,0 +1,4 @@
+<jboss-web>
+	<context-root>/</context-root>
+	<virtual-host>artigo</virtual-host>
+</jboss-web>

@@ -1,0 +1,38 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:p4s="http://play4science.org/facelets">
+
+	<table id="betScoringLegendTable" cellspacing="0">
+		<tr>
+			<th />
+			<th style="background-color: #8692be;"/> 
+			<th style="background-color: #6067b3;"/>
+			<th style="background-color: #6871d8;"/>
+			<th style="background-color: #444ad1;"/>
+			<th style="background-color: #3f44e9;"/>
+			<th></th>
+			<th style="background-color: #272aed;"/>
+			<th></th>
+			<th style="width: 100px; text-align: center;"><s:fragment rendered="#{withOwnChoice != null}"><div id="ownChoiceMarker"/></s:fragment></th>
+			<th></th>
+			<th style="text-align: right; padding-right:3px;"><div id="betDetailLocationPercentage" style="color:grey;"></div></th>
+			<th style="width: *; text-align: left;"><div id="betDetailLocationName" style="color:grey;"></div></th>
+			
+		</tr>
+		<tr>
+			<th colspan="2">0%&lt;</th>
+			<th colspan="3"></th>
+			<th colspan="3">&lt;50%&lt;</th>
+			<th></th>
+			<th style="width: 100px; text-align: center;"><s:fragment rendered="#{withOwnChoice != null}"><h:outputText value="#{messages['game.newstatement.ownChoice']}" rendered="#{withOwnChoice != null}"/></s:fragment></th>
+			<th colspan="3"></th>
+		</tr>
+	</table>
+</ui:composition>

@@ -1,0 +1,2 @@
+insert into gametype (id, name, label, description, rounds, players, roundduration, workflow, platform) values 
+	(10, 'mitRecognize', 'MetropolItalia Recognize', 'Recognize statements as true or false', 3, 1, NULL, NULL, 'metropolitalia');

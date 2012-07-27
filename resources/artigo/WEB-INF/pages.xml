@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pages login-view-id="/login.xhtml"
+ no-conversation-view-id="/home.xhtml"
+ xmlns="http://jboss.com/products/seam/pages"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+ <page view-id="/taggingGame.xhtml">
+  <begin-conversation join="true" pageflow="imageLabeler"/>
+ </page>
+ <page view-id="/tabooTaggingGame.xhtml">
+  <begin-conversation join="true" pageflow="tabooImageLabeler"/>
+ </page>
+ <!-- <page view-id="/memoryGame.xhtml">
+ <action execute="#{gwapGameMemoryPlayer.notified}" on-postback="false" />
+ </page> 
+ <page view-id="/memoryLobby.xhtml">
+ <action execute="#{gwapGameMemoryPlayerMatcher.enqueue}" on-postback="false" />
+ </page> -->
+ <page view-id="/custom/kunsthalle-karlsruhe.xhtml">
+  <action execute="#{customSourceBean.setSource('kunsthalle-karlsruhe')}"/>
+  <rewrite pattern="/kunsthalle-karlsruhe"/>
+ </page>
+ <page view-id="/custom/amherst-college.xhtml">
+  <action execute="#{customSourceBean.setSource('amherst-college')}"/>
+  <rewrite pattern="/amherst-college"/>
+ </page>
+ <page view-id="/home.xhtml">
+  <rewrite pattern="/"/>
+ </page>
+ <page view-id="/solrSearchResults.html">
+  <rewrite pattern="/search"/>
+ </page>
+ <page view-id="/solrSearchResultsShowSingle.html">
+  <rewrite pattern="/searchShowSingle"/>
+ </page>
+ <page view-id="/memorySelection.xhtml">
+  <rewrite pattern="/karido"/>
+ </page>
+ <page view-id="*">
+  <action execute="#{authenticator.tryLogin()}"/>
+  <navigation>
+   <rule if-outcome="home">
+    <redirect view-id="/home.xhtml"/>
+   </rule>
+   <rule if-outcome="memoryScoring">
+    <redirect view-id="/memoryScoring.xhtml"/>
+   </rule>
+   <rule if-outcome="memoryGame">
+    <redirect view-id="/memoryGame.xhtml"/>
+   </rule>
+   <rule if-outcome="abandoned">
+    <redirect view-id="/abandoned.xhtml"/>
+   </rule>
+   <rule if-outcome="password">
+    <redirect view-id="/password.xhtml"/>
+   </rule>
+   <rule if-outcome="register">
+    <redirect view-id="/register.xhtml"/>
+   </rule>
+   <rule if-outcome="scoring">
+    <redirect view-id="/scoring.xhtml"/>
+   </rule>
+   <rule if-outcome="show">
+    <redirect view-id="/show.xhtml"/>
+   </rule>
+  </navigation>
+ </page>
+ 
+ <page login-required="true" view-id="/admin/*">
+  <restrict>#{s:hasPermission('artigo', 'view-admin-interface')}</restrict>
+ </page>
+ <page login-required="true" view-id="/sentiment.xhtml">
+  <restrict>#{s:hasPermission('sentiment', 'test')}</restrict>
+  <begin-conversation join="true"/>
+ </page>
+ <page login-required="true" view-id="/tagATag.xhtml">
+  <restrict>#{s:hasPermission('tagatag', 'test')}</restrict>
+  <begin-conversation join="true"/>
+ </page>
+ <page login-required="true" view-id="/combino.xhtml">
+  <restrict>#{s:hasPermission('combino', 'test')}</restrict>
+  <begin-conversation join="true" pageflow="combino"/>
+ </page>
+ <page login-required="true" view-id="/tagging.xhtml">
+  <restrict>#{s:hasPermission('artigo', 'tag-image')}</restrict>
+  <param name="resourceId" value="#{resourceBean.resourceId}"/> 
+  <begin-conversation join="true"/>
+ </page>
+ <page login-required="true" view-id="/virtualTagging.xhtml">
+  <restrict>#{s:hasPermission('artigo', 'virtual-tag-image')}</restrict>
+  <param name="resourceId" value="#{resourceBean.resourceId}"/> 
+  <begin-conversation join="true"/>
+ </page>
+
+ 
+ <exception class="org.jboss.seam.framework.EntityNotFoundException">
+  <redirect view-id="/error.xhtml">
+   <message severity="warn">#{messages['org.jboss.seam.framework.EntityNotFoundException']}</message>
+  </redirect>
+ </exception>
+ <exception class="javax.persistence.EntityNotFoundException">
+  <redirect view-id="/error.xhtml">
+   <message severity="warn">#{messages['org.jboss.seam.framework.EntityNotFoundException']}</message>
+  </redirect>
+ </exception>
+ <exception class="javax.persistence.EntityExistsException">
+  <redirect view-id="/error.xhtml">
+   <message severity="warn">#{messages['org.jboss.seam.framework.EntityExistsException']}</message>
+  </redirect>
+ </exception>
+ <exception class="javax.persistence.OptimisticLockException">
+  <end-conversation/>
+  <redirect view-id="/error.xhtml">
+   <message severity="warn">#{messages['org.jboss.seam.'OptimisticLockException]}</message>
+  </redirect>
+ </exception>
+ <exception class="org.jboss.seam.security.AuthorizationException">
+  <redirect view-id="/error.xhtml">
+   <message severity="error">#{messages['org.jboss.seam.security.AuthorizationException']}</message>
+  </redirect>
+ </exception>
+ <exception class="org.jboss.seam.security.NotLoggedInException">
+  <redirect view-id="/login.xhtml">
+   <message severity="warn">#{messages['org.jboss.seam.NotLoggedIn']}</message>
+  </redirect>
+ </exception>
+ <exception class="javax.faces.application.ViewExpiredException">
+  <redirect view-id="/home.xhtml">
+   <message severity="warn">#{messages['org.jboss.seam.ViewExpired']}</message>
+  </redirect>
+ </exception>
+ <exception class="org.jboss.seam.ConcurrentRequestTimeoutException" log-level="trace">
+  <http-error error-code="503"/>
+ </exception>
+ <exception>
+  <redirect view-id="/error.xhtml">
+   <message severity="error">#{messages['org.jboss.seam.unexpected.error']}</message>
+  </redirect>
+ </exception>
+</pages>

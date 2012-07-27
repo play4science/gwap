@@ -1,0 +1,87 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    template="layout/template.xhtml">
+
+    <ui:define name="body">
+       	<a4j:queue/>
+    
+    	<script type="text/javascript" language="javascript">
+		var lastScore=0;
+
+		var lastHeading=0;
+		</script>
+    
+    	
+		<div id="related">
+			<ui:include src="layout/logo.xhtml" />
+			<ui:include src="layout/menu.xhtml" />
+			<ul id="navSub">
+		   	</ul>			
+
+			<ui:include src="memoryGame/memoryFormGame.xhtml"/>
+			
+								
+		</div>
+
+	 <div id="content-centered">				
+					<a4j:outputPanel id="memoryheading">				
+						<div id="headingdiv" class="heading">
+							<h:outputText value="#{messages[gwapGameMemorySharedGame.getHeading(gwapGameMemoryPlayer.guesser)]}" />
+						</div>	
+						
+
+						<script type="text/javascript" language="javascript">
+						function heading()
+						{
+							if (#{gwapGameMemoryPlayer.isNotified('shakeheading')})
+								new Effect.Shake('headingdiv', { duration: 1.0, distance: 15 });
+						}
+						heading();
+						</script>
+					</a4j:outputPanel>					
+					
+					<ui:include src="memoryGame/resourceImageGrid.xhtml"/>				
+			</div>
+		
+<!--
+This snipped can be included to benchmark JavaScript performance 
+ 				
+<div class="demo" style="float:right;">
+<div id="dropout_demo" style="width:80px; height:80px; background:#c2defb; border:1px solid #333;"></div>
+<a href="#" onclick="new Effect.DropUpBenchmark('dropout_demo'); return false;">Click here for a demo!</a>
+-->
+			
+		
+		
+		<a4j:form>
+  		<a4j:push action="#{gwapGameMemoryPlayer.notified}" oncomplete="score();"
+  		reRender="memoryheading  		
+  				 #{gwapGameMemoryPlayer.isNotified('moves')?',moves':''}
+  				 #{gwapGameMemoryPlayer.isNotified('images')?',memorygrid':''}
+  				 #{gwapGameMemoryPlayer.isNotified('tags')?',descriptionGuesser,descriptionDescriber':''}
+  				 #{gwapGameMemoryPlayer.isNotified('score')?',score':''}
+  				 #{gwapGameMemoryPlayer.isNotified('questions')?',questionsGuesser,questionsDescriber':''}
+  				 #{gwapGameMemoryPlayer.isNotified('edit')?',memoryform,round':''}"
+  				  eventProducer="#{gwapGameMemoryPlayer.addListener}" interval="500"/>  				  		
+		<a4j:poll action="#{gwapGameMemoryPlayer.poll(gwapGameMemorySharedGame.currentRound)}" interval="2000"/>		
+		</a4j:form>
+		
+		<!-- scoreeffect is not inside the form, to avoid interuption of the effect when the form updates -->
+		<div id="scoreeffect">EFFECT</div>
+		
+			
+			
+		<br class="clear" />
+		
+		<!-- Force tools.js to update the layout -->
+    	<!-- <script type="text/javascript">updateGridImages();</script> -->
+		
+    </ui:define>
+</ui:composition>

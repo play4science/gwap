@@ -1,0 +1,46 @@
+<dataConfig>
+	<!-- <dataSource driver="org.postgresql.Driver" url="jdbc:postgresql:gwap" user="gwap" password="gwap" readOnly="true" />-->
+    <dataSource jndiName="GWAPDatasource" type="JdbcDataSource" user="" password="" readOnly="true" />
+    <document name="dev">
+        <entity name="artresource"
+        		query="select id, datecreated, location, institution from artresource where enabled=true"
+        		deltaImportQuery="select id, datecreated, location, institution from artresource where id=${dataimporter.delta.id} and enabled=true"
+                deltaQuery="select gr.resources_id as id from gameround_resource gr join gameround r on gr.gamerounds_id=r.id where r.startdate > '${dataimporter.last_index_time}'"
+                deletedPkQuery="select id from artresource where enabled=false">
+
+			<!-- If the column names are the same as the field names, no field entries have to be specified for these -->
+
+            <entity name="artistEntity"
+                    query="select coalesce(forename || ' ' || surname, surname, forename) as artist from person p join artresource ar on ar.artist_id=p.id where ar.id='${artresource.id}'"/>
+            
+            <entity name="title"
+                    query="select title from artresourcetitle where resource_id='${artresource.id}'"/>
+            
+            <entity name="teaser"
+                    query="select description from artresourceteaser where resource_id='${artresource.id}'"/>
+
+            <entity name="imagepath"
+            		query="select s.url || a.path as imagepath from artresource a join source s on a.source_id=s.id where a.id='${artresource.id}'"/>
+
+            <entity name="tag"
+            		query="select name as tag from tag t join tagging tg on t.id=tg.tag_id where tg.resource_id=${artresource.id}  and exists (select tg2.id from tagging tg2 where tg2.resource_id = ${artresource.id} and tg2.tag_id = tg.tag_id and tg2.id != tg.id)"/>
+            <entity name="tag_de"
+            		query="select name as tag_de from tag t join tagging tg on t.id=tg.tag_id where tg.resource_id=${artresource.id} and language='de'  and exists (select tg2.id from tagging tg2 where tg2.resource_id = ${artresource.id} and tg2.tag_id = tg.tag_id and tg2.id != tg.id)"/>
+            <entity name="tag_en"
+            		query="select name as tag_en from tag t join tagging tg on t.id=tg.tag_id where tg.resource_id=${artresource.id} and language='en'  and exists (select tg2.id from tagging tg2 where tg2.resource_id = ${artresource.id} and tg2.tag_id = tg.tag_id and tg2.id != tg.id)"/>
+            <entity name="tag_fr"
+            		query="select name as tag_fr from tag t join tagging tg on t.id=tg.tag_id where tg.resource_id=${artresource.id} and language='fr'  and exists (select tg2.id from tagging tg2 where tg2.resource_id = ${artresource.id} and tg2.tag_id = tg.tag_id and tg2.id != tg.id)"/>
+            
+            <entity name="tagrating"
+            		query="select name as tag from tag t join tagrating tr on t.id=tr.tag_id where tr.resource_id=${artresource.id} and rating > 1.0"/>
+            <entity name="tagrating_de"
+            		query="select name as tag_de from tag t join tagrating tr on t.id=tr.tag_id where tr.resource_id=${artresource.id} and language='de' and rating > 1.0"/>
+            <entity name="tagrating_en"
+            		query="select name as tag_en from tag t join tagrating tr on t.id=tr.tag_id where tr.resource_id=${artresource.id} and language='en' and rating > 1.0"/>
+            <entity name="tagrating_fr"
+            		query="select name as tag_fr from tag t join tagrating tr on t.id=tr.tag_id where tr.resource_id=${artresource.id} and language='fr' and rating > 1.0"/>
+            
+        </entity>
+    </document>
+</dataConfig>
+

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+
+	<navigation from-action="#{mitAdminStatementAnnotationHome.persist}">
+		<rule if-outcome="persisted">
+			<redirect view-id="/admin/statement.xhtml">
+				<param name="statementId" value="#{mitAdminStatementAnnotationHome.instance.statement.id}" />
+			</redirect>
+		</rule>
+	</navigation>
+	<navigation from-action="#{mitAdminStatementAnnotationHome.update}">
+		<rule if-outcome="updated">
+			<redirect view-id="/admin/statement.xhtml">
+				<param name="statementId" value="#{mitAdminStatementAnnotationHome.instance.statement.id}" />
+			</redirect>
+		</rule>
+	</navigation>
+
+</page>

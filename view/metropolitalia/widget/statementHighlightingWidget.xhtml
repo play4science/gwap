@@ -1,0 +1,26 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:p4s="http://play4science.org/facelets">
+	
+	<ui:repeat var="_statementAnnotation" value="#{mitPokerScoring.getHighlightingResult(statement)}"> 
+		<div style="float: left; margin-right: 10px;">
+			<div class="highlightedToken" style="background-color: #{_statementAnnotation.getMarkerColor()}; #{mitPokerScoring.getStatementTokenBorder(_statementAnnotation, person)}; ">
+				<h:outputText value="#{_statementAnnotation.getStatementToken().token.value}" />
+			</div>
+			<div style="margin-top: 0.3em">
+				<h:outputText value="#{_statementAnnotation.sum.intValue()}" />
+			</div>
+		</div>
+	</ui:repeat> 
+	<div style="margin: 1.3em 0 0 1em; ">
+		<h:outputText value=" #{messages['admin.statementOverview.from']} #{mitPokerScoring.getHighlightingTotal(statement)}" />
+	</div>
+	
+</ui:composition>

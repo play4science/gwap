@@ -1,0 +1,8 @@
+#!/bin/sh
+cd /var/backups/postgres || exit 1
+
+# delete old backups
+find -ctime +3 -exec rm {} \;
+
+DATE=`date '+%Y%m%d'`
+pg_dump -h localhost -U gwap gwap | gzip -c > gwap$DATE.psql.gz

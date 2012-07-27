@@ -1,0 +1,81 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:p4s="http://play4science.org/facelets">
+	
+	<script type="text/javascript">
+	function swich(){
+		var betPercentages = jQuery("#betPercentages");
+		if (betPercentages.css("display") == 'none') {
+		     betPercentages.fadeIn();
+		 } else {
+			 betPercentages.fadeOut();
+		    }		    
+	}
+
+	map.mouseOver = function(object, event) {
+		$('betDetailLocationName').innerHTML = object.title;
+		$('betDetailLocationPercentage').innerHTML = object.percentage + '%';
+	};
+	map.mouseOut = function(object, event) {
+		$('betDetailLocationName').innerHTML = "";
+		$('betDetailLocationPercentage').innerHTML = "";
+	};
+	map.mouseClick = function(object, event) {
+		$('betDetailLocationName').innerHTML = "";
+		$('betDetailLocationPercentage').innerHTML = "";
+	};
+	</script>    
+	
+	<h:form>	
+		<s:fragment rendered="#{mitBetList.getSelectedBet() == null}">
+			<h:outputText value="#{messages['bets.none']}" />
+			<br />
+			<s:button view="/newstatement.xhtml" value="#{messages['bets.new']}" style="margin-top:100px;"></s:button>
+		</s:fragment>
+		<s:fragment rendered="#{mitBetList.getSelectedBet() != null}">
+			<ui:include src="/widget/googlemap.xhtml" />
+			<script type="text/javascript">
+				__addLoadEvent(function() {
+					map.displayPercentagesByBet(#{mitBetList.getSelectedBet().getId()});
+					maxWidthPossible = 600;
+					map.percentageView = true;
+				 });
+			</script>
+			<rich:panel id="betDetails">
+			<script type="text/javascript">
+				map.displayPercentagesByBet(#{mitBetList.getSelectedBet().getId()});
+				colorChooser(#{mitBetList.getSelectedBet().getId()});
+			</script>
+			<div id="betScoringLegend">
+				<ui:include src="mapLegend.xhtml">
+					<ui:param name="withOwnChoice" value="true" />
+				</ui:include>
+			</div>
+			<table style="padding-bottom: 20px">
+			<ui:include src="betScoring.xhtml" rendered="#{mitRecognize.getBetAction(_round) != null}">
+				<ui:param name="bet" value="#{mitBetList.selectedBet}" />
+				<ui:param name="allowChangeBet" value= "true" />
+			</ui:include>
+			</table>
+			<br></br>
+
+			<a4j:commandLink  oncomplete="swich();" styleClass="link">
+				<span><h:outputText value="#{messages['statements.list.othersHeaderButton']}" /></span>
+			</a4j:commandLink>
+
+			<div id="betPercentages" style="display: none;">
+				<ui:include src="/widget/betPercentages.xhtml">
+					<ui:param name="percentages" value="#{mitPokerScoring.getStatementPercentages(mitBetList.selectedBet.resource)}"/>
+				</ui:include>
+			</div>
+			</rich:panel>
+		</s:fragment>
+	</h:form>
+</ui:composition>

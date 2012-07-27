@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<pageflow-definition
+  xmlns="http://jboss.com/products/seam/pageflow"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://jboss.com/products/seam/pageflow http://jboss.com/products/seam/pageflow-2.0.xsd"
+  name="tabooImageLabeler">
+  
+	<start-page name="start" view-id="/tabooTaggingGame.xhtml">
+		<action expression="#{gameSessionBean.startGameSession('tabooImageLabeler')}" />
+		<transition name="next" to="endOfRound"/>
+	</start-page>
+	
+	<page name="game" view-id="/tabooTaggingGame.xhtml">
+ 		<transition name="next" to="endOfRound"/>
+	</page>
+	
+	<decision name="endOfRound" expression="#{gameSessionBean.roundExpired()}">
+		<transition name="true" to="roundToPlay">
+			<action expression="#{gameSessionBean.endRound()}" />
+		</transition>
+		<transition name="false" to="game"/>
+	</decision>
+	
+	<decision name="roundToPlay" expression="#{gameSessionBean.roundsLeft > 0}">
+		<transition name="true" to="game">
+			<action expression="#{gameSessionBean.startRound()}" />
+		</transition>
+		<transition name="false" to="scoring">
+			<action expression="#{gameSessionBean.endGameSession()}" />
+		</transition>
+	</decision>	
+	<page name="scoring" view-id="/scoring.xhtml">
+	<!-- 
+		<end-conversation/>
+	 -->
+	</page>
+</pageflow-definition>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns="http://jboss.com/products/seam/pages"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
+
+   <param name="firstResult" value="#{adminPersonList.firstResult}"/>
+   <param name="sort" value="#{adminPersonList.orderColumn}"/>
+   <param name="dir" value="#{adminPersonList.orderDirection}"/>
+   <param name="logic" value="#{adminPersonList.restrictionLogicOperator}"/>
+
+   <param name="from"/>
+   <param name="email" value="#{adminPersonList.person.email}"/>
+   <param name="password" value="#{adminPersonList.person.password}"/>
+   <param name="username" value="#{adminPersonList.person.username}"/>
+
+</page>

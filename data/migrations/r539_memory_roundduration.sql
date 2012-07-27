@@ -1,0 +1,1 @@
+UPDATE gametype SET roundduration=90 WHERE name='gwapGameMemory';

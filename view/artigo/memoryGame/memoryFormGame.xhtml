@@ -1,0 +1,114 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+		<div class="round">
+			<h:outputText
+			value="#{messages['game.round']} " />
+			<h:outputText id="round"
+			value="#{gwapGameMemorySharedGame.currentRound}" /><h:outputText
+			value=" #{messages['game.round_of']} " /><h:outputText
+			value="#{gwapGameMemorySharedGame.roundCount}" />
+			
+			<div class="progressbar">
+				<rich:progressBar
+				id="progressbar"
+				minValue="-1" 
+				maxValue="#{gwapGameMemorySharedGame.moveMode?(gwapGameMemorySharedGame.moves):(gwapGameMemorySharedGame.roundLength)}"
+				label=" "
+				mode="client"			
+				/>
+			</div>
+		</div>			
+	<a4j:outputPanel id="memoryform">
+
+
+		<div class="memoryActionPanel">
+		<ui:include src="#{gwapGameMemoryPlayer.guesser?'memoryFormGameGuesser.xhtml':'memoryFormGameDescriber.xhtml'}" />
+		</div>
+
+		<div class="round"><h:outputText
+			value="#{messages['game.memory.score']} " /></div>
+
+		<a4j:outputPanel id="score">
+			<div id="scorediv"
+				class="score #{gwapGameMemorySharedGame.score>=0?'scoreblack':'scorered'}">
+			#{gwapGameMemorySharedGame.score}</div>
+
+	<script type="text/javascript" language="javascript">	
+	
+    function score() {
+		if (#{gwapGameMemorySharedGame.score}!=lastScore)
+        {
+	        var scoreDiv=$('scorediv');
+	        
+			var effect=$('scoreeffect');
+			effect.update(#{gwapGameMemorySharedGame.score}-lastScore);
+
+			var pos=scoreDiv.cumulativeOffset();
+			effect.setStyle({
+				top : pos.top + 'px',
+				left : pos.left + 'px',
+				display : 'block',
+				opacity: '1.0'
+			});
+			
+			if (lastScore &lt; #{gwapGameMemorySharedGame.score})
+			{				
+	        	effect.removeClassName('scorered');
+	        	effect.addClassName('scoreblack');
+	        	new Effect.DropUp('scoreeffect', { duration: 1.8 });	        	
+			}
+	        else
+		    {	
+	        	effect.removeClassName('scoreblack');
+	        	effect.addClassName('scorered');
+			    
+	        	new Effect.DropOut('scoreeffect', { duration: 1.8 });
+		    }
+		    lastScore=#{gwapGameMemorySharedGame.score};			
+        }                
+    }
+	</script>
+		</a4j:outputPanel>
+
+		<!-- Countdown timer -->
+		<a4j:outputPanel rendered="#{!gwapGameMemorySharedGame.moveMode}">
+			<div><span id="countdown">#{gwapGameMemorySharedGame.roundRemaining}</span>#{' '}<h:outputText
+				value="#{messages['game.seconds']}" />
+				 
+				<script type="text/javascript">
+				#{rich:component('progressbar')}.setValue(#{gwapGameMemorySharedGame.roundLength-gwapGameMemorySharedGame.roundRemaining+1});
+				#{rich:component('progressbar')}.setLabel("#{gwapGameMemorySharedGame.roundRemaining} #{messages['game.seconds']}");
+				
+				countdown.callbackStep = function() {
+					#{rich:component('progressbar')}.setValue(#{gwapGameMemorySharedGame.roundLength}-this.seconds+1);
+					#{rich:component('progressbar')}.setLabel(this.seconds + " #{messages['game.seconds']}");
+					document.getElementById('countdown').innerHTML = this.seconds;					
+				};				
+	            countdown.start(#{gwapGameMemorySharedGame.roundRemaining});
+	            </script>
+			</div>
+		</a4j:outputPanel>
+		<a4j:outputPanel id="moves"
+			rendered="#{gwapGameMemorySharedGame.moveMode}">
+			<span>#{gwapGameMemorySharedGame.movesLeft}</span>#{' '}<h:outputText
+				value="#{messages['game.moves']}" />
+				
+				<script type="text/javascript">
+				#{rich:component('progressbar')}.setValue(#{gwapGameMemorySharedGame.moves-gwapGameMemorySharedGame.movesLeft});
+				#{rich:component('progressbar')}.setLabel("#{gwapGameMemorySharedGame.movesLeft} #{messages['game.moves']}");
+				</script>
+				
+		</a4j:outputPanel>
+
+	</a4j:outputPanel>
+
+
+</ui:composition>

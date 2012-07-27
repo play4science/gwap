@@ -1,0 +1,46 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j" template="layout/template.xhtml">
+
+	<ui:define name="body">
+		<div id="related">
+			<ui:include src="layout/menu.xhtml" />
+		</div>
+	
+		<div id="content">
+			<div id="hideGmap"/>
+			<ui:include src="/widget/googlemap.xhtml" />
+			<a4j:loadScript src="javascript/infobubble.js" />
+			<script type="text/javascript">
+			
+			map.gmapOptions['disableDefaultUI'] = true;
+			map.gmapOptions['disableDoubleClickZoom'] = true;
+			map.gmapOptions['draggable'] = false;
+			map.gmapOptions['scrollwheel'] = false;
+
+			
+				__addLoadEvent(function() {
+				var a = new InfoBubble({content: 'Ho incontrato la Lucia al mercato stamattina.',
+					position: new google.maps.LatLng(45.269403,10.359128), 
+					map: gmap, hideCloseButton: true, disableAutoPan: true, arrowPosition:60, arrowStyle:1 }).open();
+				new InfoBubble({content: "Lucia pranza sempre al tocco.", 
+					position: new google.maps.LatLng(42.059822,13.314450), 
+					map: gmap, hideCloseButton: true, disableAutoPan: true, arrowPosition:30, arrowStyle:2}).open();
+				new InfoBubble({content: "Lucia ha entrato la macchina in garage.", 
+					position: new google.maps.LatLng(37.598403,14.296233), 
+					map: gmap, hideCloseButton: true, disableAutoPan: true, arrowPosition:70, arrowStyle:1}).open();
+				} );
+			jQuery('#hideGmap').click(function() { window.location.href = "recognize.html"; });
+			jQuery('#hideGmap').css("cursor", "pointer");
+			</script>
+		</div>
+
+		<br class="clear" />
+	</ui:define>
+</ui:composition>
