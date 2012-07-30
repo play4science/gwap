@@ -76,8 +76,7 @@
   <restrict>#{s:hasPermission('tagatag', 'test')}</restrict>
   <begin-conversation join="true"/>
  </page>
- <page login-required="true" view-id="/combino.xhtml">
-  <restrict>#{s:hasPermission('combino', 'test')}</restrict>
+ <page view-id="/combino.xhtml">
   <begin-conversation join="true" pageflow="combino"/>
  </page>
  <page login-required="true" view-id="/tagging.xhtml">

@@ -74,8 +74,8 @@
   NAME="exception:javax.faces.application.ViewExpiredException"
   PATH="javax.faces.application.ViewExpiredException"
   SHAPE="24,1793,0,0" TYPE="exception" model-entity="SeamPagesDiagramItem">
-  <output ID="/error.xhtml" NAME="output" PATH="/error.xhtml"
-   TARGET="#xerror.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
+  <output ID="/home.xhtml" NAME="output" PATH="/home.xhtml"
+   TARGET="#xhome.xhtml" model-entity="SeamPagesDiagramItemOutput"/>
  </item>
  <item ID="org.jboss.seam.ConcurrentRequestTimeoutException"
   NAME="exception:org.jboss.seam.ConcurrentRequestTimeoutException"
@@ -120,4 +120,10 @@
  <item ID="#custom#amherst-college.xhtml"
   NAME="#xcustom#xamherst-college.xhtml"
   PATH="/custom/amherst-college.xhtml" SHAPE="24,2265,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="#combino.xhtml" NAME="#xcombino.xhtml" PATH="/combino.xhtml"
+  SHAPE="24,2265,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="#tagging.xhtml" NAME="#xtagging.xhtml" PATH="/tagging.xhtml"
+  SHAPE="344,2265,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
+ <item ID="#virtualTagging.xhtml" NAME="#xvirtualTagging.xhtml"
+  PATH="/virtualTagging.xhtml" SHAPE="664,2265,0,0" TYPE="page" model-entity="SeamPagesDiagramItem"/>
 </diagram>
