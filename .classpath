@@ -67,5 +67,6 @@
 	<classpathentry kind="lib" path="lib/opencsv-2.2.jar"/>
 	<classpathentry kind="lib" path="lib/jaxrs-api.jar"/>
 	<classpathentry kind="lib" path="lib/apache-solr-solrj-3.6.0.jar"/>
+	<classpathentry kind="lib" path="lib/gson-2.1.jar"/>
 	<classpathentry kind="output" path="resources/WEB-INF/classes"/>
 </classpath>

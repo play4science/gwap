@@ -74,9 +74,7 @@ public class TermHome extends EntityHome<Term> {
 			facesMessages.add("Bitte geben Sie einen Confirmed Term an!");
 	}
 	
-	public void deleteConfirmedTerm() {
-		log.info("hallo #{confirmedTagId}");
-		//FIXME: geht grad nicht
+	public void deleteConfirmedTerm(Long confirmedTagId) {
 		if (confirmedTagId != null) {
 			List<Tag> confirmedTags = getInstance().getConfirmedTags();
 			for (int i = 0; i < confirmedTags.size(); i++) {
@@ -125,7 +123,7 @@ public class TermHome extends EntityHome<Term> {
 	}
 	
 	private Tag findOrCreateTag(String name) {
-		Query q = entityManager.createNamedQuery("tag.byNameAndLanguage");
+		Query q = entityManager.createNamedQuery("tag.tagByNameAndLanguage");
 		q.setParameter("name", name);
 		q.setParameter("language", localeSelector.getLanguage());
 		Tag tag;

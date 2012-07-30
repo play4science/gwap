@@ -52,7 +52,7 @@ public abstract class AbstractGameSessionBean implements Serializable {
 	@In(required=false) @Out protected GameRound gameRound;
 	@In(required=false) @Out protected GameType gameType;
 	
-	protected Integer completedRoundsScore = 0;
+	protected Integer completedRoundsScore;
 	protected Integer currentRoundScore;
 	
 	protected Integer roundsLeft;
@@ -104,7 +104,7 @@ public abstract class AbstractGameSessionBean implements Serializable {
 		gameRound.setScore(currentRoundScore);
 		if (currentRoundScore != null)
 			completedRoundsScore += currentRoundScore;
-		currentRoundScore = null;
+		currentRoundScore = 0;
 		entityManager.merge(gameRound);
 		entityManager.flush();
 	}

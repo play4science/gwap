@@ -1,0 +1,27 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+	<a4j:form id="bereich3">
+		<s:validateAll>
+			<h:panelGrid columns="2">
+				<h:outputText class="gamequestion"
+					value="#{messages['elearning3.frage.satz']}" />
+				<h:inputText id="inputassoc" value="#{elearnTermina.association}"
+					required="false" />
+			</h:panelGrid>
+		</s:validateAll>
+			<h:messages />
+
+			<a4j:commandButton action="#{elearnTermina.choose()}"
+				value="Sende Assoziation" reRender="bereich1,bereich3,focusbereich"
+				type="submit" />
+	</a4j:form>
+
+</ui:composition>

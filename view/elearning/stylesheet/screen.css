@@ -32,7 +32,7 @@ punktelevel							{ font-size:20px; color:#2E9AFE; backgroundcolor:#E0E0F8; }
 *.gamequestion						{ font-size:14px; color:#424242; }
 *.alignmentright					{float:right;}
 *.alignmentleft					{float:left;}
-*.configlow						{font-size:10px; color:#0B3861; }
+*.configlow						{font-size:12px; color:#0B3861; }
 
 /* =Structure
 -----------------------------------------------------------------------------*/
@@ -42,8 +42,8 @@ body                                    { padding:0px 24px 220px 24px;  repeat-x
 #navHeader                              { float:left }
 #search                                 { float:right }
 #logo                                   { margin:12px 0 20px 0; }
-#related                                { float:left; width:275px; margin-right:24px; display:inline }
-#content                                { width:500px; position:relative; margin-left:300px; margin-top:132px; }
+#related                                { float:left; width:350px; margin-right:24px; display:inline }
+#content                                { width:500px; position:relative; margin-left:360px; margin-top:0px; }
 
 /* =Navigation
 -----------------------------------------------------------------------------*/
@@ -85,7 +85,9 @@ label                                   { display:block; margin-top:1em; line-he
 #register input[type="text"]            { width:191px }
 label.required                          { color:#9dadc4 }
 label.error                             { color:#a7103d }
-#recommendedTags, #opponentTags         { text-transform:uppercase }
+.ongoingGameStatsCaption				{ font-weight: bold; }
+.ongoingGameStatsContent				{ line-height: 1.1; }
+div .ongoingGameStatsContent			{ float: right; }
 
 /* =Content
 -----------------------------------------------------------------------------*/

@@ -1,0 +1,48 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    template="/layout/adminTemplate.xhtml">
+
+    <ui:define name="body">
+		<div id="content">
+      <f:view>
+
+         <h:form>
+
+            <s:validateAll>
+
+				<h:inputText value="#{topicHome.instance.name}" />
+                  
+                  
+                  <rich:pickList value="#{topicHome.list}" var="_term"> 
+            			<s:selectItems value="#{topicHome.allResources}" var="_term" itemValue="#{_term}" label="#{_term.tag.name}"/>
+        		  </rich:pickList>
+                  
+                  
+              	 <h:commandButton 
+						value="#{messages['admin.topic.persist']}"
+						action="#{topicHome.persist()}" 
+						rendered="#{!topicHome.managed}" />
+					<h:commandButton 
+						value="#{messages['admin.topic.update']}"
+						action="#{topicHome.update()}" 
+						rendered="#{topicHome.managed}" />
+
+            </s:validateAll>
+
+            <h:messages/>
+
+         </h:form>
+
+      </f:view>
+      </div>
+		
+        <br class="clear" />
+    </ui:define>
+</ui:composition>

@@ -39,18 +39,18 @@ public class Termina extends AbstractGameSessionBean {
 
 	private static final long serialVersionUID = -4140570198882726459L;
 
-	@In(required=false) @Out(required=false)	private GameConfiguration gameConfiguration;
-	@In(create=true)							private TermBean elearnTermBean;
-	@In(required=false) @Out(required=false)	private Term term;
-	@In											private LocaleSelector localeSelector;
+	@In(required=false) @Out(required=false)	protected GameConfiguration gameConfiguration;
+	@In(create=true)							protected TermBean elearnTermBean;
+	@In(required=false) @Out(required=false)	protected Term term;
+	@In											protected LocaleSelector localeSelector;
 	
-	private GameConfiguration nextGameConfiguration;
-	private String association;
-	private Integer foundAssociations;
+	protected GameConfiguration nextGameConfiguration;
+	protected String association;
+	protected Integer foundAssociations;
 
-	private List<Tag> tags;
-	private List<String> answers;
-	private List<Tag> previousTaggings;
+	protected List<Tag> tags;
+	protected List<String> answers;
+	protected List<Tag> previousTaggings;
 	
 
 	@Override
@@ -67,23 +67,35 @@ public class Termina extends AbstractGameSessionBean {
 		previousTaggings = new ArrayList<Tag>();
 		foundAssociations = 0;
 		
+		adjustGameConfiguration();
+		gameRound.setGameConfiguration(gameConfiguration);
+		
+		term = elearnTermBean.updateTerm(gameConfiguration);
+			
+		gameRound.getResources().add(term);
+	}
+	
+	protected void adjustGameConfiguration() {
 		if (nextGameConfiguration != null) {
 			gameConfiguration = nextGameConfiguration;
 		} else if (gameConfiguration == null) {
 			gameConfiguration = new GameConfiguration();
 			gameConfiguration.setLevel(1);
-			gameConfiguration.setBid(1);
+			gameConfiguration.setBid(2);
 			gameConfiguration.setRoundDuration(60);
 		}
 
 		gameConfiguration.setLevel(1 + ((gameRound.getNumber()-1) / 10));
 		
-		term = elearnTermBean.updateRandomTerm();
-		
 		// find GameConfiguration if it exists, otherwise create it
 		try {
-			Query q = entityManager.createNamedQuery("gameConfiguration.byAll");
-			q.setParameter("topic", gameConfiguration.getTopic());
+			Query q;
+			if (gameConfiguration.getTopic() == null) {
+				q = entityManager.createNamedQuery("gameConfiguration.byAllButTopic");
+			} else {
+				q = entityManager.createNamedQuery("gameConfiguration.byAll");
+				q.setParameter("topic", gameConfiguration.getTopic());
+			}
 			q.setParameter("level", gameConfiguration.getLevel());
 			q.setParameter("bid", gameConfiguration.getBid());
 			q.setParameter("roundDuration", gameConfiguration.getRoundDuration());
@@ -95,15 +107,18 @@ public class Termina extends AbstractGameSessionBean {
 		
 		nextGameConfiguration = GameConfiguration.deepCopy(gameConfiguration);
 	}
-	
+
 	public void startRoundPalette() {
 		startRound();
 		
 		// 1. Create list of shown tags
 		int maxNrResults = gameConfiguration.getBid();
 
-		if (term.getConfirmedTags().size() < maxNrResults)
+		if (term.getConfirmedTags().size() < maxNrResults) {
+			gameRound.getResources().remove(term);
 			term = elearnTermBean.updateRandomTermMinConfirmedTags(maxNrResults);
+			gameRound.getResources().add(term);
+		}
 		
 		// Could be selected in a more intelligent way :)
 		tags = elearnTermBean.updateRandomTagsNotRelated(term, maxNrResults);
@@ -121,8 +136,12 @@ public class Termina extends AbstractGameSessionBean {
 	 * Action for normal game round (not for palette mode)
 	 */
 	public void choose() {
+		if (association == null || association.length() == 0) {
+			facesMessages.addFromResourceBundle("termina.term.tooShort");
+			return;
+		}
 		if (TagSemantics.containsNotNormalized(previousTaggings, association) != null) {
-			facesMessages.add("Bereits gesagt!");
+			facesMessages.addFromResourceBundle("termina.term.duplicate");
 			log.info("Association #0 has already been said for term #1", association, term);
 			return;
 		}
@@ -135,16 +154,19 @@ public class Termina extends AbstractGameSessionBean {
 		
 		if (tag != null) {
 			log.info("Association '#0' is correct for term '#1'", association, term);
-			facesMessages.add("Richtig!");
+			facesMessages.addFromResourceBundle("termina.term.correct");
 			tagging.setTag(tag);
+			tagging.setScore(scoreMultiplicator());
 			foundAssociations++;
 			currentRoundScore += scoreMultiplicator();
 		} else {
 			log.info("Association '#0' is wrong for term '#1'", association, term);
+			facesMessages.addFromResourceBundle("termina.term.wrong");
 			tagging.setTag(findOrCreateTag(association));
 		}
 		previousTaggings.add(tagging.getTag());
 		entityManager.persist(tagging);
+		gameRound.getActions().add(tagging);
 		association = "";
 	}
 	
@@ -163,7 +185,7 @@ public class Termina extends AbstractGameSessionBean {
 		}
 		currentRoundScore += foundAssociations*scoreMultiplicator();
 		if (foundAssociations == gameConfiguration.getBid())
-			facesMessages.add("Richtig!");
+			facesMessages.addFromResourceBundle("termina.term.correct");
 		return "next";
 	}
 

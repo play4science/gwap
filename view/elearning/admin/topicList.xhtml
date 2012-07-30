@@ -1,0 +1,53 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    template="../layout/adminTemplate.xhtml">
+
+    <ui:define name="body">
+		<div id="content">
+			<s:link view="/admin/topic.xhtml" value="New topic" propagation="none"/>
+			
+			<h:outputText value="#{messages['admin.termAnnotations.noResourceFound']}" rendered="#{empty topicList.resultList}" />
+			
+			<rich:dataTable id="topicList" value="#{topicList.resultList}" var="_resource">
+			   <rich:column width="10px">
+			    	<s:link view="/admin/topic.xhtml" propagation="none" value="#{messages['edit']}">
+			    		<f:param name="topicId" value="#{_resource.id}"/>
+			    	</s:link> 
+			    </rich:column>
+			    <!-- <rich:column width="10px">
+			    	<s:link action="#{elearnTermHome.remove}" value="#{messages['delete']}">
+			    		<f:param name="termId" value="#{_resource.id}"/>
+			    	</s:link>
+			    </rich:column> -->
+			    <rich:column width="50px">
+			        <f:facet name="header" >
+			            <h:outputText value="#{messages['admin.topics.id']}"/>
+			        </f:facet>
+			        <h:outputText value="#{_resource.id}"/>
+			    </rich:column>
+			    <rich:column>
+			        <f:facet name="header" >
+			            <h:outputText value="Topic name"/>
+			        </f:facet>
+			        <h:outputText value="#{_resource.name}"/>
+			    </rich:column>
+			    <rich:column>
+			        <f:facet name="header" >
+			            <h:outputText value="Term Names"/>
+			        </f:facet>
+			        <ui:repeat value="#{_resource.resources}" var="_term" varStatus="_status">
+			        	<h:outputText value="#{_term.tag.name}"/><h:outputText value=", " rendered="#{!_status.last}" />
+			        </ui:repeat>
+			    </rich:column>
+			</rich:dataTable>
+		</div>
+        <br class="clear" />
+    </ui:define>
+</ui:composition>

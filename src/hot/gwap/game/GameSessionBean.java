@@ -53,7 +53,7 @@ public class GameSessionBean extends AbstractGameSessionBean {
 	
 	public String recommendTag() {
 		if (!roundExpired()) {
-			Tagging tagging = taggingBean.recommendTag();
+			Tagging tagging = taggingBean.recommendTag(resource, false);
 			if (tagging.getTag() == null) {
 				log.info("Could not add tag to gameround as it is invalid.");
 			} else {

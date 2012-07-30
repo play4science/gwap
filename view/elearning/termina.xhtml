@@ -19,7 +19,7 @@
 			
 			<h:form>
 				<f:view>
-					Hier kannst Du das Spiel starten! <br></br>Wähle Deine Anfangskonfiguration:
+					<h:outputText value="#{messages['termina.start.header']}" escape="false" />
 					<br></br>
 					<br></br>
 					#{messages['elearn.ansage.anzahl']}<h:outputText value="#{gameConfiguration.bid}"/>
@@ -30,14 +30,13 @@
 					<h:commandButton action="#{elearnGameConfigurationBean.riseRoundDuration()}" value="+"/>
 					<h:commandButton action="#{elearnGameConfigurationBean.lowerRoundDuration()}" value="-"/>**
 					<br></br>
-					<!--  <s:link action="continueGame" value="#{messages['OK']}" propagation="none" />-->
 					<br></br>
-					<h:commandButton action="continueGame" image="/img/ok.png" value="OK"></h:commandButton>
+					<h:commandButton action="continueGame" value="#{messages['termina.start']}" style="font-size:16px; font-weight: bold; width: 100px;"></h:commandButton>
 					<br></br>
 					<br></br>
-					<p class="configlow">*: Ansage ist die Zahl an Assoziationen die Du Dir pro Runde zutraust.
+					<p class="configlow">*: <h:outputText value="#{messages['termina.description.bid']}" />
 					<br></br>
-					**: Zeit ist die Dauer an Sekunden die Du pro Runde benötigst.</p>
+					**: <h:outputText value="#{messages['termina.description.roundDuration']}"/></p>
 				</f:view>
 		</h:form>
 		

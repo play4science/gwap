@@ -1,0 +1,69 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    template="../layout/adminTemplate.xhtml">
+
+    <ui:define name="body">
+		<div id="content">
+			<s:link view="/admin/gameConfiguration.xhtml" value="New GameConfiguration" propagation="none"/>
+			
+			<h:outputText value="#{messages['noResourceFound']}" rendered="#{empty gameConfigurationList.resultList}" />
+			
+			<rich:dataTable id="gameConfigurationList" value="#{gameConfigurationList.resultList}" var="_resource">
+			   <rich:column width="10px">
+			    	<s:link view="/admin/gameConfiguration.xhtml" propagation="none" value="#{messages['edit']}">
+			    		<f:param name="gameConfigurationId" value="#{_resource.id}"/>
+			    	</s:link> 
+			    </rich:column>
+			    <!-- <rich:column width="10px">
+			    	<s:link action="#{elearnTermHome.remove}" value="#{messages['delete']}">
+			    		<f:param name="termId" value="#{_resource.id}"/>
+			    	</s:link>
+			    </rich:column> -->
+			    <rich:column width="50px">
+			        <f:facet name="header" >
+			            <h:outputText value="#{messages['admin.gameConfiguration.id']}"/>
+			        </f:facet>
+			        <h:outputText value="#{_resource.id}"/>
+			    </rich:column>
+			    <rich:column>
+			        <f:facet name="header" >
+			            <h:outputText value="#{messages['admin.gameConfiguration.topicName']}:"/>
+			        </f:facet>
+			        <h:outputText value="#{_resource.topic.name}"/>
+			    </rich:column>
+			    <rich:column>
+			        <f:facet name="header" >
+			            <h:outputText value="#{messages['admin.gameConfiguration.topicId']}:"/>
+			        </f:facet>
+			        <h:outputText value="#{_resource.topic.id}"/>
+			    </rich:column>
+			    <rich:column>
+			        <f:facet name="header" >
+			            <h:outputText value="#{messages['admin.gameConfiguration.roundDuration']}"/>
+			        </f:facet>
+			        <h:outputText value="#{_resource.roundDuration}"/>
+			    </rich:column>
+			    <rich:column>
+			        <f:facet name="header" >
+			            <h:outputText value="#{messages['admin.gameConfiguration.level']}"/>
+			        </f:facet>
+			        <h:outputText value="#{_resource.level}"/>
+			    </rich:column>
+			    <rich:column>
+			        <f:facet name="header" >
+			            <h:outputText value="#{messages['admin.gameConfiguration.bid']}"/>
+			        </f:facet>
+			        <h:outputText value="#{_resource.bid}"/>
+			    </rich:column>
+			</rich:dataTable>
+		</div>
+        <br class="clear" />
+    </ui:define>
+</ui:composition>

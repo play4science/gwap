@@ -75,6 +75,8 @@
 		<!--<bpm:process-definitions><value>elearnImageLabeler.jpdl.xml</value></bpm:process-definitions>-->
 		<bpm:pageflow-definitions>
 			<value>elearnTermina.jpdl.xml</value>
+			<value>elearnTerminaBackstage.jpdl.xml</value>
+			<value>elearnFreeTaggingGame.jpdl.xml</value>
 		</bpm:pageflow-definitions>
 
 	</bpm:jbpm>

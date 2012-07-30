@@ -1,0 +1,53 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j">
+	
+	<rich:dataTable var="_gameround" value="#{gameSession.getGameRounds()}">
+		<f:facet name="header">
+			<rich:columnGroup>
+				<rich:column><h:outputText value="#{messages['termina.scoring.userTags']}" /></rich:column>
+				<rich:column colspan="2"><h:outputText value="#{messages['termina.scoring.otherTags']}" /></rich:column>
+			</rich:columnGroup>
+		</f:facet>
+		<rich:column colspan="3">
+			<h:outputText value="#{messages['termina.round']} #{_gameround.number}" />
+			(<b><h:outputText value="#{_gameround.resources.get(0).tag.name}"/></b>)<s:fragment rendered="#{!hideGameRoundScore}">:				
+			<h:outputText value="#{_gameround.score} #{messages['termina.score']}" /></s:fragment>
+		</rich:column>
+		<rich:subTable var="_foo" value="1">
+			<rich:column style="vertical-align:top;">
+				<ui:repeat var="_tagging" value="#{_gameround.actions}">
+					<span style="color:#{_tagging.score > 0 ? 'green' : 'red'};">
+						<h:outputText value="#{_tagging.tag.name}"/>
+						<br/>
+					</span>
+				</ui:repeat>
+			</rich:column>
+			<rich:column style="color:green; vertical-align:top;">
+				<ui:repeat var="_term" value="#{elearnResults.getTopCorrectAnswers(_gameround)}">
+					<h:outputFormat value="{0} ({1}x)">
+						<f:param value="#{_term.term}" />
+						<f:param value="#{_term.appearence}" />
+					</h:outputFormat>
+					<br/>
+				</ui:repeat>
+			</rich:column>
+			<rich:column style="color:red; vertical-align:top;">
+				<ui:repeat var="_term" value="#{elearnResults.getTopWrongAnswers(_gameround)}">
+					<h:outputFormat value="{0} ({1}x)">
+						<f:param value="#{_term.term}" />
+						<f:param value="#{_term.appearence}" />
+					</h:outputFormat>
+					<br/>
+				</ui:repeat>
+			</rich:column>
+		</rich:subTable>
+	</rich:dataTable>
+
+</ui:composition>

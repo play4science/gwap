@@ -74,9 +74,45 @@ import org.jboss.seam.annotations.Scope;
 					"where g.gameSession.id=(:sessionid) " +
 					"and g.person.id=(:personid) " +
 					"and not g.id in (:limitlist) " +
-					"order by g.startDate desc")					
+					"order by g.startDate desc"),	
+	@NamedQuery(
+			name = "gameRound.ScoreByExternalSessionId",
+			query = "select new gwap.wrapper.BackstageResult(g.number, avg(g.score)) from GameRound g " +
+					"where g.gameSession.externalSessionId=:externalSessionId " + 
+					"group by g.number " +
+					"having avg(g.score) != null " + 
+					"order by g.number,avg(g.score)"),
+
+	@NamedQuery(	
+			name = "gameRound.ScoreByGameRoundStudent",
+			query = "select new gwap.wrapper.BackstageResult(g.number, g.score) from GameRound g " +
+					"where g.gameSession.externalSessionId=:externalSessionId " +
+					"and g.person.externalUsername=:externalUsername " + 
+					"and g.score != null " +
+					"order by g.number"),
+	
+	@NamedQuery(	
+			name = "gameRound.ScoreOverallStudent",
+			query = "select new gwap.wrapper.BackstageResult(avg(g.score)) from GameRound g " +
+					"where g.gameSession.externalSessionId=:externalSessionId " +
+					"and g.person.externalUsername=:externalUsername"),
 					
+	@NamedQuery(	
+			name = "gameRound.stopQuiz",
+			query = "update GameRound set endDate=:date " + 
+					"where gameSession.id = (select id from GameSession where externalSessionId=:externalSessionId) " +
+					"and endDate!=null"),
+
+	@NamedQuery(	
+			name = "gameRound.stopTermina",
+			query = "select g from GameRound g " +
+					"where g.gameSession.externalSessionId=:externalSessionId"),
+		
 					
+	@NamedQuery(	
+			name = "gameRound.testGameRound",
+			query = "select g from GameRound g")
+	
 }
 )
 					

@@ -1,0 +1,124 @@
+/*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ *
+ * Copyright (c) 2009-11, Lehrstuhl PMS (http://www.pms.ifi.lmu.de/)
+ * All rights reserved.
+ * 
+ */
+
+package gwap.admin;
+
+import gwap.model.GameConfiguration;
+import gwap.model.Topic;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.faces.model.SelectItem;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+
+import org.jboss.seam.annotations.Begin;
+import org.jboss.seam.annotations.In;
+import org.jboss.seam.annotations.Logger;
+import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.web.RequestParameter;
+import org.jboss.seam.faces.FacesMessages;
+import org.jboss.seam.framework.EntityHome;
+import org.jboss.seam.international.LocaleSelector;
+import org.jboss.seam.log.Log;
+
+/**
+ * @author elearning
+ */
+@Name("gameConfigurationHome")
+public class GameConfigurationHome extends EntityHome<GameConfiguration>{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 52097429085092384L;
+	@RequestParameter		
+	Long gameConfigurationId;
+	@In
+	private FacesMessages facesMessages;
+	@In
+	private EntityManager entityManager;
+	@In
+	private LocaleSelector localeSelector;
+	@Logger
+	private Log log;
+
+	private Topic selectedTopic; // +getter +setter
+	private Long selectedTopicId;
+	private List<Topic> selectTopics = null; // +getter
+	private List option; 
+
+	public Topic getSelectedTopic() {
+		return selectedTopic;
+	}
+
+	public void setSelectedTopic(Topic selectedTopic) {
+		this.selectedTopic = selectedTopic;
+	}	
+	
+	public List<SelectItem> getSelectTopics() {
+		option = new ArrayList();
+		if (selectTopics == null) {
+			Query q = entityManager.createNamedQuery("topic.topicsByName");
+			selectTopics = q.getResultList();
+		}
+		for (Topic t : selectTopics){
+			option.add(new SelectItem(t.getId(), t.getName()));
+		}
+		return option;
+	}
+
+	@Override
+	@Begin(join = true)
+	public void create() {
+		super.create();
+	}
+
+    @Override
+	public String persist() {
+    	String persist = super.persist();
+    	selectedTopic = entityManager.find(Topic.class, selectedTopicId);
+    	getInstance().setTopic(selectedTopic);
+    	return persist;
+	}
+	
+    @Override
+    public String update() {
+    	String update = super.update();
+    	selectedTopic = entityManager.find(Topic.class, selectedTopicId);
+    	getInstance().setTopic(selectedTopic);
+    	return update;
+    };
+	
+	@Override
+	public Object getId() {
+		if (gameConfigurationId == null)
+			return super.getId();
+		else
+			return gameConfigurationId;
+	}
+	
+	private String newGameConfiguration;
+
+	public String getNewGameConfiguration() {
+		return newGameConfiguration;
+	}
+
+	public void setNewGameConfiguration(String newGameConfiguration) {
+		this.newGameConfiguration = newGameConfiguration;
+	}
+
+	public Long getSelectedTopicId() {
+		return selectedTopicId;
+	}
+
+	public void setSelectedTopicId(Long selectedTopicId) {
+		this.selectedTopicId = selectedTopicId;
+	}
+}

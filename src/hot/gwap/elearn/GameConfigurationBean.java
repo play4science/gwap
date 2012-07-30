@@ -35,7 +35,7 @@ public class GameConfigurationBean implements Serializable {
 	public void initGameConfiguration() {
 		gameConfiguration = new GameConfiguration();
 		gameConfiguration.setLevel(1);
-		gameConfiguration.setBid(1);
+		gameConfiguration.setBid(2);
 		gameConfiguration.setRoundDuration(60);
 	}
 	

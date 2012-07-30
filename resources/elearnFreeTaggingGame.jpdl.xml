@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<pageflow-definition
+  xmlns="http://jboss.com/products/seam/pageflow"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://jboss.com/products/seam/pageflow http://jboss.com/products/seam/pageflow-2.0.xsd"
+  name="elearnFreeTaggingGame">
+  
+	<start-page name="start" view-id="/tagging.xhtml">
+		<action expression="#{elearnFreeTaggingGame.startGameSession()}" />
+		<transition name="next" to="roundToPlay">
+			<action expression="#{elearnFreeTaggingGame.endRound()}" />
+		</transition>
+ 		<transition name="beenden" to="scoring">
+			<action expression="#{elearnFreeTaggingGame.endRound()}" />
+			<action expression="#{elearnFreeTaggingGame.endGameSession()}" />
+ 		</transition>
+	</start-page>
+	
+	<page name="game" view-id="/tagging.xhtml">
+ 		<transition name="next" to="roundToPlay">
+			<action expression="#{elearnFreeTaggingGame.endRound()}" />
+ 		</transition>
+ 		<transition name="beenden" to="scoring">
+			<action expression="#{elearnFreeTaggingGame.endRound()}" />
+			<action expression="#{elearnFreeTaggingGame.endGameSession()}" />
+ 		</transition>
+	</page>
+	
+	<decision name="roundToPlay" expression="#{elearnFreeTaggingGame.roundsLeft > 0}">
+		<transition name="true" to="game">
+			<action expression="#{elearnFreeTaggingGame.startRound()}" />
+		</transition>
+		<transition name="false" to="scoring">
+			<action expression="#{elearnFreeTaggingGame.endGameSession()}" />
+		</transition>
+	</decision>	
+
+	<page name="scoring" view-id="/taggingScoring.xhtml">
+	</page>
+
+</pageflow-definition>

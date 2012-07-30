@@ -11,57 +11,28 @@
 
 
     <ui:define name="body">
+    
 		<div id="related">
-			<ui:include src="layout/menu.xhtml" />
-		</div>
-
+  			<ui:include src="/layout/menu.xhtml" />
+ 		</div>
+ 		
 		<div id="content">
 		
-		<ui:include src="widget/gameheader.xhtml" />
+		<ui:include src="/widget/gameheader.xhtml" />
 		
-		<h:form id="bereich2">
-			<h:outputText class="gamequestion" value="#{messages['elearning.frage.satz']}"/>
-			<div class="standout">
-				<h:outputText id="questionTerm" value="#{term.tag.name}" rendered="#{!empty(term)}"/>
-			</div>
-
-			<h:commandButton id="switchTermButton" action="next"  value="Wechsle Term" type="button"/>
-			<a4j:jsFunction name="switchTerm" action="next"/>
-		</h:form>
-		<ui:remove>
-		<!-- dem User wird ein Fragebegriff angezeigt. Da er sich in der ersten Runde des ersten 
-		Levels befindet, befinden wir uns im Variety-Modus. Im mittels JavaScript automatisch 
-		anfokussierten Inputfeld soll der User nun Assoziationen nennen die ihm zu dem genannten 
-		Begriff einfallen. Tippt der User nun ein Wort ein und klickt auf den Command-Button 
-		“Sende Assoziation”, wird die CheckAssociation-Klasse aufgerufen-->
-		</ui:remove>
-		<a4j:form id="bereich3">
-			<s:validateAll>
-				<h:panelGrid columns="2">
-				<h:outputText class="gamequestion" value="#{messages['elearning3.frage.satz']}"/>
-                <h:inputText id="inputassoc" value="#{elearnTermina.association}" required="false" />
-				</h:panelGrid>
-           	</s:validateAll>
-
-			<h:messages/>
-
-			<a4j:commandButton action="#{elearnTermina.choose()}" value="Sende Assoziation" reRender="bereich1,bereich3,focusbereich" type="submit" />
-		</a4j:form>
-		<h:form id="focusbereich">
-			<script type="text/javascript">
-	  			document.getElementById('bereich3:inputassoc').focus();
-			</script>
-		</h:form>
+		<ui:include src="/terminaGame/bereich2.xhtml" />
 		
-<!-- Beenden Button, Session wird beendet, man wird zum Highscore gelinkt  -->
-		<h:form id="bereich4" class="alignmentright">
-		<a4j:commandButton id="beendenButton" action="beenden" value="Beenden"/>
-		</h:form>
+		<ui:include src="/terminaGame/remove.xhtml" />
 		
-		<!--  <s:button action="next" value="#{'Naechste Runde!'}"/>-->
-		</div>
-	
+		<ui:include src="/terminaGame/bereich3.xhtml" />
+		
+		<ui:include src="/terminaGame/focusbereich.xhtml" />
+		
+		<ui:include src="/terminaGame/bereich4.xhtml" />
+
+        </div>
 		
         <br class="clear" />
+        
     </ui:define>
 </ui:composition>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<pageflow-definition
+  xmlns="http://jboss.com/products/seam/pageflow"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://jboss.com/products/seam/pageflow http://jboss.com/products/seam/pageflow-2.0.xsd"
+  name="elearnTerminaBackstage">
+ 
+	
+	<start-page name="game" view-id="/backstage/termina.xhtml">	
+		<action expression="#{elearnTerminaBackstage.startGameSession()}" />
+ 		<transition name="next" to="roundToPlay">
+ 			<action expression="#{elearnTerminaBackstage.endRound()}" />
+ 		</transition>
+	</start-page>
+	
+	<page name="palette" view-id="/backstage/termina_paletteBackstage.xhtml">
+ 		<transition name="next" to="roundToPlay">
+ 			<action expression="#{elearnTerminaBackstage.endRound()}" />
+ 		</transition>
+	</page>
+	
+	<decision name="gameover" expression="#{0 > gameSessionScore}">
+		<transition name="true" to="highscorepage"/>
+      	<transition name="false" to="whichmode"/>
+ 	</decision>
+	
+	<decision name="roundToPlay" expression="#{elearnTerminaBackstage.roundsLeft > 0}">
+		<transition name="true" to="gameover"/>
+		<transition name="false" to="highscorepage">
+			<action expression="#{elearnTerminaBackstage.endGameSession()}" />
+			<!--  <action expression="#{elearnGameConfiguration.setAllVariablesBack()}" />-->
+		</transition>
+	</decision>	
+	
+	<decision name="whichmode" expression="#{gameRound.number % 3 == 0}">
+    	<transition name="true" to="palette">
+    	<!--  Bei jedem Switch nächste Runde, sowie Termchange -->
+			<!-- <action expression="#{elearnCheckAssociation.setSaidTermsArrayBack()}" />-->
+			<action expression="#{elearnTerminaBackstage.startRoundPalette()}" />
+		</transition>
+    	<transition name="false" to="game">
+			<!-- <action expression="#{elearnCheckAssociation.setSaidTermsArrayBack()}" />-->
+			<action expression="#{elearnTerminaBackstage.startRound()}" />
+		</transition>
+	</decision>
+	
+	<page name="highscorepage" view-id="/backstage/result.xhtml">
+	</page>
+	
+</pageflow-definition>

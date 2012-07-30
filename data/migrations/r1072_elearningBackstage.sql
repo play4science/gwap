@@ -1,0 +1,1 @@
+INSERT INTO gametype (id, description, label, name, players, roundduration, rounds, workflow, platform) VALUES (11, 'TerminaBackstage', 'TerminaBackstage', 'elearnTerminaBackstage', 1, 60, 30, NULL, 'elearningBackstage');

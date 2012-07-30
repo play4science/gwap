@@ -34,6 +34,8 @@ import org.jboss.seam.annotations.Scope;
 public class GameSession implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	
+	private String externalSessionId;	
 
 	@Id @GeneratedValue
 	private Long id;
@@ -68,4 +70,13 @@ public class GameSession implements Serializable {
 	public String toString() {
 		return "Id: " + id; 
 	}
+
+	public String getExternalSessionId() {
+		return externalSessionId;
+	}
+
+	public void setExternalSessionId(String externalSessionId) {
+		this.externalSessionId = externalSessionId;
+	}
+
 }

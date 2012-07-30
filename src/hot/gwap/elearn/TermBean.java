@@ -9,6 +9,7 @@
 package gwap.elearn;
 
 import gwap.model.GameConfiguration;
+import gwap.model.GameSession;
 import gwap.model.Tag;
 import gwap.model.resource.Term;
 
@@ -45,29 +46,113 @@ public class TermBean implements Serializable {
 	@In(required=false)      private GameConfiguration gameConfiguration;
 	@Out(required=false)     private Term term;
 	@In						 private LocaleSelector localeSelector;
+	@In(required=false)      private GameSession gameSession;
 	
 	@Factory("term")
 	public Term updateTerm() {
-		return updateRandomTerm();
+		updateSensibleTerm();
+		if (term == null)
+			updateRandomTerm();
+		log.info("Updated term: #0", term);
+		return term;
+	}
+	
+	public Term updateTerm(GameConfiguration gameConfiguration) {
+		this.gameConfiguration = gameConfiguration;
+		return updateTerm();
 	}
 	
 	public Term updateRandomTerm() {
 		log.info("Updating Random Term");
 		
 		try {
-			Query query = entityManager.createNamedQuery("term.randomByLevel");
+			Query query = null;
+			if (gameConfiguration != null && gameConfiguration.getTopic() != null) {
+				query = entityManager.createNamedQuery("term.randomByTopic");
+				query.setParameter("topic", gameConfiguration.getTopic());
+			} else {
+				query = entityManager.createNamedQuery("term.randomByLevel");
+				if (gameConfiguration != null && gameConfiguration.getLevel() != null)
+					query.setParameter("level", gameConfiguration.getLevel());
+				else
+					query.setParameter("level", 1);
+			}
+			query.setParameter("language", localeSelector.getLanguage());
+			query.setMaxResults(1);
+			term = (Term) query.getSingleResult();
+			return term;
+		} catch(Exception e) {
+			log.info("Could not find a random term");
+			return null;
+		}
+	}
+	
+	public Term updateSensibleTerm() {
+		log.info("Updating Sensible Term");
+		
+		try {
+			Query query = null;
+			if (gameConfiguration != null && gameConfiguration.getTopic() != null) {
+				query = entityManager.createNamedQuery("term.randomByTopicNotInGameSession");
+				query.setParameter("topic", gameConfiguration.getTopic());
+			} else {
+				query = entityManager.createNamedQuery("term.randomByLevelNotInGameSession");
+				if (gameConfiguration != null)
+					query.setParameter("level", gameConfiguration.getLevel());
+				else
+					query.setParameter("level", 1);
+			}
+			query.setParameter("gameSession", gameSession);
+			query.setParameter("language", localeSelector.getLanguage());
+			query.setMaxResults(1);
+			term = (Term) query.getSingleResult();
+			return term;
+		} catch(Exception e) {
+			log.info("Could not find a sensible term");
+			term = null;
+			return null;
+		}
+	}
+
+	public Term updateSensibleTermForFreeTagging(Integer level) {
+		log.info("Updating Sensible Term For Free Tagging");
+		
+		try {
+			Query query = null;
+			query = entityManager.createNamedQuery("term.randomByLevelNotInGameSession");
+			query.setParameter("level", level);
+			query.setParameter("gameSession", gameSession);
+			query.setParameter("language", localeSelector.getLanguage());
+			query.setMaxResults(1);
+			term = (Term) query.getSingleResult();
+			return term;
+		} catch(Exception e) {
+			log.info("Could not find a sensible term for free tagging");
+			term = null;
+			return null;
+		}
+	}
+
+	public Term updateRandomTermMinConfirmedTags(int maxNrResults) {
+		log.info("Updating Random Term Min Confirmed Tags");
+		
+		try {
+			Query query = entityManager.createNamedQuery("term.randomByLevelMinConfirmedTags");
+			if (gameSession != null) {
+				query = entityManager.createNamedQuery("term.randomByLevelMinConfirmedTagsNotInGameSession");
+				query.setParameter("gameSession", gameSession);
+			}
 			query.setParameter("language", localeSelector.getLanguage());
 			if (gameConfiguration != null)
 				query.setParameter("level", gameConfiguration.getLevel());
 			else
 				query.setParameter("level", 1);
+			query.setParameter("minConfirmedTags", maxNrResults);
 			query.setMaxResults(1);
 			term = (Term) query.getSingleResult();
-			log.info("Found random term #0", term);
 			return term;
 		} catch(Exception e) {
-			facesMessages.add("#{messages['general.noResource']}");
-			log.info("Could not find a random term");
+			log.info("Could not find a random term min confirmed tags");
 			return null;
 		}
 	}
@@ -86,28 +171,7 @@ public class TermBean implements Serializable {
 			return terms;
 		} catch(Exception e) {
 			facesMessages.add("#{messages['general.noResource']}");
-			log.info("Could not find a random term");
-			return null;
-		}
-	}
-	public Term updateRandomTermMinConfirmedTags(int maxNrResults) {
-		log.info("Updating Random Term");
-		
-		try {
-			Query query = entityManager.createNamedQuery("term.randomByLevelMinConfirmedTags");
-			query.setParameter("language", localeSelector.getLanguage());
-			if (gameConfiguration != null)
-				query.setParameter("level", gameConfiguration.getLevel());
-			else
-				query.setParameter("level", 1);
-			query.setParameter("minConfirmedTags", maxNrResults);
-			query.setMaxResults(1);
-			term = (Term) query.getSingleResult();
-			log.info("Found random term #0", term);
-			return term;
-		} catch(Exception e) {
-			facesMessages.add("#{messages['general.noResource']}");
-			log.info("Could not find a random term");
+			log.info("Could not update random tags not related");
 			return null;
 		}
 	}

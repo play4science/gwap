@@ -17,7 +17,7 @@
  		<transition name="next" to="roundToPlay">
  			<action expression="#{elearnTermina.endRound()}" />
  		</transition>
- 		<transition name="beenden" to="highscorepage">
+ 		<transition name="beenden" to="gameoverpage">
  			<action expression="#{elearnTermina.endRound()}" />
  		</transition>
 	</page>
@@ -26,7 +26,7 @@
  		<transition name="next" to="roundToPlay">
  			<action expression="#{elearnTermina.endRound()}" />
  		</transition>
- 		<transition name="beenden" to="highscorepage">
+ 		<transition name="beenden" to="gameoverpage">
  			<action expression="#{elearnTermina.endRound()}" />
  		</transition>
 	</page>
@@ -38,7 +38,7 @@
 	
 	<decision name="roundToPlay" expression="#{elearnTermina.roundsLeft > 0}">
 		<transition name="true" to="isgameover"/>
-		<transition name="false" to="highscorepage">
+		<transition name="false" to="gameoverpage">
 			<action expression="#{elearnTermina.endGameSession()}" />
 			<!--  <action expression="#{elearnGameConfiguration.setAllVariablesBack()}" />-->
 		</transition>
@@ -56,10 +56,7 @@
 		</transition>
 	</decision>
 	
-	<page name="highscorepage" view-id="/highscore.xhtml">
-	</page>
-	
-	<page name="gameoverpage" view-id="/gameover.xhtml">
+	<page name="gameoverpage" view-id="/scoring.xhtml">
 	</page>
 
 </pageflow-definition>

@@ -28,3 +28,4 @@ slf4j-log4j12.jar
 jaxrs-api.jar
 resteasy-jaxrs.jar
 jboss-seam-resteasy.jar
+gson-2.1.jar

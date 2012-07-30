@@ -1,5 +1,5 @@
 /*
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+t * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
  * Copyright (c) 2009-11, Lehrstuhl PMS (http://www.pms.ifi.lmu.de/)
  * All rights reserved.
@@ -18,11 +18,17 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 
+@NamedQueries({
+	@NamedQuery(name="topic.topicsByName", 
+				query="select t from Topic t order by t.name")
+})
 /**
  * A topic is a combination of resources and can be used to group
  * resources into a common theme.

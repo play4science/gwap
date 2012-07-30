@@ -24,14 +24,15 @@
 	    
 		<ul id="navMain">
 		
-			<li class="#{menuBean.getCssClass('/home.xhtml')}">
-				<s:link view="/home.xhtml" value="#{messages['Begrüßung']}" propagation="none" />
-        	</li>
 			<li class="#{menuBean.getCssClass('/termina.xhtml')}">
-	        	<s:link view="/termina.xhtml" value="#{messages['Spiel']}" propagation="none"/>
+	        	<s:link view="/termina.xhtml" value="#{messages['menu.termina']}" propagation="none"/>
         	</li>
         	<li class="#{menuBean.getCssClass('/highscore.xhtml')}">
-	        	<s:link view="/highscore.xhtml" value="#{messages['Highscore']}" propagation="none"/>
+	        	<s:link view="/highscore.xhtml" value="#{messages['menu.highscore']}" propagation="none"/>
+        	</li>
+
+			<li class="#{menuBean.getCssClass('/tagging.xhtml')}">
+	        	<s:link view="/tagging.xhtml" value="#{messages['menu.tagging']}" propagation="none"/>
         	</li>
         	<!--<li class="#{menuBean.getCssClass('/addword.xhtml')}">
 	        	<s:link view="/addword.xhtml" value="#{messages['Terme hinzufuegen']}" propagation="none"/>

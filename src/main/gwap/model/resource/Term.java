@@ -26,12 +26,33 @@ import org.jboss.seam.annotations.Scope;
 
 @NamedQueries({
 	@NamedQuery(name="term.randomByLevel", 
-				query="select p from Term p where p.rating = :level and p.tag.language = :language order by random()"),
+				query="select p from Term p where p.enabled = true and p.rating = :level and p.tag.language = :language order by random()"),
+	@NamedQuery(name="term.randomByLevelNotInGameSession", 
+				query="select p from Term p where p.enabled = true and p.rating = :level and p.tag.language = :language " +
+						"and p.id not in (select r2.id from GameRound r join r.resources r2 where r.gameSession=:gameSession) " +
+						"order by random()"),
+	@NamedQuery(name="term.randomByTopic", 
+				query="select p from Term p join p.topics t where p.enabled = true and t = :topic and p.tag.language = :language order by random()"),
+	@NamedQuery(name="term.randomByTopicNotInGameSession", 
+				query="select p from Term p join p.topics t where p.enabled = true and t = :topic and p.tag.language = :language " +
+						"and p.id not in (select r2.id from GameRound r join r.resources r2 where r.gameSession=:gameSession) " +
+						"order by random()"),
 	@NamedQuery(name="term.randomByLevelMinConfirmedTags", 
-				query="select p from Term p where p.rating = :level and p.tag.language = :language and " +
-						"(select count(*) from p.confirmedTags) >= :minConfirmedTags order by random()"),
+				query="select p from Term p where p.enabled = true and p.rating = :level and p.tag.language = :language " +
+						"and (select count(*) from p.confirmedTags) >= :minConfirmedTags order by random()"),
+	@NamedQuery(name="term.randomByLevelMinConfirmedTagsNotInGameSession", 
+				query="select p from Term p where p.enabled = true and p.rating = :level and p.tag.language = :language " +
+						"and p.id not in (select r2.id from GameRound r join r.resources r2 where r.gameSession=:gameSession) " +
+						"and (select count(*) from p.confirmedTags) >= :minConfirmedTags order by random()"),
 	@NamedQuery(name="term.randomTagsNotRelated", 
-				query="select t from Term p join p.confirmedTags t where p != :term and t.language = :language order by random()")
+				query="select t from Term p join p.confirmedTags t where p.enabled = true and p != :term and t.language = :language " +
+						"order by random()"),					
+	@NamedQuery(name = "term.allTerms",
+				query = "select t from Term t join t.tag g order by g.name"),			
+	@NamedQuery(name="term.byExternalSessionId", 
+				query="select t from Term t join t.gameRounds r join r.gameSession s " +
+						"where s.externalSessionId=:externalSessionId " +
+						"group by t.id, t.externalId, t.enabled, t.tag, t.rating, r.number order by r.number")
 })
 @Entity
 @Name("term")

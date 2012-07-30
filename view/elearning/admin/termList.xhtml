@@ -11,13 +11,13 @@
 
     <ui:define name="body">
 		<div id="content">
-			<s:link view="/admin/term.xhtml" value="New term"/>
+			<s:link view="/admin/term.xhtml" value="#{messages['admin.term.add']}" propagation="none"/>
 			
 			<h:outputText value="#{messages['admin.termAnnotations.noResourceFound']}" rendered="#{empty termList.resultList}" />
 			
 			<rich:dataTable id="termList" value="#{termList.resultList}" var="_resource">
 			    <rich:column width="10px">
-			    	<s:link view="/admin/term.xhtml" propagation="none" value="#{messages['edit']}">
+			    	<s:link view="/admin/term.xhtml" propagation="none" value="#{messages['admin.term.edit']}">
 			    		<f:param name="termId" value="#{_resource.id}"/>
 			    	</s:link>
 			    </rich:column>
@@ -28,25 +28,25 @@
 			    </rich:column> -->
 			    <rich:column width="50px">
 			        <f:facet name="header" >
-			            <h:outputText value="#{messages['admin.terms.id']}"/>
+			            <h:outputText value="#{messages['admin.term.id']}"/>
 			        </f:facet>
 			        <h:outputText value="#{_resource.id}"/>
 			    </rich:column>
 			    <rich:column>
 			        <f:facet name="header" >
-			            <h:outputText value="Term name"/>
+			            <h:outputText value="#{messages['admin.term.name']}"/>
 			        </f:facet>
 			        <h:outputText value="#{_resource.tag.name}"/>
 			    </rich:column>
 			    <rich:column>
 			        <f:facet name="header" >
-			            <h:outputText value="Rating"/>
+			            <h:outputText value="#{messages['admin.term.rating']}"/>
 			        </f:facet>
 			        <h:outputText value="#{_resource.rating}"/>
 			    </rich:column>
 			    <rich:column>
 			        <f:facet name="header" >
-			            <h:outputText value="Confirmed Terms"/>
+			            <h:outputText value="#{messages['admin.term.confirmedTags']}"/>
 			        </f:facet>
 			        <ui:repeat value="#{_resource.confirmedTags}" var="_tag" varStatus="_status">
 			        	<h:outputText value="#{_tag.name}"/><h:outputText value=", " rendered="#{!_status.last}" />

@@ -68,7 +68,9 @@ public class Person implements Serializable {
 	
 	@Id	@GeneratedValue
 	private Long id;
-
+	
+	private String externalUsername; 
+	
 	@ManyToOne								private Person personConnected; // the person it is connected to (if it exists)
 	@OneToMany(mappedBy="personConnected")	private Set<Person> connectedPersons = new HashSet<Person>(); // persons, that are connected to this person (reflexive).
 	@OneToMany(mappedBy="person")			private List<GameRound> gameRounds = new ArrayList<GameRound>();
@@ -312,6 +314,14 @@ public class Person implements Serializable {
 
 	public void setEducation(Education education) {
 		this.education = education;
+	}
+
+	public String getExternalUsername() {
+		return externalUsername;
+	}
+
+	public void setExternalUsername(String externalUsername) {
+		this.externalUsername = externalUsername;
 	}
 
 	public String getUnverifiedEmail() {

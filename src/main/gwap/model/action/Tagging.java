@@ -60,7 +60,39 @@ import org.jboss.seam.annotations.Scope;
 			query = "select t from Tagging t " +
 					"where t.resource.id=:resid and " +
 					"t.gameRound.id=:gameid " +					
-					"order by t.created"), 
+					"order by t.created"),
+	@NamedQuery(
+			name = "tagging.taggingsByTag",
+			query = "select count(*) from Tagging t where t.tag=:tag"),
+	@NamedQuery(
+			name="tagging.byResource",
+			query="select t.tag.name, count(t.id) from Tagging t " +
+					"where t.resource.id=:resourceId group by t.tag.name having count(t.id)>=:minOccurrence"),
+					
+	@NamedQuery(
+			name="tagging.topCorrectAnswers",
+			query="select new gwap.wrapper.BackstageAnswer(t.name, count(*)) from Term r join r.confirmedTags t join r.taggings tg join tg.gameRound gr " +
+					"where r.id=:resourceId and gr.gameSession.externalSessionId=:externalSessionId " +
+					"and t.id=tg.tag.id " +
+					"group by t.name order by count(*) desc"),
+	@NamedQuery(
+			name="tagging.topWrongAnswers",
+			query="select new gwap.wrapper.BackstageAnswer(t.name, count(*)) from Term r join r.taggings tg join tg.tag t " +
+					"where r.id=:resourceId and tg.gameRound.gameSession.externalSessionId=:externalSessionId " +
+					"and t.id not in (select t2.id from r.confirmedTags t2) " +
+					"group by t.name order by count(*) desc"),
+	@NamedQuery(
+			name="tagging.topCorrectAnswersGeneral",
+			query="select new gwap.wrapper.BackstageAnswer(t.name, count(*)) from Term r join r.confirmedTags t join r.taggings tg " +
+					"where r.id=:resourceId " +
+					"and t.id=tg.tag.id " +
+					"group by t.name order by count(*) desc"),
+	@NamedQuery(
+			name="tagging.topWrongAnswersGeneral",
+			query="select new gwap.wrapper.BackstageAnswer(t.name, count(*)) from Term r join r.taggings tg join tg.tag t " +
+					"where r.id=:resourceId " +
+					"and t.id not in (select t2.id from r.confirmedTags t2) " + 
+					"group by t.name order by count(*) desc"),
 	@NamedQuery(
 			name = "tagging.tagFrequencyBySource",
 			query = "select r.externalId, t.tag.name, t.tag.language, count(t.tag.name) " +
@@ -77,9 +109,6 @@ import org.jboss.seam.annotations.Scope;
 					"group by r.externalId, t.tag.name, t.tag.language " +
 					"having count(t.tag.name) >= :threshold " +
 					"order by r.externalId, t.tag.language, t.tag.name"),
-	@NamedQuery(
-			name = "tagging.taggingsByTag",
-			query = "select count(*) from Tagging t where t.tag=:tag"),
 	@NamedQuery(
 			name = "tagging.taggingsByTagNameResourceAndGameround",
 			query = "select t from Tagging t where lower(t.tag.name)=lower(:tagName) and t.resource=:resource and t.gameRound = :gameRound")

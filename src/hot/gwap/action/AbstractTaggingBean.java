@@ -51,7 +51,7 @@ public abstract class AbstractTaggingBean<GenericTagging> implements Serializabl
 	@In                      protected FacesMessages facesMessages;
 	@In                      protected EntityManager entityManager;
 	@In                      protected LocaleSelector localeSelector;
-	@In(create=true)         protected Resource resource;
+	@In(required=false)      protected Resource resource;
 	@In(create=true)         protected RecommendedTag recommendedTag;
 	@In(create=true)         protected Person person;
 	@In(create=true) @Out    protected Tag tag;

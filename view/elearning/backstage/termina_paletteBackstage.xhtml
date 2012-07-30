@@ -1,0 +1,44 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    template="../layout/templateBackstage.xhtml">
+
+    <ui:define name="body">
+	
+		<div id="content">
+		
+		<ui:include src="/widget/gameheaderBackstage.xhtml" />		
+		
+		<h:form id="bereich2">
+			<h:outputText class="gamequestion" value="#{messages['elearning2.frage.satz']}"/>
+			<div class="standout">
+				<h:outputText id="questionTerm" value="#{term.tag.name}" rendered="#{!empty(term)}"/>
+			</div>
+			
+			<h:commandButton id="switchTermButton" action="next"  value="Wechsle Term" type="button"/>
+			<a4j:jsFunction name="switchTerm" action="next"/>
+		</h:form>
+		<!-- Befindet sich der User im Palette Modus, so muss er die passenden Assoziationen zu dem 
+		Fragebegriff auswählen und bestätigen. Hierbei wird eine andere Methode in der CheckAssociation-Klasse 
+		aufgerufen -->
+		<a4j:form id="bereich3">
+			<s:validateAll>
+			<h:selectManyListbox id="answersListbox" value="#{elearnTerminaBackstage.answers}">
+				<s:selectItems value="#{elearnTerminaBackstage.tags}" var="tag" label="#{tag.name}" />
+			</h:selectManyListbox>
+			</s:validateAll>
+			<br></br>
+			<a4j:commandButton action="#{elearnTerminaBackstage.choosePalette()}" value="Sende Auswahl" reRender="bereich1,bereich3" type="submit"/>
+		</a4j:form>
+		</div>
+	
+		
+        <br class="clear" />
+    </ui:define>
+</ui:composition>

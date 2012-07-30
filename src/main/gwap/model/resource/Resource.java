@@ -9,6 +9,7 @@
 package gwap.model.resource;
 
 import gwap.model.GameRound;
+import gwap.model.Topic;
 import gwap.model.action.LocationAssignment;
 import gwap.model.action.Tagging;
 
@@ -53,6 +54,9 @@ public abstract class Resource implements Serializable {
 	
 	@OneToMany(mappedBy="resource", cascade=CascadeType.REMOVE)
 	private List<LocationAssignment> locationAssignments = new ArrayList<LocationAssignment>();
+	
+	@ManyToMany(mappedBy="resources")
+	protected List<Topic> topics = new ArrayList<Topic>();
 	
 	public Long getId() {
 		return id;
@@ -101,5 +105,14 @@ public abstract class Resource implements Serializable {
 	public void setTaggings(Set<Tagging> taggings) {
 		this.taggings = taggings;
 	}
+
+	public List<Topic> getTopics() {
+		return topics;
+	}
+
+	public void setTopics(List<Topic> topics) {
+		this.topics = topics;
+	}
+
 	
 }
