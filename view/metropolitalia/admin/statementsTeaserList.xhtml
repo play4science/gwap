@@ -13,7 +13,8 @@
 		<div id="content">
 			<s:link view="/admin/statementsTeaser.xhtml" value="#{messages['admin.statementsTeaser.new']}"/>
 			
-			<h:dataTable id="statementsTeaserList" value="#{mitAdminStatementsTeaserList.resultList}" var="_resource">
+			<h:dataTable id="statementsTeaserList" value="#{mitAdminStatementsTeaserList.resultList}" var="_resource" 
+				styleClass="rich-table" columnClasses="rich-table-cell" headerClass="rich-table-subheadercell rich-table-subheader">
 			    <h:column width="10px" >
 			    	<s:link view="/admin/statementsTeaser.xhtml" propagation="none" value="#{messages['edit']}">
 			    		<f:param name="statementsTeaserId" value="#{_resource.id}"/>
