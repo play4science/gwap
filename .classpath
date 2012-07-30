@@ -3,7 +3,6 @@
 	<classpathentry kind="src" output="classes/main" path="src/main"/>
 	<classpathentry kind="src" output="classes/hot" path="src/hot"/>
 	<classpathentry kind="src" output="classes/test" path="src/test"/>
-	<classpathentry kind="lib" path="test-build" sourcepath="src"/>
 	<classpathentry kind="lib" path="bootstrap"/>
 	<classpathentry kind="lib" path="lib/hibernate-validator.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate-core.jar"/>
