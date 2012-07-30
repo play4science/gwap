@@ -10,6 +10,7 @@ package gwap.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -20,9 +21,13 @@ import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @NamedQueries({
-		@NamedQuery(name = "statementsTeaser.all", query = "from StatementsTeaser")
+		@NamedQuery(name = "statementsTeaser.all", query = "from StatementsTeaser"),
+		@NamedQuery(name = "statementsTeaser.latestByPublicationDate", 
+			query = "from StatementsTeaser where publicationDate <= current_date() order by publicationDate desc")
 })
 @Entity
 public class StatementsTeaser implements Serializable {
@@ -38,6 +43,9 @@ public class StatementsTeaser implements Serializable {
 
 	@Lob
 	private String teaser;
+	
+	@Temporal(TemporalType.DATE)
+	private Date publicationDate;
 
 	public Long getId() {
 		return id;
@@ -61,6 +69,14 @@ public class StatementsTeaser implements Serializable {
 
 	public void setTeaser(String teaser) {
 		this.teaser = teaser;
+	}
+
+	public Date getPublicationDate() {
+		return publicationDate;
+	}
+
+	public void setPublicationDate(Date publicationDate) {
+		this.publicationDate = publicationDate;
 	}
 
 }
