@@ -340,7 +340,6 @@ public class Recognize extends AbstractGameSessionBean {
 			if(!statementTokens.get(i).getToken().isPunktuation())
 				aux++;
 		}
-		log.info("STATEMENT TOKENS : " + aux);
 		if(aux == 1)
 			return false;
 		else 
