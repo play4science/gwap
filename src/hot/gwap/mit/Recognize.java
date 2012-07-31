@@ -208,7 +208,17 @@ public class Recognize extends AbstractGameSessionBean {
 					sat.add(token);
 			}
 			entityManager.flush();
-			addToScore(mitPokerScoring.highlighting(statementAnnotation, facesMessages));
+			try {
+				Integer score = mitPokerScoring.highlighting(statementAnnotation);
+				addToScore(score);
+				if (score > 0)
+					facesMessages.addFromResourceBundle(Severity.INFO, "game.recognize.gainedPoints", score);
+				else
+					facesMessages.addFromResourceBundle(Severity.INFO, "game.recognize.gainedNoPoints");
+				facesMessages.addFromResourceBundle(Severity.INFO, "game.recognize.highlighting.result", mitPokerScoring.getHighlightingPercentage(statementAnnotation));
+			} catch (NotEnoughDataException e) {
+				facesMessages.addFromResourceBundle(Severity.INFO, "game.recognize.highlighting.notEnoughData");
+			}
 		}
 	}
 	
@@ -226,6 +236,8 @@ public class Recognize extends AbstractGameSessionBean {
 				addToScore(mitPokerScoring.characterization(statementCharacterization));
 				if (statementCharacterization.getScore() > 0)
 					facesMessages.addFromResourceBundle(Severity.INFO, "game.recognize.gainedPoints", statementCharacterization.getScore());
+				else
+					facesMessages.addFromResourceBundle(Severity.INFO, "game.recognize.gainedNoPoints");
 				facesMessages.addFromResourceBundle(Severity.INFO, "game.recognize.characterizationResult.seeAbove");
 			} catch (NotEnoughDataException e) {
 				facesMessages.addFromResourceBundle(Severity.INFO, "game.recognize.characterizationResult.notEnoughData");

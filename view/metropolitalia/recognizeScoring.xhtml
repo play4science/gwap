@@ -51,6 +51,7 @@
 							<ui:param name="bet" value="#{mitRecognize.getBetAction(_round)}" />
 						</ui:include>
 					
+						<s:fragment rendered="#{mitRecognize.getLocationAssignmentAction(_round) != null}">
 						<tr>
 							<td style="vertical-align:top;">
 								<dl>
@@ -80,6 +81,7 @@
 						 		</h:outputFormat>
 							</td>
 						</tr>
+						</s:fragment>
 						
 						<s:fragment rendered="#{mitRecognize.getCharacterizationAction(_round) != null}">
 						<tr>

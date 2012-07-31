@@ -41,7 +41,6 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
-import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.log.Log;
 
 /**
@@ -55,8 +54,8 @@ public class PokerScoring {
 	public static final int CHARACTERIZATION_BONUS_TENDENCY = 5;
 	public static final int CHARACTERIZATION_BONUS_10_PERCENT = 10;
 	private static final int STATEMENT_CREATED = 10;
-	private static final int ANNOTATION_LIKE_MAJORITY = 10;
-	private static final int ANNOTATION_LIKE_THIRD = 5;
+	public static final int ANNOTATION_LIKE_MAJORITY = 10;
+	public static final int ANNOTATION_LIKE_THIRD = 5;
 	private static final int LOCATION_ASSIGNMENT_MAX_SCORE = 10;
 	private static final double LOCATION_ASSIGNMENT_ND_FACTOR = 0.03;
 	private static final int BET_MAX_SCORE = 100;
@@ -105,7 +104,7 @@ public class PokerScoring {
 				} else if (percentage.getTotal() == MIN_NR_FOR_STATISTICS) {
 					// Calculate score for all characterizations
 					if (allCharacterizations == null)
-						allCharacterizations = entityManager.createNamedQuery("statementCharacterization.byStatementLatestFirst")
+						allCharacterizations = entityManager.createNamedQuery("statementCharacterization.byStatement")
 							.setParameter("statement", characterization.getStatement())
 							.getResultList();
 					for (int i = 0; i < allCharacterizations.size(); i++) {
@@ -124,13 +123,13 @@ public class PokerScoring {
 			throw new NotEnoughDataException();
 		} catch (Exception e) {
 		}
-		if (score != 0)
-			characterization.setScore(score);
+		characterization.setScore(score);
 		return score;
 	}
 
-	public Integer highlighting(StatementAnnotation annotation, FacesMessages facesMessages) {
+	public Integer highlighting(StatementAnnotation annotation) throws NotEnoughDataException {
 		int score = 0;
+		annotation.setScore(score);
 		Percentage percentage = getHighlightingPercentage(annotation);
 		if (percentage != null) {
 			if (percentage.getTotal() > MIN_NR_FOR_STATISTICS) {
@@ -140,24 +139,25 @@ public class PokerScoring {
 					score = ANNOTATION_LIKE_THIRD;
 				}
 			} else if (percentage.getTotal() == MIN_NR_FOR_STATISTICS) {
-				
+				List<StatementAnnotation> allAnnotations = entityManager.createNamedQuery("statementAnnotation.byStatement")
+					.setParameter("statement", annotation.getStatement())
+					.getResultList();
+				for (int i = 0; i < allAnnotations.size(); i++) {
+					StatementAnnotation sa = allAnnotations.get(i);
+					if (percentage.getPercentage() >= 50) {
+						sa.setScore(ANNOTATION_LIKE_MAJORITY);
+					} else if (percentage.getPercentage() >= 30) {
+						sa.setScore(ANNOTATION_LIKE_THIRD);
+					}
+					if (sa.getId().equals(annotation.getId()))
+						score = sa.getScore();
+				}
+			} else {
+				throw new NotEnoughDataException();
 			}
 		}
 		annotation.setScore(score);
-		printPercentage(facesMessages, percentage, "highlighting");
 		return score;
-	}
-	
-	private void printPercentage(FacesMessages facesMessages, Percentage percentage, String type) {
-		if (facesMessages == null)
-			return;
-		if (percentage != null && percentage.getTotal() >= MIN_NR_FOR_STATISTICS) {
-			if (percentage.getPercentage() >= 30)
-				facesMessages.addFromResourceBundle("game.recognize."+type+".high", percentage.getPercentage().intValue());
-			else
-				facesMessages.addFromResourceBundle("game.recognize."+type+".low", percentage.getPercentage().intValue());
-		} else
-			facesMessages.addFromResourceBundle("game.recognize."+type+".notEnoughData");
 	}
 	
 	public int getPersonScoreSum(Person person) {

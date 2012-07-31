@@ -41,7 +41,9 @@ import org.jboss.seam.annotations.Scope;
 	@NamedQuery(name="statementAnnotation.byToken",
 			query="select t.id, count(*) from StatementAnnotation a join a.statementTokens t where a.statement.id = :statementId group by t.id"),
 	@NamedQuery(name="statementAnnotation.countByStatement",
-			query="select count(a.id) from StatementAnnotation a where a.statement.id = :statementId and a.statementTokens is not empty")
+			query="select count(a.id) from StatementAnnotation a where a.statement.id = :statementId and a.statementTokens is not empty"),
+	@NamedQuery(name="statementAnnotation.byStatement",
+			query="from StatementAnnotation where statement = :statement")
 })
 @Entity
 @Name("statementAnnotation")
