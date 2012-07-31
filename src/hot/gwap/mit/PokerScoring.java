@@ -91,6 +91,7 @@ public class PokerScoring {
 		characterization.setScore(score);
 		String[] types = new String[] { "gender", "maturity", "cultivation" };
 		try {
+			List<StatementCharacterization> allCharacterizations = null;
 			for (String type : types) {
 				Percentage percentage = getCharacterizationResult(characterization.getStatement(), type);
 				Method getMethod = characterization.getClass().getDeclaredMethod("get" + type.substring(0, 1).toUpperCase() + type.substring(1), null);
@@ -98,12 +99,13 @@ public class PokerScoring {
 				if (percentage.getTotal() > MIN_NR_FOR_STATISTICS) {
 					// Calculate score for this characterization
 					if (Math.abs(percentage.getFraction().intValue() - value.intValue()) <= 10)
-						return CHARACTERIZATION_BONUS_10_PERCENT;
+						score += CHARACTERIZATION_BONUS_10_PERCENT;
 					else if (Math.signum(percentage.getFraction().intValue()) == Math.signum(value.intValue()))
-						return CHARACTERIZATION_BONUS_TENDENCY;
+						score += CHARACTERIZATION_BONUS_TENDENCY;
 				} else if (percentage.getTotal() == MIN_NR_FOR_STATISTICS) {
 					// Calculate score for all characterizations
-					List<StatementCharacterization> allCharacterizations = entityManager.createNamedQuery("statementCharacterization.byStatementLatestFirst")
+					if (allCharacterizations == null)
+						allCharacterizations = entityManager.createNamedQuery("statementCharacterization.byStatementLatestFirst")
 							.setParameter("statement", characterization.getStatement())
 							.getResultList();
 					for (int i = 0; i < allCharacterizations.size(); i++) {
@@ -112,8 +114,9 @@ public class PokerScoring {
 							sc.setScore(sc.getScore() + CHARACTERIZATION_BONUS_10_PERCENT);
 						else if (Math.signum(percentage.getFraction().intValue()) == Math.signum(value))
 							sc.setScore(sc.getScore() + CHARACTERIZATION_BONUS_TENDENCY);
-					}	
-					break;
+						if (sc.getId().equals(characterization.getId()))
+							score = sc.getScore();
+					}
 				} else
 					throw new NotEnoughDataException();
 			}
@@ -129,11 +132,15 @@ public class PokerScoring {
 	public Integer highlighting(StatementAnnotation annotation, FacesMessages facesMessages) {
 		int score = 0;
 		Percentage percentage = getHighlightingPercentage(annotation);
-		if (percentage != null && percentage.getTotal() >= MIN_NR_FOR_STATISTICS) {
-			if (percentage.getPercentage() >= 50) {
-				score = ANNOTATION_LIKE_MAJORITY;
-			} else if (percentage.getPercentage() >= 30) {
-				score = ANNOTATION_LIKE_THIRD;
+		if (percentage != null) {
+			if (percentage.getTotal() > MIN_NR_FOR_STATISTICS) {
+				if (percentage.getPercentage() >= 50) {
+					score = ANNOTATION_LIKE_MAJORITY;
+				} else if (percentage.getPercentage() >= 30) {
+					score = ANNOTATION_LIKE_THIRD;
+				}
+			} else if (percentage.getTotal() == MIN_NR_FOR_STATISTICS) {
+				
 			}
 		}
 		annotation.setScore(score);
