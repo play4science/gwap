@@ -29,7 +29,9 @@ import org.jboss.seam.annotations.Scope;
 					"from StatementCharacterization a where a.statement = :statement and a.maturity is not null"),
 	@NamedQuery(name="statementCharacterization.cultivationPercentageByStatement",
 			query="select new gwap.wrapper.Percentage( sum(a.cultivation), count(a.cultivation) ) " +
-					"from StatementCharacterization a where a.statement = :statement and a.cultivation is not null")
+					"from StatementCharacterization a where a.statement = :statement and a.cultivation is not null"),
+	@NamedQuery(name="statementCharacterization.byStatementLatestFirst",
+			query="from StatementCharacterization where statement = :statement order by created desc")
 })
 @Entity
 @Name("statementCharacterization")

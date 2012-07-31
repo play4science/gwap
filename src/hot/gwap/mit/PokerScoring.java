@@ -25,6 +25,7 @@ import gwap.wrapper.Percentage;
 import gwap.wrapper.Score;
 import gwap.wrapper.StatementTokenPercentage;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -61,7 +62,7 @@ public class PokerScoring {
 	private static final int BET_MAX_SCORE = 100;
 	private static final double BET_ND_FACTOR = 0.09;
 	
-	public static final int MIN_NR_FOR_STATISTICS = 2;
+	public static final int MIN_NR_FOR_STATISTICS = 3;
 	
 	private HashMap<Long, List<Location>> hierarchyTrees = new HashMap<Long, List<Location>>();
 	
@@ -88,26 +89,41 @@ public class PokerScoring {
 	public Integer characterization(StatementCharacterization characterization) throws NotEnoughDataException {
 		int score = 0;
 		characterization.setScore(score);
-		score += withinRangeGiveBonus(characterization.getGender(), characterization.getStatement(), "gender");
-		score += withinRangeGiveBonus(characterization.getMaturity(), characterization.getStatement(), "maturity");
-		score += withinRangeGiveBonus(characterization.getCultivation(), characterization.getStatement(), "cultivation");
-		characterization.setScore(score);
-		return score;
-	}
-	
-	private int withinRangeGiveBonus(Integer value, Statement statement, String type) throws NotEnoughDataException {
-		if (notNull(value)) {
-			Percentage percentage = getCharacterizationResult(statement, type);
-			if (percentage.getTotal() >= MIN_NR_FOR_STATISTICS) {
-				int difference = Math.abs(percentage.getFraction().intValue() - value.intValue());
-				if (difference <= 10)
-					return CHARACTERIZATION_BONUS_10_PERCENT;
-				else if (percentage.getFraction().intValue()>0 && value.intValue()>0 || percentage.getFraction().intValue()<0 && value.intValue()<0)
-					return CHARACTERIZATION_BONUS_TENDENCY;
-			} else
-				throw new NotEnoughDataException();
+		String[] types = new String[] { "gender", "maturity", "cultivation" };
+		try {
+			for (String type : types) {
+				Percentage percentage = getCharacterizationResult(characterization.getStatement(), type);
+				Method getMethod = characterization.getClass().getDeclaredMethod("get" + type.substring(0, 1).toUpperCase() + type.substring(1), null);
+				Integer value = (Integer) getMethod.invoke(characterization);
+				if (percentage.getTotal() > MIN_NR_FOR_STATISTICS) {
+					// Calculate score for this characterization
+					if (Math.abs(percentage.getFraction().intValue() - value.intValue()) <= 10)
+						return CHARACTERIZATION_BONUS_10_PERCENT;
+					else if (Math.signum(percentage.getFraction().intValue()) == Math.signum(value.intValue()))
+						return CHARACTERIZATION_BONUS_TENDENCY;
+				} else if (percentage.getTotal() == MIN_NR_FOR_STATISTICS) {
+					// Calculate score for all characterizations
+					List<StatementCharacterization> allCharacterizations = entityManager.createNamedQuery("statementCharacterization.byStatementLatestFirst")
+							.setParameter("statement", characterization.getStatement())
+							.getResultList();
+					for (int i = 0; i < allCharacterizations.size(); i++) {
+						StatementCharacterization sc = allCharacterizations.get(i);
+						if (Math.abs(percentage.getFraction().intValue() - value) <= 10)
+							sc.setScore(sc.getScore() + CHARACTERIZATION_BONUS_10_PERCENT);
+						else if (Math.signum(percentage.getFraction().intValue()) == Math.signum(value))
+							sc.setScore(sc.getScore() + CHARACTERIZATION_BONUS_TENDENCY);
+					}	
+					break;
+				} else
+					throw new NotEnoughDataException();
+			}
+		} catch (NotEnoughDataException e) {
+			throw new NotEnoughDataException();
+		} catch (Exception e) {
 		}
-		return 0;
+		if (score != 0)
+			characterization.setScore(score);
+		return score;
 	}
 
 	public Integer highlighting(StatementAnnotation annotation, FacesMessages facesMessages) {
@@ -390,10 +406,6 @@ public class PokerScoring {
 			return 0;
 		else
 			return n.intValue();
-	}
-	
-	private boolean notNull(Number n) {
-		return n != null && n.intValue() != 0;
 	}
 	
 	public String getStatementTokenBorder(StatementTokenPercentage stp, Person person){
