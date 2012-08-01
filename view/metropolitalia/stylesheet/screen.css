@@ -74,7 +74,7 @@ body                                    { padding:0px 24px 220px 24px; backgroun
 -----------------------------------------------------------------------------*/
 #search input[type=text]                { background: transparent; width:200px; border: none; padding: 0 3px 0 1px; margin: 0; }
 #search input[type="submit"]            { background: url(../img/lupe.gif) no-repeat; height:17px; width:17px; margin: 0px; padding: 0px; border: none; }
-#search									{ border: 1px solid silver; } 
+#search									{ border: 1px solid #666; } 
 
 
 #game                                   { margin-top:25px }
