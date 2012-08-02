@@ -12,4 +12,8 @@
 		<tag-name>pagination</tag-name>
 		<source>tags/pagination.xhtml</source>
     </tag>
+    <tag>
+		<tag-name>punti</tag-name>
+		<source>tags/punti.xhtml</source>    
+    </tag>
 </facelet-taglib>
