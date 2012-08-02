@@ -63,6 +63,7 @@ public class Recognize extends AbstractGameSessionBean {
 	private StatementAnnotation statementAnnotation;
 	private LocationAssignment locationAssignment;
 	private Integer points;
+
 	
 	@Override
 	public void startGameSession() {
@@ -217,6 +218,7 @@ public class Recognize extends AbstractGameSessionBean {
 					facesMessages.addFromResourceBundle(Severity.INFO, "game.recognize.gainedNoPoints");
 				facesMessages.addFromResourceBundle(Severity.INFO, "game.recognize.highlighting.result", mitPokerScoring.getHighlightingPercentage(statementAnnotation));
 			} catch (NotEnoughDataException e) {
+				skipCharacterizationResult = true;
 				facesMessages.addFromResourceBundle(Severity.INFO, "game.recognize.highlighting.notEnoughData");
 			}
 		}
@@ -359,5 +361,6 @@ public class Recognize extends AbstractGameSessionBean {
 		else 
 			return true;
 	}
+
 		
 }
