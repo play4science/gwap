@@ -13,7 +13,7 @@
 		<source>tags/pagination.xhtml</source>
     </tag>
     <tag>
-		<tag-name>punti</tag-name>
-		<source>tags/punti.xhtml</source>    
+		<tag-name>points</tag-name>
+		<source>tags/points.xhtml</source>    
     </tag>
 </facelet-taglib>

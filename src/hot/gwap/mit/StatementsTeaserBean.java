@@ -41,7 +41,7 @@ public class StatementsTeaserBean implements Serializable {
 	@Logger
 	private Log log;
 	
-	@Out(required=false)
+	@Out
 	private StatementsTeaser statementsTeaser;
 	
 	@RequestParameter
