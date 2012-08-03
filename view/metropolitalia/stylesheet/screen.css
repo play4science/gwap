@@ -35,6 +35,8 @@ body                                    { padding:0px 24px 220px 24px; backgroun
 #content                                { float:left; margin-top: 40px; width:650px; }
 #content ol                             { list-style-type:decimal; padding-left: 20px;}
 h4                                      { margin-top:3px !important;}
+a:active, a:link, a:visited             { color: #0078D0; }
+a:hover                                 { color: #0090FF; };
 
 /* =Navigation
 -----------------------------------------------------------------------------*/
