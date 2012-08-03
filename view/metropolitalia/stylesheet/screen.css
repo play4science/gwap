@@ -13,7 +13,7 @@
 -----------------------------------------------------------------------------*/
 html, body, div,
 table, caption, tbody, tfoot, thead, tr, th, td,
-h1, h2, h3, p, em, font, img,
+h1, h2, h3, h4, p, em, font, img,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend           { margin:0; padding:0; border:0; outline:0; vertical-align:bottom; background:transparent; color:#000 }
 body                                    { line-height:1; font-family:Arial, Verdana, Tahoma, sans-serif; position:relative }
@@ -34,6 +34,7 @@ body                                    { padding:0px 24px 220px 24px; backgroun
 #content-image                          { display:inline }
 #content                                { float:left; margin-top: 40px; width:650px; }
 #content ol                             { list-style-type:decimal; padding-left: 20px;}
+h4                                      { margin-top:3px !important;}
 
 /* =Navigation
 -----------------------------------------------------------------------------*/
