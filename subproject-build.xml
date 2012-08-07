@@ -6,6 +6,12 @@
 		<not><matches string="${subproject.name}" pattern="\$\{subproject[0-9]+}"/></not>
 	</condition>
 	
+	<target name="jar" if="subproject.defined" description="Adds additional resources to jar">
+		<copy todir="${jar.dir}">
+			<fileset dir="${basedir}/resources/${subproject.name}/jar-resources"/>
+		</copy>
+	</target>
+	
 	<target name="war" if="subproject.defined"
 		description="Builds a single WAR in a staging directory">
 		<echo message="Subproject ${subproject.name}" level="info" />
@@ -66,7 +72,6 @@
                 <include name="messages*.properties"/>
                 <include name="*.skin.properties" if="richfaces.present"/>
                 <include name="*_theme.properties"/>
-            	<include name="**/*.csv" />
                 <include name="**/*.xcss" if="richfaces.present"/>
             </fileset>
             <!-- move XCSS into classpath for now
