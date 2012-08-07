@@ -10,7 +10,6 @@ package gwap.game.quiz.action;
 
 import gwap.game.quiz.UserPerceptionRating;
 import gwap.model.PerceptionPair;
-import gwap.model.Person;
 
 import java.io.Serializable;
 
@@ -23,8 +22,6 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
-import org.jboss.seam.faces.FacesMessages;
-import org.jboss.seam.international.LocaleSelector;
 import org.jboss.seam.log.Log;
 
 
@@ -47,13 +44,7 @@ public class PerceptionBean implements Serializable {
 	@Logger
 	private Log log;
 	@In
-	private FacesMessages facesMessages;
-	@In
 	private EntityManager entityManager;
-	@In
-	private LocaleSelector localeSelector;
-	@In(create = true)
-	private Person person;
 	private UserPerceptionRating userRecommendedRating;
 
 	public void addUserPerceptionRating(UserPerceptionRating userRecommendedRating) {

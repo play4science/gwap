@@ -13,6 +13,7 @@ import gwap.model.Person;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.Serializable;
 import java.net.URL;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ import org.jboss.seam.log.Log;
  */
 @Name("wrongAnswerBean")
 @Scope(ScopeType.STATELESS)
-public class WrongAnswerBean {
+public class WrongAnswerBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Logger

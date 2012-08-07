@@ -20,8 +20,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.Date;
 
-import javax.el.ELContext;
-import javax.el.ExpressionFactory;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,13 +32,10 @@ import javax.transaction.SystemException;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.In;
-import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Startup;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
-import org.jboss.seam.log.Log;
 import org.jboss.seam.servlet.ContextualHttpServletRequest;
 import org.jboss.seam.transaction.Transaction;
 import org.jboss.seam.web.AbstractResource;
@@ -60,18 +55,8 @@ import org.json.simple.parser.ParseException;
 @Name("playNRatingCommunicationResource")
 @BypassInterceptors
 public class PlayNRatingCommunicationResource extends AbstractResource {
-	@Logger
-	private static Log logger;
-
-	@In(create = true)
-	private PerceptionBean perceptionBean;
-	private HttpServletRequest request;
 
 	private HttpServletResponse response;
-
-	private ExpressionFactory elFactory;
-
-	private ELContext elc;
 
 	private String sessionID = null;
 
@@ -95,7 +80,6 @@ public class PlayNRatingCommunicationResource extends AbstractResource {
 	private void doWork(HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 
-		this.request = request;
 		this.response = response;
 		UserPerceptionRating userPerceptionRating = readOutJSONData(request);
 

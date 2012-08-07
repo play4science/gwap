@@ -22,8 +22,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.el.ELContext;
-import javax.el.ExpressionFactory;
 import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -37,12 +35,10 @@ import javax.transaction.SystemException;
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
-import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Startup;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
-import org.jboss.seam.log.Log;
 import org.jboss.seam.servlet.ContextualHttpServletRequest;
 import org.jboss.seam.transaction.Transaction;
 import org.jboss.seam.web.AbstractResource;
@@ -62,21 +58,11 @@ import org.json.simple.parser.ParseException;
 @Name("playNHighscoreCommunicationResource")
 @BypassInterceptors
 public class PlayNHighscoreCommunicationResource extends AbstractResource {
-	@Logger
-	private static Log logger;
-
-	private HttpServletRequest request;
 
 	private HttpServletResponse response;
 
-	private ExpressionFactory elFactory;
-
-	private ELContext elc;
-
 	@In(create = true)
 	EntityManager entityManager;
-
-	private String sessionID = null;
 
 	private String action = "";
 
@@ -102,7 +88,6 @@ public class PlayNHighscoreCommunicationResource extends AbstractResource {
 	private void doWork(HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 
-		this.request = request;
 		this.response = response;
 		QuizHighscore quizHighscore = readOutJSONData(request);
 		try {
