@@ -63,7 +63,23 @@ import org.jboss.seam.annotations.Scope;
 			    query="select r " +
 			    	  "from ArtResource r " +
 			    	  "where r.enabled=true " +
-			    	  "order by random()"),
+			    	  "order by random()"),	
+	
+	@NamedQuery(name="artResource.woelfflin", 
+			  	query="select r " +
+			  		  "from ArtResource r " +
+			  		  "where r.enabled=true and " +
+			  		  //"r.id < 5000 and r.id > 999 and " +
+/*			  		  "ascii(substr(r.dateCreated,1,1)) >= 48 and ascii(substr(r.dateCreated,1,1)) <= 57 and " +
+			  		  "ascii(substr(r.dateCreated,2,1)) >= 48 and ascii(substr(r.dateCreated,2,1)) <= 57 and " +
+			  		  "ascii(substr(r.dateCreated,3,1)) >= 48 and ascii(substr(r.dateCreated,3,1)) <= 57 and " +
+			  		  "ascii(substr(r.dateCreated,4,1)) >= 48 and ascii(substr(r.dateCreated,4,1)) <= 57 and " +
+			  		  "cast(substr(r.dateCreated,1,4) as INTEGER) < 1770 and " +
+			  		  "cast(substr(r.dateCreated,1,4) as INTEGER) > 1400 and " +
+			  		  */
+			  		  "r.artist is not null "+
+					 "order by random()"),		    	 
+					 
     @NamedQuery(name="artResource.randomCustom", 
     			query="select r " +
     				  "from ArtResource r " +

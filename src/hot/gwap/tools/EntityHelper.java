@@ -15,6 +15,7 @@ import gwap.model.action.Combination;
 import gwap.model.resource.ArtResource;
 import gwap.wrapper.TagFrequency;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +36,7 @@ import org.jboss.seam.log.Log;
  */
 @Name("entityHelper")
 @Scope(ScopeType.CONVERSATION)
-public class EntityHelper {
+public class EntityHelper implements Serializable {
 	
 	@Logger private Log log;
 	@In 	private EntityManager entityManager;

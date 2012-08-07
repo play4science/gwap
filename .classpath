@@ -3,7 +3,6 @@
 	<classpathentry kind="src" output="classes/main" path="src/main"/>
 	<classpathentry kind="src" output="classes/hot" path="src/hot"/>
 	<classpathentry kind="src" output="classes/test" path="src/test"/>
-	<classpathentry kind="lib" path="test-build" sourcepath="src"/>
 	<classpathentry kind="lib" path="bootstrap"/>
 	<classpathentry kind="lib" path="lib/hibernate-validator.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate-core.jar"/>
@@ -67,5 +66,7 @@
 	<classpathentry kind="lib" path="lib/opencsv-2.2.jar"/>
 	<classpathentry kind="lib" path="lib/jaxrs-api.jar"/>
 	<classpathentry kind="lib" path="lib/apache-solr-solrj-3.6.0.jar"/>
+	<classpathentry kind="lib" path="lib/commons-io.jar"/>
+	<classpathentry kind="lib" path="lib/json_simple-1.1.jar"/>
 	<classpathentry kind="output" path="resources/WEB-INF/classes"/>
 </classpath>

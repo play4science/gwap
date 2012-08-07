@@ -1,0 +1,26 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    template="layout/template.xhtml">
+
+    <ui:define name="body">
+		<div id="related">
+			<ui:include src="layout/logo.xhtml" />
+			<ui:include src="layout/mainMenuOnly.xhtml" />
+			<ul id="navSub" />
+		</div>
+
+		<div id="content">
+			<iframe src="../playn-quiz/Quiz.html"
+				width="800" height="615" name="Woelfflin-Quiz" scrolling="no" marginwidth="0px" marginheigth="0px" frameborder="0" align="top"></iframe>
+		</div>
+		
+        <br class="clear" />
+    </ui:define>
+</ui:composition>
+
