@@ -3,3 +3,7 @@ classes
 dist
 exploded-archives
 test-*
+.*.xml.spdia
+.*.xml.jsfdia
+.*.jpdl.xml
+.*.gpd.xml

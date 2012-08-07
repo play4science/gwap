@@ -40,10 +40,8 @@
 			    		<td colspan="2" style="padding-right:20px;">
 				    		<p4s:speechbubble statement="#{_round.resources[0]}" />
 			    		</td>
-			    		<td>
-						 	<h:outputFormat value="#{messages['game.recognizeScoring.list.points']}" styleClass="coins">
-						 		<f:param value="#{mitRecognize.getBetAction(_round) != null ? mitRecognize.getBetAction(_round).score + _round.score : _round.score}"/>
-						 	</h:outputFormat>
+			    		<td style="width: 100px;">
+			    			<p4s:points value="#{mitRecognize.getBetAction(_round) != null ? mitRecognize.getBetAction(_round).score + _round.score : _round.score}" />
 			    		</td>
 			    		</tr>
 						<ui:include src="/widget/betScoring.xhtml">
@@ -51,6 +49,7 @@
 							<ui:param name="bet" value="#{mitRecognize.getBetAction(_round)}" />
 						</ui:include>
 					
+						<s:fragment rendered="#{mitRecognize.getLocationAssignmentAction(_round) != null}">
 						<tr>
 							<td style="vertical-align:top;">
 								<dl>
@@ -75,11 +74,10 @@
 								</dl>
 							</td>
 							<td style="vertical-align:top;">
-								<h:outputFormat value="#{messages['game.recognizeScoring.list.points']}" styleClass="coins">
-						 			<f:param value="#{mitRecognize.getLocationAssignmentAction(_round).score}"/>
-						 		</h:outputFormat>
+								<p4s:points value="#{mitRecognize.getLocationAssignmentAction(_round).score}" />
 							</td>
 						</tr>
+						</s:fragment>
 						
 						<s:fragment rendered="#{mitRecognize.getCharacterizationAction(_round) != null}">
 						<tr>
@@ -89,9 +87,7 @@
 								</ui:include>
 							</td>
 							<td>
-								<h:outputFormat value="#{messages['game.recognizeScoring.list.points']}" styleClass="coins">
-						 			<f:param value="#{mitRecognize.getCharacterizationAction(_round).score}"/>
-						 		</h:outputFormat>
+								<p4s:points value="#{mitRecognize.getCharacterizationAction(_round).score}" />
 							</td>
 						</tr>
 						</s:fragment>
@@ -103,10 +99,8 @@
 									<ui:param name="statement" value="#{mitRecognize.getAnnotationAction(_round).statement}" />
 								</ui:include>
 							</td>
-							<td>
-								<h:outputFormat value="#{messages['game.recognizeScoring.list.points']}" styleClass="coins">
-						 			<f:param value="#{mitRecognize.getAnnotationAction(_round).score}"/>
-						 		</h:outputFormat>
+							<td > 
+								<p4s:points value="#{mitRecognize.getAnnotationAction(_round).score}" />
 							</td>
 						</tr>
 						</s:fragment>

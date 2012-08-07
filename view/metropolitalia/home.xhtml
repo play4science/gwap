@@ -24,21 +24,23 @@
 			map.gmapOptions['draggable'] = false;
 			map.gmapOptions['scrollwheel'] = false;
 
-			
-				__addLoadEvent(function() {
-				var a = new InfoBubble({content: 'Ho incontrato la Lucia al mercato stamattina.',
-					position: new google.maps.LatLng(45.269403,10.359128), 
-					map: gmap, hideCloseButton: true, disableAutoPan: true, arrowPosition:60, arrowStyle:1 }).open();
-				new InfoBubble({content: "Lucia pranza sempre al tocco.", 
-					position: new google.maps.LatLng(42.059822,13.314450), 
-					map: gmap, hideCloseButton: true, disableAutoPan: true, arrowPosition:30, arrowStyle:2}).open();
-				new InfoBubble({content: "Lucia ha entrato la macchina in garage.", 
-					position: new google.maps.LatLng(37.598403,14.296233), 
-					map: gmap, hideCloseButton: true, disableAutoPan: true, arrowPosition:70, arrowStyle:1}).open();
-				} );
 			jQuery('#hideGmap').click(function() { window.location.href = "recognize.html"; });
 			jQuery('#hideGmap').css("cursor", "pointer");
 			</script>
+			<ui:repeat var="_statement" value="#{statementsTeaser.statementList}">
+				<script type="text/javascript">
+				__addLoadEvent(function() {
+					new InfoBubble({
+						content: "#{_statement.statement.text}", 
+						position: new google.maps.LatLng(#{_statement.geoPoint.latitude}, #{_statement.geoPoint.longitude}),
+						map: gmap, hideCloseButton: true, disableAutoPan: true, arrowPosition:60, arrowStyle:1
+					}).open();
+				});
+				</script>
+			</ui:repeat>
+			<div style="margin-top:5px;">
+				<h:outputText value="#{statementsTeaser.teaser}"/>
+			</div>
 		</div>
 
 		<br class="clear" />

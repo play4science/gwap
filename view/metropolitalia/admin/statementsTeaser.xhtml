@@ -47,10 +47,15 @@
 							</h:selectOneMenu>
 						</h:column>
 						<h:column>
-							<h:inputText value="#{_statementWithGeoPoint.geoPoint.latitude}" />
-							<h:inputText value="#{_statementWithGeoPoint.geoPoint.longitude}" />
+							<h:inputText value="#{_statementWithGeoPoint.geoPoint.latitude}" size="7" />
+							<h:inputText value="#{_statementWithGeoPoint.geoPoint.longitude}" size="7" />
 							<a href="#" onclick="addMarker(this)"><h:outputText value="#{messages['admin.statementsTeaser.editPosition']}" /></a>
 						</h:column>
+						<!--  does not work <h:column>
+							<s:link action="#{ mitAdminStatementsTeaserHome.removeStatement(_statementWithGeoPoint.id)}">
+								<h:outputText value="#{messages['delete']}" />
+							</s:link>
+						</h:column>-->
 					</rich:dataTable>
 					<h:commandButton action="#{mitAdminStatementsTeaserHome.addStatement()}" 
 						value="#{messages['admin.statementsTeaser.addStatement']}"/>

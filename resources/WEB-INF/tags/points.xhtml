@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"  
+      xmlns:s="http://jboss.com/products/seam/taglib" 
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition>
+	<s:fragment>
+		
+		<h:outputText value="#{value != null ? value : 0} #{messages['game.coins']}" styleClass="coins" style="float:left;" />
+
+		<s:link view="/about.xhtml" value=" * " propagation="none" style="text-decoration: none; font-size:150%">
+			<f:param name="selectedTab" value="scoring"/>
+    	</s:link>
+	</s:fragment>
+</ui:composition>
+</html>	

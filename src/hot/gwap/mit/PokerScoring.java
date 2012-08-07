@@ -25,6 +25,7 @@ import gwap.wrapper.Percentage;
 import gwap.wrapper.Score;
 import gwap.wrapper.StatementTokenPercentage;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +41,6 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
-import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.log.Log;
 
 /**
@@ -54,14 +54,14 @@ public class PokerScoring {
 	public static final int CHARACTERIZATION_BONUS_TENDENCY = 5;
 	public static final int CHARACTERIZATION_BONUS_10_PERCENT = 10;
 	private static final int STATEMENT_CREATED = 10;
-	private static final int ANNOTATION_LIKE_MAJORITY = 10;
-	private static final int ANNOTATION_LIKE_THIRD = 5;
+	public static final int ANNOTATION_LIKE_MAJORITY = 10;
+	public static final int ANNOTATION_LIKE_THIRD = 5;
 	private static final int LOCATION_ASSIGNMENT_MAX_SCORE = 10;
 	private static final double LOCATION_ASSIGNMENT_ND_FACTOR = 0.03;
 	private static final int BET_MAX_SCORE = 100;
 	private static final double BET_ND_FACTOR = 0.09;
 	
-	public static final int MIN_NR_FOR_STATISTICS = 2;
+	public static final int MIN_NR_FOR_STATISTICS = 3;
 	
 	private HashMap<Long, List<Location>> hierarchyTrees = new HashMap<Long, List<Location>>();
 	
@@ -88,53 +88,76 @@ public class PokerScoring {
 	public Integer characterization(StatementCharacterization characterization) throws NotEnoughDataException {
 		int score = 0;
 		characterization.setScore(score);
-		score += withinRangeGiveBonus(characterization.getGender(), characterization.getStatement(), "gender");
-		score += withinRangeGiveBonus(characterization.getMaturity(), characterization.getStatement(), "maturity");
-		score += withinRangeGiveBonus(characterization.getCultivation(), characterization.getStatement(), "cultivation");
+		String[] types = new String[] { "gender", "maturity", "cultivation" };
+		try {
+			List<StatementCharacterization> allCharacterizations = null;
+			for (String type : types) {
+				Percentage percentage = getCharacterizationResult(characterization.getStatement(), type);
+				Method getMethod = characterization.getClass().getDeclaredMethod("get" + type.substring(0, 1).toUpperCase() + type.substring(1), null);
+				Integer value = (Integer) getMethod.invoke(characterization);
+				if (percentage.getTotal() > MIN_NR_FOR_STATISTICS) {
+					// Calculate score for this characterization
+					if (Math.abs(percentage.getFraction().intValue() - value.intValue()) <= 10)
+						score += CHARACTERIZATION_BONUS_10_PERCENT;
+					else if (Math.signum(percentage.getFraction().intValue()) == Math.signum(value.intValue()))
+						score += CHARACTERIZATION_BONUS_TENDENCY;
+				} else if (percentage.getTotal() == MIN_NR_FOR_STATISTICS) {
+					// Calculate score for all characterizations
+					if (allCharacterizations == null)
+						allCharacterizations = entityManager.createNamedQuery("statementCharacterization.byStatement")
+							.setParameter("statement", characterization.getStatement())
+							.getResultList();
+					for (int i = 0; i < allCharacterizations.size(); i++) {
+						StatementCharacterization sc = allCharacterizations.get(i);
+						if (Math.abs(percentage.getFraction().intValue() - value) <= 10)
+							sc.setScore(sc.getScore() + CHARACTERIZATION_BONUS_10_PERCENT);
+						else if (Math.signum(percentage.getFraction().intValue()) == Math.signum(value))
+							sc.setScore(sc.getScore() + CHARACTERIZATION_BONUS_TENDENCY);
+						if (sc.getId().equals(characterization.getId()))
+							score = sc.getScore();
+					}
+				} else
+					throw new NotEnoughDataException();
+			}
+		} catch (NotEnoughDataException e) {
+			throw new NotEnoughDataException();
+		} catch (Exception e) {
+		}
 		characterization.setScore(score);
 		return score;
 	}
-	
-	private int withinRangeGiveBonus(Integer value, Statement statement, String type) throws NotEnoughDataException {
-		if (notNull(value)) {
-			Percentage percentage = getCharacterizationResult(statement, type);
-			if (percentage.getTotal() >= MIN_NR_FOR_STATISTICS) {
-				int difference = Math.abs(percentage.getFraction().intValue() - value.intValue());
-				if (difference <= 10)
-					return CHARACTERIZATION_BONUS_10_PERCENT;
-				else if (percentage.getFraction().intValue()>0 && value.intValue()>0 || percentage.getFraction().intValue()<0 && value.intValue()<0)
-					return CHARACTERIZATION_BONUS_TENDENCY;
-			} else
-				throw new NotEnoughDataException();
-		}
-		return 0;
-	}
 
-	public Integer highlighting(StatementAnnotation annotation, FacesMessages facesMessages) {
+	public Integer highlighting(StatementAnnotation annotation) throws NotEnoughDataException {
 		int score = 0;
+		annotation.setScore(score);
 		Percentage percentage = getHighlightingPercentage(annotation);
-		if (percentage != null && percentage.getTotal() >= MIN_NR_FOR_STATISTICS) {
-			if (percentage.getPercentage() >= 50) {
-				score = ANNOTATION_LIKE_MAJORITY;
-			} else if (percentage.getPercentage() >= 30) {
-				score = ANNOTATION_LIKE_THIRD;
+		if (percentage != null) {
+			if (percentage.getTotal() > MIN_NR_FOR_STATISTICS) {
+				if (percentage.getPercentage() >= 50) {
+					score = ANNOTATION_LIKE_MAJORITY;
+				} else if (percentage.getPercentage() >= 30) {
+					score = ANNOTATION_LIKE_THIRD;
+				}
+			} else if (percentage.getTotal() == MIN_NR_FOR_STATISTICS) {
+				List<StatementAnnotation> allAnnotations = entityManager.createNamedQuery("statementAnnotation.byStatement")
+					.setParameter("statement", annotation.getStatement())
+					.getResultList();
+				for (int i = 0; i < allAnnotations.size(); i++) {
+					StatementAnnotation sa = allAnnotations.get(i);
+					if (percentage.getPercentage() >= 50) {
+						sa.setScore(ANNOTATION_LIKE_MAJORITY);
+					} else if (percentage.getPercentage() >= 30) {
+						sa.setScore(ANNOTATION_LIKE_THIRD);
+					}
+					if (sa.getId().equals(annotation.getId()))
+						score = sa.getScore();
+				}
+			} else {
+				throw new NotEnoughDataException();
 			}
 		}
 		annotation.setScore(score);
-		printPercentage(facesMessages, percentage, "highlighting");
 		return score;
-	}
-	
-	private void printPercentage(FacesMessages facesMessages, Percentage percentage, String type) {
-		if (facesMessages == null)
-			return;
-		if (percentage != null && percentage.getTotal() >= MIN_NR_FOR_STATISTICS) {
-			if (percentage.getPercentage() >= 30)
-				facesMessages.addFromResourceBundle("game.recognize."+type+".high", percentage.getPercentage().intValue());
-			else
-				facesMessages.addFromResourceBundle("game.recognize."+type+".low", percentage.getPercentage().intValue());
-		} else
-			facesMessages.addFromResourceBundle("game.recognize."+type+".notEnoughData");
 	}
 	
 	public int getPersonScoreSum(Person person) {
@@ -390,10 +413,6 @@ public class PokerScoring {
 			return 0;
 		else
 			return n.intValue();
-	}
-	
-	private boolean notNull(Number n) {
-		return n != null && n.intValue() != 0;
 	}
 	
 	public String getStatementTokenBorder(StatementTokenPercentage stp, Person person){

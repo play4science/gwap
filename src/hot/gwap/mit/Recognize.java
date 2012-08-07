@@ -63,6 +63,7 @@ public class Recognize extends AbstractGameSessionBean {
 	private StatementAnnotation statementAnnotation;
 	private LocationAssignment locationAssignment;
 	private Integer points;
+
 	
 	@Override
 	public void startGameSession() {
@@ -124,7 +125,7 @@ public class Recognize extends AbstractGameSessionBean {
 				facesMessages.addFromResourceBundle(Severity.INFO,"game.recognize.locationAssignment.high", score.getPercentage(), score.getScore());
 		}
 		if (score == null || score.getScore() == 0) {
-			facesMessages.addFromResourceBundle(Severity.INFO, "game.recognize.locationAssignment.low");
+			facesMessages.addFromResourceBundle(Severity.INFO, "game.recognize.gainedNoPoints");
 			List<LocationPercentage> percentages = mitPokerScoring.getStatementPercentages(statement);
 			for (LocationPercentage percentage : percentages) {
 				if (percentage.getSum() == 1)
@@ -208,7 +209,18 @@ public class Recognize extends AbstractGameSessionBean {
 					sat.add(token);
 			}
 			entityManager.flush();
-			addToScore(mitPokerScoring.highlighting(statementAnnotation, facesMessages));
+			try {
+				Integer score = mitPokerScoring.highlighting(statementAnnotation);
+				addToScore(score);
+				if (score > 0)
+					facesMessages.addFromResourceBundle(Severity.INFO, "game.recognize.gainedPoints", score);
+				else
+					facesMessages.addFromResourceBundle(Severity.INFO, "game.recognize.gainedNoPoints");
+				facesMessages.addFromResourceBundle(Severity.INFO, "game.recognize.highlighting.result", mitPokerScoring.getHighlightingPercentage(statementAnnotation));
+			} catch (NotEnoughDataException e) {
+				skipCharacterizationResult = true;
+				facesMessages.addFromResourceBundle(Severity.INFO, "game.recognize.highlighting.notEnoughData");
+			}
 		}
 	}
 	
@@ -224,9 +236,13 @@ public class Recognize extends AbstractGameSessionBean {
 			entityManager.flush();
 			try {
 				addToScore(mitPokerScoring.characterization(statementCharacterization));
-				facesMessages.addFromResourceBundle("game.recognize.characterizationResult.seeAbove");
+				if (statementCharacterization.getScore() > 0)
+					facesMessages.addFromResourceBundle(Severity.INFO, "game.recognize.gainedPoints", statementCharacterization.getScore());
+				else
+					facesMessages.addFromResourceBundle(Severity.INFO, "game.recognize.gainedNoPoints");
+				facesMessages.addFromResourceBundle(Severity.INFO, "game.recognize.characterizationResult.seeAbove");
 			} catch (NotEnoughDataException e) {
-				facesMessages.addFromResourceBundle("game.recognize.characterizationResult.notEnoughData");
+				facesMessages.addFromResourceBundle(Severity.INFO, "game.recognize.characterizationResult.notEnoughData");
 			}
 		} else {
 			log.info("Characterization NOT saved (empty)");
@@ -340,11 +356,11 @@ public class Recognize extends AbstractGameSessionBean {
 			if(!statementTokens.get(i).getToken().isPunktuation())
 				aux++;
 		}
-		log.info("STATEMENT TOKENS : " + aux);
 		if(aux == 1)
 			return false;
 		else 
 			return true;
 	}
+
 		
 }

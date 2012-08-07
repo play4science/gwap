@@ -18,9 +18,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.jboss.seam.annotations.Begin;
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.web.RequestParameter;
+import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.framework.EntityHome;
 import org.jboss.seam.log.Log;
 
@@ -30,9 +32,9 @@ import org.jboss.seam.log.Log;
 @Name("mitAdminStatementsTeaserHome")
 public class StatementsTeaserHome extends EntityHome<StatementsTeaser> {
 	
-	@RequestParameter		Long statementsTeaserId;
-	
 	@Logger                 private Log log;
+	@In						private FacesMessages facesMessages;
+	@RequestParameter		Long statementsTeaserId;
 	
 	private Long locationId;
 	
@@ -44,6 +46,7 @@ public class StatementsTeaserHome extends EntityHome<StatementsTeaser> {
 //							private List<Bet> locationAssignments;
 
 	private List<Statement> allStatements;
+
 	
 	@Override
 	public Object getId() {
@@ -74,14 +77,32 @@ public class StatementsTeaserHome extends EntityHome<StatementsTeaser> {
 	
 	@Override
 	public String update() {
+		if (!isStatementListValid())
+			return null;
 		fixStatementList();
 		return super.update();
 	}
 	
 	@Override
 	public String persist() {
+		if (!isStatementListValid())
+			return null;
 		fixStatementList();
 		return super.persist();
+	}
+	
+	private boolean isStatementListValid() {
+		for (StatementWithGeoPoint s : currentStatements) {
+			if (s.getStatement() == null || s.getStatement().getId() == null || s.getStatement().getId() <= 0) {
+				facesMessages.addFromResourceBundle("admin.statementsTeaser.errorNoStatement");
+				return false;
+			}
+			if (s.getGeoPoint() == null || s.getGeoPoint().getLatitude() == null || s.getGeoPoint().getLongitude() == null) {
+				facesMessages.addFromResourceBundle("admin.statementsTeaser.errorNoGeoPoint");
+				return false;
+			}
+		}
+		return true;
 	}
 
 	private void fixStatementList() {
@@ -133,6 +154,19 @@ public class StatementsTeaserHome extends EntityHome<StatementsTeaser> {
 		statementWithGeoPoint.setGeoPoint(new GeoPoint());
 		currentStatements.add(statementWithGeoPoint);
 	}
+	
+	// Does not work
+//	public void removeStatement(Long id) {
+//		StatementWithGeoPoint s = getEntityManager().find(StatementWithGeoPoint.class, id);
+//		for (int i = 0; i < currentStatements.size(); i++) {
+//			if (id.equals(currentStatements.get(i).getId())) {
+//				currentStatements.remove(i);
+//				break;
+//			}
+//		}
+//		if (s != null)
+//			getEntityManager().remove(s);
+//	}
 
 	public List<StatementWithGeoPoint> getCurrentStatements() {
 		return currentStatements;

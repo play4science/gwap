@@ -13,13 +13,16 @@
     	<ui:include src="logoMIT.xhtml" />
 	</div>
 	
-	<div>	
+	<div>
 		<ul id="navMain">
 			<s:fragment rendered="#{s:hasPermission('metropolitalia', 'view-admin-interface')}">
         		<li>
 					<s:link view="/admin/index.xhtml" value="#{messages['admin.menu.index']}" propagation="none"/>
         		</li>
         	</s:fragment>
+        	<li>
+        		<a href="http://blog.metropolitalia.org"><h:outputText value="#{messages['menu.blog']}" /></a>
+        	</li>
         	<s:fragment rendered="#{identity.loggedIn}">
 				<li>
 		        	<s:link view="/bets.xhtml" value="#{messages['menu.bets']}" propagation="none" includePageParams="false"/>
@@ -40,7 +43,7 @@
 		<s:fragment rendered="#{!hideSubmenu}">
 		    <div id="search">  	
 				<h:form>
-					<h:inputText value="#{mitSearchBean.queryString}" id="searchField" required="true" />
+					<h:inputText value="#{mitSearchBean.queryString}" id="searchField" required="true" placeholder="#{messages['menu.search.placeholder']}" />
 					<h:commandButton id="resourceSearch-submit"
 					                   type="submit"
 					                   action="#{mitSearchBean.search()}"

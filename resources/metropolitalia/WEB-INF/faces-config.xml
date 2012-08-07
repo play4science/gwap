@@ -4,13 +4,20 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd">
 
-   <application>
-      <locale-config>
-         <default-locale>it</default-locale>
-         <supported-locale>it</supported-locale>
-         <!-- <supported-locale>de</supported-locale> -->
-      </locale-config>
-      <view-handler>com.sun.facelets.FaceletViewHandler</view-handler>
-   </application>
+	<application>
+		<locale-config>
+			<default-locale>it</default-locale>
+			<supported-locale>it</supported-locale>
+		</locale-config>
+		<view-handler>com.sun.facelets.FaceletViewHandler</view-handler>
+	</application>
+
+	<render-kit>
+		<renderer>
+			<component-family>javax.faces.Input</component-family>
+			<renderer-type>javax.faces.Text</renderer-type>
+			<renderer-class>gwap.tools.InputRenderer</renderer-class>
+		</renderer>
+	</render-kit>
 
 </faces-config>
