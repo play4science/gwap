@@ -66,6 +66,7 @@
                 <include name="messages*.properties"/>
                 <include name="*.skin.properties" if="richfaces.present"/>
                 <include name="*_theme.properties"/>
+            	<include name="**/*.csv" />
                 <include name="**/*.xcss" if="richfaces.present"/>
             </fileset>
             <!-- move XCSS into classpath for now
