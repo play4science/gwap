@@ -203,7 +203,7 @@ public class WrongAnswerBean implements Serializable {
 			}
 			in.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("Could not read from file #0", e, resource);
 		}
 		List<Person> result = new ArrayList<Person>();
 		Random r = new Random();
