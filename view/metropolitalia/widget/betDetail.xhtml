@@ -10,15 +10,8 @@
     xmlns:p4s="http://play4science.org/facelets">
 	
 	<script type="text/javascript">
-	function swich(){
-		var betPercentages = jQuery("#betPercentages");
-		if (betPercentages.css("display") == 'none') {
-		     betPercentages.fadeIn();
-		 } else {
-			 betPercentages.fadeOut();
-		    }		    
-	}
 
+	
 	map.mouseOver = function(object, event) {
 		$('betDetailLocationName').innerHTML = object.title;
 		$('betDetailLocationPercentage').innerHTML = object.percentage + '%';
@@ -66,11 +59,8 @@
 			</table>
 			<br></br>
 
-			<a4j:commandLink  oncomplete="swich();" styleClass="link">
-				<span><h:outputText value="#{messages['statements.list.othersHeaderButton']}" /></span>
-			</a4j:commandLink>
-
-			<div id="betPercentages" style="display: none;">
+			<div id="betPercentages">
+				<h4><h:outputText value="#{messages['search.results']}"/></h4>
 				<ui:include src="/widget/betPercentages.xhtml">
 					<ui:param name="percentages" value="#{mitPokerScoring.getStatementPercentages(mitBetList.selectedBet.resource)}"/>
 				</ui:include>

@@ -44,7 +44,7 @@
     
     <div id="search">
 		<h:form>
-			<h:inputText value="#{solrSearchBean.queryString}" id="searchField" required="true" />
+			<h:inputText value="#{solrSearchBean.queryString}" id="searchField" required="true" placeholder="#{messages['menu.search.placeholder']}" />
 			<rich:toolTip value="#{messages['search.tooltip']}" for="searchField"/>
 			<h:commandButton id="resourceSearch-submit"
 			                   type="submit"

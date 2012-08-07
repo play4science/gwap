@@ -56,11 +56,9 @@
 					</dd>
 				</dl>
 			</td>
-			<td style="vertical-align: top;"><h:outputFormat
-					value="#{messages['game.recognizeScoring.list.points']}"
-					styleClass="coins">
-					<f:param value="#{bet.score}" />
-				</h:outputFormat></td>
+			<td style="vertical-align: top;">
+				<p4s:points value="#{bet.score}" />
+			</td>
 		</tr>
 		<tr>
 			<td colspan="3" style="margin-bottom: 10px;">
