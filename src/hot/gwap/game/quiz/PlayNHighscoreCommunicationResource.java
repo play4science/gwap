@@ -26,11 +26,6 @@ import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
@@ -40,7 +35,6 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Startup;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
 import org.jboss.seam.servlet.ContextualHttpServletRequest;
-import org.jboss.seam.transaction.Transaction;
 import org.jboss.seam.web.AbstractResource;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -92,8 +86,6 @@ public class PlayNHighscoreCommunicationResource extends AbstractResource {
 		QuizHighscore quizHighscore = readOutJSONData(request);
 		try {
 
-			Transaction.instance().begin();
-
 			QuizHighscoreBean quizHighscoreBean = (QuizHighscoreBean) Component
 			.getInstance("quizHighscoreBean");
 			
@@ -122,27 +114,10 @@ public class PlayNHighscoreCommunicationResource extends AbstractResource {
 
 			sendJSONObject(jsonObject);
 
-			Transaction.instance().commit();
-
-		} catch (NotSupportedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (SystemException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (RollbackException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (HeuristicMixedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (HeuristicRollbackException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
