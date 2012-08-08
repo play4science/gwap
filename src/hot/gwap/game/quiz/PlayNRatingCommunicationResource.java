@@ -10,7 +10,7 @@ package gwap.game.quiz;
 
 import gwap.game.quiz.action.PerceptionBean;
 import gwap.game.quiz.tools.QuizQuestionBean;
-import gwap.model.PerceptionPair;
+import gwap.model.action.PerceptionPair;
 import gwap.model.action.PerceptionRating;
 
 import java.io.BufferedReader;

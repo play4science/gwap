@@ -9,8 +9,8 @@
 package gwap.game.quiz;
 
 import gwap.game.quiz.tools.QuizQuestionBean;
-import gwap.model.PerceptionPair;
 import gwap.model.Person;
+import gwap.model.action.PerceptionPair;
 
 import java.util.Date;
 import java.util.Random;

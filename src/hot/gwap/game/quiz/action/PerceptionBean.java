@@ -9,7 +9,7 @@
 package gwap.game.quiz.action;
 
 import gwap.game.quiz.UserPerceptionRating;
-import gwap.model.PerceptionPair;
+import gwap.model.action.PerceptionPair;
 
 import java.io.Serializable;
 
