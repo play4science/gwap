@@ -11,7 +11,7 @@ package gwap.game.quiz;
 import gwap.game.quiz.action.PerceptionBean;
 import gwap.game.quiz.tools.QuizQuestionBean;
 import gwap.model.PerceptionPair;
-import gwap.model.PerceptionRating;
+import gwap.model.action.PerceptionRating;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -62,7 +62,7 @@ public class PlayNRatingCommunicationResource extends AbstractResource {
 	private HttpServletResponse response;
 
 	private String sessionID = null;
-
+	
 	@Override
 	public String getResourcePath() {
 		return "/rating";
@@ -103,6 +103,7 @@ public class PlayNRatingCommunicationResource extends AbstractResource {
 
 			// create PerceptionRating
 			PerceptionRating perceptionRating = new PerceptionRating();
+			perceptionRating.setPerson(quizSession.person);
 			perceptionRating.setCreated(new Date());
 			perceptionRating.setResource(quizQuestion.getArtResource());
 			perceptionRating.setFillOutTimeMs(userPerceptionRating.getFillOutTimeMs());

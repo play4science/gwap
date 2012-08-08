@@ -6,19 +6,17 @@
  * 
  */
 
-package gwap.model;
+package gwap.model.action;
 
+import gwap.model.PerceptionPair;
 import gwap.model.resource.Resource;
 
-import java.io.Serializable;
-import java.util.Date;
-
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+
+import org.jboss.seam.annotations.Name;
 
 /**
  * A PerceptionRating saves which user added a perception pair to "rate" a resource.
@@ -32,33 +30,14 @@ import javax.persistence.NamedQuery;
 			query="select t from PerceptionRating t")
 })
 @Entity
-public class PerceptionRating implements Serializable {
+@Name("perceptionRating")
+public class PerceptionRating extends Action {
 
 	private static final long serialVersionUID = 1L;
 
-	@Id @GeneratedValue
-	private Long id;
-	private Date created;
 	@ManyToOne	private PerceptionPair perceptionPair;
 	@ManyToOne	private Resource resource;
     private Long fillOutTimeMs;
-
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Date getCreated() {
-		return created;
-	}
-
-	public void setCreated(Date created) {
-		this.created = created;
-	}
 
 	public PerceptionPair getPerceptionPair() {
 		return perceptionPair;

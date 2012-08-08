@@ -18,6 +18,8 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
+import org.jboss.seam.annotations.Name;
+
 /**
  * Responsible for the Highscore for the Woelfflin-QuizGame
  * 
@@ -30,6 +32,7 @@ import javax.persistence.NamedQuery;
 		@NamedQuery(name = "quizHighscore.placeThisWeek", query = "select count(*) from QuizHighscore t WHERE score > :score and created > current_date - 7"),
 		@NamedQuery(name = "quizHighscore.placeAllTime", query = "select count(*) from QuizHighscore t WHERE score > :score") })
 @Entity
+@Name("quizHighscore")
 public class QuizHighscore implements Serializable {
 
 	private static final long serialVersionUID = 1L;
