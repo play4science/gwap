@@ -32,10 +32,12 @@ import javax.transaction.SystemException;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Startup;
 import org.jboss.seam.annotations.intercept.BypassInterceptors;
+import org.jboss.seam.log.Log;
 import org.jboss.seam.servlet.ContextualHttpServletRequest;
 import org.jboss.seam.transaction.Transaction;
 import org.jboss.seam.web.AbstractResource;
@@ -55,7 +57,8 @@ import org.json.simple.parser.ParseException;
 @Name("playNRatingCommunicationResource")
 @BypassInterceptors
 public class PlayNRatingCommunicationResource extends AbstractResource {
-
+	@Logger
+	private Log logger;
 	private HttpServletResponse response;
 
 	private String sessionID = null;
@@ -84,6 +87,8 @@ public class PlayNRatingCommunicationResource extends AbstractResource {
 		UserPerceptionRating userPerceptionRating = readOutJSONData(request);
 
 		try {
+			logger.info("Create perception rating for resource #0, question #1 with pairs #2", 
+					userPerceptionRating.getResourceId(), userPerceptionRating.getQuestionNumber(), userPerceptionRating.getPairs());
 
 			// get Session
 			HttpSession ses = SessionTracker.instance().getSession(sessionID);
@@ -128,8 +133,8 @@ public class PlayNRatingCommunicationResource extends AbstractResource {
 			PerceptionBean perceptionBean = (PerceptionBean) Component
 					.getInstance("perceptionBean");
 			perceptionBean.addUserPerceptionRating(userPerceptionRating);
-			
 			Transaction.instance().commit();
+			logger.info("Created perception ratings");
 
 		} catch (NotSupportedException e1) {
 			// TODO Auto-generated catch block

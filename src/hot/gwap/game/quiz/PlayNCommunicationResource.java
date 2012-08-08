@@ -50,7 +50,7 @@ import org.json.simple.JSONObject;
 @BypassInterceptors
 public class PlayNCommunicationResource extends AbstractResource {
 	@Logger
-	private static Log logger;
+	private Log logger;
 
 	private HttpServletRequest request;
 
@@ -113,6 +113,7 @@ public class PlayNCommunicationResource extends AbstractResource {
 					outstream.close();
 
 					instream.close();
+					logger.info("Successfully initialized game");
 					break;
 				} catch (IOException e) {
 					e.printStackTrace();
