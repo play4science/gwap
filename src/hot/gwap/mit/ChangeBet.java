@@ -11,7 +11,9 @@ package gwap.mit;
 import gwap.model.action.Bet;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import javax.persistence.EntityManager;
 
@@ -45,14 +47,14 @@ public class ChangeBet implements Serializable {
 	
 	
 	public void changeBet(Bet bet){
+		Calendar calendar = GregorianCalendar.getInstance();
+		calendar.setTime(bet.getCreated());
+		calendar.add(Calendar.HOUR, 24);
 		log.info("Changed bet #0 to #1 by #2", bet, points, bet.getPerson());
-		Long timeDifference = ((new Date().getTime() - bet.getCreated().getTime())/3600000) ;
-		log.info("Time difference between bet and tried betChange : " + timeDifference);
-		
 
 		if (Math.abs(points - bet.getCurrentMatch()) <= 10)
 			facesMessages.addFromResourceBundle(Severity.ERROR, "bet.change.differenceTooLow");
-		else if (timeDifference <= 24)
+		else if (!calendar.before(new Date()))
 			facesMessages.addFromResourceBundle(Severity.ERROR, "bet.change.timeDifferenceTooShort");
 		else {
 			Bet newBet = new Bet();
