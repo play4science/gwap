@@ -26,6 +26,7 @@ import javax.persistence.TemporalType;
 
 @NamedQueries({
 		@NamedQuery(name = "statementsTeaser.all", query = "from StatementsTeaser"),
+		@NamedQuery(name = "statementsTeaser.allForDateGeneration", query = "select s from StatementsTeaser s where s.publicationDate=null order by s.id "),
 		@NamedQuery(name = "statementsTeaser.latestByPublicationDate", 
 			query = "from StatementsTeaser where publicationDate <= current_date() order by publicationDate desc")
 })
@@ -78,5 +79,7 @@ public class StatementsTeaser implements Serializable {
 	public void setPublicationDate(Date publicationDate) {
 		this.publicationDate = publicationDate;
 	}
+
+	
 
 }
