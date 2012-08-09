@@ -35,6 +35,10 @@
 			<s:button id="continueButton"
 			    value="#{messages['taggingBean.continueButton']}"
 			    reRender="gameMessages,recommendedTags" />
+			<br/>
+			<s:button id="skipButton"
+			    value="#{messages['taggingBean.skipButton']}"
+			    action="#{taggingBean.skipResource()}" />
 			<a4j:outputPanel id="gameMessages">
 				<h:messages id="messages" globalOnly="true" styleClass="messages"
 					errorClass="errormsg" infoClass="infomsg" warnClass="warnmsg"
