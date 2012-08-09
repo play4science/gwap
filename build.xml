@@ -238,6 +238,7 @@
                 <include name="seam.properties"/>
                 <include name="*.drl"/>
                 <include name="META-INF/*.drl"/>
+                <include name="*.dat"/>
             </fileset>
         </copy>
     	<antcall target="subproject" inheritrefs="true"><param name="target" value="jar"/></antcall>

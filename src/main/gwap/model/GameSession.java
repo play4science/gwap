@@ -40,6 +40,8 @@ public class GameSession implements Serializable {
 
 	@ManyToOne								private GameType gameType;
 	@OneToMany(mappedBy="gameSession")		private List<GameRound> gameRounds = new ArrayList<GameRound>();
+	
+	private Long ipLocationId; 
 
 	public List<GameRound> getGameRounds() {
 		return gameRounds;
@@ -68,4 +70,16 @@ public class GameSession implements Serializable {
 	public String toString() {
 		return "Id: " + id; 
 	}
+
+	public Long getIpLocationId() {
+		return ipLocationId;
+	}
+
+	public void setIpLocationId(Long ipLocationId) {
+		this.ipLocationId = ipLocationId;
+	}
+
+
+	
+	
 }

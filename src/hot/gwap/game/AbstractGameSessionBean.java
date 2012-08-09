@@ -8,16 +8,20 @@
 
 package gwap.game;
 
+import gwap.mit.CityLookupTest;
 import gwap.model.GameRound;
 import gwap.model.GameSession;
 import gwap.model.GameType;
 import gwap.model.Person;
 import gwap.model.action.Action;
+import gwap.model.resource.IpBasedLocation;
 
 import java.io.Serializable;
+import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -29,6 +33,11 @@ import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Out;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.log.Log;
+
+import com.maxmind.geoip.Location;
+import com.maxmind.geoip.LookupService;
+import com.maxmind.geoip.regionName;
+import com.maxmind.geoip.timeZone;
 
 /**
  * This is the backing bean for one game session. It handles all actions that
@@ -59,6 +68,7 @@ public abstract class AbstractGameSessionBean implements Serializable {
 	protected Integer roundNr = 1;
 	protected int maxClientDelay = 3000; // milliseconds
 	protected Date startConsideringClientDelay;
+	@In("#{facesContext.externalContext.request.remoteAddr}") private String remoteAddr;
 	
 	public void startGameSession() {	
 		startGameSession("imageLabeler");
@@ -73,6 +83,7 @@ public abstract class AbstractGameSessionBean implements Serializable {
 		entityManager.persist(gameSession);
 		roundsLeft = gameType.getRounds();
 		completedRoundsScore = 0;
+		lookup();
 		startRound();
 	}
 
@@ -169,4 +180,52 @@ public abstract class AbstractGameSessionBean implements Serializable {
 		action.setPerson(person);
 		action.setGameRound(gameRound);
 	}
+	
+	
+	public void lookup() {
+		Long ipLocationId;
+		
+    	try {
+    		IpBasedLocation ipLocation = new IpBasedLocation();
+			URL url = CityLookupTest.class.getResource("/GeoLiteCity.dat");
+			LookupService cl = new LookupService(url.getFile(),
+						LookupService.GEOIP_MEMORY_CACHE );
+			Query q = entityManager.createQuery("select il from IpBasedLocation il where il.country = :country and il.region = :region and il.city = :city");
+			if(remoteAddr.equals("127.0.0.1"))
+				log.info("working on localhost");
+			else{
+				Location l = cl.getLocation(remoteAddr);
+				q.setParameter("country", l.countryName);
+				q.setParameter("region", l.region );
+				q.setParameter("city", l.city);
+				List<IpBasedLocation> ibl = q.getResultList();
+				if(ibl.size() > 0){
+					ipLocationId = ((IpBasedLocation) ibl.get(0)).getId();
+					log.info("Location already saved. Id: " + ibl.get(0).getId());
+				} else {			
+				    ipLocation.setCity(l.city);
+				    ipLocation.setRegion(l.region);
+				    ipLocation.setCountry(l.countryName);
+				    entityManager.persist(ipLocation);
+				    ipLocationId = ipLocation.getId();
+				
+				    log.info("playersLocation: " + l.countryCode +
+				                       "\n countryName: " + l.countryName +
+				                       "\n region: " + l.region +
+				                       "\n regionName: " + regionName.regionNameByCode(l.countryCode, l.region) +
+				                       "\n city: " + l.city +
+				                       "\n postalCode: " + l.postalCode +
+				                       "\n latitude: " + l.latitude +
+				                       "\n longitude: " + l.longitude +
+				                       "\n timezone: " + timeZone.timeZoneByCountryAndRegion(l.countryCode, l.region));
+				}
+				gameSession.setIpLocationId(ipLocationId);
+				entityManager.persist(gameSession);
+				cl.close();
+			}
+	}
+	catch (Throwable e) {
+	   log.info(e.toString());
+	}
+    }
 }
