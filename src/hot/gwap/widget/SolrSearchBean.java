@@ -68,6 +68,8 @@ public class SolrSearchBean implements Serializable {
 	 * Override this method to change the query behaviour
 	 */
 	protected SolrQuery generateQuery() {
+		if (queryString == null || queryString.length() == 0)
+			return null;
 		String language = localeSelector.getLanguage();
 		
 		SolrQuery solrQuery = new SolrQuery(queryString);
@@ -84,9 +86,9 @@ public class SolrSearchBean implements Serializable {
 		log.info("Updating Results");
 		
 		results = null;
-		if (queryString == null || queryString.length() == 0)
-			return;
 		SolrQuery solrQuery = generateQuery();
+		if (solrQuery == null)
+			return;
 		paginationControl.setResultsPerPage(5);
 		solrQuery.setRows(paginationControl.getResultsPerPage());
 		solrQuery.setStart(paginationControl.getFirstResult());
@@ -95,7 +97,7 @@ public class SolrSearchBean implements Serializable {
 			results = response.getResults();
 			paginationControl.setNumResults(results.getNumFound());
 			dirty = false;
-			log.info("Got #0 results for query '#1'", results.getNumFound(), queryString);
+			log.info("Got #0 results for query '#1'", results.getNumFound(), solrQuery.getQuery());
 		} catch (SolrServerException e) {
 			log.info("Could not complete query", e);
 		}

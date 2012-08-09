@@ -53,6 +53,8 @@ public class SearchBean extends SolrSearchBean implements Serializable {
 	
 	@Override
 	protected SolrQuery generateQuery() {
+		if (queryString == null || queryString.length() == 0)
+			return null;
 		// 1. Parse queryString and look for locations and special characterization words (variable "specialWords")
 		String[] queryArray = queryString.split("\\s+");
 		String solrQueryString = "";

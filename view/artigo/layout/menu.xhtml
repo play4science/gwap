@@ -11,17 +11,17 @@
 	<ui:include src="mainMenuOnly.xhtml" />
     <s:fragment rendered="#{!languageBean.languageChangeDisabled}">
     <div id="navSub">
+    	<h1><h:outputText value="#{messages['menu.search']}" /></h1>
+	    <ul style="margin-bottom: 2em">
+	    	<li>
+	   		   	<s:link value="#{messages['menu.search.detailedSearch']}"
+	   		   	        view="/detailedSearch.xhtml" 
+   		   	        	propagation="begin"
+	   		   	        />
+	    	</li>
+	    </ul>
     	<h1><h:outputText value="#{messages['menu.games']}" /></h1>
 	    <ul>
-	    <!-- 
-		   	<li>
-	   		   	<s:link id="menuTaggingId" 
-	   		   	        value="Tagging"
-	   		   	        view="/tagging.xhtml" 
-   		   	        	propagation="none"
-	   		   	        />
-	   		</li>
-	     -->
 		   	<li>
 	   		   	<s:link id="menuTaggingGameId" 
 	   		   	        value="#{messages['menu.game.tagging']}"
