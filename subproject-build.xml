@@ -7,7 +7,7 @@
 	</condition>
 	
 	<target name="jar" if="subproject.defined" description="Adds additional resources to jar">
-		<copy todir="${jar.dir}">
+		<copy todir="${jar.dir}" failonerror="no">
 			<fileset dir="${basedir}/resources/${subproject.name}/jar-resources"/>
 		</copy>
 	</target>
