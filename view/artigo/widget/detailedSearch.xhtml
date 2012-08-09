@@ -8,29 +8,34 @@
     xmlns:rich="http://richfaces.org/rich"
     xmlns:a4j="http://richfaces.org/a4j">
 
+	<h1 id="detailedSearchFormHeader"><h:outputText value="#{messages['menu.search.detailedSearch']}" /></h1>
     <h:form id="detailedSearchForm">
-		<s:decorate template="/layout/edit.xhtml">
-			<ui:define name="label"><h:outputText value="#{messages['general.tags']}" /></ui:define>
-			<h:inputText id="tags" value="#{detailedSearch.tags}"/>
-		</s:decorate>
-		<s:decorate template="/layout/edit.xhtml">
-			<ui:define name="label"><h:outputText value="#{messages['image.artist']}" /></ui:define>
-			<h:inputText id="artist" value="#{detailedSearch.artist}"/>
-		</s:decorate>
-		<s:decorate template="/layout/edit.xhtml">
-			<ui:define name="label"><h:outputText value="#{messages['image.title']}" /></ui:define>
-			<h:inputText id="title" value="#{detailedSearch.title}"/>
-		</s:decorate>
-		<s:decorate template="/layout/edit.xhtml">
-			<ui:define name="label"><h:outputText value="#{messages['image.location']}" /></ui:define>
-			<h:inputText id="location" value="#{detailedSearch.location}"/>
-		</s:decorate>
-		<s:decorate template="/layout/edit.xhtml">
-			<ui:define name="label"><h:outputText value="#{messages['image.dateYear']}" /></ui:define>
-			<h:inputText id="year" value="#{detailedSearch.year}"/>
-		</s:decorate>
-		<h:commandButton id="search" action="/detailedSearchResults.xhtml" value="#{messages['menu.search']}">
-			<s:defaultAction />
-		</h:commandButton>
+	    <h:panelGrid columns="1">
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label"><h:outputText value="#{messages['general.tags']}" /></ui:define>
+				<h:inputText id="tags" value="#{detailedSearch.tags}"/>
+			</s:decorate>
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label"><h:outputText value="#{messages['image.artist']}" /></ui:define>
+				<h:inputText id="artist" value="#{detailedSearch.artist}"/>
+			</s:decorate>
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label"><h:outputText value="#{messages['image.title']}" /></ui:define>
+				<h:inputText id="title" value="#{detailedSearch.title}"/>
+			</s:decorate>
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label"><h:outputText value="#{messages['image.location']}" /></ui:define>
+				<h:inputText id="location" value="#{detailedSearch.location}"/>
+			</s:decorate>
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label"><h:outputText value="#{messages['image.dateYear']}" /></ui:define>
+				<h:inputText id="year" value="#{detailedSearch.year}"/>
+			</s:decorate>
+	    	<div>
+				<h:commandButton id="search" action="#{detailedSearch.updateSearch()}" value="#{messages['menu.search']}">
+					<s:defaultAction />
+				</h:commandButton>
+	    	</div>
+    	</h:panelGrid>
     </h:form>
 </ui:composition>

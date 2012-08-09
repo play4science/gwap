@@ -35,7 +35,7 @@ public class DetailedSearch extends SolrSearchBean {
 	private String title;
 	private String location;
 	private String year;
-	private static final Pattern p = Pattern.compile("\"[^\"]+\"|[^\"]+");
+	private static final Pattern p = Pattern.compile("\"[^\"]+\"|[^\" ]+");
 	
 	@Override
 	protected SolrQuery generateQuery() {
@@ -58,9 +58,9 @@ public class DetailedSearch extends SolrSearchBean {
 		return solrQuery;
 	}
 
-	@Override
-	public void search() {
-		submitQuery();
+	public String updateSearch() {
+		dirty = true;
+		return "/detailedSearchResults.xhtml";
 	}
 	
 	private String parseField(String field, String solrField) {

@@ -64,6 +64,10 @@ body                                    { padding:0px 24px 0px 24px; background:
 .pagination                             { padding-bottom:1px; text-align: center; font-weight:bold; font-size: 13px; background: white; border-top: 1px solid silver; border-bottom: 1px solid silver; }
 .pagination a, .pagination span			{ margin: 0 4px 0 4px; text-decoration: none; }
 
+#detailedSearchForm label.name          { padding: 0px; }
+#detailedSearchForm .value              { padding: 0px; }
+#detailedSearchFormHeader               { font-size: 1.16667em; text-transform: uppercase; margin-top:2em; margin-bottom: 1em;}
+
 /* =Forms
 -----------------------------------------------------------------------------*/
 #search input[type=text]                { background: transparent; width:160px; border: none; padding: 0 3px 0 1px; margin: 0; }
