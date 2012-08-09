@@ -20,8 +20,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.Create;
-import org.jboss.seam.annotations.Destroy;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
@@ -40,9 +38,6 @@ public class TagCloudBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static final int MAX_NORMALIZED_FREQUENCY = 5;
 	
-	@Create	 public void init()    { log.info("Creating");   }
-	@Destroy public void destroy() { log.info("Destroying"); }
-	
 	@Logger	                 private Log log;
 	@In	                     private EntityManager entityManager;
 	@In(create=true) @Out    private ArtResource resource;
@@ -50,6 +45,7 @@ public class TagCloudBean implements Serializable {
 	@DataModel				 private List<TagFrequency> tagCloudAll;
 	@DataModel               private List<TagFrequency> tagCloud;
 	@DataModelSelection(value="tagCloud")      private TagFrequency tagFrequency;
+	private String cachedResourceId;
 	
 	private Long threshold = 2L;
 	
@@ -106,29 +102,19 @@ public class TagCloudBean implements Serializable {
 		return res;
 	}
 	
-	@Factory("tagCloudAll")
-	public void updateTagCloudAll(){
-		log.info("Updating Tag Cloud for all tags");
-		
-		tagCloudAll=getTagCloud(resource, threshold, Integer.MAX_VALUE);
-
-		List<Tag> virtualTags = entityManager.createNamedQuery("virtualTagging.tagsByResourceAndLanguage")
-			.setParameter("resource", resource)
-			.setParameter("language", localeSelector.getLanguage())
-			.getResultList();
-		for (Tag tag : virtualTags) {
-			tagCloudAll.add(0, new TagFrequency(tag.getName(), new Long(MAX_NORMALIZED_FREQUENCY)));
+	public List<TagFrequency> getTagCloudForSearchResultList(String resourceId) {
+		if (!resourceId.equals(cachedResourceId)) {
+			ArtResource resource = entityManager.find(ArtResource.class, Long.parseLong(resourceId));
+			tagCloud = getTagCloudWithVirtualTags(resource, 20);
+			cachedResourceId = resourceId;
 		}
-		
-		Collections.shuffle(tagCloudAll);
+		return tagCloud;
 	}
 	
-	
-	@Factory("tagCloud") 
-	public void updateTagCloud() {
-		log.info("Updating Tag Cloud");
+	public List<TagFrequency> getTagCloudWithVirtualTags(ArtResource resource, int maxQueryResults) {
+		Long millis = System.currentTimeMillis();
 		
-		tagCloud=getTagCloud(resource, threshold, 20);
+		List<TagFrequency> tagCloud=getTagCloud(resource, threshold, maxQueryResults);
 
 		List<Tag> virtualTags = entityManager.createNamedQuery("virtualTagging.tagsByResourceAndLanguage")
 			.setParameter("resource", resource)
@@ -137,9 +123,30 @@ public class TagCloudBean implements Serializable {
 		for (Tag tag : virtualTags) {
 			tagCloud.add(0, new TagFrequency(tag.getName(), new Long(MAX_NORMALIZED_FREQUENCY)));
 		}
-		
-		tagCloud=tagCloud.subList(0, Math.min(20, tagCloud.size()));
+
+		if (tagCloud.size() > maxQueryResults)
+			tagCloud=tagCloud.subList(0, maxQueryResults);
+
 		Collections.shuffle(tagCloud);
+
+		if (maxQueryResults == Integer.MAX_VALUE)
+			log.info("Updated Tag Cloud for all tags in #0ms", (System.currentTimeMillis()-millis));
+		else
+			log.info("Updated Tag Cloud for maximum #1 tags in #0ms", (System.currentTimeMillis()-millis), maxQueryResults);
+		return tagCloud;
+	}
+	
+	@Factory("tagCloudAll")
+	public void updateTagCloudAll(){
+		tagCloudAll = getTagCloudWithVirtualTags(resource, Integer.MAX_VALUE);
+	}
+	
+	
+	@Factory("tagCloud") 
+	public void updateTagCloud() {
+		if (tagCloudAll == null)
+			updateTagCloudAll();
+		tagCloud = tagCloudAll.subList(0, 20);		
 	}
 	
 }
