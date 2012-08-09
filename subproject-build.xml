@@ -121,7 +121,7 @@
 		<copy todir="${ear.deploy.dir}/${subproject.name}.war">
 		    <fileset dir="${subproject.war.dir}"/>
 		</copy>
-		<copy todir="${ear.deploy.dir}">
+		<copy todir="${ear.deploy.dir}" failonerror="no">
 			<fileset dir="${basedir}/resources/${subproject.name}/WARs">
 				<include name="*.war"/>
 			</fileset>
