@@ -28,12 +28,12 @@
 					               columnClasses="noBorder"
 					               style="border: none; "
 					               >
-					    <rich:column width="20%">
+					    <rich:column>
 					    	<ui:include src="/widget/tagCloudOnly.xhtml">
 					    		<ui:param name="tagCloud" value="#{tagCloudBean.getTagCloudForSearchResultList(_doc.getFieldValue('id'))}" />
 					    	</ui:include>
 					    </rich:column>
-					    <rich:column styleClass="resultListImage" width="40%">
+					    <rich:column styleClass="resultListImage">
 						<s:link view="/solrSearchResultsShowSingle.xhtml" propagation="join">
 							<h:graphicImage value="#{imageAccessBean.getInstance().getResourceUrl(_doc.getFieldValue('imagepath'))}"
 											alt=""
@@ -42,7 +42,7 @@
 							<f:param name="queryString" value="#{solrSearchBean.queryString}"/>
 						</s:link>
 					    </rich:column>
-					    <rich:column width="40%">
+					    <rich:column width="300px">
 							<dt><h:outputText value="#{messages['image.artist']}" /></dt>
 							<dd><h:outputText value="#{empty(_doc.getFieldValue('artist')) ? messages['image.artist.anonymous'] : _doc.getFieldValue('artist')}"/>
 							</dd>

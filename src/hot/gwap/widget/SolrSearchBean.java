@@ -87,6 +87,7 @@ public class SolrSearchBean implements Serializable {
 		if (queryString == null || queryString.length() == 0)
 			return;
 		SolrQuery solrQuery = generateQuery();
+		paginationControl.setResultsPerPage(5);
 		solrQuery.setRows(paginationControl.getResultsPerPage());
 		solrQuery.setStart(paginationControl.getFirstResult());
 		try {
