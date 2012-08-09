@@ -6,6 +6,12 @@
 		<not><matches string="${subproject.name}" pattern="\$\{subproject[0-9]+}"/></not>
 	</condition>
 	
+	<target name="jar" if="subproject.defined" description="Adds additional resources to jar">
+		<copy todir="${jar.dir}">
+			<fileset dir="${basedir}/resources/${subproject.name}/jar-resources"/>
+		</copy>
+	</target>
+	
 	<target name="war" if="subproject.defined"
 		description="Builds a single WAR in a staging directory">
 		<echo message="Subproject ${subproject.name}" level="info" />
@@ -98,6 +104,10 @@
 		<echo message="Subproject ${subproject.name}" level="info" />
 		<replace file="${ear.dir}/META-INF/application.xml" token="&lt;!-- @@${subproject.varname}@@ -->" 
 			value="&lt;module&gt; &lt;web&gt; &lt;web-uri&gt;${subproject.name}.war&lt;/web-uri&gt; &lt;context-root&gt;/${subproject.name}&lt;/context-root&gt; &lt;/web&gt; &lt;/module&gt;"></replace>
+		<replace file="${ear.dir}/META-INF/application.xml"
+			propertyfile="${basedir}/resources/${subproject.name}/WARs/application-xml-additional.properties">
+			<replacefilter token="&lt;!-- @@${subproject.varname}.additional@@ -->" property="module"/>
+		</replace>
 	</target>
 	
 	<target name="archive" if="subproject.defined">
@@ -114,6 +124,11 @@
 		<echo message="Subproject ${subproject.name}" level="info" />
 		<copy todir="${ear.deploy.dir}/${subproject.name}.war">
 		    <fileset dir="${subproject.war.dir}"/>
+		</copy>
+		<copy todir="${ear.deploy.dir}">
+			<fileset dir="${basedir}/resources/${subproject.name}/WARs">
+				<include name="*.war"/>
+			</fileset>
 		</copy>
 	</target>
 	
