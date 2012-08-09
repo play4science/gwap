@@ -29,8 +29,11 @@
 		<ui:include src="layout/logo.xhtml" />
 		<ui:include src="layout/menu.xhtml" />
 
-   
-		<h:outputText value="#{messages['search.noResults']}" rendered="#{mitSearchBean.emptyResult}"/>
+      	<rich:panel rendered="#{mitSearchBean.emptyResult}">
+			<h:outputText value="#{messages['search.noResults']}"/>
+			<br/>
+			<s:link view="/newstatement.xhtml" value="#{messages['statements.new']}"/>
+		</rich:panel>
 	    <div id="searchResults">
 	    	<div style="margin-bottom: 10px;">
 				<h:outputText value="#{messages['search.results']}" rendered="#{!mitSearchBean.emptyResult}" />
