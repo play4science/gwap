@@ -146,7 +146,7 @@ public class TagCloudBean implements Serializable {
 	public void updateTagCloud() {
 		if (tagCloudAll == null)
 			updateTagCloudAll();
-		tagCloud = tagCloudAll.subList(0, 20);		
+		tagCloud = tagCloudAll.subList(0, Math.min(20, tagCloudAll.size()));		
 	}
 	
 }
