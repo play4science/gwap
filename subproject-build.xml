@@ -104,10 +104,6 @@
 		<echo message="Subproject ${subproject.name}" level="info" />
 		<replace file="${ear.dir}/META-INF/application.xml" token="&lt;!-- @@${subproject.varname}@@ -->" 
 			value="&lt;module&gt; &lt;web&gt; &lt;web-uri&gt;${subproject.name}.war&lt;/web-uri&gt; &lt;context-root&gt;/${subproject.name}&lt;/context-root&gt; &lt;/web&gt; &lt;/module&gt;"></replace>
-		<replace file="${ear.dir}/META-INF/application.xml"
-			propertyfile="${basedir}/resources/${subproject.name}/WARs/application-xml-additional.properties">
-			<replacefilter token="&lt;!-- @@${subproject.varname}.additional@@ -->" property="module"/>
-		</replace>
 	</target>
 	
 	<target name="archive" if="subproject.defined">
