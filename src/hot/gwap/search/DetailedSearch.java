@@ -8,6 +8,7 @@
 
 package gwap.search;
 
+import gwap.model.resource.ArtResource;
 import gwap.widget.SolrSearchBean;
 
 import java.util.regex.Matcher;
@@ -17,6 +18,7 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Out;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.log.Log;
 
@@ -36,6 +38,9 @@ public class DetailedSearch extends SolrSearchBean {
 	private String location;
 	private String year;
 	private static final Pattern p = Pattern.compile("\"[^\"]+\"|[^\" ]+");
+	
+	@Out(required=false)
+	protected ArtResource resource;
 	
 	@Override
 	protected SolrQuery generateQuery() {
@@ -61,6 +66,11 @@ public class DetailedSearch extends SolrSearchBean {
 	public String updateSearch() {
 		dirty = true;
 		return "/detailedSearchResults.xhtml";
+	}
+	
+	@Override
+	public void search() {
+		super.search();
 	}
 	
 	private String parseField(String field, String solrField) {
