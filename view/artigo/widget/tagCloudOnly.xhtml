@@ -16,7 +16,7 @@
 			<s:link 
 					value="#{_tagCloud.name}"
 					view="/solrSearchResults.xhtml"
-					propagation="join" 
+					propagation="none" 
 					styleClass="tagCloudItem#{_tagCloud.size}">
 					<f:param name="queryString" value="#{_tagCloud.name}"/>
 			</s:link>
