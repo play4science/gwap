@@ -27,7 +27,9 @@ import org.jboss.seam.annotations.Scope;
 	@NamedQuery(name="bet.byResourceAndPerson", 
 			query="select b from Bet b where b.resource = :resource and (b.person = :person or exists (select id from Person p where p.personConnected = :person and p.id = b.person.id)) and b.revisedBet is null"),
 	@NamedQuery(name="bet.allWithPerson",
-			query="from Bet where person is not null")
+			query="from Bet where person is not null"),
+	@NamedQuery(name="bet.byScore",
+			query="select b from Bet b where b.score != null order by b.score desc")
 })
 
 /**

@@ -178,11 +178,11 @@ public class PokerScoring {
 			Number statementAnnotationScore = (Number) entityManager.createNamedQuery("statementAnnotation.scoreSumByPerson").setParameter("person", person).getSingleResult();
 			int actionScore = numberToInt(locationAssignmentScore)+numberToInt(statementCharacterizationScore)+numberToInt(statementAnnotationScore);
 			
-			Number statementsCreatedCount = (Number) entityManager.createNamedQuery("statement.countByCreator").setParameter("person", person).getSingleResult();
-			int statementsCreatedScore = numberToInt(statementsCreatedCount) * STATEMENT_CREATED;
-			int score = actionScore + statementsCreatedScore;
+//			Number statementsCreatedCount = (Number) entityManager.createNamedQuery("statement.countByCreator").setParameter("person", person).getSingleResult();
+//			int statementsCreatedScore = numberToInt(statementsCreatedCount) * STATEMENT_CREATED;
+//			int score = actionScore + statementsCreatedScore;
 //			log.info("Person's #4 score = #0 (#1-#2+#3)", score, actionScore, statementsMinusScore, statementsPlusScore, person);
-			return score;
+			return actionScore;
 		} catch (Exception e) {
 			log.warn("Could not calculate person score sum");
 			return 0;
