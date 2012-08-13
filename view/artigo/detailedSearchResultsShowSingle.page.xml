@@ -4,11 +4,5 @@
       xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
 
 	<action execute="#{detailedSearch.show()}"/>
-	
-	<param name="tags" value="#{detailedSearch.tags}" />
-	<param name="artist" value="#{detailedSearch.artist}" />
-	<param name="title" value="#{detailedSearch.title}" />
-	<param name="location" value="#{detailedSearch.location}" />
-	<param name="year" value="#{detailedSearch.year}" />
 
 </page>
