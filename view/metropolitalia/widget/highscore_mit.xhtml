@@ -1,0 +1,52 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:c="http://java.sun.com/jstl/core">
+    			<rich:tabPanel switchType="client" width="100%">
+					<rich:tab label="#{messages['highscore.bestBets']}" style="background-color: transparent; border-bottom:none; ">
+						<rich:dataTable value="#{mitHighscore.bestBets}" var="_resource">			
+							<rich:column width="300px">
+								<f:facet name="header">
+									<h:outputText value="#{messages['highscore.statement']}"/>
+								</f:facet>
+								<h:outputText value="#{_resource.resource.text}" />
+							</rich:column>
+							<rich:column >
+								<f:facet name="header">
+									<h:outputText value="#{messages['score']}"/>
+								</f:facet>
+								<h:outputText value="#{_resource.score}" />
+							</rich:column>
+							<rich:column width="100px" >
+								<f:facet name="header">
+									<h:outputText value="#{messages['highscore.username']}"/>
+								</f:facet>
+								<h:outputText value="#{_resource.person.name}" />
+							</rich:column>
+						</rich:dataTable>
+					</rich:tab>
+					<rich:tab label="#{messages['highscore.bestPlayers']}" style="background-color: transparent; border-bottom:none;">
+						<rich:dataTable value="#{mitHighscore.bestUsers}" var="_resource">			
+							<rich:column width="150px">
+								<f:facet name="header">
+									<h:outputText value="#{messages['highscore.username']}"/>
+								</f:facet>
+								<h:outputText value="#{_resource.person.username}" />
+							</rich:column>
+							<rich:column >
+								<f:facet name="header">
+									<h:outputText value="#{messages['score']}"/>
+								</f:facet>
+								<h:outputText value="#{_resource.score}" />
+							</rich:column>
+						</rich:dataTable>
+					</rich:tab>
+    		</rich:tabPanel>
+
+</ui:composition>
