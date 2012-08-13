@@ -5,8 +5,4 @@
 
 	<action execute="#{solrSearchBean.show()}"/>
 
-	<param name="queryString" value="#{solrSearchBean.queryString}"/>
-	<param name="pageNumber" value="#{solrSearchBean.pageNumber}"/>
-	<param name="resultNumber" value="#{solrSearchBean.resultNumber}"/>
-
 </page>

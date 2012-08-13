@@ -33,6 +33,7 @@ import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Out;
 import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.annotations.web.RequestParameter;
 import org.jboss.seam.core.Conversation;
 import org.jboss.seam.faces.Redirect;
 import org.jboss.seam.international.LocaleSelector;
@@ -57,8 +58,12 @@ public class SolrSearchBean implements Serializable {
 	
 	@In(create=true) @Out    protected PaginationControl paginationControl;
 	
-	protected String queryString;
-	protected Integer resultNumber;
+	@In(value="queryString", required=false) 
+	@Out(value="queryString", required=false)
+	                         protected String queryStringBean;
+	
+	@RequestParameter        protected String queryString;
+	@RequestParameter        protected Integer resultNumber;
 	
 	protected SolrDocumentList results;
 
@@ -124,6 +129,8 @@ public class SolrSearchBean implements Serializable {
 		}
 	}
 	public void search() {
+		if (queryString == null || queryString.length() == 0 && queryStringBean != null)
+			queryString = queryStringBean;
 		if (queryString != null && queryString.length() > 0) {
 			// End a current PageFlow if a conversation is active
 			Conversation.instance().endBeforeRedirect();
@@ -151,8 +158,9 @@ public class SolrSearchBean implements Serializable {
 	public Integer getPageNumber() {
 		return paginationControl.getPageNumber();
 	}
+	@RequestParameter
 	public void setPageNumber(Integer pageNumber) {
-		if (pageNumber != paginationControl.getPageNumber()) {
+		if (pageNumber != null && pageNumber != paginationControl.getPageNumber()) {
 			paginationControl.setPageNumber(pageNumber);
 			dirty = true;
 		}
