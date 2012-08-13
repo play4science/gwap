@@ -20,6 +20,7 @@ import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Out;
 import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.core.Conversation;
 import org.jboss.seam.faces.Redirect;
 import org.jboss.seam.log.Log;
 
@@ -69,15 +70,15 @@ public class DetailedSearch extends SolrSearchBean {
 	@Override
 	public void search() {
 		dirty = true;
-//		Conversation.instance().endBeforeRedirect();
+		Conversation.instance().endBeforeRedirect();
 		Redirect redirect = Redirect.instance();
 		redirect.setViewId("/detailedSearchResults.xhtml");
-//		redirect.setParameter("tags", tags);
-//		redirect.setParameter("artist", artist);
-//		redirect.setParameter("title", title);
-//		redirect.setParameter("location", location);
-//		redirect.setParameter("year", year);
-//		redirect.setConversationPropagationEnabled(false);
+		redirect.setParameter("tags", tags);
+		redirect.setParameter("artist", artist);
+		redirect.setParameter("title", title);
+		redirect.setParameter("location", location);
+		redirect.setParameter("year", year);
+		redirect.setConversationPropagationEnabled(false);
 		redirect.execute();
 	}
 	

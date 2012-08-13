@@ -44,7 +44,7 @@
     
     <div id="search">
 		<h:form>
-			<h:inputText value="#{queryString}" id="searchField" required="true" placeholder="#{messages['menu.search.placeholder']}" />
+			<h:inputText value="#{queryBean.queryString}" id="searchField" required="true" placeholder="#{messages['menu.search.placeholder']}" />
 			<rich:toolTip value="#{messages['search.tooltip']}" for="searchField"/>
 			<h:commandButton id="resourceSearch-submit"
 			                   type="submit"

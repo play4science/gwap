@@ -20,12 +20,11 @@
     	</ui:include>
     </rich:column>
     <rich:column styleClass="resultListImage">
-	<s:link view="#{showSingleViewId}" propagation="join">
+	<s:link view="#{showSingleViewId}" propagation="join" includePageParams="true">
 		<h:graphicImage value="#{imageAccessBean.getInstance().getResourceUrl(_doc.getFieldValue('imagepath'))}"
 						alt=""
 						height="150px" />
 		<f:param name="resultNumber" value="#{results.indexOf(_doc)}"/>
-		<f:param name="queryString" value="#{queryString}"/>
 	</s:link>
     </rich:column>
     <rich:column width="300px">
