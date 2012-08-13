@@ -45,6 +45,8 @@ public class SolrSearchBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
+	protected int RESULTS_PER_PAGE = 5;
+	
 	@Logger                  protected Log log;
 	@Create                  public void init()    { log.info("Creating");   }
 	@Destroy                 public void destroy() { log.info("Destroying"); }
@@ -94,7 +96,7 @@ public class SolrSearchBean implements Serializable {
 		SolrQuery solrQuery = generateQuery();
 		if (solrQuery == null)
 			return;
-		paginationControl.setResultsPerPage(5);
+		paginationControl.setResultsPerPage(RESULTS_PER_PAGE);
 		solrQuery.setRows(paginationControl.getResultsPerPage());
 		solrQuery.setStart(paginationControl.getFirstResult());
 		try {

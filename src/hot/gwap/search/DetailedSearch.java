@@ -20,6 +20,7 @@ import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Out;
 import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.faces.Redirect;
 import org.jboss.seam.log.Log;
 
 /**
@@ -29,6 +30,8 @@ import org.jboss.seam.log.Log;
 @Scope(ScopeType.CONVERSATION)
 public class DetailedSearch extends SolrSearchBean {
 
+	private static final long serialVersionUID = -5805789047740851265L;
+	
 	@Logger
 	private Log log;
 	
@@ -63,14 +66,19 @@ public class DetailedSearch extends SolrSearchBean {
 		return solrQuery;
 	}
 
-	public String updateSearch() {
-		dirty = true;
-		return "/detailedSearchResults.xhtml";
-	}
-	
 	@Override
 	public void search() {
-		super.search();
+		dirty = true;
+//		Conversation.instance().endBeforeRedirect();
+		Redirect redirect = Redirect.instance();
+		redirect.setViewId("/detailedSearchResults.xhtml");
+//		redirect.setParameter("tags", tags);
+//		redirect.setParameter("artist", artist);
+//		redirect.setParameter("title", title);
+//		redirect.setParameter("location", location);
+//		redirect.setParameter("year", year);
+//		redirect.setConversationPropagationEnabled(false);
+		redirect.execute();
 	}
 	
 	private String parseField(String field, String solrField) {

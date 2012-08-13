@@ -33,13 +33,13 @@ import org.jboss.seam.annotations.Scope;
 public class SearchBean extends SolrSearchBean implements Serializable {
 
 	private static final long serialVersionUID = -6337457799491522338L;
+
 	protected static final List<SearchSpecialParameter> specialWords;
 	private Statement selectedStatement;
 	private Bet selectedBet;
 	@In
 	EntityManager entityManager;
 
-	
 	
 	static {
 		specialWords = new ArrayList<SearchSpecialParameter>();
@@ -49,6 +49,10 @@ public class SearchBean extends SolrSearchBean implements Serializable {
 		specialWords.add(new SearchSpecialParameter("anziano",		"maturity:[1 TO *]",	"product(scale(maturity_ratingcount,1,10),linear(abs(maturity),0.05,1))"));
 		specialWords.add(new SearchSpecialParameter("poco-istruito","cultivation:[* TO -1]","product(scale(cultivation_ratingcount,1,10),linear(abs(cultivation),0.05,1))"));
 		specialWords.add(new SearchSpecialParameter("istruito",		"cultivation:[1 TO *]",	"product(scale(cultivation_ratingcount,1,10),linear(abs(cultivation),0.05,1))"));
+	}
+	
+	public SearchBean() {
+		RESULTS_PER_PAGE = 10;
 	}
 	
 	@Override
