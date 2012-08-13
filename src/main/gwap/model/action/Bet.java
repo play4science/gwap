@@ -29,7 +29,7 @@ import org.jboss.seam.annotations.Scope;
 	@NamedQuery(name="bet.allWithPerson",
 			query="from Bet where person is not null"),
 	@NamedQuery(name="bet.byScore",
-			query="select b from Bet b where b.score != null order by b.score desc")
+			query="select b from Bet b where b.score != null and b.person != null order by b.score desc")
 })
 
 /**
