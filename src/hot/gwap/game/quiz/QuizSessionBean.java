@@ -13,7 +13,6 @@ import gwap.model.Person;
 import gwap.model.resource.ArtResource;
 
 import java.io.Serializable;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,6 +82,7 @@ public class QuizSessionBean implements Serializable {
 		ArtResource[] artResources = new ArtResource[15];
 
 		Query query = entityManager.createNamedQuery("artResource.woelfflin");
+		query.setHint("org.hibernate.readOnly", true);
 		query.setMaxResults(500);
 		List<ArtResource> resultList = (List<ArtResource>) query
 				.getResultList();
