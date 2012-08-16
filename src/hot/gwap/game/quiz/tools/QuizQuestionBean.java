@@ -23,6 +23,8 @@ import java.util.Random;
 import java.util.Set;
 
 import org.jboss.seam.Component;
+import org.jboss.seam.annotations.Logger;
+import org.jboss.seam.log.Log;
 import org.json.simple.JSONObject;
 
 /**
@@ -39,6 +41,8 @@ public class QuizQuestionBean {
 	private Person correctAnswer;
 	private int questionNumber;
 	private int correctAnswerPos;
+	@Logger
+	private static Log logger;
 
 	public QuizQuestionBean(int id, ArtResource artResource) {
 		this.artResource = artResource;
@@ -57,19 +61,19 @@ public class QuizQuestionBean {
 		return artResource.getArtistName();
 	}
 
-	public void generateAnswers() throws Exception {
+	public void generateAnswers() {
 		correctAnswer = artResource.getArtist();
 		List<Person> wrongAnswers = getWrongAnswers();
-		
-		for(Person p : wrongAnswers){
-			if(p == null){
-				throw new Exception("Fehler: Ein Kuenstler ist null!");
+
+		for (Person p : wrongAnswers) {
+			if (p == null) {
+				logger.error("Ein Kuenstler ist null!");
 			}
 		}
-		if(correctAnswer==null){
-			throw new Exception("Fehler: Ein Kuenstler ist null!");
+		if (correctAnswer == null) {
+			logger.error("Ein Kuenstler (coorectAnswer) ist null!");
 		}
-		
+
 		Random R = new Random();
 		int randomNum = R.nextInt(4);
 		if (randomNum == 0) {
@@ -131,24 +135,26 @@ public class QuizQuestionBean {
 			jsonObject.put("Institution", "");
 		}
 
-		HashMap<String,Integer> taggings = cleanUpAndGetTaggins(artResource.getTaggings());
+		HashMap<String, Integer> taggings = cleanUpAndGetTaggins(artResource
+				.getTaggings());
 		jsonObject.put("NumTags", taggings.size());
 
 		int ii = 0;
-		for(Entry<String, Integer> s : taggings.entrySet()){
-			
-			jsonObject.put("Tag" + ii, g.stemText(s.getKey()));
-			jsonObject.put("TagNum" + ii, s.getValue());
-			ii ++;
+		for (Entry<String, Integer> s : taggings.entrySet()) {
+			if (s.getValue() > 1) {
+				jsonObject.put("Tag" + ii, g.stemText(s.getKey()));
+				jsonObject.put("TagNum" + ii, s.getValue());
+			}
+
+			ii++;
 		}
-		
+
 		jsonObject.put("A", g.stem(answerA));
 		jsonObject.put("B", g.stem(answerB));
 		jsonObject.put("C", g.stem(answerC));
 		jsonObject.put("D", g.stem(answerD));
 		jsonObject.put("CorrectAnswer", g.stem(correctAnswer));
 
-		// 'ß'
 		if (answerA.getDeath() != null) {
 			jsonObject.put("DA", answerA.getDeath().getYear() + 1900);
 		} else {
@@ -179,7 +185,7 @@ public class QuizQuestionBean {
 		return this.jsonObject;
 	}
 
-	private HashMap<String,Integer> cleanUpAndGetTaggins(Set<Tagging> taggings) {
+	private HashMap<String, Integer> cleanUpAndGetTaggins(Set<Tagging> taggings) {
 
 		HashMap<String, Integer> tagMap = new HashMap<String, Integer>();
 
@@ -201,7 +207,7 @@ public class QuizQuestionBean {
 			}
 
 		}
-		
+
 		return tagMap;
 	}
 

@@ -95,8 +95,9 @@ public class PlayNCommunicationResource extends AbstractResource {
 
 		// give it ten trys to find a valid game configuration
 		for (int ii = 0; ii < 10; ++ii) {
-			try {
-				JSONObject jsonObject = createJSONObjectForNewGame();
+			JSONObject jsonObject = createJSONObjectForNewGame();
+			if (jsonObject != null) {
+
 				jsonObject.put("SID", ses.getId());
 				InputStream instream = null;
 				OutputStream outstream = null;
@@ -118,9 +119,8 @@ public class PlayNCommunicationResource extends AbstractResource {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-			} catch (Exception e) {
+			} else {
 				logger.info("Couldn't initialize a game in try no." + ii);
-				e.printStackTrace();
 			}
 
 		}

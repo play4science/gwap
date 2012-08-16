@@ -14,7 +14,9 @@ import gwap.model.resource.ArtResource;
 
 import java.io.Serializable;
 
-import javax.faces.context.FacesContext;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
@@ -63,7 +65,7 @@ public class QuizSessionBean implements Serializable {
 	protected Person person;
 
 	private static final long serialVersionUID = 1L;
-	private QuizQuestionBean[] questions;
+	private ArrayList<QuizQuestionBean> questions;
 	private JSONObject jsonResult;
 
 	@Factory(value = "quizSession", scope = ScopeType.EVENT)
@@ -72,49 +74,47 @@ public class QuizSessionBean implements Serializable {
 		return this;
 	}
 
-	private void createWoelfflinResource() {
-		log.info("Updating Woelfflin Resource");
+	/**
+	 * Creates a new game array for the Quiz Game with 15 images
+	 */
+	private boolean createWoelfflinResource() {
 
-		this.questions = new QuizQuestionBean[15];
+		this.questions = new ArrayList<QuizQuestionBean>(15);
 		ArtResource[] artResources = new ArtResource[15];
-		for (int i = 0; i < 15; ++i) {
-			// Resources with Desciptions
-			try {
-				boolean imageFound = false;
 
-				while (!imageFound) {
-					Query query = entityManager
-							.createNamedQuery("artResource.woelfflin");
-					query.setMaxResults(1);
-					artResources[i] = (ArtResource) query.getSingleResult();
+		Query query = entityManager.createNamedQuery("artResource.woelfflin");
+		query.setMaxResults(500);
+		List<ArtResource> resultList = (List<ArtResource>) query
+				.getResultList();
 
-					String dateCreated = validateYear(artResources[i]
-							.getDateCreated());
+		int numImagesFound = 0;
 
-					String forename = artResources[i].getArtist().getForename();
-					String surname = artResources[i].getArtist().getSurname();
-					if(!(forename == null && surname == null)){
-						if (dateCreated != null) {
-
-							artResources[i].setDateCreated(dateCreated);
-							imageFound = true;
-						}
+		int listCounter = 0;
+		for (ArtResource a : resultList) {
+			listCounter++;
+			String dateCreated = validateYear(a.getDateCreated());
+			if (dateCreated != null) {
+				String forename = a.getArtist().getForename();
+				String surname = a.getArtist().getSurname();
+				if (!(forename == null && surname == null)) {
+					a.setDateCreated(dateCreated);
+					QuizQuestionBean q = new QuizQuestionBean(numImagesFound, a);
+					q.generateAnswers();
+					questions.add(q);
+					numImagesFound++;
+					if (numImagesFound == 15) {
+						log.info("Found valid quiz game setup after observing " + listCounter + " ArtResources");
+						return true;
+						
 					}
-				
-					// for(Tagging t: artResources[i].getTaggings()){
-					// if(t.getTag().getName().startsWith("PORT")){
-					// imageFound = false;
-					// }
-					// }
+					
+
 				}
-
-				this.questions[i] = new QuizQuestionBean(i, artResources[i]);
-				questions[i].generateAnswers();
-
-			} catch (Exception e) {
-				facesMessages.add("#{messages['general.noResource']}");
 			}
+
 		}
+		log.error("Did not find 15 valid ArtResources out of 500 for a valid quiz game setup!");
+		return false;
 
 	}
 
@@ -139,19 +139,25 @@ public class QuizSessionBean implements Serializable {
 	}
 
 	public QuizQuestionBean getQuizQuestion(int questionNumber) {
-		return questions[questionNumber];
+		return questions.get(questionNumber);
 
 	}
 
 	public JSONObject getJSONResult() {
-		String viewId = FacesContext.getCurrentInstance().getViewRoot()
-				.getViewId();
-		createWoelfflinResource();
+
+		boolean imageFound = createWoelfflinResource();
+		if (!imageFound) {
+			// retry
+			imageFound = createWoelfflinResource();
+			if (!imageFound) {
+				log.error("Could not find 15 valid images for quiz game setup");
+			}
+		}
 
 		JSONArray gameArray = new JSONArray();
 
 		for (int i = 0; i < 15; ++i) {
-			gameArray.add(questions[i].generateJSONObject());
+			gameArray.add(questions.get(i).generateJSONObject());
 		}
 
 		this.jsonResult = new JSONObject();
