@@ -4,5 +4,7 @@
       xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
 
 	<action execute="#{solrSearchBean.show()}"/>
+	
+	<param name="queryString" value="#{queryBean.queryString}" />
 
 </page>

@@ -9,13 +9,13 @@
 package gwap.search;
 
 import gwap.model.resource.ArtResource;
-import gwap.widget.SolrSearchBean;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Out;
@@ -35,12 +35,9 @@ public class DetailedSearch extends SolrSearchBean {
 	
 	@Logger
 	private Log log;
-	
-	private String tags;
-	private String artist;
-	private String title;
-	private String location;
-	private String year;
+
+	@In @Out                 protected QueryBean queryBean;
+
 	private static final Pattern p = Pattern.compile("\"[^\"]+\"|[^\" ]+");
 	
 	@Out(required=false)
@@ -53,12 +50,12 @@ public class DetailedSearch extends SolrSearchBean {
 		//FIXME: alle Lucene Special chars escapen
 		
 		String language = localeSelector.getLanguage();
-		query.append(parseField(tags, "tag_"+language));
-		query.append(parseField(artist, "artist"));
-		query.append(parseField(title, "title"));
-		query.append(parseField(location, "location"));
-		query.append(parseField(location, "institution"));
-		query.append(parseField(year, "datecreated"));
+		query.append(parseField(queryBean.getTags(), "tag_"+language));
+		query.append(parseField(queryBean.getArtist(), "artist"));
+		query.append(parseField(queryBean.getTitle(), "title"));
+		query.append(parseField(queryBean.getLocation(), "location"));
+		query.append(parseField(queryBean.getLocation(), "institution"));
+		query.append(parseField(queryBean.getYear(), "datecreated"));
 		
 		log.info("Detailed search: #0", query.toString());
 		
@@ -73,11 +70,7 @@ public class DetailedSearch extends SolrSearchBean {
 		Conversation.instance().endBeforeRedirect();
 		Redirect redirect = Redirect.instance();
 		redirect.setViewId("/detailedSearchResults.xhtml");
-		redirect.setParameter("tags", tags);
-		redirect.setParameter("artist", artist);
-		redirect.setParameter("title", title);
-		redirect.setParameter("location", location);
-		redirect.setParameter("year", year);
+		queryBean.setNotEmptyParameters(redirect);
 		redirect.setConversationPropagationEnabled(false);
 		redirect.execute();
 	}
@@ -91,36 +84,5 @@ public class DetailedSearch extends SolrSearchBean {
 			}
 		}
 		return string;
-	}
-	
-	public String getTags() {
-		return tags;
-	}
-	public void setTags(String tags) {
-		this.tags = tags;
-	}
-	public String getArtist() {
-		return artist;
-	}
-	public void setArtist(String artist) {
-		this.artist = artist;
-	}
-	public String getTitle() {
-		return title;
-	}
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	public String getLocation() {
-		return location;
-	}
-	public void setLocation(String location) {
-		this.location = location;
-	}
-	public String getYear() {
-		return year;
-	}
-	public void setYear(String year) {
-		this.year = year;
 	}
 }

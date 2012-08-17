@@ -6,12 +6,12 @@
  * 
  */
 
-package gwap.widget;
+package gwap.search;
 
 import gwap.model.Person;
 import gwap.model.SearchQuery;
 import gwap.model.resource.ArtResource;
-import gwap.search.QueryString;
+import gwap.widget.PaginationControl;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -61,8 +61,7 @@ public class SolrSearchBean implements Serializable {
 	
 	@In(create=true) @Out    protected PaginationControl paginationControl;
 	
-	@In(create=true) 
-	@Out(required=false)     protected QueryString queryBean;
+	@In @Out                 protected QueryBean queryBean;
 	
 	@RequestParameter        protected Integer resultNumber;
 	
@@ -125,7 +124,7 @@ public class SolrSearchBean implements Serializable {
 			Conversation.instance().endBeforeRedirect();
 			Redirect redirect = Redirect.instance();
 			redirect.setViewId("/solrSearchResults.xhtml");
-			redirect.setParameter("queryString", queryString);
+			queryBean.setNotEmptyParameters(redirect);
 			redirect.setConversationPropagationEnabled(false);
 			// Save Search Query
 			SearchQuery searchQuery = new SearchQuery();

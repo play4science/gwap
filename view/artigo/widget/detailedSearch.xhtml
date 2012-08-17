@@ -13,23 +13,23 @@
 	    <h:panelGrid columns="1">
 			<s:decorate template="/layout/edit.xhtml">
 				<ui:define name="label"><h:outputText value="#{messages['general.tags']}" /></ui:define>
-				<h:inputText id="tags" value="#{detailedSearch.tags}"/>
+				<h:inputText id="tags" value="#{queryBean.tags}"/>
 			</s:decorate>
 			<s:decorate template="/layout/edit.xhtml">
 				<ui:define name="label"><h:outputText value="#{messages['image.artist']}" /></ui:define>
-				<h:inputText id="artist" value="#{detailedSearch.artist}"/>
+				<h:inputText id="artist" value="#{queryBean.artist}"/>
 			</s:decorate>
 			<s:decorate template="/layout/edit.xhtml">
 				<ui:define name="label"><h:outputText value="#{messages['image.title']}" /></ui:define>
-				<h:inputText id="title" value="#{detailedSearch.title}"/>
+				<h:inputText id="title" value="#{queryBean.title}"/>
 			</s:decorate>
 			<s:decorate template="/layout/edit.xhtml">
 				<ui:define name="label"><h:outputText value="#{messages['image.location']}" /></ui:define>
-				<h:inputText id="location" value="#{detailedSearch.location}"/>
+				<h:inputText id="location" value="#{queryBean.location}"/>
 			</s:decorate>
 			<s:decorate template="/layout/edit.xhtml">
 				<ui:define name="label"><h:outputText value="#{messages['image.dateYear']}" /></ui:define>
-				<h:inputText id="year" value="#{detailedSearch.year}"/>
+				<h:inputText id="year" value="#{queryBean.year}"/>
 			</s:decorate>
 	    	<div>
 				<h:commandButton id="search" action="#{detailedSearch.search()}" value="#{messages['menu.search']}">

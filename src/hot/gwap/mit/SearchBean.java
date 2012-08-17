@@ -10,7 +10,7 @@ package gwap.mit;
 
 import gwap.model.action.Bet;
 import gwap.model.resource.Statement;
-import gwap.widget.SolrSearchBean;
+import gwap.search.SolrSearchBean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
