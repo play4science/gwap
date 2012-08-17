@@ -36,10 +36,8 @@
 		</dd>
 		<dt><h:outputText value="#{messages['image.location']}" /></dt>
 		<dd>
-			<h:outputText value="#{_doc.getFieldValue('location')} / #{_doc.getFieldValue('institution')}" rendered="#{!empty(_doc.getFieldValue('location')) and !empty(_doc.getFieldValue('institution'))}"/>
-			<h:outputText value="#{_doc.getFieldValue('location')}" rendered="#{!empty(_doc.getFieldValue('location')) and empty(_doc.getFieldValue('institution'))}"/>
-			<h:outputText value="#{_doc.getFieldValue('institution')}" rendered="#{empty(_doc.getFieldValue('location')) and !empty(_doc.getFieldValue('institution'))}"/>
-			<h:outputText value="#{messages['image.location.unknown']}" rendered="#{empty(_doc.getFieldValue('location')) and empty(_doc.getFieldValue('institution'))}"/>
+			<h:outputText value="#{_doc.getFieldValue('location_institution')}" rendered="#{!empty(_doc.getFieldValue('location_institution'))}"/>
+			<h:outputText value="#{messages['image.location.unknown']}" rendered="#{empty(_doc.getFieldValue('location_institution'))}"/>
 		</dd>
 		<dt><h:outputText value="#{messages['image.dateCreated']}" /></dt>
 		<dd><h:outputText value="#{empty(_doc.getFieldValue('institution')) ? messages['image.dateCreated.unknown'] : _doc.getFieldValue('datecreated')}" />

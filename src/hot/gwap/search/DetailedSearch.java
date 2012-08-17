@@ -53,8 +53,7 @@ public class DetailedSearch extends SolrSearchBean {
 		query.append(parseField(queryBean.getTags(), "tag_"+language));
 		query.append(parseField(queryBean.getArtist(), "artist"));
 		query.append(parseField(queryBean.getTitle(), "title"));
-		query.append(parseField(queryBean.getLocation(), "location"));
-		query.append(parseField(queryBean.getLocation(), "institution"));
+		query.append(parseField(queryBean.getLocation(), "location_institution"));
 		query.append(parseField(queryBean.getYear(), "datecreated"));
 		
 		log.info("Detailed search: #0", query.toString());
