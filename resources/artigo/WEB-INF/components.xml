@@ -31,6 +31,8 @@
  	<web:hot-deploy-filter url-pattern="*.html"/>
 	
 	<web:rewrite-filter view-mapping="*.html"/>	
+	
+	<web:authentication-filter auth-type="basic" url-pattern="/seam/resource/rest/artigodata/*"></web:authentication-filter>
  
  	<persistence:managed-persistence-context
 	 	auto-create="true"
