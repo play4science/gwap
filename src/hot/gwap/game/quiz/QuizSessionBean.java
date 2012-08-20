@@ -9,7 +9,6 @@
 package gwap.game.quiz;
 
 import gwap.game.quiz.tools.QuizQuestionBean;
-import gwap.model.Person;
 import gwap.model.resource.ArtResource;
 
 import java.io.Serializable;
@@ -60,8 +59,6 @@ public class QuizSessionBean implements Serializable {
 	protected FacesMessages facesMessages;
 	@In
 	protected EntityManager entityManager;
-	@In(create = true)
-	protected Person person;
 
 	private static final long serialVersionUID = 1L;
 	private ArrayList<QuizQuestionBean> questions;

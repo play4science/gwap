@@ -103,7 +103,6 @@ public class PlayNRatingCommunicationResource extends AbstractResource {
 
 			// create PerceptionRating
 			PerceptionRating perceptionRating = new PerceptionRating();
-			perceptionRating.setPerson(quizSession.person);
 			perceptionRating.setCreated(new Date());
 			perceptionRating.setResource(quizQuestion.getArtResource());
 			perceptionRating.setFillOutTimeMs(userPerceptionRating.getFillOutTimeMs());
