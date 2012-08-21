@@ -12,6 +12,7 @@
     xmlns:a4j="http://richfaces.org/a4j">
 
 	<h:form>
+		<s:fragment rendered="#{!forDetailedSearch}">
 		<a4j:repeat value="#{tagCloud}" var="_tagCloud">
 			<s:link 
 					value="#{_tagCloud.name}"
@@ -22,6 +23,19 @@
 			</s:link>
 			#{' '}
 		</a4j:repeat>
+		</s:fragment>
+		<s:fragment rendered="#{forDetailedSearch}">
+		<a4j:repeat value="#{tagCloud}" var="_tagCloud">
+			<s:link 
+					value="#{_tagCloud.name}"
+					view="/detailedSearchResults.xhtml"
+					propagation="none" 
+					styleClass="tagCloudItem#{_tagCloud.size}" includePageParams="true">
+					<f:param name="tags" value="#{queryBean.tags} #{_tagCloud.name}"/>
+			</s:link>
+			#{' '}
+		</a4j:repeat>
+		</s:fragment>
 	</h:form>
 
 </ui:composition>
