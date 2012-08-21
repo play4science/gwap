@@ -93,8 +93,15 @@ public abstract class AbstractGameSessionBean implements Serializable {
 		gameRound.setGameSession(gameSession);
 		gameSession.getGameRounds().add(gameRound);
 		entityManager.persist(gameRound);
+		loadNewResource();
 	}
 
+	/**
+	 * Needs to load a new resource before each round. It is called
+	 * in the startRound() method.
+	 */
+	protected abstract void loadNewResource();
+	
 	public void endRound() {
 		log.info("Ending round");
 		if (roundsLeft != null)

@@ -23,7 +23,7 @@
 					<p4s:pagination viewId="/solrSearchResults.xhtml" style="margin:0 0 10px 0;"/>
 					<ui:include src="/widget/searchResults.xhtml">
 						<ui:param name="results" value="#{solrSearchBean.results}" />
-						<ui:param name="queryString" value="#{solrSearchBean.queryString}"/>
+						<ui:param name="queryString" value="#{queryBean.queryString}"/>
 						<ui:param name="showSingleViewId" value="/solrSearchResultsShowSingle.xhtml" />
 					</ui:include>
 					<p4s:pagination viewId="/solrSearchResults.xhtml" style="margin:10px 0 0 0;"/>

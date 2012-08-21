@@ -75,13 +75,6 @@ public class Recognize extends AbstractGameSessionBean {
 	@Override
 	public void startRound() {
 		super.startRound();
-		if (roundNr > 1) {
-			if (roundNr == roundNrUsingAtLeastAssignedStatement)
-				statement = mitStatementBean.updateAtLeastAssignedStatement();
-			else
-				statement = mitStatementBean.updateStatement();
-		}
-		statement.getStatementStandardTokens().size();
 		gameRound.getResources().add(statement);
 		locationId = null;
 		breadcrumbLocations.clear();
@@ -95,6 +88,17 @@ public class Recognize extends AbstractGameSessionBean {
 		points = null;
 		selectedTokens.clear();
 		skipCharacterizationResult = false;
+	}
+	
+	@Override
+	protected void loadNewResource() {
+		if (roundNr > 1) {
+			if (roundNr == roundNrUsingAtLeastAssignedStatement)
+				statement = mitStatementBean.updateAtLeastAssignedStatement();
+			else
+				statement = mitStatementBean.updateStatement();
+		}
+		statement.getStatementStandardTokens().size();
 	}
 	
 	public boolean assignLocation() {

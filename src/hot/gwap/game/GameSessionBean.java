@@ -8,6 +8,7 @@
 
 package gwap.game;
 
+import gwap.ResourceBean;
 import gwap.action.TaggingBean;
 import gwap.model.GameRound;
 import gwap.model.action.Action;
@@ -41,6 +42,7 @@ public class GameSessionBean extends AbstractGameSessionBean {
 	private static final long serialVersionUID = 1L;
 
 	@In(create=true)         private TaggingBean taggingBean;
+	@In                      private ResourceBean resourceBean;
 	@In(create=true)		 private ArtResource resource;
 	@In(create=true)         private GameRoundScoringBean gameRoundScoringBean;
 	
@@ -49,6 +51,11 @@ public class GameSessionBean extends AbstractGameSessionBean {
 	@Override
 	public void startGameSession() {
 		startGameSession("imageLabeler");
+	}
+	
+	@Override
+	protected void loadNewResource() {
+		resourceBean.updateResource();
 	}
 	
 	public String recommendTag() {
