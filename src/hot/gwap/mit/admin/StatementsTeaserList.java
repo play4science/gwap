@@ -36,8 +36,9 @@ public class StatementsTeaserList extends EntityQuery<StatementsTeaserList> {
 	}
 	
 	public void generatePublicationDate(){
-		Query query = entityManager.createNamedQuery("statementsTeaser.latestByPublicationDate");
-		Date latestPublication = ((StatementsTeaser) query.getResultList().get(0)).getPublicationDate();
+		Query query = entityManager.createNamedQuery("statementsTeaser.orderedByPublicationDate");
+		query.setMaxResults(1);
+		Date latestPublication = ((StatementsTeaser) query.getSingleResult()).getPublicationDate();
 		Calendar calendar = GregorianCalendar.getInstance();
 		calendar.setTime(latestPublication);
 		Query query2 = entityManager.createNamedQuery("statementsTeaser.allForDateGeneration");

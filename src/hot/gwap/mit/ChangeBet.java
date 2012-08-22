@@ -50,13 +50,13 @@ public class ChangeBet implements Serializable {
 		Calendar calendar = GregorianCalendar.getInstance();
 		calendar.setTime(bet.getCreated());
 		calendar.add(Calendar.HOUR, 24);
-		log.info("Changed bet #0 to #1 by #2", bet, points, bet.getPerson());
 
 		if (Math.abs(points - bet.getCurrentMatch()) <= 10)
 			facesMessages.addFromResourceBundle(Severity.ERROR, "bet.change.differenceTooLow");
-		else if (!calendar.before(new Date()))
+		else if (!calendar.before(GregorianCalendar.getInstance()))
 			facesMessages.addFromResourceBundle(Severity.ERROR, "bet.change.timeDifferenceTooShort");
 		else {
+			log.info("Changed bet #0 to #1 by #2", bet, points, bet.getPerson());
 			Bet newBet = new Bet();
 			//initialize
 			newBet.setCreated(new Date());
