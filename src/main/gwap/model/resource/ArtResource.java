@@ -368,6 +368,7 @@ public class ArtResource extends Resource {
 	@Lob
 	private String origin;       // Kauf, Leihgabe, Geschenk, Mittelverwendung 
 	private Boolean easement;  // permission to use the ArtResource is given by the author
+	private Boolean skip;  // if ArtResource is not suitable to be tagged by users (e.g., boring)
 	@Transient
 	private String url;
 	
@@ -461,6 +462,12 @@ public class ArtResource extends Resource {
 	}
 	public void setEasement(Boolean easement) {
 		this.easement = easement;
+	}
+	public Boolean getSkip() {
+		return skip;
+	}
+	public void setSkip(Boolean skip) {
+		this.skip = skip;
 	}
 	@Override
 	public String toString() {

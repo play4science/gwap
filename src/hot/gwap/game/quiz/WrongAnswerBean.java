@@ -102,6 +102,7 @@ public class WrongAnswerBean implements Serializable {
 					"SELECT p FROM Person p WHERE death is not null and (death < '01.01."
 							+ (year - dist) + "' or death > '01.01." + (year + dist)
 							+ "') ORDER by random()").setMaxResults(3)
+			.setHint("org.hibernate.readOnly", true)
 			.getResultList();
 		case 11:
 			dist = 200;
@@ -110,6 +111,7 @@ public class WrongAnswerBean implements Serializable {
 					"SELECT p FROM Person p WHERE death is not null and (death < '01.01."
 							+ (year - dist) + "' or death > '01.01." + (year + dist)
 							+ "') ORDER by random()").setMaxResults(3)
+			.setHint("org.hibernate.readOnly", true)
 			.getResultList();
 		case 12:
 			dist = 150;
@@ -118,6 +120,7 @@ public class WrongAnswerBean implements Serializable {
 					"SELECT p FROM Person p WHERE death is not null and (death < '01.01."
 							+ (year - dist) + "' or death > '01.01." + (year + dist)
 							+ "') ORDER by random()").setMaxResults(3)
+			.setHint("org.hibernate.readOnly", true)
 			.getResultList();
 		case 13:
 			if (year <= 1600) {
@@ -132,6 +135,7 @@ public class WrongAnswerBean implements Serializable {
 					"SELECT p FROM Person p WHERE death is not null and death > '01.01."
 							+ minyear + "' and death < '01.01." + maxyear
 							+ "' ORDER by random()").setMaxResults(3)
+			.setHint("org.hibernate.readOnly", true)
 			.getResultList();
 		case 14:
 			if (year <= 1600) {
@@ -146,6 +150,7 @@ public class WrongAnswerBean implements Serializable {
 					"SELECT p FROM Person p WHERE death is not null and death > '01.01."
 							+ minyear + "' and death < '01.01." + maxyear
 							+ "' ORDER by random()").setMaxResults(3)
+			.setHint("org.hibernate.readOnly", true)
 			.getResultList();
 		case 15:
 			minyear = year - 100;
@@ -155,6 +160,7 @@ public class WrongAnswerBean implements Serializable {
 					"SELECT p FROM Person p WHERE death is not null and death > '01.01."
 							+ minyear + "' and death < '01.01." + maxyear
 							+ "' ORDER by random()").setMaxResults(3)
+			.setHint("org.hibernate.readOnly", true)
 			.getResultList();
 		}
 		
@@ -165,6 +171,7 @@ public class WrongAnswerBean implements Serializable {
 				"SELECT p FROM Person p WHERE death is not null and death < '01.01."
 						+ (year - dist) + "' or death > '01.01." + (year + dist)
 						+ "' ORDER by random()").setMaxResults(3)
+		.setHint("org.hibernate.readOnly", true)
 		.getResultList();
 		
 		

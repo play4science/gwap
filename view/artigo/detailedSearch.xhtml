@@ -11,15 +11,14 @@
 
     <ui:define name="body">
 		<div id="related">
-			<ui:include src="/layout/menu.xhtml"/>
+			<ui:include src="layout/logo.xhtml" />
+			<ui:include src="layout/menu.xhtml" />
 		</div>
 
 		<div id="content">
-			<h2><h:outputText value="#{messages['impressum.title']}" /></h2>
-			<h:outputText value="#{messages['impressum.text']}" escape="false" />
+			<ui:include src="widget/detailedSearch.xhtml" />
 		</div>
-		 
-		<br class="clear" />
 		
+        <br class="clear" />
     </ui:define>
 </ui:composition>

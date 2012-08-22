@@ -14,19 +14,20 @@
 		<div id="related">
 			<ui:include src="layout/logo.xhtml" />
 			<ui:include src="layout/menu.xhtml" />
+			<ui:include src="widget/detailedSearch.xhtml" />
 		</div>
 
 		<div id="content">
 			<div class="images">
-				<h:outputText value="#{messages['resourceSearch.noResults']}" rendered="#{solrSearchBean.emptyResult}"/>
+				<h:outputText value="#{messages['resourceSearch.noResults']}" rendered="#{detailedSearch.emptyResult}"/>
 				<h:form>
-					<p4s:pagination viewId="/solrSearchResults.xhtml" style="margin:0 0 10px 0;"/>
+					<p4s:pagination viewId="/detailedSearchResults.xhtml" style="margin:0 0 10px 0;"/>
 					<ui:include src="/widget/searchResults.xhtml">
-						<ui:param name="results" value="#{solrSearchBean.results}" />
-						<ui:param name="queryString" value="#{queryBean.queryString}"/>
-						<ui:param name="showSingleViewId" value="/solrSearchResultsShowSingle.xhtml" />
+						<ui:param name="results" value="#{detailedSearch.results}" />
+						<ui:param name="queryString" value="#{null}"/>
+						<ui:param name="showSingleViewId" value="/detailedSearchResultsShowSingle.xhtml" />
 					</ui:include>
-					<p4s:pagination viewId="/solrSearchResults.xhtml" style="margin:10px 0 0 0;"/>
+					<p4s:pagination viewId="/detailedSearchResults.xhtml" style="margin:10px 0 0 0;"/>
 				</h:form>
 			</div>
 		</div>

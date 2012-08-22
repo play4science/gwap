@@ -10,7 +10,7 @@ package gwap.mit;
 
 import gwap.model.action.Bet;
 import gwap.model.resource.Statement;
-import gwap.widget.SolrSearchBean;
+import gwap.search.SolrSearchBean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -33,13 +33,13 @@ import org.jboss.seam.annotations.Scope;
 public class SearchBean extends SolrSearchBean implements Serializable {
 
 	private static final long serialVersionUID = -6337457799491522338L;
+
 	protected static final List<SearchSpecialParameter> specialWords;
 	private Statement selectedStatement;
 	private Bet selectedBet;
 	@In
 	EntityManager entityManager;
 
-	
 	
 	static {
 		specialWords = new ArrayList<SearchSpecialParameter>();
@@ -51,10 +51,16 @@ public class SearchBean extends SolrSearchBean implements Serializable {
 		specialWords.add(new SearchSpecialParameter("istruito",		"cultivation:[1 TO *]",	"product(scale(cultivation_ratingcount,1,10),linear(abs(cultivation),0.05,1))"));
 	}
 	
+	public SearchBean() {
+		RESULTS_PER_PAGE = 10;
+	}
+	
 	@Override
 	protected SolrQuery generateQuery() {
+		if (isQueryEmpty())
+			return null;
 		// 1. Parse queryString and look for locations and special characterization words (variable "specialWords")
-		String[] queryArray = queryString.split("\\s+");
+		String[] queryArray = queryBean.getQueryString().split("\\s+");
 		String solrQueryString = "";
 		String solrBoostString = null;
 		for (int i = 0; i < queryArray.length; i++) {

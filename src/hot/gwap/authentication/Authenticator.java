@@ -151,9 +151,13 @@ public class Authenticator implements Serializable {
 	
 	private void updatePersonOnLogin(Person person) {
 		// Set meta data
-		for (SelectItem locale : localeSelector.getSupportedLocales())
-			if (locale.getValue().equals(person.getLanguage()))
-				localeSelector.setLanguage(person.getLanguage());
+		try {
+			for (SelectItem locale : localeSelector.getSupportedLocales())
+				if (locale.getValue().equals(person.getLanguage()))
+					localeSelector.setLanguage(person.getLanguage());
+		} catch (NullPointerException e) {
+			// Not supported for restful services
+		}
 
 		if (person.getRoles() != null) {
 			for (Role role : person.getRoles()) {

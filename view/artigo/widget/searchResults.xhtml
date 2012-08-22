@@ -1,0 +1,49 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j">
+
+  <rich:dataTable id="resultsList"
+               value="#{results}"
+               var="_doc"
+               columnClasses="noBorder"
+               style="border: none; "
+               >
+    <rich:column>
+    	<ui:include src="/widget/tagCloudOnly.xhtml">
+    		<ui:param name="tagCloud" value="#{tagCloudBean.getTagCloudForSearchResultList(_doc.getFieldValue('id'))}" />
+    		<ui:param name="forDetailedSearch" value="true"/>
+    	</ui:include>
+    </rich:column>
+    <rich:column styleClass="resultListImage">
+	<s:link view="#{showSingleViewId}" propagation="join" includePageParams="true">
+		<h:graphicImage value="#{imageAccessBean.getInstance().getResourceUrl(_doc.getFieldValue('imagepath'))}"
+						alt=""
+						height="150px" />
+		<f:param name="resultNumber" value="#{results.indexOf(_doc)}"/>
+	</s:link>
+    </rich:column>
+    <rich:column width="300px">
+		<dt><h:outputText value="#{messages['image.artist']}" /></dt>
+		<dd><h:outputText value="#{empty(_doc.getFieldValue('artist')) ? messages['image.artist.anonymous'] : _doc.getFieldValue('artist')}"/>
+		</dd>
+		<dt><h:outputText value="#{messages['image.title']}" /></dt>
+		<dd><h:outputText value="#{empty(_doc.getFieldValue('title')) ? messages['image.title.unknown'] : _doc.getFieldValue('title')[0]}" />
+		</dd>
+		<dt><h:outputText value="#{messages['image.location']}" /></dt>
+		<dd>
+			<h:outputText value="#{_doc.getFieldValue('location_institution')}" rendered="#{!empty(_doc.getFieldValue('location_institution'))}"/>
+			<h:outputText value="#{messages['image.location.unknown']}" rendered="#{empty(_doc.getFieldValue('location_institution'))}"/>
+		</dd>
+		<dt><h:outputText value="#{messages['image.dateCreated']}" /></dt>
+		<dd><h:outputText value="#{empty(_doc.getFieldValue('institution')) ? messages['image.dateCreated.unknown'] : _doc.getFieldValue('datecreated')}" />
+		</dd>
+    </rich:column>
+</rich:dataTable>
+	
+</ui:composition>

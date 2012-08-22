@@ -4,7 +4,11 @@
       xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd">
 
 	<begin-conversation join="true"/>
-
-	<param name="queryString" value="#{queryBean.queryString}" />
+	
+	<param name="tags" value="#{queryBean.tags}" />
+	<param name="artist" value="#{queryBean.artist}" />
+	<param name="title" value="#{queryBean.title}" />
+	<param name="location" value="#{queryBean.location}" />
+	<param name="year" value="#{queryBean.year}" />
 
 </page>

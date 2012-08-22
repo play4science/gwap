@@ -7,28 +7,22 @@
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:rich="http://richfaces.org/rich"
     xmlns:a4j="http://richfaces.org/a4j"
-    xmlns:p4s="http://play4science.org/facelets"
     template="layout/template.xhtml">
 
     <ui:define name="body">
 		<div id="related">
 			<ui:include src="layout/logo.xhtml" />
 			<ui:include src="layout/menu.xhtml" />
+			<ui:include src="widget/tagCloud.xhtml" />
+			<ui:include src="widget/scoringResourceDetails.xhtml">
+				<ui:param name="_resource" value="#{resource}" />
+			</ui:include>
+			<ui:include src="admin/submenu.xhtml" rendered="#{s:hasPermission('artigo', 'view-admin-interface')}"/>
 		</div>
 
 		<div id="content">
-			<div class="images">
-				<h:outputText value="#{messages['resourceSearch.noResults']}" rendered="#{solrSearchBean.emptyResult}"/>
-				<h:form>
-					<p4s:pagination viewId="/solrSearchResults.xhtml" style="margin:0 0 10px 0;"/>
-					<ui:include src="/widget/searchResults.xhtml">
-						<ui:param name="results" value="#{solrSearchBean.results}" />
-						<ui:param name="queryString" value="#{queryBean.queryString}"/>
-						<ui:param name="showSingleViewId" value="/solrSearchResultsShowSingle.xhtml" />
-					</ui:include>
-					<p4s:pagination viewId="/solrSearchResults.xhtml" style="margin:10px 0 0 0;"/>
-				</h:form>
-			</div>
+			<ui:include src="widget/resourceImage.xhtml" />
+			<ui:include src="widget/resourceDescription.xhtml" />
 		</div>
 		
         <br class="clear" />
