@@ -8,7 +8,6 @@
 
 package gwap.game;
 
-import gwap.mit.CityLookupTest;
 import gwap.model.GameRound;
 import gwap.model.GameSession;
 import gwap.model.GameType;
@@ -187,7 +186,7 @@ public abstract class AbstractGameSessionBean implements Serializable {
 		
     	try {
     		IpBasedLocation ipLocation = new IpBasedLocation();
-			URL url = CityLookupTest.class.getResource("/GeoLiteCity.dat");
+			URL url = AbstractGameSessionBean.class.getResource("/GeoLiteCity.dat");
 			LookupService cl = new LookupService(url.getFile(),
 						LookupService.GEOIP_MEMORY_CACHE );
 			Query q = entityManager.createQuery("select il from IpBasedLocation il where il.country = :country and il.region = :region and il.city = :city");
