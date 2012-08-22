@@ -77,7 +77,7 @@ import javax.persistence.OneToOne;
 				"  a.class = LocationAssignment or " +
 				"  a.class = StatementCharacterization or a.class = StatementAnnotation" +
 				") and " +
-				"a.person != null and a.score != null " +
+				"a.score > 0 " +
 				"and a.gameRound.gameSession.gameType.name=:gametype " +
 				"group by coalesce(p.personConnected.id, p.id) order by sum(a.score) desc" ),
 	@NamedQuery(

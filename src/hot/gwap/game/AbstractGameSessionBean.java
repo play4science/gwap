@@ -14,15 +14,15 @@ import gwap.model.GameType;
 import gwap.model.Person;
 import gwap.model.action.Action;
 import gwap.model.resource.IpBasedLocation;
+import gwap.tools.IpBasedLocationBean;
 
 import java.io.Serializable;
-import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import org.jboss.seam.annotations.Create;
@@ -34,9 +34,6 @@ import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.log.Log;
 
 import com.maxmind.geoip.Location;
-import com.maxmind.geoip.LookupService;
-import com.maxmind.geoip.regionName;
-import com.maxmind.geoip.timeZone;
 
 /**
  * This is the backing bean for one game session. It handles all actions that
@@ -54,6 +51,7 @@ public abstract class AbstractGameSessionBean implements Serializable {
 	
 	@Logger                  protected Log log;
 	@In                      protected FacesMessages facesMessages;
+	@In                      protected IpBasedLocationBean ipBasedLocationBean;
 	@In                      protected EntityManager entityManager;
 	@In(create=true)	     protected Person person;
 	@In(create=true) @Out	 protected GameSession gameSession;
@@ -82,7 +80,7 @@ public abstract class AbstractGameSessionBean implements Serializable {
 		entityManager.persist(gameSession);
 		roundsLeft = gameType.getRounds();
 		completedRoundsScore = 0;
-		lookup();
+		lookupIpBasedLocation();
 		startRound();
 	}
 
@@ -180,51 +178,34 @@ public abstract class AbstractGameSessionBean implements Serializable {
 		action.setGameRound(gameRound);
 	}
 	
-	
-	public void lookup() {
-		Long ipLocationId;
-		
+	/**
+	 * Performs a lookup of the location of the current user and saves it 
+	 * to the current gameSession;
+	 */
+	public void lookupIpBasedLocation() {
     	try {
-    		IpBasedLocation ipLocation = new IpBasedLocation();
-			URL url = AbstractGameSessionBean.class.getResource("/GeoLiteCity.dat");
-			LookupService cl = new LookupService(url.getFile(),
-						LookupService.GEOIP_MEMORY_CACHE );
-			Query q = entityManager.createQuery("select il from IpBasedLocation il where il.country = :country and il.region = :region and il.city = :city");
-			if(remoteAddr.equals("127.0.0.1"))
-				log.info("working on localhost");
-			else{
-				Location l = cl.getLocation(remoteAddr);
+    		IpBasedLocation ipBasedLocation = null;
+			Location l = ipBasedLocationBean.findByIpAddress(remoteAddr);
+			if (l != null) {
+				Query q = entityManager.createNamedQuery("byCountryRegionCity");
 				q.setParameter("country", l.countryName);
 				q.setParameter("region", l.region );
 				q.setParameter("city", l.city);
-				List<IpBasedLocation> ibl = q.getResultList();
-				if(ibl.size() > 0){
-					ipLocationId = ((IpBasedLocation) ibl.get(0)).getId();
-					log.info("Location already saved. Id: " + ibl.get(0).getId());
-				} else {			
-				    ipLocation.setCity(l.city);
-				    ipLocation.setRegion(l.region);
-				    ipLocation.setCountry(l.countryName);
-				    entityManager.persist(ipLocation);
-				    ipLocationId = ipLocation.getId();
-				
-				    log.info("playersLocation: " + l.countryCode +
-				                       "\n countryName: " + l.countryName +
-				                       "\n region: " + l.region +
-				                       "\n regionName: " + regionName.regionNameByCode(l.countryCode, l.region) +
-				                       "\n city: " + l.city +
-				                       "\n postalCode: " + l.postalCode +
-				                       "\n latitude: " + l.latitude +
-				                       "\n longitude: " + l.longitude +
-				                       "\n timezone: " + timeZone.timeZoneByCountryAndRegion(l.countryCode, l.region));
+				try {
+					ipBasedLocation = (IpBasedLocation) q.getSingleResult();
+				} catch (NoResultException e) {
+					ipBasedLocation = new IpBasedLocation();
+				    ipBasedLocation.setCity(l.city);
+				    ipBasedLocation.setRegion(l.region);
+				    ipBasedLocation.setCountry(l.countryName);
+				    entityManager.persist(ipBasedLocation);
 				}
-				gameSession.setIpLocationId(ipLocationId);
-				entityManager.persist(gameSession);
-				cl.close();
+				log.info("IpBasedLocation set to #0", ipBasedLocation);
+				gameSession.setIpBasedLocation(ipBasedLocation);
 			}
-	}
-	catch (Throwable e) {
-	   log.info(e.toString());
-	}
+		}
+		catch (Throwable e) {
+		   log.info(e.toString());
+		}
     }
 }

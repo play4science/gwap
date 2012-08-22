@@ -29,7 +29,7 @@ import org.jboss.seam.log.Log;
 public class Highscore {
 	
 	@In EntityManager entityManager;
-	@ Logger private Log log;
+	@Logger private Log log;
 	private List<Bet> bestBets;
 	private List<gwap.model.Highscore> bestUsers;
 
@@ -37,10 +37,6 @@ public class Highscore {
 		Query q = entityManager.createNamedQuery("bet.byScore");
 		q.setMaxResults(10);
 		List<Bet> result = q.getResultList();
-		for(Bet bet : result){
-			if (bet.getPerson().getUsername().equals(""))
-				bet.getPerson().setUsername("Gast");
-		}
 			
 		return result;
 		
@@ -52,10 +48,6 @@ public class Highscore {
 		q.setParameter("gametype", "mitRecognize");
 		List<gwap.model.Highscore> result  = q.getResultList();
 		HighscoreBean.modifyHighscore(result, entityManager);
-		for(gwap.model.Highscore h : result){
-			if (h.getPerson().getUsername().equals(""))
-				h.getPerson().setUsername("Gast");
-		}
 		
 		return result;
 	}

@@ -13,13 +13,17 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 /**
  * the location, where the player's id is from
  * 
  * @author Andre Reichstaller
  */
-
+@NamedQueries({
+	@NamedQuery(name="byCountryRegionCity", query="select il from IpBasedLocation il where il.country = :country and il.region = :region and il.city = :city")
+})
 @Entity
 public class IpBasedLocation implements Serializable {
 
@@ -31,7 +35,6 @@ public class IpBasedLocation implements Serializable {
 	private String country;
 	private String region;
 	private String city;
-	
 	
 	public Long getId() {
 		return id;
@@ -57,8 +60,10 @@ public class IpBasedLocation implements Serializable {
 	public void setCity(String city) {
 		this.city = city;
 	}
-
-
 	
-	
+	@Override
+	public String toString() {
+		return "Location#" + id + "(" + city + "/" + region + "/" + country + ")";
+	}
+
 }
