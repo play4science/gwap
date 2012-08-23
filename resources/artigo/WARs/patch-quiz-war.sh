@@ -2,15 +2,21 @@
 # Modifies the playn-showcase-html.war so that it runs on the correct
 # artigo jboss server
 
-[ -e /resources/artigo/WARs/playn-quiz-html-1.0.war ] || (echo "Could not find file, run from project root"; exit 1)
+FILE="resources/artigo/WARs/playn-quiz-html-1.0.war"
 
-mkdir -p tmp && cd tmp && rm -rf * && \
-jar xf ../resources/artigo/WARs/playn-quiz-html-1.0.war && \
-cat > WEB-INF/jboss-web.xml <<EOF
-<jboss-web>
-        <context-root>/playn-quiz</context-root>
-        <virtual-host>artigo</virtual-host>
-</jboss-web>
-EOF
-$! && jar cf ../resources/artigo/WARs/playn-quiz-html-1.0.war *
+error() {
+	echo $*
+	[ "$TEMPDIR" != "" ] && echo "Failed, leaving directory $TEMPDIR for inspection"
+	exit 1
+}
 
+[ -e $FILE ] || error "Could not find file, run from project root"
+
+TEMPDIR=`mktemp -d --tmpdir=.`
+cd $TEMPDIR || error "Could not create temp dir"
+jar xf ../$FILE || error "Could not extract file"
+echo -e "<jboss-web>\n        <context-root>/playn-quiz</context-root>\n        <virtual-host>artigo</virtual-host>\n</jboss-web>" > WEB-INF/jboss-web.xml || error "Could not create jboss-web.xml"
+jar cf ../$FILE * || error "Could not create new archive"
+cd ..
+rm -rf $TEMPDIR
+echo "Successful"
