@@ -17,7 +17,6 @@
     <rich:column>
     	<ui:include src="/widget/tagCloudOnly.xhtml">
     		<ui:param name="tagCloud" value="#{tagCloudBean.getTagCloudForSearchResultList(_doc.getFieldValue('id'))}" />
-    		<ui:param name="forDetailedSearch" value="true"/>
     	</ui:include>
     </rich:column>
     <rich:column styleClass="resultListImage">
