@@ -161,7 +161,7 @@ public class PokerScoring {
 	}
 	
 	public int getPersonScoreSum(Person person) {
-		if (person == null)
+		if (person == null || person.getId() == null)
 			return 0;
 		try {
 			person = entityManager.find(Person.class, person.getId());
@@ -179,8 +179,7 @@ public class PokerScoring {
 
 			return actionScore;
 		} catch (Exception e) {
-
-			log.warn("Could not calculate person score sum");
+			log.warn("Could not calculate person score sum", e);
 			return 0;
 		}
 	}
