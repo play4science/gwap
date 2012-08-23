@@ -33,7 +33,7 @@ import com.maxmind.geoip.LookupService;
  * @author Fabian Kneissl
  */
 @Name("ipBasedLocationBean")
-@Scope(ScopeType.STATELESS)@AutoCreate
+@Scope(ScopeType.APPLICATION)@AutoCreate
 public class IpBasedLocationBean implements Serializable {
 
 	@Logger
@@ -71,14 +71,6 @@ public class IpBasedLocationBean implements Serializable {
 			return null;
 		else {
 			Location location = lookupService.getLocation(ipAddress);
-			if (log.isDebugEnabled())
-				log.debug("Player's Location: " + location.countryCode +
-                    "\n countryName: " + location.countryName +
-                    "\n region: " + location.region +
-                    "\n city: " + location.city +
-                    "\n postalCode: " + location.postalCode +
-                    "\n latitude: " + location.latitude +
-                    "\n longitude: " + location.longitude);
 			return location;
 		}
 	}

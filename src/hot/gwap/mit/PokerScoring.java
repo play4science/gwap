@@ -178,6 +178,8 @@ public class PokerScoring {
 			int actionScore = numberToInt((Number) ((gwap.model.Highscore)q.getSingleResult()).getScore());
 
 			return actionScore;
+		} catch (NoResultException nre) {
+			return 0;
 		} catch (Exception e) {
 			log.warn("Could not calculate person score sum", e);
 			return 0;
