@@ -194,16 +194,17 @@ public abstract class AbstractGameSessionBean implements Serializable {
     		IpBasedLocation ipBasedLocation = null;
 			Location l = ipBasedLocationBean.findByIpAddress(remoteAddr);
 			if (l != null) {
+				String regionName = com.maxmind.geoip.regionName.regionNameByCode(l.countryCode, l.region);
 				Query q = entityManager.createNamedQuery("byCountryRegionCity");
 				q.setParameter("country", l.countryName);
-				q.setParameter("region", l.region );
+				q.setParameter("region", regionName);
 				q.setParameter("city", l.city);
 				try {
 					ipBasedLocation = (IpBasedLocation) q.getSingleResult();
 				} catch (NoResultException e) {
 					ipBasedLocation = new IpBasedLocation();
 				    ipBasedLocation.setCity(l.city);
-				    ipBasedLocation.setRegion(l.region);
+				    ipBasedLocation.setRegion(regionName);
 				    ipBasedLocation.setCountry(l.countryName);
 				    entityManager.persist(ipBasedLocation);
 				}
