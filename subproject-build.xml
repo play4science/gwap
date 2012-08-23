@@ -17,6 +17,8 @@
 		<echo message="Subproject ${subproject.name}" level="info" />
         <copy todir="${subproject.war.dir}" overwrite="true">
             <fileset dir="${basedir}/view/common"/>
+        </copy>
+        <copy todir="${subproject.war.dir}" overwrite="true">
             <fileset dir="${basedir}/view/${subproject.name}"/>
         </copy>
         <copy tofile="${subproject.war.dir}/WEB-INF/classes/components.properties"
