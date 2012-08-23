@@ -15,8 +15,8 @@ error() {
 TEMPDIR=`mktemp -d --tmpdir=.`
 cd $TEMPDIR || error "Could not create temp dir"
 jar xf ../$FILE || error "Could not extract file"
-echo -e "<jboss-web>\n        <context-root>/playn-quiz</context-root>\n        <virtual-host>artigo</virtual-host>\n</jboss-web>" > WEB-INF/jboss-web.xml || error "Could not create jboss-web.xml"
+/bin/echo -e "<jboss-web>\n        <context-root>/playn-quiz</context-root>\n        <virtual-host>artigo</virtual-host>\n</jboss-web>" > WEB-INF/jboss-web.xml || error "Could not create jboss-web.xml"
 jar cf ../$FILE * || error "Could not create new archive"
 cd ..
 rm -rf $TEMPDIR
-echo "Successful"
+echo "Successfully patched archive"
