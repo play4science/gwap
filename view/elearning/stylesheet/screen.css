@@ -39,9 +39,10 @@ punktelevel							{ font-size:20px; color:#2E9AFE; backgroundcolor:#E0E0F8; }
 body                                    { padding:0px 24px 220px 24px;  repeat-x left bottom }
 
 #navLanguage                            { float:left }
-#navHeader                              { float:left }
+#navHeader                              {  }
 #search                                 { float:right }
-#logo                                   { margin:12px 0 20px 0; }
+#logo									{ float:left }
+/* #logo                                   { margin:12px 0 20px 0; } */
 #related                                { float:left; width:350px; margin-right:24px; display:inline }
 #content                                { width:500px; position:relative; margin-left:360px; margin-top:0px; }
 
@@ -52,7 +53,7 @@ body                                    { padding:0px 24px 220px 24px;  repeat-x
 #navLanguage a:hover,
 #navLanguage li.active a                { background:#b8c9e1; font-size:1.2em }
 
-#navHeader li                           { float:left; margin-right:1em }
+/*#navHeader li                           { float:left; margin-right:1em }*/
 #navHeader li a                         { font-size:1em; color:#000; font-weight:bold; text-transform:uppercase; text-decoration:none }
 
 #ad p                                   { float:left; margin-right:2em; text-transform:uppercase; font-weight:bold; font-size:.9em; padding-top:.75em }
