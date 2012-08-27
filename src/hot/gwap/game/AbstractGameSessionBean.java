@@ -119,7 +119,7 @@ public abstract class AbstractGameSessionBean implements Serializable {
 		gameRound.setScore(currentRoundScore);
 		if (currentRoundScore != null)
 			completedRoundsScore += currentRoundScore;
-		currentRoundScore = 0;
+		currentRoundScore = null;
 		entityManager.merge(gameRound);
 		entityManager.flush();
 	}
