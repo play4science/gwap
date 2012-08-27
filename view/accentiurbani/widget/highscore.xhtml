@@ -15,8 +15,8 @@
 				<f:facet name="header">
 					<h:outputText value="#{messages['score.user']}"/>
 				</f:facet>
-				<h:outputText value="#{_score.username}" rendered="#{_score.username.length() > 0}" />
-				<h:outputText value="#{messages['general.guest']}" rendered="#{_score.username.length() == 0}" />
+				<h:outputText value="#{_score.person.username}" rendered="#{_score.person.username.length() > 0}" />
+				<h:outputText value="#{messages['general.guest']}" rendered="#{_score.person.username.length() == 0}" />
 			</rich:column>
 			<rich:column width="20%" styleClass="#{_score.personId == person.id ? 'self' : null}">
 				<f:facet name="header">
