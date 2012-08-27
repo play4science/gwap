@@ -8,6 +8,17 @@
 
 package gwap.mit.admin;
 
+import gwap.model.StatementsTeaser;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.framework.EntityQuery;
 
@@ -16,9 +27,26 @@ import org.jboss.seam.framework.EntityQuery;
  */
 @Name("mitAdminStatementsTeaserList")
 public class StatementsTeaserList extends EntityQuery<StatementsTeaserList> {
-
+	
+	@In
+	private EntityManager entityManager;
+	
 	public StatementsTeaserList() {
-		setEjbql("select s from StatementsTeaser s");
+		setEjbql("select s from StatementsTeaser s order by s.publicationDate, s.id");
 	}
 	
+	public void generatePublicationDate(){
+		Query query = entityManager.createNamedQuery("statementsTeaser.orderedByPublicationDate");
+		query.setMaxResults(1);
+		Date latestPublication = ((StatementsTeaser) query.getSingleResult()).getPublicationDate();
+		Calendar calendar = GregorianCalendar.getInstance();
+		calendar.setTime(latestPublication);
+		Query query2 = entityManager.createNamedQuery("statementsTeaser.allForDateGeneration");
+		List<StatementsTeaser> statementTeasersForGeneration = query2.getResultList();
+		for(StatementsTeaser st : statementTeasersForGeneration){
+			calendar.add(Calendar.HOUR, 24*7);
+			st.setPublicationDate(calendar.getTime());
+			entityManager.persist(st);
+		}
+	}
 }

@@ -6,11 +6,12 @@
  * 
  */
 
-package gwap.widget;
+package gwap.search;
 
 import gwap.model.Person;
 import gwap.model.SearchQuery;
 import gwap.model.resource.ArtResource;
+import gwap.widget.PaginationControl;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -33,6 +34,7 @@ import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Out;
 import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.annotations.web.RequestParameter;
 import org.jboss.seam.core.Conversation;
 import org.jboss.seam.faces.Redirect;
 import org.jboss.seam.international.LocaleSelector;
@@ -43,6 +45,8 @@ import org.jboss.seam.log.Log;
 public class SolrSearchBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	
+	protected int RESULTS_PER_PAGE = 5;
 	
 	@Logger                  protected Log log;
 	@Create                  public void init()    { log.info("Creating");   }
@@ -57,8 +61,9 @@ public class SolrSearchBean implements Serializable {
 	
 	@In(create=true) @Out    protected PaginationControl paginationControl;
 	
-	protected String queryString;
-	protected Integer resultNumber;
+	@In @Out                 protected QueryBean queryBean;
+	
+	@RequestParameter        protected Integer resultNumber;
 	
 	protected SolrDocumentList results;
 
@@ -68,9 +73,11 @@ public class SolrSearchBean implements Serializable {
 	 * Override this method to change the query behaviour
 	 */
 	protected SolrQuery generateQuery() {
+		if (isQueryEmpty())
+			return null;
 		String language = localeSelector.getLanguage();
 		
-		SolrQuery solrQuery = new SolrQuery(queryString);
+		SolrQuery solrQuery = new SolrQuery(queryBean.getQueryString());
 		solrQuery.setParam("defType", "dismax");
 		String fields = "tag";
 		if (language != null && language.length() == 2)
@@ -84,9 +91,10 @@ public class SolrSearchBean implements Serializable {
 		log.info("Updating Results");
 		
 		results = null;
-		if (queryString == null || queryString.length() == 0)
-			return;
 		SolrQuery solrQuery = generateQuery();
+		if (solrQuery == null)
+			return;
+		paginationControl.setResultsPerPage(RESULTS_PER_PAGE);
 		solrQuery.setRows(paginationControl.getResultsPerPage());
 		solrQuery.setStart(paginationControl.getFirstResult());
 		try {
@@ -94,7 +102,7 @@ public class SolrSearchBean implements Serializable {
 			results = response.getResults();
 			paginationControl.setNumResults(results.getNumFound());
 			dirty = false;
-			log.info("Got #0 results for query '#1'", results.getNumFound(), queryString);
+			log.info("Got #0 results for query '#1'", results.getNumFound(), solrQuery.getQuery());
 		} catch (SolrServerException e) {
 			log.info("Could not complete query", e);
 		}
@@ -107,26 +115,16 @@ public class SolrSearchBean implements Serializable {
 			long resourceId = Long.parseLong((String) results.get(resultNumber).getFieldValue("id"));
 			resource = entityManager.find(ArtResource.class, resourceId);
 		}
-		log.info("Show solr result #0 on page #1 for query '#2' (#3)", resultNumber, paginationControl.getPageNumber(), queryString, resource);
-	}
-
-	public String getQueryString() {
-		return queryString;
-	}
-	public void setQueryString(String queryString) {
-		if (this.queryString != queryString) {
-			this.queryString = queryString;
-			paginationControl.setPageNumber(1);
-			dirty = true;
-		}
+		log.info("Show solr result #0 on page #1 for query '#2' (#3)", resultNumber, paginationControl.getPageNumber(), queryBean.getQueryString(), resource);
 	}
 	public void search() {
-		if (queryString != null && queryString.length() > 0) {
+		if (!isQueryEmpty()) {
+			String queryString = queryBean.getQueryString();
 			// End a current PageFlow if a conversation is active
 			Conversation.instance().endBeforeRedirect();
 			Redirect redirect = Redirect.instance();
 			redirect.setViewId("/solrSearchResults.xhtml");
-			redirect.setParameter("queryString", queryString);
+			queryBean.setNotEmptyParameters(redirect);
 			redirect.setConversationPropagationEnabled(false);
 			// Save Search Query
 			SearchQuery searchQuery = new SearchQuery();
@@ -145,11 +143,15 @@ public class SolrSearchBean implements Serializable {
 			redirect.execute();
 		}
 	}
+	protected boolean isQueryEmpty() {
+		return queryBean.getQueryString() == null || queryBean.getQueryString().length() == 0;
+	}
 	public Integer getPageNumber() {
 		return paginationControl.getPageNumber();
 	}
+	@RequestParameter
 	public void setPageNumber(Integer pageNumber) {
-		if (pageNumber != paginationControl.getPageNumber()) {
+		if (pageNumber != null && !pageNumber.equals(paginationControl.getPageNumber())) {
 			paginationControl.setPageNumber(pageNumber);
 			dirty = true;
 		}

@@ -96,7 +96,7 @@ public class HighscoreBean implements Serializable {
 		query.setMaxResults(20);
 		query.setParameter("gametype", gameType);
 		List<Highscore> res = query.getResultList();
-		modifyHighscore(res);
+		modifyHighscore(res, entityManager);
 		
 		return res;
 	}
@@ -166,11 +166,11 @@ public class HighscoreBean implements Serializable {
 			}
 		}
 		
-		modifyHighscore(res);
+		modifyHighscore(res, entityManager);
 		return res;
 	}
 	
-	private void modifyHighscore(List<Highscore> highscoreList) {
+	public static void modifyHighscore(List<Highscore> highscoreList, EntityManager entityManager) {
 		Query query = entityManager.createNamedQuery("person.byId");
 		for (Highscore highscore : highscoreList) {
 			if (highscore.getPersonId() != null) {

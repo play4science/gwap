@@ -11,6 +11,11 @@
    <!-- @@subproject03@@ -->
    <!-- @@subproject04@@ -->
    <!-- @@subproject05@@ -->
+   <!-- @@subproject01.additional@@ -->
+   <!-- @@subproject02.additional@@ -->
+   <!-- @@subproject03.additional@@ -->
+   <!-- @@subproject04.additional@@ -->
+   <!-- @@subproject05.additional@@ -->
    
    <module>
       <ejb>GWAP.jar</ejb>

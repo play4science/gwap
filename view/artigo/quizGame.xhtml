@@ -1,5 +1,4 @@
-<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
     xmlns:s="http://jboss.com/products/seam/taglib"
     xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -11,15 +10,17 @@
 
     <ui:define name="body">
 		<div id="related">
-			<ui:include src="/layout/menu.xhtml"/>
+			<ui:include src="layout/logo.xhtml" />
+			<ui:include src="layout/mainMenuOnly.xhtml" />
+			<ul id="navSub" />
 		</div>
 
 		<div id="content">
-			<h2><h:outputText value="#{messages['impressum.title']}" /></h2>
-			<h:outputText value="#{messages['impressum.text']}" escape="false" />
+			<iframe src="../playn-quiz/Quiz.html"
+				width="800" height="615" name="Woelfflin-Quiz" scrolling="no" marginwidth="0px" marginheigth="0px" frameborder="0" align="top"></iframe>
 		</div>
-		 
-		<br class="clear" />
 		
+        <br class="clear" />
     </ui:define>
 </ui:composition>
+

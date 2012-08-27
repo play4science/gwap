@@ -5,12 +5,32 @@
 	<condition property="subproject.defined">
 		<not><matches string="${subproject.name}" pattern="\$\{subproject[0-9]+}"/></not>
 	</condition>
+	<condition property="jar-resources.dir.exists">
+		<and>
+			<available file="${basedir}/resources/${subproject.name}/jar-resources" type="dir"/>
+			<istrue value="${subproject.defined}" />
+		</and>
+	</condition>
+	<condition property="additional-wars.dir.exists">
+		<and>
+			<available file="${basedir}/resources/${subproject.name}/WARs" type="dir"/>
+			<istrue value="${subproject.defined}" />
+		</and>
+	</condition>
+	
+	<target name="jar" if="jar-resources.dir.exists" description="Adds additional resources to jar">
+		<copy todir="${jar.dir}">
+			<fileset dir="${basedir}/resources/${subproject.name}/jar-resources"/>
+		</copy>
+	</target>
 	
 	<target name="war" if="subproject.defined"
 		description="Builds a single WAR in a staging directory">
 		<echo message="Subproject ${subproject.name}" level="info" />
         <copy todir="${subproject.war.dir}" overwrite="true">
             <fileset dir="${basedir}/view/common"/>
+        </copy>
+        <copy todir="${subproject.war.dir}" overwrite="true">
             <fileset dir="${basedir}/view/${subproject.name}"/>
         </copy>
         <copy tofile="${subproject.war.dir}/WEB-INF/classes/components.properties"
@@ -114,6 +134,15 @@
 		<echo message="Subproject ${subproject.name}" level="info" />
 		<copy todir="${ear.deploy.dir}/${subproject.name}.war">
 		    <fileset dir="${subproject.war.dir}"/>
+		</copy>
+		<antcall target="explode-additional-wars" inheritall="true"/>
+	</target>
+	
+	<target name="explode-additional-wars" if="additional-wars.dir.exists">
+		<copy todir="${ear.deploy.dir}" failonerror="no">
+			<fileset dir="${basedir}/resources/${subproject.name}/WARs">
+				<include name="*.war"/>
+			</fileset>
 		</copy>
 	</target>
 	

@@ -11,17 +11,17 @@
 	<ui:include src="mainMenuOnly.xhtml" />
     <s:fragment rendered="#{!languageBean.languageChangeDisabled}">
     <div id="navSub">
-    	<h1><h:outputText value="#{messages['menu.games']}" /></h1>
-	    <ul>
-	    <!-- 
-		   	<li>
-	   		   	<s:link id="menuTaggingId" 
-	   		   	        value="Tagging"
-	   		   	        view="/tagging.xhtml" 
+    	<h1><h:outputText value="#{messages['menu.search']}" /></h1>
+	    <ul style="margin-bottom: 2em">
+	    	<li>
+	   		   	<s:link value="#{messages['menu.search.detailedSearch']}"
+	   		   	        view="/detailedSearch.xhtml" 
    		   	        	propagation="none"
 	   		   	        />
-	   		</li>
-	     -->
+	    	</li>
+	    </ul>
+    	<h1><h:outputText value="#{messages['menu.games']}" /></h1>
+	    <ul>
 		   	<li>
 	   		   	<s:link id="menuTaggingGameId" 
 	   		   	        value="#{messages['menu.game.tagging']}"
@@ -50,6 +50,16 @@
 	   		   		<f:param name="selectedTab" value="karido"/>
 	   		   	</s:link>
    			</li>
+   			<s:fragment rendered="#{localeSelector.language == 'de'}">
+   			<li>
+	   		   	<s:link id="menuQuizGameId" 
+	   		   	        value="#{messages['menu.game.quiz']}"
+	   		   	        view="/quizGameBrowserTest.html" 
+   		   	        	propagation="none"
+	   		   	        />
+	   		   	<span class="beta">beta</span>
+	   		</li>
+	   		</s:fragment>
    			<s:fragment rendered="#{s:hasPermission('tagatag', 'test')}"> 
     			<li>
 	   		   		<s:link id="menuTagATagGameId" 
@@ -78,9 +88,7 @@
                 	view="/combino.xhtml"
 					value="#{messages['game.gwapGameCombine']}"
 					propagation="none"/>
-                <s:link view="/about.xhtml" styleClass="helpLink" propagation="none">
-               		<f:param name="selectedTab" value="combino"/>
-              	</s:link>
+				<span class="beta">beta</span>
 			</li>
 			</s:fragment>
 <!--  

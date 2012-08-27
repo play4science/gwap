@@ -5,8 +5,6 @@
 
 	<begin-conversation join="true"/>
 
-	<param name="queryString" value="#{solrSearchBean.queryString}"/>
-	<param name="pageNumber" value="#{solrSearchBean.pageNumber}"/>
-	<param name="resultNumber" value="#{solrSearchBean.resultNumber}"/>
+	<param name="queryString" value="#{queryBean.queryString}" />
 
 </page>

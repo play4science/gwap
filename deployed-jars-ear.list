@@ -29,3 +29,6 @@ jaxrs-api.jar
 resteasy-jaxrs.jar
 jboss-seam-resteasy.jar
 gson-2.1.jar
+json_simple-1.1.jar
+guava.jar
+
