@@ -23,6 +23,9 @@
         	<li>
         		<a href="http://blog.metropolitalia.org"><h:outputText value="#{messages['menu.blog']}" /></a>
         	</li>
+			<!-- <li>
+        		<s:link view="/highscore.xhtml" value="#{messages['menu.highscore']}"/>
+        	</li> -->
         	<s:fragment rendered="#{identity.loggedIn}">
 				<li>
 		        	<s:link view="/bets.xhtml" value="#{messages['menu.bets']}" propagation="none" includePageParams="false"/>
@@ -43,7 +46,7 @@
 		<s:fragment rendered="#{!hideSubmenu}">
 		    <div id="search">  	
 				<h:form>
-					<h:inputText value="#{mitSearchBean.queryString}" id="searchField" required="true" placeholder="#{messages['menu.search.placeholder']}" />
+					<h:inputText value="#{queryBean.queryString}" id="searchField" required="true" placeholder="#{messages['menu.search.placeholder']}" />
 					<h:commandButton id="resourceSearch-submit"
 					                   type="submit"
 					                   action="#{mitSearchBean.search()}"

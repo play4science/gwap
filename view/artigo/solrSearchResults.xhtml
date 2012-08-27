@@ -21,41 +21,11 @@
 				<h:outputText value="#{messages['resourceSearch.noResults']}" rendered="#{solrSearchBean.emptyResult}"/>
 				<h:form>
 					<p4s:pagination viewId="/solrSearchResults.xhtml" style="margin:0 0 10px 0;"/>
-					<rich:dataTable id="resultsList"
-					               value="#{solrSearchBean.results}"
-					               var="_doc"
-					               rendered="#{!solrSearchBean.emptyResult}"
-					               columnClasses="noBorder"
-					               style="border: none; "
-					               >
-					    <rich:column styleClass="resultListImage">
-						<s:link view="/solrSearchResultsShowSingle.xhtml" propagation="join">
-							<h:graphicImage value="#{imageAccessBean.getInstance().getResourceUrl(_doc.getFieldValue('imagepath'))}"
-											alt=""
-											height="150px" />
-							<f:param name="resultNumber" value="#{solrSearchBean.results.indexOf(_doc)}"/>
-							<f:param name="queryString" value="#{solrSearchBean.queryString}"/>
-						</s:link>
-					    </rich:column>
-					    <rich:column>
-							<dt><h:outputText value="#{messages['image.artist']}" /></dt>
-							<dd><h:outputText value="#{empty(_doc.getFieldValue('artist')) ? messages['image.artist.anonymous'] : _doc.getFieldValue('artist')}"/>
-							</dd>
-							<dt><h:outputText value="#{messages['image.title']}" /></dt>
-							<dd><h:outputText value="#{empty(_doc.getFieldValue('title')) ? messages['image.title.unknown'] : _doc.getFieldValue('title')[0]}" />
-							</dd>
-							<dt><h:outputText value="#{messages['image.location']}" /></dt>
-							<dd>
-								<h:outputText value="#{_doc.getFieldValue('location')} / #{_doc.getFieldValue('institution')}" rendered="#{!empty(_doc.getFieldValue('location')) and !empty(_doc.getFieldValue('institution'))}"/>
-								<h:outputText value="#{_doc.getFieldValue('location')}" rendered="#{!empty(_doc.getFieldValue('location')) and empty(_doc.getFieldValue('institution'))}"/>
-								<h:outputText value="#{_doc.getFieldValue('institution')}" rendered="#{empty(_doc.getFieldValue('location')) and !empty(_doc.getFieldValue('institution'))}"/>
-								<h:outputText value="#{messages['image.location.unknown']}" rendered="#{empty(_doc.getFieldValue('location')) and empty(_doc.getFieldValue('institution'))}"/>
-							</dd>
-							<dt><h:outputText value="#{messages['image.dateCreated']}" /></dt>
-							<dd><h:outputText value="#{empty(_doc.getFieldValue('institution')) ? messages['image.dateCreated.unknown'] : _doc.getFieldValue('datecreated')}" />
-							</dd>
-					    </rich:column>
-					</rich:dataTable>
+					<ui:include src="/widget/searchResults.xhtml">
+						<ui:param name="results" value="#{solrSearchBean.results}" />
+						<ui:param name="queryString" value="#{queryBean.queryString}"/>
+						<ui:param name="showSingleViewId" value="/solrSearchResultsShowSingle.xhtml" />
+					</ui:include>
 					<p4s:pagination viewId="/solrSearchResults.xhtml" style="margin:10px 0 0 0;"/>
 				</h:form>
 			</div>

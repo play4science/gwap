@@ -13,6 +13,8 @@ import gwap.model.GameSession;
 import gwap.model.GameType;
 import gwap.model.Person;
 import gwap.model.action.Action;
+import gwap.model.resource.IpBasedLocation;
+import gwap.tools.IpBasedLocationBean;
 
 import java.io.Serializable;
 import java.util.Calendar;
@@ -20,6 +22,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import org.jboss.seam.annotations.Create;
@@ -29,6 +32,8 @@ import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Out;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.log.Log;
+
+import com.maxmind.geoip.Location;
 
 /**
  * This is the backing bean for one game session. It handles all actions that
@@ -46,6 +51,7 @@ public abstract class AbstractGameSessionBean implements Serializable {
 	
 	@Logger                  protected Log log;
 	@In                      protected FacesMessages facesMessages;
+	@In                      protected IpBasedLocationBean ipBasedLocationBean;
 	@In                      protected EntityManager entityManager;
 	@In(create=true)	     protected Person person;
 	@In(create=true) @Out	 protected GameSession gameSession;
@@ -59,6 +65,7 @@ public abstract class AbstractGameSessionBean implements Serializable {
 	protected Integer roundNr = 1;
 	protected int maxClientDelay = 3000; // milliseconds
 	protected Date startConsideringClientDelay;
+	@In("#{facesContext.externalContext.request.remoteAddr}") private String remoteAddr;
 	
 	public void startGameSession() {	
 		startGameSession("imageLabeler");
@@ -73,6 +80,7 @@ public abstract class AbstractGameSessionBean implements Serializable {
 		entityManager.persist(gameSession);
 		roundsLeft = gameType.getRounds();
 		completedRoundsScore = 0;
+		lookupIpBasedLocation();
 		startRound();
 	}
 
@@ -93,8 +101,15 @@ public abstract class AbstractGameSessionBean implements Serializable {
 		gameRound.setGameSession(gameSession);
 		gameSession.getGameRounds().add(gameRound);
 		entityManager.persist(gameRound);
+		loadNewResource();
 	}
 
+	/**
+	 * Needs to load a new resource before each round. It is called
+	 * in the startRound() method.
+	 */
+	protected abstract void loadNewResource();
+	
 	public void endRound() {
 		log.info("Ending round");
 		if (roundsLeft != null)
@@ -169,4 +184,36 @@ public abstract class AbstractGameSessionBean implements Serializable {
 		action.setPerson(person);
 		action.setGameRound(gameRound);
 	}
+	
+	/**
+	 * Performs a lookup of the location of the current user and saves it 
+	 * to the current gameSession;
+	 */
+	public void lookupIpBasedLocation() {
+    	try {
+    		IpBasedLocation ipBasedLocation = null;
+			Location l = ipBasedLocationBean.findByIpAddress(remoteAddr);
+			if (l != null) {
+				String regionName = com.maxmind.geoip.regionName.regionNameByCode(l.countryCode, l.region);
+				Query q = entityManager.createNamedQuery("byCountryRegionCity");
+				q.setParameter("country", l.countryName);
+				q.setParameter("region", regionName);
+				q.setParameter("city", l.city);
+				try {
+					ipBasedLocation = (IpBasedLocation) q.getSingleResult();
+				} catch (NoResultException e) {
+					ipBasedLocation = new IpBasedLocation();
+				    ipBasedLocation.setCity(l.city);
+				    ipBasedLocation.setRegion(regionName);
+				    ipBasedLocation.setCountry(l.countryName);
+				    entityManager.persist(ipBasedLocation);
+				}
+				log.info("IpBasedLocation set to #0", ipBasedLocation);
+				gameSession.setIpBasedLocation(ipBasedLocation);
+			}
+		}
+		catch (Throwable e) {
+		   log.info(e.toString());
+		}
+    }
 }

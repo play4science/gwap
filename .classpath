@@ -67,5 +67,8 @@
 	<classpathentry kind="lib" path="lib/jaxrs-api.jar"/>
 	<classpathentry kind="lib" path="lib/apache-solr-solrj-3.6.0.jar"/>
 	<classpathentry kind="lib" path="lib/gson-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-io.jar"/>
+	<classpathentry kind="lib" path="lib/json_simple-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/guava.jar"/>
 	<classpathentry kind="output" path="resources/WEB-INF/classes"/>
 </classpath>

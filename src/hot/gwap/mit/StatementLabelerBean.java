@@ -49,9 +49,13 @@ public class StatementLabelerBean extends AbstractGameSessionBean {
 	@Override
 	public void startRound() {
 		super.startRound();
-		statement = mitStatementBean.updateStatement();
 		gameRound.getResources().add(statement);
 		locationId = null;
+	}
+	
+	@Override
+	protected void loadNewResource() {
+		statement = mitStatementBean.updateStatement();		
 	}
 	
 	public void assignLocation() {

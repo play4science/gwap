@@ -238,8 +238,10 @@
                 <include name="seam.properties"/>
                 <include name="*.drl"/>
                 <include name="META-INF/*.drl"/>
+                <include name="*.dat"/>
             </fileset>
         </copy>
+    	<antcall target="subproject" inheritrefs="true"><param name="target" value="jar"/></antcall>
         <copy todir="${jar.dir}/META-INF">
             <fileset dir="${basedir}/resources/META-INF">
                 <include name="ejb-jar.xml"/>

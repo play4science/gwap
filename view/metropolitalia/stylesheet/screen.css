@@ -142,10 +142,6 @@ a.helpLink                              { background:url(../img/help_icon_altern
 .popup .imageDescription li             { background:#9dadc4 }
 
 .coins                                  { background: url('../img/coins.png') top left no-repeat; padding-left: 20px; }
-table.listingTable                      { width: 100%; border-bottom: 1px solid silver; padding-bottom: 0.5em; }
-table.statementListTable                { border: none !important; }
-table.statementListTable td.rich-table-cell  { border-left: none !important; border-right: none !important; border-top: none !important; border-bottom: 1px solid silver !important; }
-
 
 
 /* = StatementOverview
@@ -239,26 +235,19 @@ dd                                      { margin: 0 0 5px 10px; }
 
 /* =Table
 -----------------------------------------------------------------------------*/
-#highscoreTableDaily,
-#highscoreTable                         { border-top:4px solid #000; border-bottom:2px solid #000; border-left:none; border-right:none; width:375px; padding-bottom:10px; margin-bottom:10px; background:#fff }
-#highscoreTableDaily th,
-#highscoreTable th                      { border-left:none; border-right:none; text-align:left; padding:3px 0 20px 0; padding:3px 2px 20px 2px; font-size:12px; }
-#highscoreTableDaily td,
-#highscoreTable td                      { border-top:1px solid #000; border-left:none; border-right:none; padding:5px 2px; font-size:12px;  }
-#highscoreTableDaily tr,
-#highscoreTable tr                      { background:#fff }         
-#highscoreTableDaily tr.active,
-#highscoreTable tr.active               { background:#b9c9e2 }
-#highscoreTableDaily .rich-table-subheadercell,
-#highscoreTable .rich-table-subheadercell
-	                                      { background-image:none }
 .ranking                                { text-align:right }
 .ranking a                              { background:url(../img/arrowSmall.gif) no-repeat left center; font-size:1em; text-transform:uppercase; color:#000; font-weight:bold; text-decoration:none; line-height:22px; padding:1px 0 1px 20px }  
 
-.rich-table                             { border-top: 1px solid silver; border-left: 1px solid silver; }
-.rich-table-subheader                   { background-color: #edf1f4; }
-.rich-table-subheadercell,
-.rich-table-cell                        { border-bottom: 1px solid silver; border-right: 1px solid silver; }
+.listingTable                           { width: 100%; border-bottom: 1px solid silver; padding-bottom: 0.5em; }
+.statementListTable                     { border: none !important; }
+.statementListTable td.rich-table-cell,
+.rich-table td.rich-table-cell,
+.rich-table th.rich-table-subheadercell { border-left: none !important; border-right: none !important; border-top: none !important; border-bottom: 1px solid silver !important; }
+.rich-table th.rich-table-subheadercell { padding-bottom: 5px; }
+
+.highscoreTable                         { background-color: white; border-right: 1px solid silver; border-left: 1px solid silver; border-top: 1px solid silver; }
+.highscoreTable td, .highscoreTable th  { padding: 0 5px 0 2px; text-align: left;}
+.highscoreTable td.self	                { font-weight: bold; }
 
 /* =About
 -----------------------------------------------------------------------------*/

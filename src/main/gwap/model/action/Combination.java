@@ -33,7 +33,7 @@ import org.jboss.seam.annotations.Scope;
 			query = "select tag from Combination c " +
 					"left join c.combinedTag tag " +
 					"where c.resource=:resource and c.language=:language " +
-					"group by tag.id, tag.value " +
+					"group by tag.id, tag.value, tag.firstTag.id, tag.secondTag.id " +
 					"order by random()"),
 	@NamedQuery(
 			name = "combination.combinedTagsSimpleByLanguage",

@@ -1,0 +1,38 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:p4s="http://play4science.org/facelets"
+    template="layout/template.xhtml">
+
+    <ui:define name="body">
+		<div id="related">
+			<ui:include src="layout/logo.xhtml" />
+			<ui:include src="layout/menu.xhtml" />
+			<ui:include src="widget/detailedSearch.xhtml" />
+		</div>
+
+		<div id="content">
+			<div class="images">
+				<h:outputText value="#{messages['resourceSearch.noResults']}" rendered="#{detailedSearch.emptyResult}"/>
+				<h:form>
+					<p4s:pagination viewId="/detailedSearchResults.xhtml" style="margin:0 0 10px 0;"/>
+					<ui:include src="/widget/searchResults.xhtml">
+						<ui:param name="results" value="#{detailedSearch.results}" />
+						<ui:param name="queryString" value="#{null}"/>
+						<ui:param name="showSingleViewId" value="/detailedSearchResultsShowSingle.xhtml" />
+						<ui:param name="forDetailedSearch" value="true"/>
+					</ui:include>
+					<p4s:pagination viewId="/detailedSearchResults.xhtml" style="margin:10px 0 0 0;"/>
+				</h:form>
+			</div>
+		</div>
+		
+        <br class="clear" />
+    </ui:define>
+</ui:composition>

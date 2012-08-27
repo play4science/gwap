@@ -3,9 +3,9 @@
     <dataSource jndiName="GWAPDatasource" type="JdbcDataSource" user="" password="" readOnly="true" />
     <document name="dev">
         <entity name="artresource"
-        		query="select id, datecreated, location, institution from artresource where enabled=true"
+        		query="select a.id as id, datecreated, location, institution from artresource a join tagging t on a.id=t.resource_id where enabled=true group by a.id, datecreated, location, institution having count(*) >= 50"
         		deltaImportQuery="select id, datecreated, location, institution from artresource where id=${dataimporter.delta.id} and enabled=true"
-                deltaQuery="select gr.resources_id as id from gameround_resource gr join gameround r on gr.gamerounds_id=r.id where r.startdate > '${dataimporter.last_index_time}'"
+                deltaQuery="select gr.resources_id as id from gameround_resource gr join gameround r on gr.gamerounds_id=r.id join tagging t on t.resource_id=gr.resources_id where r.startdate > '${dataimporter.last_index_time}' group by gr.resources_id having count(*) >= 50"
                 deletedPkQuery="select id from artresource where enabled=false">
 
 			<!-- If the column names are the same as the field names, no field entries have to be specified for these -->
@@ -21,6 +21,13 @@
 
             <entity name="imagepath"
             		query="select s.url || a.path as imagepath from artresource a join source s on a.source_id=s.id where a.id='${artresource.id}'"/>
+
+			<entity name="location_institution_1"
+					query="select location || ' / ' || institution as location_institution from artresource where location != '' and institution != '' and id=${artresource.id}"/>
+			<entity name="location_institution_2"
+					query="select location as location_institution from artresource where location != '' and (institution is null or institution = '') and id=${artresource.id}"/>
+			<entity name="location_institution_1"
+					query="select institution as location_institution from artresource where (location is null or location = '') and institution != '' and id=${artresource.id}"/>
 
             <entity name="tag"
             		query="select name as tag from tag t join tagging tg on t.id=tg.tag_id where tg.resource_id=${artresource.id}  and exists (select tg2.id from tagging tg2 where tg2.resource_id = ${artresource.id} and tg2.tag_id = tg.tag_id and tg2.id != tg.id)"/>

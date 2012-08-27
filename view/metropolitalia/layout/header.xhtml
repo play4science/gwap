@@ -18,6 +18,11 @@
     		   	<s:link id="headerDescriptionId" view="/about.xhtml" value="#{messages['menu.description']}" propagation="none" includePageParams="false"/>
 			</li>
 			<li>
+				<s:link view="/about.xhtml" value="#{messages['menu.aboutUs']}" propagation="none">
+    		   		<f:param name="selectedTab" value="project"/>
+    		   	</s:link>
+        	</li>
+			<li>
     		   	<s:link view="/about.xhtml" value="#{messages['menu.feedback']}" propagation="none">
     		   		<f:param name="selectedTab" value="contact"/>
     		   	</s:link>

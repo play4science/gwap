@@ -4,6 +4,9 @@
         <wb-resource deploy-path="/" source-path="/resources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/test-build"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/hot"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test"/>
         <property name="context-root" value="GWAP"/>
         <property name="java-output-path" value="/GWAP/resources/WEB-INF/classes"/>
     </wb-module>
