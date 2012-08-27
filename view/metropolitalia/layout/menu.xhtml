@@ -23,9 +23,9 @@
         	<li>
         		<a href="http://blog.metropolitalia.org"><h:outputText value="#{messages['menu.blog']}" /></a>
         	</li>
-			<li>
+			<!-- <li>
         		<s:link view="/highscore.xhtml" value="#{messages['menu.highscore']}"/>
-        	</li>
+        	</li> -->
         	<s:fragment rendered="#{identity.loggedIn}">
 				<li>
 		        	<s:link view="/bets.xhtml" value="#{messages['menu.bets']}" propagation="none" includePageParams="false"/>
