@@ -8,6 +8,7 @@
 
 package gwap.game;
 
+import gwap.ResourceBean;
 import gwap.game.CombinedTagBean.MatchType;
 import gwap.model.Tag;
 import gwap.model.action.Combination;
@@ -40,6 +41,7 @@ public class CombineGameSessionBean extends AbstractGameSessionBean {
 	public static final int DIRECT_MATCH_SCORE = 25;
 
 	@In(create=true) @Out		private ArtResource resource;
+	@In                         private ResourceBean resourceBean;
 	@SuppressWarnings("unused")
 	@In(create=true) @Out		private CombineOpponentBean combineOpponentBean;
 	@Out						protected List<Tag> unselectedTags = new ArrayList<Tag>();
@@ -57,6 +59,11 @@ public class CombineGameSessionBean extends AbstractGameSessionBean {
 	public void startRound() {
 		super.startRound();
 		forceExpired = false;
+	}
+	
+	@Override
+	protected void loadNewResource() {
+		resourceBean.updateResource();
 	}
 	
 	@Override

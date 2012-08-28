@@ -37,7 +37,17 @@
 			        </f:facet>
 			        <h:outputText value="#{_resource.teaser}"/>
 			    </h:column>
+			    <h:column>
+			    	<f:facet name="header">
+			    		<h:outputText value="#{messages['admin.statements.createDate']}" />
+			    	</f:facet>
+			    	<h:outputText value="#{_resource.publicationDate}" />
+			    	
+			    </h:column>
 			</h:dataTable>
+			<h:form>
+				<h:commandButton value="generate date" action="#{mitAdminStatementsTeaserList.generatePublicationDate()}" />
+			</h:form>
 		</div>
         <br class="clear" />
     </ui:define>

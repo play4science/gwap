@@ -1,0 +1,41 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j">
+
+	<h1 id="detailedSearchFormHeader"><h:outputText value="#{messages['menu.search.detailedSearch']}" /></h1>
+    <h:form id="detailedSearchForm">
+	    <h:panelGrid columns="1">
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label"><h:outputText value="#{messages['general.tags']}" /></ui:define>
+				<h:inputText id="tags" value="#{queryBean.tags}"/>
+			</s:decorate>
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label"><h:outputText value="#{messages['image.artist']}" /></ui:define>
+				<h:inputText id="artist" value="#{queryBean.artist}"/>
+			</s:decorate>
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label"><h:outputText value="#{messages['image.title']}" /></ui:define>
+				<h:inputText id="title" value="#{queryBean.title}"/>
+			</s:decorate>
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label"><h:outputText value="#{messages['image.location']}" /></ui:define>
+				<h:inputText id="location" value="#{queryBean.location}"/>
+			</s:decorate>
+			<s:decorate template="/layout/edit.xhtml">
+				<ui:define name="label"><h:outputText value="#{messages['image.dateYear']}" /></ui:define>
+				<h:inputText id="year" value="#{queryBean.year}"/>
+			</s:decorate>
+	    	<div>
+				<h:commandButton id="search" action="#{detailedSearch.search()}" value="#{messages['menu.search']}">
+					<s:defaultAction />
+				</h:commandButton>
+	    	</div>
+    	</h:panelGrid>
+    </h:form>
+</ui:composition>

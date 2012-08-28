@@ -161,30 +161,27 @@ public class PokerScoring {
 	}
 	
 	public int getPersonScoreSum(Person person) {
-		// TODO Put into HQL
-		if (person == null)
+		if (person == null || person.getId() == null)
 			return 0;
 		try {
 			person = entityManager.find(Person.class, person.getId());
 
+			// Calculate scores for bets not yet having a score
 			List<Bet> bets = (List<Bet>)entityManager.createNamedQuery("bet.byPersonWithoutScore").setParameter("person", person).getResultList();
 			for (Bet bet: bets) {
 				updateScoreForBet(bet);
 			}
 
-			// Score over all actions is too slow because of the many subtables, therefore search for each table individually
-			Number locationAssignmentScore = (Number) entityManager.createNamedQuery("locationAssignment.scoreSumByPerson").setParameter("person", person).getSingleResult();
-			Number statementCharacterizationScore = (Number) entityManager.createNamedQuery("statementCharacterization.scoreSumByPerson").setParameter("person", person).getSingleResult();
-			Number statementAnnotationScore = (Number) entityManager.createNamedQuery("statementAnnotation.scoreSumByPerson").setParameter("person", person).getSingleResult();
-			int actionScore = numberToInt(locationAssignmentScore)+numberToInt(statementCharacterizationScore)+numberToInt(statementAnnotationScore);
-			
-			Number statementsCreatedCount = (Number) entityManager.createNamedQuery("statement.countByCreator").setParameter("person", person).getSingleResult();
-			int statementsCreatedScore = numberToInt(statementsCreatedCount) * STATEMENT_CREATED;
-			int score = actionScore + statementsCreatedScore;
-//			log.info("Person's #4 score = #0 (#1-#2+#3)", score, actionScore, statementsMinusScore, statementsPlusScore, person);
-			return score;
+			Query q = entityManager.createNamedQuery("highscore.mit.bySinglePerson");
+			q.setParameter("gametype", "mitRecognize");
+			q.setParameter("person", person);
+			int actionScore = numberToInt((Number) ((gwap.model.Highscore)q.getSingleResult()).getScore());
+
+			return actionScore;
+		} catch (NoResultException nre) {
+			return 0;
 		} catch (Exception e) {
-			log.warn("Could not calculate person score sum");
+			log.warn("Could not calculate person score sum", e);
 			return 0;
 		}
 	}

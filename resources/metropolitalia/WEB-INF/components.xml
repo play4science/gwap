@@ -104,6 +104,7 @@
 		value="metropolitalia"
 	/>
 	
+	
 	<component name="solrServerBean">
 		<property name="solrUsername">@solrUsername@</property>
 		<property name="solrPassword">@solrPassword@</property>

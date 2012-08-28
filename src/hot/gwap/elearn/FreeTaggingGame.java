@@ -53,6 +53,11 @@ public class FreeTaggingGame extends AbstractGameSessionBean {
 		startGameSession("elearnFreeTaggingGame");
 	}
 	
+	@Override
+	protected void loadNewResource() {
+		term = elearnTermBean.updateTerm();
+	}
+	
 	public String recommendTag() {
 		Tagging tagging = taggingBean.recommendTag(term, false);
 		if (tagging.getTag() == null) {

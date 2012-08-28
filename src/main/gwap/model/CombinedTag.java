@@ -22,9 +22,10 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 
 /**
+ * Attention: when adding attributes, modify the named query 'combination.randomCombinedTagsByResourceAndLanguage'
+ * 
  * @author Florian Störkle
  */
-
 @Entity
 @Name("combinedTag")
 @Scope(ScopeType.EVENT)

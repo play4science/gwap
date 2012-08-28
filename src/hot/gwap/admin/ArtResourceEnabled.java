@@ -62,11 +62,18 @@ public class ArtResourceEnabled implements Serializable {
 			// Check if file exists
 			boolean enabled = new File(r.getSource().getUrl() + r.getPath()).canRead();
 			logDisabled(enabled, "file does not exist", r.getId());
-			
+
+			// Skipped by staff
+			if (enabled && (r.getSkip() != null && r.getSkip())) {
+				enabled = false;
+				logDisabled(enabled, "skipped by staff", r.getId());
+			}
+
 			if (enabled) {
 				// Creator easement
 				enabled = (r.getEasement() != null) && r.getEasement();
 				logEnabled(enabled, "easement", r.getId());
+				
 				// Date check for author
 				if (!enabled) {
 					Person artist = r.getArtist();

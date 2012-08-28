@@ -108,6 +108,11 @@ public class Termina extends AbstractGameSessionBean {
 		nextGameConfiguration = GameConfiguration.deepCopy(gameConfiguration);
 	}
 
+	@Override
+	protected void loadNewResource() {
+		// this is done in the other two methods		
+	}
+	
 	public void startRoundPalette() {
 		startRound();
 		

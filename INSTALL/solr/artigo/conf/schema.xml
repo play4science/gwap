@@ -933,6 +933,8 @@
 
    <field name="location" type="text_general" indexed="true" stored="true"  multiValued="false"/>
    <field name="institution" type="text_general" indexed="true" stored="true" multiValued="false" />
+   
+   <field name="location_institution" type="text_general" indexed="true" stored="true" multiValued="false"/>
 
    <field name="teaser" type="text_general" indexed="true" stored="true" multiValued="true" />
 

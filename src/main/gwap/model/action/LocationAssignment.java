@@ -21,7 +21,7 @@ import org.jboss.seam.annotations.Scope;
 
 @NamedQueries({
 	@NamedQuery(name="locationAssignment.scoreSumByPerson",
-			query="select sum(la.score) from LocationAssignment la where la.person = :person"),
+			query="select sum(la.score) from LocationAssignment la where (la.class = Bet and la.revisedBet is null or la.class=LocationAssignment) and la.person = :person"),
 	@NamedQuery(name="locationAssignment.countByResourceAndLocation",
 			query="select count(*) from LocationAssignment la where la.resource = :resource and la.location = :location and la.notEvaluated = false"),
 	@NamedQuery(name="locationAssignment.countByResource",

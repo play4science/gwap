@@ -8,6 +8,8 @@
 
 package gwap.model;
 
+import gwap.model.resource.IpBasedLocation;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +44,7 @@ public class GameSession implements Serializable {
 
 	@ManyToOne								private GameType gameType;
 	@OneToMany(mappedBy="gameSession")		private List<GameRound> gameRounds = new ArrayList<GameRound>();
+	@ManyToOne                              private IpBasedLocation ipBasedLocation; 
 
 	public List<GameRound> getGameRounds() {
 		return gameRounds;
@@ -77,6 +80,14 @@ public class GameSession implements Serializable {
 
 	public void setExternalSessionId(String externalSessionId) {
 		this.externalSessionId = externalSessionId;
+	}
+
+	public IpBasedLocation getIpBasedLocation() {
+		return ipBasedLocation;
+	}
+
+	public void setIpBasedLocation(IpBasedLocation ipBasedLocation) {
+		this.ipBasedLocation = ipBasedLocation;
 	}
 
 }

@@ -11,6 +11,7 @@ package gwap.action;
 import gwap.model.Tag;
 import gwap.model.action.Tagging;
 import gwap.model.action.TaggingCorrection;
+import gwap.model.resource.ArtResource;
 import gwap.model.resource.Resource;
 import gwap.tools.TagSemantics;
 import gwap.wrapper.MatchingTag;
@@ -116,6 +117,14 @@ public class TaggingBean extends AbstractTaggingBean<Tagging> {
 				return tag;
 		}
 		return null;
+	}
+	
+	public void skipResource() {
+		if (resource instanceof ArtResource) {
+			((ArtResource) resource).setSkip(true);
+			resource.setEnabled(false);
+			entityManager.flush();
+		}
 	}
 
 }
