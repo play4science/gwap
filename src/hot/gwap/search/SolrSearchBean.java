@@ -47,7 +47,7 @@ public class SolrSearchBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	private static final long leastResultsForCustomGame = 5L;
+	private static final long leastResultsForCustomGame = 100L;
 	
 	protected int RESULTS_PER_PAGE = 5;
 	
