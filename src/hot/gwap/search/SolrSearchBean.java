@@ -47,6 +47,8 @@ public class SolrSearchBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
+	private static final long leastResultsForCustomGame = 5L;
+	
 	protected int RESULTS_PER_PAGE = 5;
 	
 	@Logger                  protected Log log;
@@ -174,6 +176,10 @@ public class SolrSearchBean implements Serializable {
 	public void setResultNumber(Integer resultNumber) {
 		this.resultNumber = resultNumber;
 	}
+	public boolean customGameAllowed() {
+		return results.getNumFound() >= leastResultsForCustomGame;
+	}
+	
 	public String useQueryAsSource() {
 		SolrQuery query = generateQuery();
 		customSourceBean.setCustomSearch(query);

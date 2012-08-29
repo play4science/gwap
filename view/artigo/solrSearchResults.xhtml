@@ -28,8 +28,9 @@
 					</ui:include>
 					<p4s:pagination viewId="/solrSearchResults.xhtml" style="margin:10px 0 0 0;"/>
 					
-					<h:commandButton value="#{messages['artigo.game.searchAsSource']}" 
-									 action="#{solrSearchBean.useQueryAsSource()}" />
+					<h:commandButton value="#{messages['game.imageLabeler.playWithImages']}" 
+									 action="#{solrSearchBean.useQueryAsSource()}" 
+									 rendered="#{solrSearchBean.customGameAllowed()}" />
 				</h:form>				
 			</div>
 		</div>

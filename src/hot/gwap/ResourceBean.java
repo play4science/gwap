@@ -111,7 +111,7 @@ public class ResourceBean implements Serializable {
 	}
 	
 	private void updateResourceById(Long resourceId) {
-		log.info("Updating resource by id");
+		log.info("Updating resource by id from DB");
 		Query query = entityManager.createNamedQuery("artResource.byId");
 		query.setParameter("id", resourceId);
 		resource = (ArtResource) query.getSingleResult();
@@ -122,7 +122,7 @@ public class ResourceBean implements Serializable {
 	 * (Hence, search for a random description and take its resource.) 
 	 */
 	public void dailyResource() {
-		log.info("Updating daily resource");
+		log.info("Updating daily resource from DB");
 		
 		// Resources with Descriptions
 		Query query = customSourceBean.query("artResource.withTeaser");
@@ -142,34 +142,38 @@ public class ResourceBean implements Serializable {
 	}
 	
 	public void updateLeastTaggedResource() {
-		log.info("Updating Random Resource having no or only a few taggings" + (customSourceBean.getCustomized() ? " customized" : ""));
+		log.info("Updating Random Resource having no or only a few taggings" + (customSourceBean.getCustomized() ? " customized" : "") + " from DB");
 		resource = artResourceDatabaseCacheBean.getArtResource("least");
 	}
 	
 	public void updateLeastTaggedResourceWithTeaser() {
-		log.info("Updating Random Resource having no or only a few taggings and a teaser" + (customSourceBean.getCustomized() ? " customized" : ""));
+		log.info("Updating Random Resource having no or only a few taggings and a teaser" + (customSourceBean.getCustomized() ? " customized" : "")+ " from DB");
 		
 		resource = artResourceDatabaseCacheBean.getArtResource("leastWithTeaser");
 	}
 	
 	public void updateAtLeastTaggedResource() {
-		log.info("Updating Random Resource having at least a few taggings");
-		if (customSourceBean.isSearchSource())
+		if (customSourceBean.isSearchSource()) {
+			log.info("Updating Random Resource having at least a few taggings from search");
 			resource = artResourceSearchCacheBean.getArtResource(null);
-		else
+		} else {
+			log.info("Updating Random Resource having at least a few taggings from DB");
 			resource = artResourceDatabaseCacheBean.getArtResource("atLeast");
+		}
 	}
 	
 	public void updateAtLeastTaggedForCombinoResource() {
-		log.info("Updating Random Resource having at least a few taggings for combination");
-		if (customSourceBean.isSearchSource())
+		if (customSourceBean.isSearchSource()) {
+			log.info("Updating Random Resource having at least a few taggings for combination from search");
 			resource = artResourceSearchCacheBean.getArtResource(null);
-		else
+		} else {
+			log.info("Updating Random Resource having at least a few taggings for combination from DB");
 			resource = artResourceDatabaseCacheBean.getArtResource("atLeastForCombino");
+		}
 	}
 	
 	public void updateRandomResource() {
-		log.info("Updating Random Resource");
+		log.info("Updating Random Resource from DB");
 		
 		// Resources with Desciptions
 		try {
