@@ -13,6 +13,11 @@
     <div id="navSub">
     	<h1><h:outputText value="#{messages['menu.search']}" /></h1>
 	    <ul style="margin-bottom: 2em">
+   	    	<li>
+   	    		<a href="#" onclick="#{rich:element('simpleSearchForm:searchField')}.focus();new Effect.Highlight($('search'));new Effect.Shake($('search'));">
+   	    			<h:outputText value="#{messages['menu.search.simpleSearch']}" />
+   	    		</a>
+	    	</li>
 	    	<li>
 	   		   	<s:link value="#{messages['menu.search.detailedSearch']}"
 	   		   	        view="/detailedSearch.xhtml" 
