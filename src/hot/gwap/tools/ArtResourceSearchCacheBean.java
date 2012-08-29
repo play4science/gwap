@@ -10,7 +10,6 @@ package gwap.tools;
 
 import gwap.model.resource.ArtResource;
 import gwap.search.QueryBean;
-import gwap.search.SolrSearchBean;
 
 import javax.persistence.EntityManager;
 
@@ -36,13 +35,13 @@ public class ArtResourceSearchCacheBean implements ArtResourceCacheBean {
 
 	@In(create=true)         protected SolrServer solrServer;
 	@In                       protected QueryBean queryBean;
-	@In                       protected SolrSearchBean solrSearchBean;
+	@In                       protected CustomSourceBean customSourceBean;
 	@In                       private EntityManager entityManager;
 
 	private SolrDocumentList results;
 	
 	private void updateCandidates() {
-		SolrQuery solrQuery = solrSearchBean.generateQuery();
+		SolrQuery solrQuery = customSourceBean.getCustomSearch();
 		try {
 			QueryResponse response = solrServer.query(solrQuery, METHOD.POST);
 			results = response.getResults();
@@ -64,7 +63,7 @@ public class ArtResourceSearchCacheBean implements ArtResourceCacheBean {
 			updateCandidates();
 		
 		int selected = (int) (Math.random()*results.size());
-		Long id = (Long) results.get(selected).getFieldValue("id");
+		Long id = Long.parseLong(results.get(selected).getFieldValue("id").toString());
 		return entityManager.find(ArtResource.class, id);
 	}
 

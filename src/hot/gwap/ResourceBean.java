@@ -48,6 +48,7 @@ public class ResourceBean implements Serializable {
 	@In                      private FacesMessages facesMessages;
 	@In                      private EntityManager entityManager;
 	@In(create=true)         private CustomSourceBean customSourceBean;
+	@In(create=true)         private ArtResourceCacheBean artResourceSearchCacheBean;
 	@In(create=true)         private ArtResourceCacheBean artResourceDatabaseCacheBean;
 	@In(required=false)
 	@Out(required=false)     private ArtResource resource;
@@ -142,7 +143,6 @@ public class ResourceBean implements Serializable {
 	
 	public void updateLeastTaggedResource() {
 		log.info("Updating Random Resource having no or only a few taggings" + (customSourceBean.getCustomized() ? " customized" : ""));
-		
 		resource = artResourceDatabaseCacheBean.getArtResource("least");
 	}
 	
@@ -154,12 +154,18 @@ public class ResourceBean implements Serializable {
 	
 	public void updateAtLeastTaggedResource() {
 		log.info("Updating Random Resource having at least a few taggings");
-		resource = artResourceDatabaseCacheBean.getArtResource("atLeast");
+		if (customSourceBean.isSearchSource())
+			resource = artResourceSearchCacheBean.getArtResource(null);
+		else
+			resource = artResourceDatabaseCacheBean.getArtResource("atLeast");
 	}
 	
 	public void updateAtLeastTaggedForCombinoResource() {
 		log.info("Updating Random Resource having at least a few taggings for combination");
-		resource = artResourceDatabaseCacheBean.getArtResource("atLeastForCombino");
+		if (customSourceBean.isSearchSource())
+			resource = artResourceSearchCacheBean.getArtResource(null);
+		else
+			resource = artResourceDatabaseCacheBean.getArtResource("atLeastForCombino");
 	}
 	
 	public void updateRandomResource() {

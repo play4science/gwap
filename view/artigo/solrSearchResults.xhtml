@@ -27,7 +27,10 @@
 						<ui:param name="showSingleViewId" value="/solrSearchResultsShowSingle.xhtml" />
 					</ui:include>
 					<p4s:pagination viewId="/solrSearchResults.xhtml" style="margin:10px 0 0 0;"/>
-				</h:form>
+					
+					<h:commandButton value="#{messages['artigo.game.searchAsSource']}" 
+									 action="#{solrSearchBean.useQueryAsSource()}" />
+				</h:form>				
 			</div>
 		</div>
 		
