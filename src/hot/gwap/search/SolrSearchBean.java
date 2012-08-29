@@ -72,7 +72,7 @@ public class SolrSearchBean implements Serializable {
 	/**
 	 * Override this method to change the query behaviour
 	 */
-	protected SolrQuery generateQuery() {
+	public SolrQuery generateQuery() {
 		if (isQueryEmpty())
 			return null;
 		String language = localeSelector.getLanguage();

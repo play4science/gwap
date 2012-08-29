@@ -44,7 +44,7 @@ public class DetailedSearch extends SolrSearchBean {
 	protected ArtResource resource;
 	
 	@Override
-	protected SolrQuery generateQuery() {
+	public SolrQuery generateQuery() {
 		StringBuilder query = new StringBuilder();
 		
 		//FIXME: alle Lucene Special chars escapen
