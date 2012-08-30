@@ -40,7 +40,7 @@ public class CombineGameSessionBean extends AbstractGameSessionBean {
 	
 	public static final int DIRECT_MATCH_SCORE = 25;
 
-	@In(create=true) @Out		private ArtResource resource;
+	@In				    		private ArtResource resource;
 	@In                         private ResourceBean resourceBean;
 	@SuppressWarnings("unused")
 	@In(create=true) @Out		private CombineOpponentBean combineOpponentBean;
