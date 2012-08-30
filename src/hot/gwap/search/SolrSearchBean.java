@@ -11,6 +11,7 @@ package gwap.search;
 import gwap.model.Person;
 import gwap.model.SearchQuery;
 import gwap.model.resource.ArtResource;
+import gwap.tools.CustomSourceBean;
 import gwap.widget.PaginationControl;
 
 import java.io.Serializable;
@@ -46,6 +47,8 @@ public class SolrSearchBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
+	private static final long leastResultsForCustomGame = 100L;
+	
 	protected int RESULTS_PER_PAGE = 5;
 	
 	@Logger                  protected Log log;
@@ -56,6 +59,7 @@ public class SolrSearchBean implements Serializable {
 	@In(required=false)      protected Person person;
 	@Out(required=false)     protected ArtResource resource;
 	@In(create=true)         protected String platform;
+	@In(create=true)         protected CustomSourceBean customSourceBean;
 	
 	@In(create=true)         protected SolrServer solrServer;
 	
@@ -72,7 +76,7 @@ public class SolrSearchBean implements Serializable {
 	/**
 	 * Override this method to change the query behaviour
 	 */
-	protected SolrQuery generateQuery() {
+	public SolrQuery generateQuery() {
 		if (isQueryEmpty())
 			return null;
 		String language = localeSelector.getLanguage();
@@ -171,6 +175,24 @@ public class SolrSearchBean implements Serializable {
 	}
 	public void setResultNumber(Integer resultNumber) {
 		this.resultNumber = resultNumber;
+	}
+	public boolean customGameAllowed() {
+		return results.getNumFound() >= leastResultsForCustomGame;
+	}
+	
+	public String useQueryAsSource() {
+		SolrQuery query = generateQuery();
+		customSourceBean.setCustomSearch(query);
+		log.info("Using Query #0 as Source, e.g. for games.", query.toString());
+
+		// End a current PageFlow if a conversation is active
+		Conversation.instance().endBeforeRedirect();
+		Redirect redirect = Redirect.instance();
+		redirect.setViewId("/taggingGame.xhtml");
+		queryBean.setNotEmptyParameters(redirect);
+		redirect.setConversationPropagationEnabled(false);
+		
+		return "/taggingGame.xhtml";
 	}
 	
 }

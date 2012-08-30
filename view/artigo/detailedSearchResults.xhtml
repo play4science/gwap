@@ -29,6 +29,9 @@
 						<ui:param name="forDetailedSearch" value="true"/>
 					</ui:include>
 					<p4s:pagination viewId="/detailedSearchResults.xhtml" style="margin:10px 0 0 0;"/>
+					<h:commandButton value="#{messages['game.imageLabeler.playWithImages']}" 
+									 action="#{detailedSearch.useQueryAsSource()}" 
+									 rendered="#{detailedSearch.customGameAllowed()}" />
 				</h:form>
 			</div>
 		</div>

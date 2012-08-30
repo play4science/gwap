@@ -17,6 +17,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
+import org.apache.solr.client.solrj.SolrQuery;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
@@ -47,6 +48,8 @@ public class CustomSourceBean implements Serializable {
 	@In(required=false)@Out(required=false)
 	Source customSource;
 	
+	SolrQuery customSearch;
+	
 	public void setSource(String sourceName) {
 		Query query = entityManager.createNamedQuery("source.byName");
 		query.setParameter("name", sourceName);
@@ -62,6 +65,7 @@ public class CustomSourceBean implements Serializable {
 	
 	public void reset() {
 		customSource = null;
+		customSearch = null;
 		log.info("reset custom source");
 		try {
 			String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
@@ -91,5 +95,21 @@ public class CustomSourceBean implements Serializable {
 	public Source getCustomSource() {
 		return customSource;
 	}
+	
+	/**
+	 * Source is SOLR and not database
+	 */
+	public boolean isSearchSource() {
+		return customSearch != null;
+	}
+
+	public SolrQuery getCustomSearch() {
+		return customSearch;
+	}
+
+	public void setCustomSearch(SolrQuery customSearch) {
+		this.customSearch = customSearch;
+	}
+	
 	
 }
