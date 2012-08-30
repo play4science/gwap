@@ -181,6 +181,8 @@ public class SolrSearchBean implements Serializable {
 	}
 	
 	public String useQueryAsSource() {
+		if (!customGameAllowed())
+			throw new UnsupportedOperationException("Not enough results for a game");
 		SolrQuery query = generateQuery();
 		customSourceBean.setCustomSearch(query);
 		log.info("Using Query #0 as Source, e.g. for games.", query.toString());
