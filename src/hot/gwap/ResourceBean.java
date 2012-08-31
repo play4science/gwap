@@ -29,6 +29,7 @@ import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Out;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.core.Conversation;
@@ -61,6 +62,7 @@ public class ResourceBean implements Serializable {
 	 *  Make sure, that a resource cannot be played more than once by a player!
 	 */
 	@Factory("resource")
+	@Observer("updateResource")
 	public void updateResource() {
 		String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
 		if (viewId.equals("/home.xhtml")) {

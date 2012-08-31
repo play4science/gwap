@@ -26,6 +26,7 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.core.Events;
 
 @Name("taggingBean")
 @Scope(ScopeType.PAGE)
@@ -122,8 +123,10 @@ public class TaggingBean extends AbstractTaggingBean<Tagging> {
 	public void skipResource() {
 		if (resource instanceof ArtResource) {
 			((ArtResource) resource).setSkip(true);
+			log.info("Resource #0 set skip=true", resource);
 			resource.setEnabled(false);
 			entityManager.flush();
+			Events.instance().raiseEvent("updateResource");
 		}
 	}
 
