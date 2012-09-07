@@ -11,59 +11,66 @@
 
     <ui:define name="body">
 		<div id="content">
-			<s:link view="/admin/gameConfiguration.xhtml" value="New GameConfiguration" propagation="none"/>
+			<div class="contentWrapper">
 			
-			<h:outputText value="#{messages['noResourceFound']}" rendered="#{empty gameConfigurationList.resultList}" />
+				<h1>#{messages['admin.menu.gameConfigurationList']}</h1>
+				<hr class="pageTitle" /><br />
+				
+				<h:outputText value="#{messages['noResourceFound']}" rendered="#{empty gameConfigurationList.resultList}" />
 			
-			<rich:dataTable id="gameConfigurationList" value="#{gameConfigurationList.resultList}" var="_resource">
-			   <rich:column width="10px">
-			    	<s:link view="/admin/gameConfiguration.xhtml" propagation="none" value="#{messages['edit']}">
-			    		<f:param name="gameConfigurationId" value="#{_resource.id}"/>
-			    	</s:link> 
-			    </rich:column>
-			    <!-- <rich:column width="10px">
-			    	<s:link action="#{elearnTermHome.remove}" value="#{messages['delete']}">
+				<rich:dataTable id="gameConfigurationList" value="#{gameConfigurationList.resultList}" var="_resource">
+				
+			   		<rich:column width="10px">
+			    		<s:button view="/admin/gameConfiguration.xhtml" propagation="none" styleClass="buttonEdit" value="" title="#{messages['admin.menu.gameConfigurationEdit']}">
+			    			<f:param name="gameConfigurationId" value="#{_resource.id}"/>
+			    		</s:button> 
+			    	</rich:column>
+			    	
+			    	<!-- 
+			    	<rich:column width="10px">
+			    		<s:link action="#{elearnTermHome.remove}" value="#{messages['delete']}">
 			    		<f:param name="termId" value="#{_resource.id}"/>
-			    	</s:link>
-			    </rich:column> -->
-			    <rich:column width="50px">
-			        <f:facet name="header" >
-			            <h:outputText value="#{messages['admin.gameConfiguration.id']}"/>
-			        </f:facet>
-			        <h:outputText value="#{_resource.id}"/>
-			    </rich:column>
-			    <rich:column>
-			        <f:facet name="header" >
-			            <h:outputText value="#{messages['admin.gameConfiguration.topicName']}:"/>
-			        </f:facet>
-			        <h:outputText value="#{_resource.topic.name}"/>
-			    </rich:column>
-			    <rich:column>
-			        <f:facet name="header" >
-			            <h:outputText value="#{messages['admin.gameConfiguration.topicId']}:"/>
-			        </f:facet>
-			        <h:outputText value="#{_resource.topic.id}"/>
-			    </rich:column>
-			    <rich:column>
-			        <f:facet name="header" >
-			            <h:outputText value="#{messages['admin.gameConfiguration.roundDuration']}"/>
-			        </f:facet>
-			        <h:outputText value="#{_resource.roundDuration}"/>
-			    </rich:column>
-			    <rich:column>
-			        <f:facet name="header" >
-			            <h:outputText value="#{messages['admin.gameConfiguration.level']}"/>
-			        </f:facet>
-			        <h:outputText value="#{_resource.level}"/>
-			    </rich:column>
-			    <rich:column>
-			        <f:facet name="header" >
-			            <h:outputText value="#{messages['admin.gameConfiguration.bid']}"/>
-			        </f:facet>
-			        <h:outputText value="#{_resource.bid}"/>
-			    </rich:column>
-			</rich:dataTable>
+			    		</s:link>
+			    	</rich:column> 
+			    	-->
+			    	
+			    	<rich:column width="50px">
+			        	<f:facet name="header"><h:outputText value="#{messages['admin.gameConfiguration.id']}"/></f:facet>
+			        	<h:outputText value="#{_resource.id}"/>
+			    	</rich:column>
+			    	
+			    	<rich:column>
+			        	<f:facet name="header"><h:outputText value="#{messages['admin.gameConfiguration.topicName']}"/></f:facet>
+			        	<h:outputText value="#{_resource.topic.name}"/>
+			    	</rich:column>
+			    	
+			    	<rich:column>
+			        	<f:facet name="header"><h:outputText value="#{messages['admin.gameConfiguration.topicId']}"/></f:facet>
+			        	<h:outputText value="#{_resource.topic.id}"/>
+			    	</rich:column>
+			    	
+			    	<rich:column>
+			        	<f:facet name="header"><h:outputText value="#{messages['admin.gameConfiguration.roundDuration']}"/></f:facet>
+			        	<h:outputText value="#{_resource.roundDuration}"/>
+			    	</rich:column>
+			    	
+			    	<rich:column>
+			        	<f:facet name="header"><h:outputText value="#{messages['admin.gameConfiguration.level']}"/></f:facet>
+			        	<h:outputText value="#{_resource.level}"/>
+			    	</rich:column>
+			    	
+			    	<rich:column>
+			        	<f:facet name="header" ><h:outputText value="#{messages['admin.gameConfiguration.bid']}"/></f:facet>
+			        	<h:outputText value="#{_resource.bid}"/>
+			    	</rich:column>
+			    	
+				</rich:dataTable>
+				
+				<s:button view="/admin/gameConfiguration.xhtml" styleClass="buttonNew" propagation="none" value="" title="#{messages['admin.menu.gameConfigurationAdd']}"/>
+		
+			</div>
 		</div>
+		
         <br class="clear" />
     </ui:define>
 </ui:composition>

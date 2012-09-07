@@ -11,43 +11,52 @@
 
     <ui:define name="body">
 		<div id="content">
-			<s:link view="/admin/topic.xhtml" value="New topic" propagation="none"/>
+			<div class="contentWrapper">
 			
-			<h:outputText value="#{messages['admin.termAnnotations.noResourceFound']}" rendered="#{empty topicList.resultList}" />
+				<h1>#{messages['admin.menu.topicList']}</h1>
+				<hr class="pageTitle" /><br />
 			
-			<rich:dataTable id="topicList" value="#{topicList.resultList}" var="_resource">
-			   <rich:column width="10px">
-			    	<s:link view="/admin/topic.xhtml" propagation="none" value="#{messages['edit']}">
-			    		<f:param name="topicId" value="#{_resource.id}"/>
-			    	</s:link> 
-			    </rich:column>
-			    <!-- <rich:column width="10px">
-			    	<s:link action="#{elearnTermHome.remove}" value="#{messages['delete']}">
-			    		<f:param name="termId" value="#{_resource.id}"/>
-			    	</s:link>
-			    </rich:column> -->
-			    <rich:column width="50px">
-			        <f:facet name="header" >
-			            <h:outputText value="#{messages['admin.topics.id']}"/>
-			        </f:facet>
-			        <h:outputText value="#{_resource.id}"/>
-			    </rich:column>
-			    <rich:column>
-			        <f:facet name="header" >
-			            <h:outputText value="Topic name"/>
-			        </f:facet>
-			        <h:outputText value="#{_resource.name}"/>
-			    </rich:column>
-			    <rich:column>
-			        <f:facet name="header" >
-			            <h:outputText value="Term Names"/>
-			        </f:facet>
-			        <ui:repeat value="#{_resource.resources}" var="_term" varStatus="_status">
-			        	<h:outputText value="#{_term.tag.name}"/><h:outputText value=", " rendered="#{!_status.last}" />
-			        </ui:repeat>
-			    </rich:column>
-			</rich:dataTable>
+				<h:outputText value="#{messages['admin.topicAnnotations.noResourceFound']}" rendered="#{empty topicList.resultList}" />
+			
+				<rich:dataTable id="topicList" value="#{topicList.resultList}" var="_resource">
+				
+			   		<rich:column width="10px">
+			    		<s:button view="/admin/topic.xhtml" propagation="none" value="" styleClass="buttonEdit" title="#{messages['admin.menu.topicEdit']}">
+			    			<f:param name="topicId" value="#{_resource.id}"/>
+			    		</s:button> 
+			    	</rich:column>
+			    	
+			    	<!-- 
+			    	<rich:column width="10px">
+			    		<s:link action="#{elearnTermHome.remove}" value="#{messages['delete']}">
+			    			<f:param name="termId" value="#{_resource.id}"/>
+			    		</s:link>
+			    	</rich:column> 
+			    	-->
+			    	
+			    	<rich:column width="50px">
+			        	<f:facet name="header" ><h:outputText value="#{messages['admin.topic.id']}"/></f:facet>
+			        	<h:outputText value="#{_resource.id}"/>
+			    	</rich:column>
+			    	
+			    	<rich:column>
+			        	<f:facet name="header" ><h:outputText value="#{messages['admin.topic.name']}"/></f:facet>
+			        	<h:outputText value="#{_resource.name}"/>
+			    	</rich:column>
+			    	
+			    	<rich:column>
+			        	<f:facet name="header" ><h:outputText value="#{messages['admin.topic.content']}"/></f:facet>
+			        	<ui:repeat value="#{_resource.resources}" var="_term" varStatus="_status">
+			        		<h:outputText value="#{_term.tag.name}"/><h:outputText value=", " rendered="#{!_status.last}" />
+			        	</ui:repeat>
+			    	</rich:column>
+			    	
+				</rich:dataTable>
+				
+				<s:button view="/admin/topic.xhtml" styleClass="buttonNew" propagation="none" value="" title="#{messages['admin.menu.topicAdd']}"/>
+			</div>
 		</div>
+		
         <br class="clear" />
     </ui:define>
 </ui:composition>

@@ -10,43 +10,44 @@
     template="layout/template.xhtml">
 
     <ui:define name="body">
-		<div id="related">
-			<ui:include src="layout/menu.xhtml" />
-		</div>
-
 	
 		<div id="content">
 		
-		<ui:include src="widget/gameheader.xhtml" />
+			<ui:include src="widget/gameheader.xhtml" />
 		
 		
-		
-		<h:form id="bereich2">
-			<h:outputText class="gamequestion" value="#{messages['elearning2.frage.satz']}"/>
-			<div class="standout">
-				<h:outputText id="questionTerm" value="#{term.tag.name}" rendered="#{!empty(term)}"/>
-			</div>
+			<h:form id="bereich2">
+				<!-- 
+				<h:outputText class="gamequestion" value="#{messages['elearning2.frage.satz']}"/>
+				<h:outputText class="standout" id="questionTerm" value="#{term.tag.name}" rendered="#{!empty(term)}"/>
+				
+				<h:commandButton id="switchTermButton" action="next"  styleClass="nextRound" title="#{messages['termina.skipRound']}" value="" type="button" />
+				<a4j:jsFunction name="switchTerm" action="next"/>
+				-->
 			
-			<h:commandButton id="switchTermButton" action="next"  value="Wechsle Term" type="button" />
-			<a4j:jsFunction name="switchTerm" action="next"/>
-		</h:form>
+			</h:form>
+		
 		<!-- Befindet sich der User im Palette Modus, so muss er die passenden Assoziationen zu dem 
 		Fragebegriff auswählen und bestätigen. Hierbei wird eine andere Methode in der CheckAssociation-Klasse 
 		aufgerufen -->
-		<a4j:form id="bereich3">
-			<s:validateAll>
-			<h:selectManyListbox id="answersListbox" value="#{elearnTermina.answers}">
-				<s:selectItems value="#{elearnTermina.tags}" var="tag" label="#{tag.name}" />
-			</h:selectManyListbox>
-			</s:validateAll>
-			<br></br>
-			<a4j:commandButton action="#{elearnTermina.choosePalette()}" value="Sende Auswahl" reRender="bereich1,bereich3" type="submit"/>
-		</a4j:form>
-<!-- Beenden Button, Session wird beendet, man wird zum Highscore gelinkt  -->
+		
+			<a4j:form id="bereich3">
+				<s:validateAll>
+				<h:selectManyListbox id="answersListbox" value="#{elearnTermina.answers}">
+					<s:selectItems value="#{elearnTermina.tags}" var="tag" label="#{tag.name}" />
+				</h:selectManyListbox>
+				</s:validateAll><br></br>
+				
+				<a4j:commandButton action="#{elearnTermina.choosePalette()}" styleClass="sendAssociation" title="#{messages['button.confirm']}" value="" reRender="bereich1,bereich3" type="submit"/>
+			
+			</a4j:form>
+			
+		<!-- Beenden Button, Session wird beendet, man wird zum Highscore gelinkt  -->
+
 		<h:form id="bereich4" class="alignmentright">
-		
+		<!--  
 		<a4j:commandButton id="beendenButton" action="beenden" value="Beenden"/>
-		
+		-->
 		</h:form>
 		
 		<!--  <s:button action="next" value="#{'Naechste Runde!'}"/>-->

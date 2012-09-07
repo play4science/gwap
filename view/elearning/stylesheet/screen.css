@@ -1,60 +1,90 @@
 @CHARSET "UTF-8";
 
 /*
- * CSS for Screen
  * 
- * Styles for artigo
+ * Styles for artigo, termina
  * 
  * © Letspool AG, 16.03.2010
  * Autor: Fabian Krumbholz
- von Katharina Krug veränderte Version 
+ von Katharina Krug und Romy Buchschmid veränderte Version 
  */
 
 /* =Reset
 -----------------------------------------------------------------------------*/
 html, body, div,
-table, caption, tbody, tfoot, thead, tr, th, td,
-h1, h2, h3, p, em, font, img,
+table, caption, tbody, tfoot, thead, tr, th, td, h3, p, em, font, img,
 dl, dt, dd, ol, ul, li,
-fieldset, label, legend           { margin:0; padding:0; border:0; outline:0; font-size:14px; vertical-align:bottom; background:transparent; color:#000 }
-body                                    { line-height:2; font-family:Arial, Verdana, Tahoma, sans-serif; position:relative }
+fieldset, label, legend           { margin:0; padding:0; border:0; outline:0; font-size:14px; vertical-align:bottom; background:transparent; }
+body                                    { line-height:2; font-family:Arial, Verdana, Tahoma, sans-serif; position:relative; color:#474747; }
 ol, ul                                  { list-style-type:none }
 dt                                      { clear:both }
+
 form {
-  background: #CECEF6;
-  border: thin solid #A9A9F5;
   margin:0;
   padding:.5em;
 }
-*.standout								{font-size:40px; color:#2E9AFE; background-color:#E0E0F8; outline:4px double blue; padding-bottom:4px; margin:5px; }
-*.gamevariables							{ font-size:14px; color:#0B3861; }
+*.gamevariables							{ font-size:14px; font-weight:bold; color:#474747; }
 punktelevel							{ font-size:20px; color:#2E9AFE; backgroundcolor:#E0E0F8; }
-*.gamequestion						{ font-size:14px; color:#424242; }
 *.alignmentright					{float:right;}
 *.alignmentleft					{float:left;}
 *.configlow						{font-size:12px; color:#0B3861; }
 
-/* =Structure
+/* =STRUCTURE
 -----------------------------------------------------------------------------*/
-body                                    { padding:0px 24px 220px 24px;  repeat-x left bottom }
 
-#navLanguage                            { float:left }
-#navHeader                              {  }
-#search                                 { float:right }
-#logo									{ float:left }
-/* #logo                                   { margin:12px 0 20px 0; } */
-#related                                { float:left; width:350px; margin-right:24px; display:inline }
-#content                                { width:500px; position:relative; margin-left:360px; margin-top:0px; }
+body                                    { padding:0px 24px 220px 24px; height:100%;  repeat-x left bottom }
+html									{ height:100%}
+#wrapper								{ height:100%;}
+#navLanguage                            { float:left; }
+#navHeader                              { margin-top:1em; border-bottom-width:2px; border-bottom-style:solid; border-bottom-color:#e8e8e8; }
+#search                                 { float:right; }
+#logodiv								{ float:left; width:25%; height:auto; margin-top:1em; margin-left:1em;}
+#logo                                   { width:400px; height:auto; }
 
-/* =Navigation
+/* divider */
+
+#content						{ width:100%; height:auto; min-height:70%; position:relative; margin-left:1em; margin-top:1em; margin-bottom:1em; padding-bottom:3em; }
+#enteredAssociations			{ align:left;  }
+#game           		    	{ margin-top:10px; }
+#related						{ float:left; width:350px; margin-right:24px; display:inline }
+#scoringDescription				{ padding-top:20px; font-size: small; }
+#taggingLeft					{ float:left;}
+#taggingRight					{ }
+.contentWrapper					{ width:50%; position:relative; }
+.dialog							{ width:520px; border-width:2px; border-style:solid; border-color:#a9a9a9; }
+.footer							{ }
+.ongoingGameStatsCaption		{ font-weight: bold; align:left;}
+div .ongoingGameStatsContent	{ float: left; align:left; }
+.terminaButton					{ float:left; }
+.terminaGame					{ width:650px; border-width:2px; border-style:solid; border-color:#a9a9a9; }
+.terminaProgress				{ }
+
+/* PanelGrids */
+.gameConfiguration	{ padding-left:10px; }
+
+/* helper */
+
+.clear              { clear:both; line-height:0; height:0; margin:0; padding:0; font-size:.1em; overflow:hidden }
+
+/* =NAVIGATION
 -----------------------------------------------------------------------------*/
+
+/* s:buttons */
+
+input[type="button"].buttonEdit		       { display:block; width:30px; height:30px; color:#5858FA; font-weight:bold; padding:.3em; background:url('../img/button_edit_inactive.svg'); border:none; cursor:pointer }
+input[type="button"].buttonEdit:hover	   { background:url('../img/button_edit_active.svg');}
+input[type="button"].buttonNew		       { display:block; width:44px; height:44px; color:#5858FA; font-weight:bold; padding:.3em; background:url('../img/button_new_inactive.svg'); border:none; cursor:pointer }
+input[type="button"].buttonNew:hover	   { background:url('../img/button_new_active.svg');}
+input[type="button"].buttonUpload		   { display:block; width:44px; height:44px; color:#5858FA; font-weight:bold; padding:.3em; background:url('../img/button_upload_inactive.svg'); border:none; cursor:pointer }
+input[type="button"].buttonUpload:hover	   { background:url('../img/button_upload_active.svg');}
+
 #navLanguage li                         { float:left; margin-right:.1em; margin-bottom:1em }
 #navLanguage li a                       { font-size:1em; color:#000; font-weight:bold; text-transform:uppercase; text-decoration:none; background:#cdcdcd; line-height:1.5em; padding:.3em }
 #navLanguage a:hover,
 #navLanguage li.active a                { background:#b8c9e1; font-size:1.2em }
 
 /*#navHeader li                           { float:left; margin-right:1em }*/
-#navHeader li a                         { font-size:1em; color:#000; font-weight:bold; text-transform:uppercase; text-decoration:none }
+/*#navHeader li a                         { font-size:1em; color:#000; font-weight:bold; text-transform:uppercase; text-decoration:none }*/
 
 #ad p                                   { float:left; margin-right:2em; text-transform:uppercase; font-weight:bold; font-size:.9em; padding-top:.75em }
 #ad img                                 { float:left }
@@ -68,14 +98,79 @@ body                                    { padding:0px 24px 220px 24px;  repeat-x
 #navSub li                              { line-height:21px; padding:0; background:url(../img/arrowBig.gif) no-repeat 0 0; margin-bottom:.25em }
 #navSub a                               { font-size:1.16667em; color:#000; line-height:22px; text-decoration:none; padding-left:30px; margin:0; text-transform:uppercase; font-weight:bold }
 
-/* =Forms
+#menuHomeId								{ background: url('../img/menu_home.png') bottom;}
+#menuHomeId:hover, #menuHomeId:focus, #menuHomeId.active	{ background-position: 0 0;}
+#menuImpressumId						{ background: url('../img/menu_impressum.png') bottom;}
+#menuImpressumId:hover, #menuImpressumId:focus, #menuImpressumId.active		{ background-position: 0 0;}
+#menuFAQId								{ background: url('../img/menu_faq.png') bottom;}
+#menuFAQId:hover, #menuFAQId:focus, #menuFAQId.active		{ background-position: 0 0;}
+#menuRegisterId							{ width:110px; height:80px; background: url('../img/menu_register.png') bottom;}
+#menuRegisterId:hover, #menuRegisterId:focus, #menuRegisterId.active		{ background-position: 0 0;}
+#menuTerminaId							{ width:110px; height:80px; background: url('../img/menu_termina.png') bottom;}
+#menuTerminaId:hover, #menuTerminaId:focus, #menuTerminaId.active		{ background-position: 0 0;}
+#menuTaggingId							{ background: url('../img/menu_tagging.png') bottom;}
+#menuTaggingId:hover, #menuTaggingId:focus, #menuTaggingId.active		{ background-position: 0 0;}
+#menuHighscoreId						{ width:100px; height:80px; background: url('../img/menu_highscore.png') bottom;}
+#menuHighscoreId:hover, #menuHighscoreId:focus, #menuHighscoreId.active		{ background-position: 0 0;}
+#menuLoginId							{ width:110px; height:80px; background: url('../img/menu_login.png') bottom;}
+#menuLoginId:hover, #menuLoginId:focus, #menuLoginId.active		{ background-position: 0 0;}
+.menuItem								{ display: block; width: 80px; height: 80px;}
+
+.menuLink 								{text-decoration:none; color:#a9a9a9;}
+a.menuLink:hover						{font-weight:bold; color:#707070; text-decoration:none; }
+a.menuLink.active						{font-weight:bold; color:#707070; text-decoration:none; }
+a.menuLink:visited						{text-decoration:none; color:#a9a9a9;}
+
+/* =FORMS
 -----------------------------------------------------------------------------*/
+
+/* h:commandButtons */
+input[type="submit"].buttonConfirm              { display:block; width:50px; height:50px; padding:.3em; background:url('../img/button_login_inactive.svg'); border:none; cursor:pointer }
+input[type="submit"].buttonConfirm:hover		{ background:url('../img/button_login_active.svg');}
+input[type="submit"].buttonDecrease           	{ display:block; width:30px; height:30px; margin-left:20px; padding:.3em; background:url('../img/button_decrease_inactive.svg'); border:none; cursor:pointer }
+input[type="submit"].buttonDecrease:hover		{ background:url('../img/button_decrease_active.svg');}
+input[type="submit"].buttonIncrease           	{ display:block; width:30px; height:30px; padding:.3em; background:url('../img/button_increase_inactive.svg'); border:none; cursor:pointer }
+input[type="submit"].buttonIncrease:hover		{ background:url('../img/button_increase_active.svg'); }
+input[type="submit"].buttonSave		          	{ display:block; width:50px; height:50px; padding:.3em; background:url('../img/button_save_inactive.svg'); border:none; cursor:pointer }
+input[type="submit"].buttonSave:hover			{ background:url('../img/button_save_active.svg'); }
+input[type="submit"].buttonUpload				{ display:block; width:44px; height:44px; padding:.3em; background:url('../img/button_upload_inactive.svg'); border:none; cursor:pointer }
+input[type="submit"].buttonUpload:hover			{ background:url('../img/button_upload_active.svg'); }
+input[type="submit"].buttonRegister				{ display:block; width:50px; height:50px; padding:.3em; background:url('../img/button_login_inactive.svg'); border:none; cursor:pointer }
+input[type="submit"].buttonRegister:hover		{ background:url('../img/button_login_active.svg'); }
+input[type="submit"].buttonReset				{ display:block; width:46px; height:46px; padding:.3em; background:url('../img/button_resetpassword_inactive.svg'); border:none; cursor:pointer }
+input[type="submit"].buttonReset:hover			{ background:url('../img/button_resetpassword_active.svg'); }
+input[type="submit"].buttonStart	           	{ display:block; width:50px; height:50px; margin-left:10px; padding:.3em; background:url('../img/button_startgame_inactive.svg'); border:none; cursor:pointer }
+input[type="submit"].buttonStart:hover			{ background:url('../img/button_startgame_active.svg');}
+
+/* a4j:commandButtons */
+input[type="button"].buttonEnd					{ display:block; width:50px; height:50px; padding:.3em; background:url('../img/button_endgame_inactive.svg'); border:none; cursor:pointer }
+input[type="button"].buttonEnd:hover			{ background:url('../img/button_endgame_active.svg');}
+input[type="button"].sendAssociation			{ display:block; width:50px; height:50px; padding:.3em; background:url('../img/button_login_inactive.svg'); border:none; cursor:pointer }
+input[type="button"].sendAssociation:hover		{ background:url('../img/button_login_active.svg');}
+
+/* s:button */
+input[type="button"].repeat						{ display:block; width:50px; height:50px; padding:.3em; background:url('../img/button_repeat_inactive.svg'); border:none; cursor:pointer }
+input[type="button"].repeat:hover				{ background:url('../img/button_repeat_active.svg');}
+input[type="button"].swapTerm					{ display:block; width:50px; height:50px; padding:.3em; background:url('../img/button_swapterm_inactive.svg'); border:none; cursor:pointer }
+input[type="button"].swapTerm:hover				{ background:url('../img/button_swapterm_active.svg');}
+
 #search input                           { background:url(../img/lupe.gif) no-repeat right center; width:180px }
-#game                                   { margin-top:25px }
-#game input[type=text]                  { width:215px }
+#game input[type=text]                  { width:215px margin-left:0px; }
 #game td                                { vertical-align:top; }
 input[type="button"],
-input[type="submit"]                    { color:#5858FA; font-weight:bold; padding:.3em; background:#CEF6F5; border:none; cursor:pointer }
+input[type="submit"]                  		 	{ display:block; width:50px; height:50px; color:#5858FA; font-weight:bold; padding:.3em; background:url('../img/button_login_inactive.svg'); border:none; cursor:pointer }
+input[type="submit"]:hover						{ background:url('../img/button_login_active.svg');}
+input[type="submit"].nextRound					{ display:block; width:50px; height:50px; color:#5858FA; font-weight:bold; padding:.3em; background:url('../img/button_nextround_inactive.svg'); border:none; cursor:pointer }
+input[type="submit"].nextRound:hover			{ background:url('../img/button_nextround_active.svg');}
+input[type="button"].buttonIncrease           	{ display:block; width:30px; height:30px; color:#5858FA; font-weight:bold; padding:.3em; background:url('../img/button_increase_inactive.svg'); border:none; cursor:pointer }
+input[type="button"].buttonIncrease:hover		{ background:url('../img/button_increase_active.svg');}
+input[type="button"].buttonDecrease           	{ display:block; width:30px; height:30px; color:#5858FA; font-weight:bold; padding:.3em; background:url('../img/button_decrease_inactive.svg'); border:none; cursor:pointer }
+input[type="button"].buttonDecrease:hover		{ background:url('../img/button_decrease_active.svg');}
+input[type="submit"].buttonDelete		        { display:block; width:28px; height:28px; color:#5858FA; font-weight:bold; padding:.3em; background:url('../img/button_delete_inactive.svg'); border:none; cursor:pointer }
+input[type="submit"].buttonDelete:hover			{ background:url('../img/button_delete_active.svg');}
+
+
+
 #register                               { border-top:6px solid #000; border-bottom:3px solid #000; padding:2em 0; width:575px; background:#fff } 
 form h1                                 { padding-left:24px; line-height:2em; background:#fff }
 h2.error                                { padding-left:24px; color:#a7103d }
@@ -86,12 +181,25 @@ label                                   { display:block; margin-top:1em; line-he
 #register input[type="text"]            { width:191px }
 label.required                          { color:#9dadc4 }
 label.error                             { color:#a7103d }
-.ongoingGameStatsCaption				{ font-weight: bold; }
-.ongoingGameStatsContent				{ line-height: 1.1; }
-div .ongoingGameStatsContent			{ float: right; }
 
-/* =Content
+/* =CONTENT
 -----------------------------------------------------------------------------*/
+
+/* text */
+*.gamequestion		{ font-size:14px; color:#474747; }
+*.standout			{ padding:20px; font-size:18px; color:#000; font-weight:bold; }
+.score				{ font-weight:bold; }
+
+/* tables */
+
+.termTable			{ vertical-align:top; }
+
+/* Other */
+
+#impressumEMail				{ background: url(../img/envelope.png) no-repeat scroll 0 1px transparent; padding: 1px 0 1px 25px; }
+#faqFormula					{ padding:30px; font-size:10pt; font-style:italic; font-weight:bold; }
+.ongoingGameStatsContent	{ line-height: 1.1; }
+
 #navContent li                          { float:left; margin-right:.1em; margin-bottom:1px }
 #navContent a                           { font-size:1em; color:#000; font-weight:bold; text-decoration:none; background:#cdcdcd; line-height:1.5em; padding:.3em 1.3em }
 #navContent a:hover,        
@@ -113,6 +221,9 @@ div .ongoingGameStatsContent			{ float: right; }
 .popup p                                { font-size:1em; line-height:1.2em }
 .popup .game li                         { background:#fff }
 .popup .imageDescription li             { background:#9dadc4 }
+
+.textLink a								{}
+
 
 /* =Tagging
 -----------------------------------------------------------------------------*/
@@ -145,8 +256,9 @@ a.tagCloudItem5                         { font-size:2em; color:#495A73 }
 dt                                      { font-weight: bold; }
 dd                                      { margin: 0 0 5px 10px; }
 
-/* =Table
+/* =TABLES
 -----------------------------------------------------------------------------*/
+
 #highscoreTableDaily,
 #highscoreTable                         { border-top:4px solid #000; border-bottom:2px solid #000; border-left:none; border-right:none; width:375px; padding-bottom:10px; margin-bottom:10px; background:#fff }
 #highscoreTableDaily th,
@@ -156,12 +268,17 @@ dd                                      { margin: 0 0 5px 10px; }
 #highscoreTableDaily tr,
 #highscoreTable tr                      { background:#fff }         
 #highscoreTableDaily tr.active,
-#highscoreTable tr.active               { background:#b9c9e2 }
+#highscoreTable tr.active               { background:#fff; }
 #highscoreTableDaily .rich-table-subheadercell,
 #highscoreTable .rich-table-subheadercell
 	                                      { background-image:none }
 .ranking                                { text-align:right }
 .ranking a                              { background:url(../img/arrowSmall.gif) no-repeat left center; font-size:1em; text-transform:uppercase; color:#000; font-weight:bold; text-decoration:none; line-height:22px; padding:1px 0 1px 20px }  
+
+.rich-table-headercell 					{ border-color:#c0c0c0; background-color:#fff; }
+
+.rich-table-subheader 					{ background-color:#fff; }
+.rich-table-subheadercell 				{ color: #707070; }
 
 /* =About
 -----------------------------------------------------------------------------*/
@@ -191,7 +308,6 @@ dd                                      { margin: 0 0 5px 10px; }
 
 /* =Helper
 -----------------------------------------------------------------------------*/
-.clear                                  { clear:both; line-height:0; height:0; margin:0; padding:0; font-size:.1em; overflow:hidden }
 .hide                                   { position:absolute; left:-10000em; width:20em }
 .hr                                     { margin:0; padding:0; line-height:1.18182em; height:1.18182em; font-size:.91667em; clear:both }
 .nb                                     { white-space:nowrap }

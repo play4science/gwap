@@ -11,37 +11,34 @@
 
     <ui:define name="body">
 		<div id="content">
-      <f:view>
+		
+			<h1><h:outputText value="#{messages['admin.menu.topicEdit']}" rendered="#{topicHome.managed}" /></h1>
+			<h1><h:outputText value="#{messages['admin.menu.topicAdd']}" rendered="#{!topicHome.managed}" /></h1>
+			<hr class="pageTitle" /><br />
+			
+      		<f:view>
 
-         <h:form>
+         		<h:form>
 
-            <s:validateAll>
+            		<s:validateAll><br />
+            		
+						<h:inputText value="#{topicHome.instance.name}" />
+                 
+                		<rich:pickList value="#{topicHome.list}" var="_term" >                
+            				<s:selectItems value="#{topicHome.allResources}" var="_term" itemValue="#{_term}" label="#{_term.tag.name}"/>
+        				</rich:pickList>
+               
+              			<h:commandButton value="" styleClass="buttonSave" action="#{topicHome.persist()}" rendered="#{!topicHome.managed}" title="#{messages['admin.menu.topicAdd']}" />
+						<h:commandButton value="" styleClass="buttonSave" action="#{topicHome.update()}" rendered="#{topicHome.managed}" title="#{messages['admin.menu.topicSave']}"/>
 
-				<h:inputText value="#{topicHome.instance.name}" />
-                  
-                  
-                  <rich:pickList value="#{topicHome.list}" var="_term"> 
-            			<s:selectItems value="#{topicHome.allResources}" var="_term" itemValue="#{_term}" label="#{_term.tag.name}"/>
-        		  </rich:pickList>
-                  
-                  
-              	 <h:commandButton 
-						value="#{messages['admin.topic.persist']}"
-						action="#{topicHome.persist()}" 
-						rendered="#{!topicHome.managed}" />
-					<h:commandButton 
-						value="#{messages['admin.topic.update']}"
-						action="#{topicHome.update()}" 
-						rendered="#{topicHome.managed}" />
+            		</s:validateAll>
 
-            </s:validateAll>
+            		<h:messages/>
 
-            <h:messages/>
+         		</h:form>
 
-         </h:form>
-
-      </f:view>
-      </div>
+      		</f:view>
+		</div>
 		
         <br class="clear" />
     </ui:define>

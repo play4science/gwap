@@ -8,7 +8,9 @@
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="http://richfaces.org/a4j">
 
+
 	<a4j:form id="bereich3">
+ 
 		<s:validateAll>
 			<h:panelGrid columns="2">
 				<h:outputText class="gamequestion"
@@ -19,9 +21,10 @@
 		</s:validateAll>
 			<h:messages />
 
-			<a4j:commandButton action="#{elearnTermina.choose()}"
+			<a4j:commandButton action="#{elearnTermina.choose()}" styleClass="sendAssociation"
 				value="Sende Assoziation" reRender="bereich1,bereich3,focusbereich"
 				type="submit" />
 	</a4j:form>
+
 
 </ui:composition>

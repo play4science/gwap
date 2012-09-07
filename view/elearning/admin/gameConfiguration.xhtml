@@ -11,40 +11,51 @@
 
     <ui:define name="body">
 		<div id="content">
-      <f:view>
+		
+			<h1><h:outputText value="#{messages['admin.menu.gameConfigurationEdit']}" rendered="#{gameConfigurationHome.managed}" /></h1>
+			<h1><h:outputText value="#{messages['admin.menu.gameConfigurationAdd']}" rendered="#{!gameConfigurationHome.managed}" /></h1>
+			<hr class="pageTitle" /><br />
+			
+      		<f:view>
      
-         <h:form>
+         		<h:form>
 
-            <s:validateAll>
+            		<s:validateAll>
 
-               <h:panelGrid columns="2">
-                  <h:outputText value="#{messages['admin.gameConfiguration.id']}:"/> <h:outputText value="#{gameConfigurationHome.instance.id}"/>
-            	  <h:outputText value="#{messages['admin.gameConfiguration.topicName']}:"/>
-                  <h:selectOneMenu value="#{gameConfigurationHome.selectedTopicId}"> 
-            			<f:selectItems value="#{gameConfigurationHome.selectTopics}"/>
-        		  </h:selectOneMenu> 
-<!--          		  <h:outputText value="#{messages['admin.gameConfiguration.topicId']}:"/> <h:outputText value="#{gameConfigurationHome.instance.topic.id}" required="true"/> -->
-<!--                  <h:inputText value="#{gameConfigurationHome.instance.topic.name}" required="true"/> -->
-                  <h:outputText value="#{messages['admin.gameConfiguration.roundDuration']}:"/> <h:inputText value="#{gameConfigurationHome.instance.roundDuration}" required="true"/>
-                  <h:outputText value="#{messages['admin.gameConfiguration.level']}:"/> <h:inputText value="#{gameConfigurationHome.instance.level}" required="true"/>
-                  <h:outputText value="#{messages['admin.gameConfiguration.bid']}:"/> <h:inputText value="#{gameConfigurationHome.instance.bid}" required="true"/>
-               </h:panelGrid>
-            </s:validateAll>
+               			<h:panelGrid columns="2">
+                  			<h:outputText value="#{messages['admin.gameConfiguration.id']}:"/>
+                  			<h:outputText value="#{gameConfigurationHome.instance.id}"/>
+            	  			<h:outputText value="#{messages['admin.gameConfiguration.topicName']}:"/>
+            	  			
+            	  			<h:selectOneMenu value="#{gameConfigurationHome.selectedTopicId}"> 
+            					<f:selectItems value="#{gameConfigurationHome.selectTopics}"/>
+        		  			</h:selectOneMenu>
+        		  			
+        		  			<!--
+         		  			<h:outputText value="#{messages['admin.gameConfiguration.topicId']}:"/> 
+         		  			<h:outputText value="#{gameConfigurationHome.instance.topic.id}" required="true"/>
+                  			<h:inputText value="#{gameConfigurationHome.instance.topic.name}" required="true"/> 
+                  			-->
+                  			
+                  			<h:outputText value="#{messages['admin.gameConfiguration.roundDuration']}:"/> 
+                  			<h:inputText value="#{gameConfigurationHome.instance.roundDuration}" required="true"/>
+                  			<h:outputText value="#{messages['admin.gameConfiguration.level']}:"/> 
+                  			<h:inputText value="#{gameConfigurationHome.instance.level}" required="true"/>
+                  			<h:outputText value="#{messages['admin.gameConfiguration.bid']}:"/> 
+                  			<h:inputText value="#{gameConfigurationHome.instance.bid}" required="true"/>
+               			</h:panelGrid>
+               			
+            		</s:validateAll>
 
-            <h:messages/>
+            		<h:messages/>
             
-            <h:commandButton 
-						value="#{messages['admin.gameConfiguration.persist']}"
-						action="#{gameConfigurationHome.persist()}" 
-						rendered="#{!gameConfigurationHome.managed}" />
-					<h:commandButton 
-						value="#{messages['admin.gameConfiguration.update']}"
-						action="#{gameConfigurationHome.update()}" 
-						rendered="#{gameConfigurationHome.managed}" />
-         </h:form>
+            		<h:commandButton value="" styleClass="buttonSave" action="#{gameConfigurationHome.persist()}" rendered="#{!gameConfigurationHome.managed}" title="#{messages['admin.menu.gameConfigurationAdd']}" />
+					<h:commandButton value="" styleClass="buttonSave" action="#{gameConfigurationHome.update()}" rendered="#{gameConfigurationHome.managed}" title="#{messages['admin.menu.gameConfigurationSave']}"/>
+         		
+         		</h:form>
 
-      </f:view>
-      </div>
+      		</f:view>
+		</div>
 		
         <br class="clear" />
     </ui:define>

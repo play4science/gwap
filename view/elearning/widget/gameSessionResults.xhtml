@@ -9,45 +9,56 @@
     xmlns:a4j="http://richfaces.org/a4j">
 	
 	<rich:dataTable var="_gameround" value="#{gameSession.getGameRounds()}">
+	
 		<f:facet name="header">
 			<rich:columnGroup>
-				<rich:column><h:outputText value="#{messages['termina.scoring.userTags']}" /></rich:column>
-				<rich:column colspan="2"><h:outputText value="#{messages['termina.scoring.otherTags']}" /></rich:column>
+				<rich:column>
+					<h:outputText value="#{messages['termina.scoring.userTags']}" />
+				</rich:column>
+				<rich:column colspan="2">
+					<h:outputText value="#{messages['termina.scoring.otherTags']}" />
+				</rich:column>
 			</rich:columnGroup>
 		</f:facet>
+		
 		<rich:column colspan="3">
 			<h:outputText value="#{messages['termina.round']} #{_gameround.number}" />
-			(<b><h:outputText value="#{_gameround.resources.get(0).tag.name}"/></b>)<s:fragment rendered="#{!hideGameRoundScore}">:				
-			<h:outputText value="#{_gameround.score} #{messages['termina.score']}" /></s:fragment>
+			(<b><h:outputText value="#{_gameround.resources.get(0).tag.name}"/></b>)
+			<s:fragment rendered="#{!hideGameRoundScore}">:				
+				<h:outputText value="#{_gameround.score} #{messages['termina.score']}" />
+			</s:fragment>
 		</rich:column>
+		
 		<rich:subTable var="_foo" value="1">
+		
 			<rich:column style="vertical-align:top;">
 				<ui:repeat var="_tagging" value="#{_gameround.actions}">
 					<span style="color:#{_tagging.score > 0 ? 'green' : 'red'};">
-						<h:outputText value="#{_tagging.tag.name}"/>
-						<br/>
+						<h:outputText value="#{_tagging.tag.name}"/><br/>
 					</span>
 				</ui:repeat>
 			</rich:column>
-			<rich:column style="color:green; vertical-align:top;">
+			
+			<rich:column style="vertical-align:top; color:green;">
 				<ui:repeat var="_term" value="#{elearnResults.getTopCorrectAnswers(_gameround)}">
 					<h:outputFormat value="{0} ({1}x)">
 						<f:param value="#{_term.term}" />
 						<f:param value="#{_term.appearence}" />
-					</h:outputFormat>
-					<br/>
+					</h:outputFormat><br/>
 				</ui:repeat>
 			</rich:column>
-			<rich:column style="color:red; vertical-align:top;">
+			
+			<rich:column style="vertical-align:top; color:red;">
 				<ui:repeat var="_term" value="#{elearnResults.getTopWrongAnswers(_gameround)}">
 					<h:outputFormat value="{0} ({1}x)">
 						<f:param value="#{_term.term}" />
 						<f:param value="#{_term.appearence}" />
-					</h:outputFormat>
-					<br/>
+					</h:outputFormat><br/>
 				</ui:repeat>
 			</rich:column>
+			
 		</rich:subTable>
+		
 	</rich:dataTable>
 
 </ui:composition>

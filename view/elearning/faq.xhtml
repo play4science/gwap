@@ -1,0 +1,47 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    template="layout/template.xhtml">
+
+    <ui:define name="body">
+
+		<div id="content">
+		
+			<div class="contentWrapper">
+			
+				<h1>#{messages['pagetitle.faq']}</h1>
+				<hr class="pageTitle" /><br />
+			
+				<h2>#{messages['faq.question1']}</h2>
+				<p><h:outputText value="#{messages['faq.answer1']}" /></p><br />
+			
+				<h2>#{messages['faq.question2']}</h2>
+				<p><h:outputText value="#{messages['faq.answer2']}" /></p><br />
+			
+				<h2>#{messages['faq.question3']}</h2>
+				<p>
+					<h:outputText value="#{messages['faq.answer3a']}" /><br />
+					<h:outputText value="#{messages['faq.answer3b']}" />
+				</p><br />
+			
+				<h2>#{messages['faq.question4']}</h2>
+				<p><h:outputText value="#{messages['faq.answer4']}" /></p><br />
+			
+				<h2>#{messages['faq.question5']}</h2>
+				<p>
+					<h:outputText value="#{messages['faq.answer5a']}" /><br />
+					<h:outputText id="faqFormula" value="#{messages['faq.formula']}" /><br />
+					<h:outputText value="#{messages['faq.answer5b']}" /></p>
+			
+			</div>
+		</div>
+			
+        <br class="clear" />
+    </ui:define>
+</ui:composition>

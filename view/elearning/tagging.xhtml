@@ -10,23 +10,35 @@
     template="layout/template.xhtml">
 
     <ui:define name="body">
-		<div id="related">
-		 	<ui:include src="layout/menu.xhtml" />
-			
-			<div class="ongoingGameStatsCaption" style="margin-top: 50px;"><h:outputText value="#{messages['tagging.enteredTags']}" /></div>
-	 		<a4j:outputPanel id="recommendedTags" styleClass="ongoingGameStatsContent">
-				<a4j:repeat value="#{recommendedTags}" var="_recommendedTag">
-					<div class="#{_recommendedTag.matchType}">
-						<h:outputText value="#{_recommendedTag.tag}" />
-					</div>
-				</a4j:repeat>
-			</a4j:outputPanel>			
-		</div>
 
 		<div id="content">
+		
+			<h1>#{messages['pagetitle.tagging']}</h1>
+			<hr class="pageTitle" /><br />
+			
+			
 			<ui:include src="widget/resourceTerm.xhtml" />
-			<ui:include src="widget/tagForm.xhtml" />
-			<ui:include src="terminaGame/bereich4.xhtml" />
+			
+				<ui:include src="widget/tagForm.xhtml" />
+				<!--  <ui:include src="terminaGame/bereich4.xhtml" />-->
+				
+				<hr class="form" />
+				
+				<div id="related">
+			
+					<div class="ongoingGameStatsCaption">
+						<h:outputText value="#{messages['tagging.enteredTags']}" />
+					</div>
+					
+	 				<a4j:outputPanel id="recommendedTags" styleClass="ongoingGameStatsContent">
+						<a4j:repeat value="#{recommendedTags}" var="_recommendedTag">
+							<div id="enteredAssociations" class="#{_recommendedTag.matchType}">
+								<h:outputText value="#{_recommendedTag.tag}" />
+							</div>
+						</a4j:repeat>
+					</a4j:outputPanel>	
+							
+				</div>
 		</div>
 		
         <br class="clear" />

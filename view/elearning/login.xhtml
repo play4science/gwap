@@ -1,0 +1,66 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml">
+
+	<ui:define name="body">
+	
+		<div id="content">
+		
+			<h1>#{messages['pagetitle.login']}</h1>
+			<hr class="pageTitle" /><br />
+			
+			<h:outputText value="#{messages['login.notYetRegistered']}" />
+			<s:link styleClass="textLink" view="/register.xhtml" value="#{messages['login.registerNow']}" propagation="none"/><br /><br />
+			
+		    <div class="dialog">
+ 			    		
+ 			    <h:form id="profileForm">
+ 			    
+ 			    <rich:messages styleClass="messages" globalOnly="true" errorClass="errormsg" infoClass="infomsg" warnClass="warnmsg" rendered="#{showGlobalMessages != 'false'}" /><br />
+ 			    
+					<h:panelGrid columns="1">
+					
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">
+			                	<h:outputText value="#{messages['login.username']}" styleClass="requiredField" />
+			                </ui:define>
+			                <h:inputText id="username" value="#{credentials.username}" />
+			            </s:decorate>
+			            
+						<s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">
+				            	<h:outputText value="#{messages['login.password']}" styleClass="requiredField" />
+				            </ui:define>
+			                <h:inputSecret id="password" value="#{credentials.password}"/>
+			            </s:decorate>
+			            
+			            <s:link view="/resetPassword.xhtml" value="#{messages['login.sendPasswordLostEmail']}" propagation="none" styleClass="resetPassword"/>
+			            
+			            <s:decorate template="/layout/edit.xhtml">
+							<ui:define name="label">
+				            	<h:outputText value="#{messages['login.rememberMe']}" />
+			                </ui:define>
+			            	<h:selectBooleanCheckbox id="rememberMe" value="#{rememberMe.enabled}"/>
+			            </s:decorate>
+						
+						<hr class="form" />
+						
+						<div class="actionButtons">
+						
+						    <h:commandButton id="submit" styleClass="buttonConfirm" value="" action="#{identity.login}" title="#{messages['button.login']}" />
+						    
+						</div>
+					</h:panelGrid>
+ 			    </h:form>
+		    </div>
+		</div>
+		
+		<br class="clear" />
+	</ui:define>
+</ui:composition>
