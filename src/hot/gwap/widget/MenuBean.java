@@ -25,4 +25,9 @@ public class MenuBean implements Serializable {
 	public String getCssClass(String string) {
 		return FacesContext.getCurrentInstance().getViewRoot().getViewId().equals(string) ? "active" : "inactive";
 	}
+
+	public String getCssClassStartsWith(String string) {
+		return FacesContext.getCurrentInstance().getViewRoot().getViewId().startsWith(string) ? "active" : "inactive";
+	}
+	
 }

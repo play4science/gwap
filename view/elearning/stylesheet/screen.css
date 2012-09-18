@@ -6,7 +6,7 @@
  * 
  * © Letspool AG, 16.03.2010
  * Autor: Fabian Krumbholz
- von Katharina Krug und Romy Buchschmid veränderte Version 
+ * von Katharina Krug und Romy Buchschmid veränderte Version 
  */
 
 /* =Reset
@@ -14,18 +14,16 @@
 html, body, div,
 table, caption, tbody, tfoot, thead, tr, th, td, h3, p, em, font, img,
 dl, dt, dd, ol, ul, li,
-fieldset, label, legend           { margin:0; padding:0; border:0; outline:0; font-size:14px; vertical-align:bottom; background:transparent; }
+fieldset, label, legend           		{ margin:0; padding:0; border:0; outline:0; font-size:14px; vertical-align:bottom; background:transparent; }
 body                                    { line-height:2; font-family:Arial, Verdana, Tahoma, sans-serif; position:relative; color:#474747; }
 ol, ul                                  { list-style-type:none }
 dt                                      { clear:both }
 
-form {
-  margin:0;
-  padding:.5em;
-}
-*.gamevariables							{ font-size:14px; font-weight:bold; color:#474747; }
+form 									{ margin:0; padding:.5em; }
+
+*.gamevariables							{ font-size:14px; font-weight:bold; color:#474747; padding-left:10px; padding-right:35px; }
 punktelevel							{ font-size:20px; color:#2E9AFE; backgroundcolor:#E0E0F8; }
-*.alignmentright					{float:right;}
+*.alignmentright				{ }
 *.alignmentleft					{float:left;}
 *.configlow						{font-size:12px; color:#0B3861; }
 
@@ -35,7 +33,7 @@ punktelevel							{ font-size:20px; color:#2E9AFE; backgroundcolor:#E0E0F8; }
 body                                    { padding:0px 24px 220px 24px; height:100%;  repeat-x left bottom }
 html									{ height:100%}
 #wrapper								{ height:100%;}
-#navLanguage                            { float:left; }
+#navLanguage                            { }
 #navHeader                              { margin-top:1em; border-bottom-width:2px; border-bottom-style:solid; border-bottom-color:#e8e8e8; }
 #search                                 { float:right; }
 #logodiv								{ float:left; width:25%; height:auto; margin-top:1em; margin-left:1em;}
@@ -46,7 +44,7 @@ html									{ height:100%}
 #content						{ width:100%; height:auto; min-height:70%; position:relative; margin-left:1em; margin-top:1em; margin-bottom:1em; padding-bottom:3em; }
 #enteredAssociations			{ align:left;  }
 #game           		    	{ margin-top:10px; }
-#related						{ float:left; width:350px; margin-right:24px; display:inline }
+#related						{ width:350px; margin-right:24px; display:inline }
 #scoringDescription				{ padding-top:20px; font-size: small; }
 #taggingLeft					{ float:left;}
 #taggingRight					{ }
@@ -54,7 +52,7 @@ html									{ height:100%}
 .dialog							{ width:520px; border-width:2px; border-style:solid; border-color:#a9a9a9; }
 .footer							{ }
 .ongoingGameStatsCaption		{ font-weight: bold; align:left;}
-div .ongoingGameStatsContent	{ float: left; align:left; }
+div .ongoingGameStatsContent	{ align:left; }
 .terminaButton					{ float:left; }
 .terminaGame					{ width:650px; border-width:2px; border-style:solid; border-color:#a9a9a9; }
 .terminaProgress				{ }
@@ -98,23 +96,46 @@ input[type="button"].buttonUpload:hover	   { background:url('../img/button_uploa
 #navSub li                              { line-height:21px; padding:0; background:url(../img/arrowBig.gif) no-repeat 0 0; margin-bottom:.25em }
 #navSub a                               { font-size:1.16667em; color:#000; line-height:22px; text-decoration:none; padding-left:30px; margin:0; text-transform:uppercase; font-weight:bold }
 
-#menuHomeId								{ background: url('../img/menu_home.png') bottom;}
-#menuHomeId:hover, #menuHomeId:focus, #menuHomeId.active	{ background-position: 0 0;}
-#menuImpressumId						{ background: url('../img/menu_impressum.png') bottom;}
-#menuImpressumId:hover, #menuImpressumId:focus, #menuImpressumId.active		{ background-position: 0 0;}
-#menuFAQId								{ background: url('../img/menu_faq.png') bottom;}
-#menuFAQId:hover, #menuFAQId:focus, #menuFAQId.active		{ background-position: 0 0;}
-#menuRegisterId							{ width:110px; height:80px; background: url('../img/menu_register.png') bottom;}
-#menuRegisterId:hover, #menuRegisterId:focus, #menuRegisterId.active		{ background-position: 0 0;}
-#menuTerminaId							{ width:110px; height:80px; background: url('../img/menu_termina.png') bottom;}
-#menuTerminaId:hover, #menuTerminaId:focus, #menuTerminaId.active		{ background-position: 0 0;}
-#menuTaggingId							{ background: url('../img/menu_tagging.png') bottom;}
-#menuTaggingId:hover, #menuTaggingId:focus, #menuTaggingId.active		{ background-position: 0 0;}
-#menuHighscoreId						{ width:100px; height:80px; background: url('../img/menu_highscore.png') bottom;}
-#menuHighscoreId:hover, #menuHighscoreId:focus, #menuHighscoreId.active		{ background-position: 0 0;}
-#menuLoginId							{ width:110px; height:80px; background: url('../img/menu_login.png') bottom;}
-#menuLoginId:hover, #menuLoginId:focus, #menuLoginId.active		{ background-position: 0 0;}
-.menuItem								{ display: block; width: 80px; height: 80px;}
+#menuHomeId					{ width:60px; height:55px; background: url('../img/menu_home.png') bottom;}
+#menuHomeId:hover, 
+#menuHomeId:focus, 
+#menuHomeId.active			{ background-position: 0 0;}
+#menuImpressumId			{ background: url('../img/menu_impressum.png') bottom;}
+#menuImpressumId:hover, 
+#menuImpressumId:focus, 
+#menuImpressumId.active		{ background-position: 0 0;}
+#menuFAQId					{ background: url('../img/menu_faq.png') bottom;}
+#menuFAQId:hover, 
+#menuFAQId:focus, 
+#menuFAQId.active			{ background-position: 0 0;}
+#menuProfileId				{ width:90px; height:65px; background: url('../img/menu_profile.png') bottom;}
+#menuProfileId:hover, 
+#menuProfileId:focus, 
+#menuProfileId.active		{ background-position: 0 0;}
+#menuRegisterId				{ width:90px; height:60px; background: url('../img/menu_register.png') bottom;}
+#menuRegisterId:hover, 
+#menuRegisterId:focus, 
+#menuRegisterId.active		{ background-position: 0 0;}
+#menuTerminaId				{ width:90px; height:60px; background: url('../img/menu_termina.png') bottom;}
+#menuTerminaId:hover, 
+#menuTerminaId:focus, 
+#menuTerminaId.active		{ background-position: 0 0;}
+#menuTaggingId				{ background: url('../img/menu_tagging.png') bottom;}
+#menuTaggingId:hover, 
+#menuTaggingId:focus, 
+#menuTaggingId.active		{ background-position: 0 0;}
+#menuHighscoreId			{ width:80px; height:60px; background: url('../img/menu_highscore.png') bottom;}
+#menuHighscoreId:hover, 
+#menuHighscoreId:focus,
+#menuHighscoreId.active		{ background-position: 0 0;}
+#menuLoginId				{ width:90px; height:60px; background: url('../img/menu_login.png') bottom;}
+#menuLoginId:hover,
+#menuLoginId:focus, 
+#menuLoginId.active			{ background-position: 0 0;}
+#menuLogoutId				{ width:60px; height:55px; background: url('../img/menu_logout.png') bottom;}
+#menuLogoutId:hover, 
+#menuLogoutId:focus			{ background-position: 0 0;}
+.menuItem								{ display: block; width: 60px; height: 60px;}
 
 .menuLink 								{text-decoration:none; color:#a9a9a9;}
 a.menuLink:hover						{font-weight:bold; color:#707070; text-decoration:none; }
@@ -129,6 +150,8 @@ input[type="submit"].buttonConfirm              { display:block; width:50px; hei
 input[type="submit"].buttonConfirm:hover		{ background:url('../img/button_login_active.svg');}
 input[type="submit"].buttonDecrease           	{ display:block; width:30px; height:30px; margin-left:20px; padding:.3em; background:url('../img/button_decrease_inactive.svg'); border:none; cursor:pointer }
 input[type="submit"].buttonDecrease:hover		{ background:url('../img/button_decrease_active.svg');}
+input[type="submit"].buttonDelete		        { display:block; width:28px; height:28px; color:#5858FA; font-weight:bold; padding:.3em; background:url('../img/button_delete_inactive.svg'); border:none; cursor:pointer }
+input[type="submit"].buttonDelete:hover			{ background:url('../img/button_delete_active.svg');}
 input[type="submit"].buttonIncrease           	{ display:block; width:30px; height:30px; padding:.3em; background:url('../img/button_increase_inactive.svg'); border:none; cursor:pointer }
 input[type="submit"].buttonIncrease:hover		{ background:url('../img/button_increase_active.svg'); }
 input[type="submit"].buttonSave		          	{ display:block; width:50px; height:50px; padding:.3em; background:url('../img/button_save_inactive.svg'); border:none; cursor:pointer }
@@ -147,8 +170,14 @@ input[type="button"].buttonEnd					{ display:block; width:50px; height:50px; pad
 input[type="button"].buttonEnd:hover			{ background:url('../img/button_endgame_active.svg');}
 input[type="button"].sendAssociation			{ display:block; width:50px; height:50px; padding:.3em; background:url('../img/button_login_inactive.svg'); border:none; cursor:pointer }
 input[type="button"].sendAssociation:hover		{ background:url('../img/button_login_active.svg');}
+input[type="submit"].sendAssociation			{ display:block; width:50px; height:50px; padding:.3em; background:url('../img/button_login_inactive.svg'); border:none; cursor:pointer }
+input[type="submit"].sendAssociation:hover		{ background:url('../img/button_login_active.svg');}
 
 /* s:button */
+input[type="button"].buttonBack					{ display:block; width:50px; height:50px; padding:.3em; background:url('../img/button_back_inactive.svg'); border:none; cursor:pointer }
+input[type="button"].buttonBack:hover			{ background:url('../img/button_back_active.svg');}
+input[type="button"].buttonDelete		        { display:block; width:28px; height:28px; color:#5858FA; font-weight:bold; padding:.3em; background:url('../img/button_delete_inactive.svg'); border:none; cursor:pointer }
+input[type="button"].buttonDelete:hover			{ background:url('../img/button_delete_active.svg');}
 input[type="button"].repeat						{ display:block; width:50px; height:50px; padding:.3em; background:url('../img/button_repeat_inactive.svg'); border:none; cursor:pointer }
 input[type="button"].repeat:hover				{ background:url('../img/button_repeat_active.svg');}
 input[type="button"].swapTerm					{ display:block; width:50px; height:50px; padding:.3em; background:url('../img/button_swapterm_inactive.svg'); border:none; cursor:pointer }
@@ -166,8 +195,6 @@ input[type="button"].buttonIncrease           	{ display:block; width:30px; heig
 input[type="button"].buttonIncrease:hover		{ background:url('../img/button_increase_active.svg');}
 input[type="button"].buttonDecrease           	{ display:block; width:30px; height:30px; color:#5858FA; font-weight:bold; padding:.3em; background:url('../img/button_decrease_inactive.svg'); border:none; cursor:pointer }
 input[type="button"].buttonDecrease:hover		{ background:url('../img/button_decrease_active.svg');}
-input[type="submit"].buttonDelete		        { display:block; width:28px; height:28px; color:#5858FA; font-weight:bold; padding:.3em; background:url('../img/button_delete_inactive.svg'); border:none; cursor:pointer }
-input[type="submit"].buttonDelete:hover			{ background:url('../img/button_delete_active.svg');}
 
 
 
@@ -186,18 +213,23 @@ label.error                             { color:#a7103d }
 -----------------------------------------------------------------------------*/
 
 /* text */
-*.gamequestion		{ font-size:14px; color:#474747; }
+*.gamequestion		{ font-size:14px; color:#474747; padding:20px; }
 *.standout			{ padding:20px; font-size:18px; color:#000; font-weight:bold; }
+*.standout2			{ padding:20px; font-size:10px; color:#000; font-weight:bold; }
 .score				{ font-weight:bold; }
 
 /* tables */
 
 .termTable			{ vertical-align:top; }
+.menuTableCell		{ width:11%; }
+.terminaTableCell	{ vertical-align:middle; padding-left: 5px; }
 
 /* Other */
 
 #impressumEMail				{ background: url(../img/envelope.png) no-repeat scroll 0 1px transparent; padding: 1px 0 1px 25px; }
+.gameIcon					{ width:30px; height:30px; }
 #faqFormula					{ padding:30px; font-size:10pt; font-style:italic; font-weight:bold; }
+#questionTerm				{ color:red;}
 .ongoingGameStatsContent	{ line-height: 1.1; }
 
 #navContent li                          { float:left; margin-right:.1em; margin-bottom:1px }
@@ -282,18 +314,22 @@ dd                                      { margin: 0 0 5px 10px; }
 
 /* =About
 -----------------------------------------------------------------------------*/
-.rich-tabpanel .rich-tab-active                 { background-image:none; background-color:#b8c9e1 }
-.rich-tabpanel .rich-tab-inactive               { background-image:none; background-color:#cdcdcd }
+.richt-tabpanel									{ width: 500px; }
+.rich-tabpanel .rich-tab-active                 { background-image:none; background-color:#ffd83b; -moz-border-top-left-radius: 5px; border-top-left-radius: 5px; -moz-border-top-right-radius: 5px; border-top-right-radius: 5px; }
+.rich-tabpanel .rich-tab-inactive:hover         { background-image:none; background-color:#ffd83b; -moz-border-top-left-radius: 5px; border-top-left-radius: 5px; -moz-border-top-right-radius: 5px; border-top-right-radius: 5px; }
+.rich-tabpanel .rich-tab-inactive               { background-image:none; background-color:#e3e4eb; -moz-border-top-left-radius: 5px; border-top-left-radius: 5px; -moz-border-top-right-radius: 5px; border-top-right-radius: 5px;}
 .rich-tabpanel .dr-tbpnl-tb-act                 { border:none }
 .rich-tabpanel .dr-tbpnl-tbtopbrdr,
 .rich-tabpanel .rich-tabhdr-side-cell           { border:none }
-.rich-tabpanel .rich-tab-header                 { color:#000000; font-size:1em; font-weight:bold; line-height:1.5em; padding:0.3em 1.3em; text-decoration:none }
+.rich-tabpanel .rich-tab-header                 { color:#000; font-size:1em; line-height:1.5em; padding:0.3em 1.3em; text-decoration:none }
 .rich-tabpanel .rich-tabhdr-side-border         { background-color:transparent }
+
+#emailTab										{ background: url(../img/envelope.png); }
 
 .rich-tabpanel .rich-tabpanel-content,
 .rich-tabpanel .dr-tbpnl-cntnt                 { border:none }
 
-.rich-tabpanel .rich-tabpanel-content          { border-bottom:3px solid #000000; border-top:6px solid #000000; padding:20px 24px; width:527px }
+.rich-tabpanel .rich-tabpanel-content          { border-bottom:3px solid #e3e4eb; border-top:6px solid #ffd83b; padding:20px 24px; width:527px }
 .rich-tabpanel .rich-tabpanel-content,
 .rich-tabpanel .rich-tabpanel-content p        { font-size:1.2em; line-height:1.25em; margin-bottom:1.25em }
 .rich-tabpanel .rich-tabpanel-content h1       { font-size:1.4em; line-height:1.25em; margin-bottom:1.25em }

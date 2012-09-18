@@ -12,19 +12,13 @@
     <ui:define name="body">
 
 		<div id="content">
-		
+			<div class="contentWrapper">
 			<h1>#{messages['pagetitle.tagging']}</h1>
 			<hr class="pageTitle" /><br />
 			
-			
 			<ui:include src="widget/resourceTerm.xhtml" />
 			
-				<ui:include src="widget/tagForm.xhtml" />
-				<!--  <ui:include src="terminaGame/bereich4.xhtml" />-->
-				
-				<hr class="form" />
-				
-				<div id="related">
+							<div id="related">
 			
 					<div class="ongoingGameStatsCaption">
 						<h:outputText value="#{messages['tagging.enteredTags']}" />
@@ -38,6 +32,14 @@
 						</a4j:repeat>
 					</a4j:outputPanel>	
 							
+				</div><br />
+			
+				<ui:include src="widget/tagForm.xhtml" />
+				<!--  <ui:include src="terminaGame/bereich4.xhtml" />-->
+				
+				<hr class="form" />
+				<br />
+				<p><h:outputText value="#{messages['tagging.explanation']}" /></p><br />
 				</div>
 		</div>
 		

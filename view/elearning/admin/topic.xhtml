@@ -12,8 +12,8 @@
     <ui:define name="body">
 		<div id="content">
 		
-			<h1><h:outputText value="#{messages['admin.menu.topicEdit']}" rendered="#{topicHome.managed}" /></h1>
-			<h1><h:outputText value="#{messages['admin.menu.topicAdd']}" rendered="#{!topicHome.managed}" /></h1>
+			<h1><h:outputText value="#{messages['pagetitle.admin.topicEdit']}" rendered="#{topicHome.managed}" /></h1>
+			<h1><h:outputText value="#{messages['pagetitle.admin.topicAdd']}" rendered="#{!topicHome.managed}" /></h1>
 			<hr class="pageTitle" /><br />
 			
       		<f:view>
@@ -27,9 +27,12 @@
                 		<rich:pickList value="#{topicHome.list}" var="_term" >                
             				<s:selectItems value="#{topicHome.allResources}" var="_term" itemValue="#{_term}" label="#{_term.tag.name}"/>
         				</rich:pickList>
-               
-              			<h:commandButton value="" styleClass="buttonSave" action="#{topicHome.persist()}" rendered="#{!topicHome.managed}" title="#{messages['admin.menu.topicAdd']}" />
-						<h:commandButton value="" styleClass="buttonSave" action="#{topicHome.update()}" rendered="#{topicHome.managed}" title="#{messages['admin.menu.topicSave']}"/>
+               			
+               			<h:panelGrid columns="2">
+               				<s:button styleClass="buttonBack" value="" view="/admin/topicList.xhtml" title="#{messages['buttonTitle.back']}"/>
+               				<h:commandButton value="" styleClass="buttonSave" action="#{topicHome.persist()}" rendered="#{!topicHome.managed}" title="#{messages['buttonTitle.topicAdd']}" />
+							<h:commandButton value="" styleClass="buttonSave" action="#{topicHome.update()}" rendered="#{topicHome.managed}" title="#{messages['buttonTitle.topicSave']}"/>
+               			</h:panelGrid>
 
             		</s:validateAll>
 

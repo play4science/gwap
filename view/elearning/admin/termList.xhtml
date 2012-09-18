@@ -13,43 +13,46 @@
 		<div id="content">
 			<div class="contentWrapper">
 			
-				<h1>#{messages['admin.menu.termList']}</h1>
+				<h1>#{messages['pagetitle.admin.termList']}</h1>
 				<hr class="pageTitle" /><br />		
+				
+				<h:outputText value="#{messages['terme.explanation']}" escape="false" />
+				<!-- 
+				<s:link view="/admin/topicList.xhtml" value="#{messages['admin.linkTopic']}" />
+				<h:outputText value="#{messages['admin.termeExplanationb']}" />--><br /><br />
 					
-				<h:outputText value="#{messages['admin.termAnnotations.noResourceFound']}" rendered="#{empty termList.resultList}" />
-			
+				<h:outputText value="#{messages['terme.annotations.noResourceFound']}" rendered="#{empty termList.resultList}" />
 				<rich:dataTable id="termList" value="#{termList.resultList}" var="_resource">
 			    	<rich:column width="10px">
-			    		<s:button view="/admin/term.xhtml" propagation="none"  styleClass="buttonEdit" value="" title="#{messages['admin.menu.termEdit']}">
+			    		<s:button view="/admin/term.xhtml" propagation="none"  styleClass="buttonEdit" value="" title="#{messages['buttonTitle.termEdit']}">
 			    			<f:param name="termId" value="#{_resource.id}"/>
 			    		</s:button>
 			    	</rich:column>
 			    	
-			  	 	 <!-- 
+					<!--  
 			   		 <rich:column width="10px">
-			    		<s:link action="#{elearnTermHome.remove}" value="#{messages['delete']}">
+			    		<s:button styleClass="buttonDelete" action="#{elearnTermHome.remove}" value="" title="#{messages['buttonTitle.termDelete']}" propagation="none" >
 			    			<f:param name="termId" value="#{_resource.id}"/>
-			    		</s:link>
-			  	 	 </rich:column>
-			  		  -->
+			    		</s:button>
+			  	 	 </rich:column>-->
 			  		  
 			    	<rich:column width="50px">
-			        	<f:facet name="header"><h:outputText value="#{messages['admin.term.id']}"/></f:facet>
+			        	<f:facet name="header"><h:outputText value="#{messages['terme.id']}"/></f:facet>
 			        	<h:outputText value="#{_resource.id}"/>
 			    	</rich:column>
 			    	
 			    	<rich:column width="200px">
-			        	<f:facet name="header"><h:outputText value="#{messages['admin.term.name']}"/></f:facet>
+			        	<f:facet name="header"><h:outputText value="#{messages['terme.name']}"/></f:facet>
 			        	<h:outputText value="#{_resource.tag.name}"/>
 			    	</rich:column>
 			    	
 			    	<rich:column width="10px">
-			        	<f:facet name="header"><h:outputText value="#{messages['admin.term.rating']}"/></f:facet>
+			        	<f:facet name="header"><h:outputText value="#{messages['terme.rating']}"/></f:facet>
 			        	<h:outputText value="#{_resource.rating}"/>
 			    	</rich:column>
 			    	
 			    	<rich:column width="500px">
-			        	<f:facet name="header"><h:outputText value="#{messages['admin.term.confirmedTags']}"/></f:facet>
+			        	<f:facet name="header"><h:outputText value="#{messages['terme.confirmedTags']}"/></f:facet>
 			        	<ui:repeat value="#{_resource.confirmedTags}" var="_tag" varStatus="_status">
 			        		<h:outputText value="#{_tag.name}"/><h:outputText value=", " rendered="#{!_status.last}" />
 			        	</ui:repeat>
@@ -57,8 +60,8 @@
 			</rich:dataTable>
 			
 			<h:panelGrid columns="2">
-				<s:button view="/admin/term.xhtml" styleClass="buttonNew" propagation="none" value="" title="#{messages['admin.menu.termAdd']}"/>
-				<s:button view="/admin/termImporter.xhtml" styleClass="buttonUpload" propagation="none" value="" title="#{messages['admin.menu.termImport']}"/>
+				<s:button view="/admin/term.xhtml" styleClass="buttonNew" propagation="none" value="" title="#{messages['buttonTitle.termAdd']}"/>
+				<s:button view="/admin/termImporter.xhtml" styleClass="buttonUpload" propagation="none" value="" title="#{messages['buttonTitle.termImport']}"/>
 			</h:panelGrid>
 			</div>
 		</div>

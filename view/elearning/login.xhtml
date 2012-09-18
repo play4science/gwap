@@ -15,8 +15,7 @@
 			<h1>#{messages['pagetitle.login']}</h1>
 			<hr class="pageTitle" /><br />
 			
-			<h:outputText value="#{messages['login.notYetRegistered']}" />
-			<s:link styleClass="textLink" view="/register.xhtml" value="#{messages['login.registerNow']}" propagation="none"/><br /><br />
+			<h:outputText value="#{messages['login.notYetRegistered']}" escape="false" /><br /><br />
 			
 		    <div class="dialog">
  			    		
@@ -53,7 +52,7 @@
 						
 						<div class="actionButtons">
 						
-						    <h:commandButton id="submit" styleClass="buttonConfirm" value="" action="#{identity.login}" title="#{messages['button.login']}" />
+						    <h:commandButton id="submit" styleClass="buttonConfirm" value="" action="#{identity.login}" title="#{messages['buttonTitle.login']}" />
 						    
 						</div>
 					</h:panelGrid>

@@ -16,16 +16,12 @@
 			<hr class="pageTitle" /><br />
 			
 			
-			<p><h:outputText value="#{messages['register.intro']}" /></p><br />
+			<p><h:outputText value="#{messages['register.explanation']}" /></p><br />
 			
 		    <div class="dialog">
 		    
 	    		<h:form id="loginForm">
-					<p>
-				    	<h:outputText value="#{messages['register.requesta']}" />
-				        <h:outputText value="#{messages['register.requestb']}" styleClass="required" />
-				        <h:outputText value="#{messages['register.requestc']}" />
-				    </p><br />
+					<p><h:outputText value="#{messages['register.mandatory']}" escape="false" /></p><br />
 				    
 				    <hr class="form"/>
 				    
@@ -53,7 +49,7 @@
 							</ui:define>
 			                <h:inputSecret id="password" value="#{register.password}" required="true" />
 			            </s:decorate>
-			            <h:outputText value="#{messages['person.passwordHint']}" styleClass="passwordHint" />
+			            <h:outputText value="#{messages['register.passwordHint']}" styleClass="passwordHint" />
 			            
 			            <s:decorate id="passwordConfirmationField" template="/layout/edit.xhtml">
 							<ui:define name="label">
@@ -90,7 +86,7 @@
 						<hr class="form" />
 						
 						<div class="actionButtons">
-							<h:commandButton id="submit" value="" action="#{register.createPerson}" title="#{messages['menu.register']}" styleClass="buttonRegister" />
+							<h:commandButton id="submit" value="" action="#{register.createPerson}" title="#{messages['buttonTitle.register']}" styleClass="buttonRegister" />
 						</div>
 					</h:panelGrid>
 	    		</h:form>

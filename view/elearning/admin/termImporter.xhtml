@@ -13,37 +13,43 @@
     <ui:define name="body">
 		<div id="content">
 		
-			<h1>#{messages['admin.menu.termImport']}</h1>
+			<h1>#{messages['pagetitle.admin.termImport']}</h1>
 			<hr class="pageTitle" /><br />
+			
+			<div class="contentWrapper">
+			<h:outputText value="#{messages['admin.termImport.explanation']}" escape="false" /><br /><br />
 			
 			<h:form enctype="multipart/form-data">
 				
 				<s:fileUpload id="file" data="#{adminTermImporter.data}" fileName="#{adminTermImporter.name}" fileSize="#{adminTermImporter.size}" contentType="#{adminTermImporter.contentType}"/>
-				<h:commandButton styleClass="buttonUpload" value="" action="#{adminTermImporter.upload}" title="#{messages['admin.menu.termImport']}" /><br/>
+				<h:commandButton styleClass="buttonUpload" value="" action="#{adminTermImporter.upload}" title="#{messages['buttonTitle.termImport']}" /><br/>
 				<h:outputText value="#{adminTermImporter.terms.size()} #{messages['admin.terms.termsLoaded']}" rendered="#{!empty adminTermImporter.terms}" />
 				
 				<rich:dataTable value="#{adminTermImporter.terms}" var="_resource" rendered="#{!empty adminTermImporter.terms}" styleClass="with-borders">
 					
 					<rich:column>
-				    	<f:facet name="header"><h:outputText value="#{messages['admin.terms.term']}"/></f:facet>
+				    	<f:facet name="header"><h:outputText value="#{messages['terme.name']}"/></f:facet>
 				        <h:outputText value="#{_resource.term}" />
 				    </rich:column>
 				    
 					<rich:column>
-				    	<f:facet name="header"><h:outputText value="#{messages['admin.terms.associations']}"/></f:facet>
+				    	<f:facet name="header"><h:outputText value="#{messages['terme.confirmedTags']}"/></f:facet>
 				        <h:outputText value="#{_resource.associations}" />
 				    </rich:column>
 				    
 					<rich:column>
-				    	<f:facet name="header"><h:outputText value="#{messages['admin.terms.rating']}"/></f:facet>
+				    	<f:facet name="header"><h:outputText value="#{messages['terme.rating']}"/></f:facet>
 				        <h:outputText value="#{_resource.rating}" />
 				    </rich:column>
 				    
 				</rich:dataTable>
-				
-				<h:commandButton value="Import" action="#{adminTermImporter.doImport()}" rendered="#{!empty adminTermImporter.terms}" />
+				<h:panelGrid columns="2">
+					<s:button styleClass="buttonBack" value="" view="/admin/termList.xhtml" title="#{messages['buttonTitle.back']}"/>
+					<h:commandButton value="Import" action="#{adminTermImporter.doImport()}" rendered="#{!empty adminTermImporter.terms}" />
+				</h:panelGrid>
 				
 			</h:form>
+			</div>
 		</div>
 		
         <br class="clear" />

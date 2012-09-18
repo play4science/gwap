@@ -56,7 +56,7 @@
 		</transition>
 	</decision>
 	
-	<page name="gameoverpage" view-id="/scoring.xhtml">
+	<page name="gameoverpage" view-id="/termina_scoring.xhtml">
 	</page>
 
 </pageflow-definition>

@@ -36,13 +36,13 @@
 			
 			<h:panelGrid columns="3">
 			
-				<a4j:commandButton styleClass="sendAssociation" id="recommendTagButton" onclick="onSubmitTag()"  action="#{elearnFreeTaggingGame.recommendTag()}" reRender="gameMessages,recommendedTags" value="" title="#{messages['button.confirm']}">
+				<a4j:commandButton styleClass="sendAssociation" id="recommendTagButton" onclick="onSubmitTag()"  action="#{elearnFreeTaggingGame.recommendTag()}" reRender="gameMessages,recommendedTags" value="" title="#{messages['buttonTitle.confirm']}">
 					<s:defaultAction />
 				</a4j:commandButton> 
 				
-				<s:button id="continueButton" styleClass="swapTerm" action="next" value="" title="#{messages['button.swapTerm']}" />
+				<s:button id="continueButton" styleClass="swapTerm" action="next" value="" title="#{messages['buttonTitle.swapTerm']}" />
 			
-				<a4j:commandButton id="beendenButton" styleClass="buttonEnd" action="beenden" value="" title="#{messages['button.endGame']}"/>
+				<a4j:commandButton id="beendenButton" styleClass="buttonEnd" action="beenden" value="" title="#{messages['buttonTitle.endGame']}"/>
 				
 			</h:panelGrid>
 			

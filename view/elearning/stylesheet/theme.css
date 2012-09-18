@@ -1,76 +1,35 @@
-/* =BASICS
+
+/* =BASIC HTML
 -----------------------------------------------------------------------------*/
 
-/* Horizontal lines*/
-hr.pageTitle			{ width:500px; margin-left:0px; border-top: 1px solid #0e1e79; text-align:left; }
-hr.form					{ width:500px; height:1px; margin-left:5px; text-align:left; color:#a9a9a9; }
+a img 					{ border:none; }
 
-/* Page titles */
+body 					{ font-size:12px; margin:0px; }
+
+div.info 				{ font-size:1.2em; }
+
 h1						{ margin-top:0px; font-family:Arial, Verdana, Tahoma, sans-serif; font-size:18px; color:#0e1e79; }
 h2						{ font-size:12pt; font-weight:bold; }
 
-/* Divider */
-.actionButtons 			{ padding-left:1px; }
+hr.pageTitle			{ width:500px; margin-left:0px; border-top: 1px solid #0e1e79; text-align:left; }
+hr.form					{ width:500px; height:1px; margin-left:5px; text-align:left; color:#a9a9a9; }
+hr.termina				{ width:700px; height:1px; margin-left:5px; text-align:left; color:#a9a9a9; }
 
 
-/* =JSF
------------------------------------------------------------------------------*/
+table.radio 					{ border:0; }
+table.radio td 					{ padding:0 2px; }
+table.radio input[type=radio] 	{ vertical-align:bottom; }
 
-.rich-table 			{ width: 100%; }
+td.action 						{ text-align:center; width:8em; white-space:nowrap; }
+td.action a 					{ padding-left:1px; padding-right:1px; }
 
-body {
-	font-size: 12px;
-	margin: 0px;
-}
+ul.bullets 						{ list-style:square; }
+ul.bullets li 					{ padding-bottom:2px; }
 
-a img {
-	border: none;
-}
-
-input[type=submit], input[type=button] {
-	font-size: 11px;
-	margin: 5px 5px 5px 0;
-	cursor: pointer;
-}
-
-input[type=text], input[type=password], textarea {
-	font-size: 12px;
-	padding-left: 1px;
-}
-
-select {
-	font-size: 13px;
-}
-
-.tableControl, .actionButtons {
-	width: 100%;
-}
-
-.tableControl a {
-	padding-left: 10px;
-}
-
-.tableControl {
-	text-align: right;
-}
-
-.footer {
-	text-align: center;
-	font-size: 12px;
-	margin-bottom: 10px;
-}
-
-.body {
-	padding: 30px;
-}
-
-.value {
-	float: left;
-	padding: 5px;
-}
 
 /* =MESSAGES
 -----------------------------------------------------------------------------*/
+
 
 .message 					{ padding:5px; list-style:none; border:0; background:none; padding:0; color:#000; margin:5px 0 8px 0; font-size:12px; }
 
@@ -83,6 +42,12 @@ select {
 
 /* =FORMS
 -----------------------------------------------------------------------------*/
+
+input[type=submit], 
+input[type=button] 								{ font-size:11px; margin:5px 5px 5px 0; cursor:pointer; }
+input[type=text], 
+input[type=password], 
+textarea 										{ font-size:12px; padding-left:1px; }
 
 #profileForm									{ width:500px; }
 #loginForm										{ width:500px; }
@@ -98,14 +63,38 @@ select {
 img.errors 										{ padding-right: 5px; }
 .errors input, .errors textarea, .errors select { border: 1px solid red !important; }
 
-
-/* Other */
 .resetPassword									{ padding:5px; font-size:8pt; }
+ 
 
 
-.rich-stglpanel-body {
-	overflow: auto;
-} 
+/* = OTHER
+-----------------------------------------------------------------------------*/
+
+.actionButtons 			{ padding-left:1px; }
+.actionButtons select 	{ margin:5px 5px 5px 0; vertical-align:bottom; }
+
+.rich-table 			{ width: 100%; }
+.rich-stglpanel-body 	{ overflow: auto; } 
+
+
+select 					{ font-size:13px; }
+
+.tableControl 						{ text-align: right; }
+.tableControl, .actionButtons 		{ width:100%; }
+.tableControl a 					{ padding-left:10px; }
+.tableControl input[type=submit], 
+.tableControl input[type=button], 
+.tableControl select 				{ margin:5px 0 5px 5px; }
+
+/* I don't know why this is necessary, but the select is off by a pixel on the top and is padding too much on the left */
+.tableControl select 				{ margin-left:2px; position:relative; top:1px; }
+
+
+.footer 						{ text-align:center; font-size:12px; margin-bottom:10px; }
+
+.body 							{ padding:30px; }
+
+.value 							{ float:left; padding:5px; }
 
 /* the specificity here is necessary to override the defaults */
 /*
@@ -114,80 +103,17 @@ img.errors 										{ padding-right: 5px; }
 	padding: 2px 3px;
 }*/
 
-.rich-panel input[type=submit], .rich-panel input[type=button],
-.rich-tabpanel input[type=submit], .rich-tabpanel input[type=button] {
-	margin-bottom: 0;
-}
+.rich-panel input[type=submit], 
+.rich-panel input[type=button],
+.rich-tabpanel input[type=submit], 
+.rich-tabpanel input[type=button] 				{ margin-bottom:0; }
 
-.tableControl input[type=submit], .tableControl input[type=button], .tableControl select {
-	margin: 5px 0 5px 5px;
-}
 
-/* I don't know why this is necessary, but the select is off by a pixel on the top and is padding too much on the left */
-.tableControl select {
-	margin-left: 2px;
-	position: relative;
-	top: 1px;
-}
+.rich-toolbar-item a 							{ text-decoration:none; }
+.rich-toolbar-item a:hover, 
+.rich-ddmenu-label-select 						{ text-decoration:underline; }
 
-.actionButtons select {
-	margin: 5px 5px 5px 0;
-	vertical-align: bottom;
-}
+.rich-toolbar-item .rich-menu-item a:hover 		{ text-decoration:none; }
 
-.rich-toolbar-item a {
-	text-decoration: none;
-}
-
-.rich-toolbar-item a:hover, .rich-ddmenu-label-select {
-	text-decoration: underline;
-}
-
-.rich-toolbar-item .rich-menu-item a:hover {
-	text-decoration: none;
-}
-
-.rich-datalist {
-	list-style: square;
-	margin: 6px 0 1px 0;
-	padding-left: 18px;
-}
-
-.rich-list-item {
-	padding-bottom: 4px;
-}
-
-div.info {
-	font-size: 1.2em;
-}
-
-ul.bullets {
-	list-style: square;
-}
-
-ul.bullets li {
-	padding-bottom: 2px;
-}
-
-td.action {
-	text-align: center;
-	width: 8em;
-	white-space: nowrap;
-}
-
-td.action a {
-	padding-left: 1px;
-	padding-right: 1px;
-}
-
-table.radio {
-   border: 0;
-}
-
-table.radio td {
-   padding: 0 2px;
-}
-
-table.radio input[type=radio] {
-   vertical-align: bottom;
-}
+.rich-datalist 									{ list-style:square; margin:6px 0 1px 0; padding-left:18px; }
+.rich-list-item 								{ padding-bottom:4px; }

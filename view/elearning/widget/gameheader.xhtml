@@ -8,123 +8,23 @@
     xmlns:rich="http://richfaces.org/rich"
     xmlns:a4j="http://richfaces.org/a4j">
 	
-		
-	<h:outputText class="gamevariables" value="#{messages['Runden:']} #{gameRound.number}"/>
-	<h:outputText class="gamevariables" style="padding-left:10px;" value="#{messages['admin.term.rating']}: #{gameConfiguration.level}"/><br /><br />
+	<table>
+		<tr>
+			<td class="terminaTableCell"><img class="gameIcon" src="#{internalBasePath}img/game_round.svg" /><h:outputText class="gamevariables" value="#{messages['termina.currentRound']} #{gameRound.number}"/></td>
+			<td class="terminaTableCell"><img class="gameIcon" src="#{internalBasePath}img/game_level.svg" /><h:outputText class="gamevariables" style="padding-left:10px;" value="#{messages['terme.rating']}: #{gameConfiguration.level}"/></td>
+			<td class="terminaTableCell"><img class="gameIcon" src="#{internalBasePath}img/game_points.svg" /><h:outputText class="gamevariables" style="padding-left:10px;" value="#{messages['termina.punkte.anzahl']} #{elearnTermina.score}"/></td>
+			<td style="padding-left:60px;">
+				<h:form id="bereich4" class="alignmentright">
+					<a4j:commandButton id="beendenButton" styleClass="buttonEnd" action="beenden" value="" title="#{messages['buttonTitle.endGame']}" />
+				</h:form>
+			</td>
+		</tr>
+	</table>
+	<hr class="termina" />
+	<br />
 	
-	<div class="terminaGame">
-	<h:form id="countdown">
-		
-		<h:outputText class="gamequestion" value="#{messages['elearning.frage.satz']}" />
-		<h:outputText class="standout" id="questionTerm" value="#{term.tag.name}" rendered="#{!empty(term)}" /><br />
-		
-		<table>
-			<tr>
-				<td>
-					<h:commandButton id="switchTermButton" styleClass="nextRound" action="next" value="" title="#{messages['termina.skipRound']}" type="button" />
-					<a4j:jsFunction name="switchTerm" action="next" />
-				</td>
-				<td>
-					<a4j:commandButton action="#{elearnTermina.choose()}" styleClass="sendAssociation" title="#{messages['button.confirm']}" value="" reRender="bereich1,bereich3,focusbereich" type="submit" />
-				</td>
-				<td style="vertical-align:middle;">
-					
-					<rich:progressBar id="progressbar" minValue="0" maxValue="#{gameConfiguration.roundDuration}" value="0.000001" label="bar" mode="client" />
-					<script type="text/javascript">
-						countdown.callbackStep = function() {
-							#{rich:component('progressbar')}.setValue(this.duration - this.seconds + 0.000001);
-							#{rich:component('progressbar')}.setLabel(this.seconds);
-						};
-		
-						countdown.callbackStop = function() {
-							switchTerm();
-						};
+	<h:outputText value="#{messages['tagging.frage.satz']}" />
+	<h:outputText class="standout" id="questionTerm" value="#{term.tag.name}" rendered="#{!empty(term)}" /><br />
 	
-						countdown.start(#{gameConfiguration.roundDuration});
-			
-					</script>
-				</td>
-			</tr>
-		</table>
 		
-		<hr class="form" />
-		
-		<!--
-		<table>
-			<tr>
-				<td>
-					<h:outputText class="gamevariables" value="#{messages['admin.term.rating']}: #{gameConfiguration.level}"/>
-				</td>
-
-			<rich:progressBar
-				id="progressbar"
-				minValue="0" 
-				maxValue="#{gameConfiguration.roundDuration}"
-				value="0.000001"
-				label="bar"
-				mode="client"
-				
-			>
-			</rich:progressBar>
-			
-			<script type="text/javascript">
-				countdown.callbackStep = function() {
-					#{rich:component('progressbar')}.setValue(this.duration - this.seconds + 0.000001);
-					#{rich:component('progressbar')}.setLabel(this.seconds);
-				};
-		
-				countdown.callbackStop = function() {
-					switchTerm();
-				};
-	
-				countdown.start(#{gameConfiguration.roundDuration});
-			
-			</script>
-
-			</tr>
-		
-			</table>-->
-		
-		</h:form>
-		
-		<!-- Anzeigen der Game Variablen Rundenanzahl, momentaner Score, die momentane Ansage, sowie die momentane Zeiteinstellung -->
-		<h:form id="bereich1" >
-			<table >
-				<tr>
-					<td><h:outputText value="#{messages['elearn.punkte.anzahl']}"/></td>
-					<td><h:outputText value=" #{elearnTermina.score}"/></td>
-					<td></td>
-					<td></td>
-				</tr>
-				
-				<tr>
-					<td><h:outputText value="#{messages['Gefundene Assoziationen:']}"/></td>
-					<td><h:outputText value="#{elearnTermina.foundAssociations}"/></td>
-					<td><h:outputText value="#{messages['von']} #{gameConfiguration.bid}"/></td>
-					<td></td>
-				</tr>
-				
-				<tr>
-					<td><h:outputText value="#{messages['elearn.ansage.anzahl']}" /></td>
-					<td><a4j:commandButton styleClass="buttonDecrease" action="#{elearnTermina.lowerBid()}" value="" title="#{messages['button.decrease']}" reRender="bereich1"/></td>
-					<td><h:outputText value="#{elearnTermina.nextGameConfiguration.bid}"/></td>
-					<td><a4j:commandButton styleClass="buttonIncrease" action="#{elearnTermina.riseBid()}" value="" title="#{messages['button.increase']}" reRender="bereich1"/></td>
-				</tr>
-				
-				<tr>
-					<td><h:outputText value="#{messages['elearn.zeit.anzahl']}"  /></td>
-					<td><a4j:commandButton styleClass="buttonDecrease" action="#{elearnTermina.lowerRoundDuration()}" value="" title="#{messages['button.decrease']}" reRender="bereich1"/></td>
-					<td><h:outputText value="#{elearnTermina.nextGameConfiguration.roundDuration}"/></td>
-					<td><a4j:commandButton styleClass="buttonIncrease" action="#{elearnTermina.riseRoundDuration()}" value="" title="#{messages['button.increase']}" reRender="bereich1"/></td>
-					</tr>
-					
-			</table>
-
-			<script type="text/javascript">
-				if(#{gameConfiguration.bid}==#{elearnTermina.foundAssociations})
-					countdown.stop();		
-				</script>	
-			
-		</h:form>
-		</div>
 	</ui:composition>

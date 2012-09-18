@@ -10,16 +10,12 @@
 
 	<script type="text/javascript"></script>
 	<noscript><div class="noscript"><h:outputText value="#{messages['general.javascriptDisabled']}" /></div></noscript>
-	
-	<div id="logodiv">
-
-	 <s:link view="/home.xhtml"><img id="logo" src="#{internalBasePath}img/termina_logo.svg" /></s:link>
-	</div>
 
 	<div id="navHeader">
 	<br />
-		<table width="60%">
+		<table width="100%">
 			<tr>
+				<td rowspan="2"><s:link view="/home.xhtml"><img id="logo" src="#{internalBasePath}img/termina_logo.svg" /></s:link></td>
 				<td align="center"><s:link id="menuHomeId" styleClass="menuItem #{menuBean.getCssClass('/home.xhtml')}" view="/home.xhtml" propagation="none" /></td>
 				<td align="center"><s:link id="menuImpressumId" styleClass="menuItem #{menuBean.getCssClass('/impressum.xhtml')}" view="/impressum.xhtml" propagation="none" /></td>
 				<td align="center"><s:link id="menuFAQId" styleClass="menuItem #{menuBean.getCssClass('/faq.xhtml')}" view="/faq.xhtml" propagation="none" /></td>
@@ -29,20 +25,26 @@
 				<td align="center"><s:link id="menuHighscoreId" styleClass="menuItem #{menuBean.getCssClass('/highscore.xhtml')}" view="/highscore.xhtml" propagation="none" /></td>
 				<td align="center"><s:link id="menuLoginId" styleClass="menuItem #{menuBean.getCssClass('/login.xhtml')}" view="/login.xhtml" propagation="none" /></td>
 				<td rowspan="2">
-					<s:link view="/admin/termList.xhtml" styleClass="menuLink #{menuBean.getCssClass('/admin/termList.xhtml')}" value="#{messages['admin.menu.termList']}" /><br />
-					<s:link view="/admin/topicList.xhtml" styleClass="menuLink #{menuBean.getCssClass('/admin/topicList.xhtml')}" value="#{messages['admin.menu.topicList']}" /><br />
-					<s:link view="/admin/gameConfigurationList.xhtml" styleClass="menuLink #{menuBean.getCssClass('/admin/gameConfigurationList.xhtml')}" value="#{messages['admin.menu.gameConfigurationList']}" />
+					<s:link view="/admin/termList.xhtml" styleClass="menuLink #{menuBean.getCssClass('/admin/term.xhtml')}" value="#{messages['menu.admin.termList']}" /><br />
+					<s:link view="/admin/topicList.xhtml" styleClass="menuLink #{menuBean.getCssClass('/admin/topic.xhtml')}" value="#{messages['menu.admin.topicList']}" /><br />
+					<s:link view="/admin/gameConfigurationList.xhtml" styleClass="menuLink #{menuBean.getCssClass('/admin/gameConfiguration.xhtml')}" value="#{messages['menu.admin.gameConfList']}" />
 				</td>
 			</tr>
 			<tr>
 				<td align="center"><s:link styleClass="menuLink #{menuBean.getCssClass('/home.xhtml')}" view="/home.xhtml" value="#{messages['menu.welcome']}" propagation="none"/></td>
 				<td align="center"><s:link styleClass="menuLink #{menuBean.getCssClass('/impressum.xhtml')}" view="/impressum.xhtml" value="#{messages['menu.impressum']}" propagation="none"/></td>
 				<td align="center"><s:link styleClass="menuLink #{menuBean.getCssClass('/faq.xhtml')}" view="/faq.xhtml" value="#{messages['menu.faq']}" propagation="none"/></td>
-				<td align="center"><s:link styleClass="menuLink #{menuBean.getCssClass('/register.xhtml')}" view="/register.xhtml" value="#{messages['menu.register']}" rendered="#{not identity.loggedIn}" propagation="none"/></td>
+				<td align="center">
+					<s:link styleClass="menuLink #{menuBean.getCssClass('/register.xhtml')}" view="/register.xhtml" value="#{messages['menu.register']}" rendered="#{not identity.loggedIn}" propagation="none"/>
+					<s:link styleClass="menuLink #{menuBean.getCssClass('/profile.xhtml')}" view="/profile.xhtml" value="#{messages['menu.profile']}" rendered="#{identity.loggedIn}" propagation="none"/>
+					</td>
 				<td align="center"><s:link styleClass="menuLink #{menuBean.getCssClass('/termina.xhtml')}" view="/termina.xhtml" value="#{messages['menu.termina']}" propagation="none"/></td>
 				<td align="center"><s:link styleClass="menuLink #{menuBean.getCssClass('/tagging.xhtml')}" view="/tagging.xhtml" value="#{messages['menu.tagging']}" propagation="none"/></td>
 				<td align="center"><s:link styleClass="menuLink #{menuBean.getCssClass('/highscore.xhtml')}" view="/highscore.xhtml" value="#{messages['menu.highscore']}" propagation="none"/></td>
-				<td align="center"><s:link styleClass="menuLink #{menuBean.getCssClass('/login.xhtml')}" view="/login.xhtml" value="Login" rendered="#{not identity.loggedIn}" propagation="none"/></td>
+				<td align="center">
+					<s:link styleClass="menuLink #{menuBean.getCssClass('/login.xhtml')}" view="/login.xhtml" value="#{messages['menu.login']}" rendered="#{not identity.loggedIn}" propagation="none"/>
+					<s:link styleClass="menuLink #{menuBean.getCssClass('/login.xhtml')}" view="/home.xhtml" action="#{identity.logout}" value="#{messages['menu.logout']}" rendered="#{identity.loggedIn}" propagation="none"/>
+				</td>
 			</tr>
 		</table>
 

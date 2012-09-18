@@ -12,8 +12,8 @@
     <ui:define name="body">
 		<div id="content">
 		
-			<h1><h:outputText value="#{messages['admin.menu.termEdit']}" rendered="#{termHome.managed}" /></h1>
-			<h1><h:outputText value="#{messages['admin.menu.termAdd']}" rendered="#{!termHome.managed}" /></h1>
+			<h1><h:outputText value="#{messages['pagetitle.admin.termEdit']}" rendered="#{termHome.managed}" /></h1>
+			<h1><h:outputText value="#{messages['pagetitle.admin.termAdd']}" rendered="#{!termHome.managed}" /></h1>
 			<hr class="pageTitle" /><br />
 			
       		<f:view>
@@ -22,11 +22,11 @@
             		<s:validateAll>
                			<h:panelGrid columns="2" columnClasses="termTable">
                			
-                  			<h:outputText value="#{messages['admin.term.name']}:"/>
+                  			<h:outputText value="#{messages['terme.name']}:"/>
                   			<h:inputText value="#{termHome.instance.tag.name}" required="true"/>
-                  			<h:outputText value="#{messages['admin.term.rating']}:"/>
+                  			<h:outputText value="#{messages['terme.rating']}:"/>
                   			<h:inputText value="#{termHome.instance.rating}" required="true"/>
-                  			<h:outputText value="#{messages['admin.term.confirmedTags']}:"/>
+                  			<h:outputText value="#{messages['terme.confirmedTags']}:"/>
                   			
                  		 	<rich:dataTable id="confirmedTagsTable" value="#{termHome.instance.confirmedTags}" var="_tag">
                  		 	
@@ -36,7 +36,7 @@
 			        			</h:column>
 			        			
 								<h:column>
-									<h:commandButton styleClass="buttonDelete" action="#{termHome.deleteConfirmedTerm(_tag.id)}" value="" title="#{messages['admin.menu.assocDelete']}">
+									<h:commandButton styleClass="buttonDelete" action="#{termHome.deleteConfirmedTerm(_tag.id)}" value="" title="#{messages['buttonTitle.assocDelete']}">
 									<!-- <f:param name="confirmedTagId" value="#{_tag.id}"/> -->
 									</h:commandButton>
 								</h:column>
@@ -46,18 +46,20 @@
                   		
                   		<h:panelGrid columns="3">
                   		
-                  			<h:outputText value="#{messages['admin.term.addConfirmedTag']}"/>
+                  			<h:outputText value="#{messages['terme.addConfirmedTag']}"/>
                   			<h:inputText value="#{termHome.newConfirmedTag}"/>
-	                		<h:commandButton value="" styleClass="buttonIncrease" action="#{termHome.addConfirmedTag}" title="#{messages['admin.menu.assocAdd']}" />
+	                		<h:commandButton value="" styleClass="buttonIncrease" action="#{termHome.addConfirmedTag}" title="#{messages['buttonTitle.assocAdd']}" />
 
                			</h:panelGrid>
 
             		</s:validateAll>
 
             		<h:messages/>
-
-            		<h:commandButton value="" styleClass="buttonSave" action="#{termHome.persist}" rendered="#{!termHome.managed}" title="#{messages['admin.menu.termAdd']}" />
-					<h:commandButton value="" styleClass="buttonSave" action="#{termHome.update}" rendered="#{termHome.managed}" title="#{messages['admin.menu.termSave']}" />
+            		<h:panelGrid columns="2">
+						<s:button styleClass="buttonBack" value="" view="/admin/termList.xhtml" title="#{messages['buttonTitle.back']}"/>
+	            		<h:commandButton value="" styleClass="buttonSave" action="#{termHome.persist}" rendered="#{!termHome.managed}" title="#{messages['buttonTitle.termAdd']}" />
+						<h:commandButton value="" styleClass="buttonSave" action="#{termHome.update}" rendered="#{termHome.managed}" title="#{messages['buttonTitle.termSave']}" />
+         			</h:panelGrid>
          		</h:form>
 
       		</f:view>

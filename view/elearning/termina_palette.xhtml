@@ -32,28 +32,26 @@
 		aufgerufen -->
 		
 			<a4j:form id="bereich3">
-				<s:validateAll>
-				<h:selectManyListbox id="answersListbox" value="#{elearnTermina.answers}">
-					<s:selectItems value="#{elearnTermina.tags}" var="tag" label="#{tag.name}" />
-				</h:selectManyListbox>
-				</s:validateAll><br></br>
-				
-				<a4j:commandButton action="#{elearnTermina.choosePalette()}" styleClass="sendAssociation" title="#{messages['button.confirm']}" value="" reRender="bereich1,bereich3" type="submit"/>
-			
+				<table>
+					<tr>
+						<td>
+							<s:validateAll>
+							<h:selectManyListbox id="answersListbox" value="#{elearnTermina.answers}">
+							<s:selectItems value="#{elearnTermina.tags}" var="tag" label="#{tag.name}" />
+						</h:selectManyListbox><br />
+						<h:outputText value="#{messages['termina.mehrfachauswahl']}" styleClass="passwordHint" />
+						</s:validateAll>
+						</td>
+						<td class="terminaTableCell"><a4j:commandButton action="#{elearnTermina.choosePalette()}" styleClass="sendAssociation" title="#{messages['buttonTitle.confirm']}" value="" reRender="bereich1,bereich3" type="submit"/>
+			</td>
+					</tr>
+				</table>
 			</a4j:form>
 			
-		<!-- Beenden Button, Session wird beendet, man wird zum Highscore gelinkt  -->
-
-		<h:form id="bereich4" class="alignmentright">
-		<!--  
-		<a4j:commandButton id="beendenButton" action="beenden" value="Beenden"/>
-		-->
-		</h:form>
+			<ui:include src="/terminaGame/focusbereich.xhtml" />
 		
 		<!--  <s:button action="next" value="#{'Naechste Runde!'}"/>-->
 		</div>
-	
-		
         <br class="clear" />
     </ui:define>
 </ui:composition>
