@@ -375,6 +375,10 @@ img.errors {
 	padding-right: 35px;
 }
 
+.highscoreheader {
+	font-size: 10pt;
+}
+
 .loggedIn {
 	float: left;
 }
@@ -1312,7 +1316,7 @@ dd {
 
 .ranking a {
 	background: url(../img/arrowSmall.gif) no-repeat left center;
-	font-size: 1em;
+	font-size: 12px;
 	text-transform: uppercase;
 	color: #000;
 	font-weight: bold;
@@ -1328,10 +1332,12 @@ dd {
 
 .rich-table-subheader {
 	background-color: #fff;
+	font-size: 11px;
 }
 
 .rich-table-subheadercell {
 	color: #707070;
+	font-size: 11px;
 }
 
 /* =About
