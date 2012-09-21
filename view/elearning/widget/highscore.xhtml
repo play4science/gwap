@@ -12,7 +12,7 @@
     
 	<c:forEach items="#{highscoreBean.highscores}" var="_highscore">
 	
-		<rich:dataTable styleClass="highscoreTable" style="width:50%;" summary="Highscore" value="#{_highscore.highscoreAll}" var="_score" rendered="true">			
+		<rich:dataTable width="50%" style="width:50%;" styleClass="highscoreTable" summary="Highscore" value="#{_highscore.highscoreAll}" var="_score" rendered="true">			
 
 			<f:facet name="header">
 				<h:outputText value="#{messages['score.all']}" />
@@ -22,8 +22,8 @@
 				<f:facet name="header">
 					<h:outputText styleClass="highscoreheader" value="#{messages['score.user']}"/>
 				</f:facet>
-				<h:outputText value="#{_score.person.username}" rendered="true" />
-				<h:outputText value="#{messages['general.guest']}" rendered="true" />
+				<h:outputText value="#{_score.person.username}" />
+				<h:outputText value="#{messages['general.guest']}" rendered="#{empty(_score.person.username)}" />
 			</rich:column>
 			
 			<rich:column width="20%" style="text-align:center" styleClass="#{_score.personId == person.id ? 'self' : null}">

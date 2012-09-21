@@ -450,6 +450,10 @@ img.errors {
 	font-weight: bold;
 }
 
+.taggingQuestion {
+	padding-left: 0px;
+}
+
 .terminaQuestion {
 	padding-left:35px;
 }
@@ -661,6 +665,47 @@ input[type="button"].swapTerm:hover {
 /*--------------------------------- TABLES --------------------------------- */
 /*-------------------------------------------------------------------------- */
 
+
+#highscoreTableDaily,#highscoreTable {
+	border-top: 4px solid #000;
+	border-bottom: 2px solid #000;
+	border-left: none;
+	border-right: none;
+	width: 375px;
+	padding-bottom: 10px;
+	margin-bottom: 10px;
+	background: #fff
+}
+
+#highscoreTableDaily th,#highscoreTable th {
+	border-left: none;
+	border-right: none;
+	text-align: left;
+	padding: 3px 0 20px 0;
+	padding: 3px 2px 20px 2px;
+	font-size: 12px;
+}
+
+#highscoreTableDaily td,#highscoreTable td {
+	border-top: 1px solid #000;
+	border-left: none;
+	border-right: none;
+	padding: 5px 2px;
+	font-size: 14px;
+}
+
+#highscoreTableDaily tr,#highscoreTable tr {
+	background: #fff
+}
+
+#highscoreTableDaily tr.active,#highscoreTable tr.active {
+	background: #fff;
+}
+
+#highscoreTableDaily .rich-table-subheadercell,#highscoreTable .rich-table-subheadercell
+	{
+	background-image: none
+}
 
 #menuTable {
 	width: 100%;
@@ -1333,46 +1378,6 @@ dd {
 
 /* =TABLES
 -----------------------------------------------------------------------------*/
-#highscoreTableDaily,#highscoreTable {
-	border-top: 4px solid #000;
-	border-bottom: 2px solid #000;
-	border-left: none;
-	border-right: none;
-	width: 375px;
-	padding-bottom: 10px;
-	margin-bottom: 10px;
-	background: #fff
-}
-
-#highscoreTableDaily th,#highscoreTable th {
-	border-left: none;
-	border-right: none;
-	text-align: left;
-	padding: 3px 0 20px 0;
-	padding: 3px 2px 20px 2px;
-	font-size: 12px;
-}
-
-#highscoreTableDaily td,#highscoreTable td {
-	border-top: 1px solid #000;
-	border-left: none;
-	border-right: none;
-	padding: 5px 2px;
-	font-size: 14px;
-}
-
-#highscoreTableDaily tr,#highscoreTable tr {
-	background: #fff
-}
-
-#highscoreTableDaily tr.active,#highscoreTable tr.active {
-	background: #fff;
-}
-
-#highscoreTableDaily .rich-table-subheadercell,#highscoreTable .rich-table-subheadercell
-	{
-	background-image: none
-}
 
 .ranking {
 	text-align: right
