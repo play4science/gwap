@@ -17,7 +17,7 @@
 			<hr class="pageTitle" /><br />
 			
       		<f:view>
-     
+     			<div class="dialog">
          		<h:form>
             		<s:validateAll>
                			<h:panelGrid columns="2" columnClasses="termTable">
@@ -61,7 +61,7 @@
 						<h:commandButton value="" styleClass="buttonSave" action="#{termHome.update}" rendered="#{termHome.managed}" title="#{messages['buttonTitle.termSave']}" />
          			</h:panelGrid>
          		</h:form>
-
+				</div>
       		</f:view>
 		</div>		
         <br class="clear" />

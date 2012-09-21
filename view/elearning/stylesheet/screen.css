@@ -356,6 +356,10 @@ img.errors {
 	font-size: small;
 }
 
+.adminForm {
+	padding-left: 10px;
+}
+
 *.gamequestion {
 	font-size: 14px;
 	font-weight: bold; color : #474747;
@@ -439,6 +443,10 @@ img.errors {
 
 #profileForm { 
 	width:500px; 
+}
+
+.adminInput {
+	margin-left: 10px;
 }
 
 .globalMessage {
@@ -1282,7 +1290,7 @@ dd {
 	border-left: none;
 	border-right: none;
 	padding: 5px 2px;
-	font-size: 12px;
+	font-size: 14px;
 }
 
 #highscoreTableDaily tr,#highscoreTable tr {

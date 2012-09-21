@@ -21,8 +21,8 @@
          		<h:form>
 
             		<s:validateAll><br />
-            			<h:outputText style="padding-left:10px;" value="#{messages['topic.name']}:" />
-						<h:inputText style="margin-left:10px;" value="#{topicHome.instance.name}" /><br /><br />
+            			<h:outputText styleClass="adminForm" value="#{messages['topic.name']}:" />
+						<h:inputText styleClass="adminInput" value="#{topicHome.instance.name}" /><br /><br />
                  
                 		<rich:pickList value="#{topicHome.list}" var="_term" >                
             				<s:selectItems value="#{topicHome.allResources}" var="_term" itemValue="#{_term}" label="#{_term.tag.name}"/>
@@ -30,8 +30,8 @@
                			
                			<h:panelGrid columns="2">
                				<s:button styleClass="buttonBack" value="" view="/admin/topicList.xhtml" title="#{messages['buttonTitle.back']}"/>
-               				<h:commandButton value="" style="padding-left:10px;" styleClass="buttonSave" action="#{topicHome.persist()}" rendered="#{!topicHome.managed}" title="#{messages['buttonTitle.topicAdd']}" />
-							<h:commandButton value="" style="padding-left:10px;" styleClass="buttonSave" action="#{topicHome.update()}" rendered="#{topicHome.managed}" title="#{messages['buttonTitle.topicSave']}"/>
+               				<h:commandButton value=""  styleClass="buttonSave" action="#{topicHome.persist()}" rendered="#{!topicHome.managed}" title="#{messages['buttonTitle.topicAdd']}" />
+							<h:commandButton value="" styleClass="buttonSave" action="#{topicHome.update()}" rendered="#{topicHome.managed}" title="#{messages['buttonTitle.topicSave']}"/>
                			</h:panelGrid>
 
             		</s:validateAll>
