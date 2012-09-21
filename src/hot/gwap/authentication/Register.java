@@ -86,6 +86,7 @@ public class Register implements Serializable {
 		}
 		entityManager.flush();
 		
+		log.info("Sending welcome email to #0 <#1>", person.getName(), person.getEmail());
 		renderer.render("/email/welcome.xhtml");
 		log.info("Registered new user #0", person);
 		
