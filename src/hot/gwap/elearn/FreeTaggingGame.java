@@ -11,7 +11,6 @@ package gwap.elearn;
 import gwap.action.TaggingBean;
 import gwap.game.AbstractGameSessionBean;
 import gwap.model.GameRound;
-import gwap.model.action.Action;
 import gwap.model.action.Tagging;
 import gwap.model.resource.Term;
 import gwap.wrapper.MatchingTag;
@@ -63,9 +62,10 @@ public class FreeTaggingGame extends AbstractGameSessionBean {
 		if (tagging.getTag() == null) {
 			log.info("Could not add tag to gameround as it is invalid.");
 		} else {
-			List<Action> actions = gameRound.getActions();
-			actions.add(tagging);
-			log.info("Added #0 to game round", tagging.getTag().getName());
+			gameRound.getActions().add(tagging);
+			if (TerminaMatching.isAssociationInConfirmedTags(tagging.getTag().getName(), term))
+				tagging.setScore(1);
+			log.info("Added #0 to game round", tagging.getTag());
 		}
 		recommendedTags.put(gameRound.getNumber(), taggingBean.getRecommendedTags());
 		return null;

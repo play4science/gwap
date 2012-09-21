@@ -150,7 +150,7 @@ public class Termina extends AbstractGameSessionBean {
 		initializeAction(tagging);
 		tagging.setResource(term);
 		
-		Tag tag = checkAssociation(association, term);
+		Tag tag = TerminaMatching.checkAssociationInConfirmedTags(association, term);
 		
 		if (tag != null) {
 			log.info("Association '#0' is correct for term '#1'", association, term);
@@ -221,10 +221,6 @@ public class Termina extends AbstractGameSessionBean {
 		}
 		
 		return zeitbonus * gameConfiguration.getLevel();
-	}
-	
-	private Tag checkAssociation(String association, Term term) {
-		return TagSemantics.containsNotNormalized(term.getConfirmedTags(), association);
 	}
 	
 	@Override
