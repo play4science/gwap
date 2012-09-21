@@ -102,7 +102,7 @@ public class TopicHome extends EntityHome<Topic> {
 	@Override
 	public String persist() {
 		if (Strings.isNullOrEmpty(getInstance().getName())) {
-			facesMessages.addToControl("topicName", "#{messages['topic.name']} #{messages['validator.notNull']}");
+			facesMessages.addToControlFromResourceBundle("topicName", "javax.faces.component.UIInput.REQUIRED");
 			return null;
 		}
 		String persist = super.persist();

@@ -22,32 +22,44 @@
 
             		<s:validateAll>
 
-               			<h:panelGrid columns="2">
+               			<h:panelGrid columns="1">
                   			<h:outputText value="#{messages['gameConf.id']}:"/>
                   			<h:outputText value="#{gameConfigurationHome.instance.id}"/>
-            	  			<h:outputText value="#{messages['gameConf.topicName']}:"/>
             	  			
-            	  			<h:selectOneMenu value="#{gameConfigurationHome.selectedTopicId}"> 
-            					<f:selectItems value="#{gameConfigurationHome.selectTopics}"/>
-        		  			</h:selectOneMenu>
-        		  			
-        		  			<!--
-         		  			<h:outputText value="#{messages['admin.gameConfiguration.topicId']}:"/> 
-         		  			<h:outputText value="#{gameConfigurationHome.instance.topic.id}" required="true"/>
-                  			<h:inputText value="#{gameConfigurationHome.instance.topic.name}" required="true"/> 
-                  			-->
+            	  			<s:decorate id="topicNameField" template="/layout/edit.xhtml">
+			            		<ui:define name="label">
+	                  				<h:outputText value="#{messages['gameConf.topicName']}:"/>
+			                	</ui:define>
+	            	  			<h:selectOneMenu value="#{gameConfigurationHome.selectedTopicId}"> 
+	            					<f:selectItems value="#{gameConfigurationHome.selectTopics}"/>
+	        		  			</h:selectOneMenu>
+	        		  		</s:decorate>
                   			
-                  			<h:outputText value="#{messages['gameConf.roundDuration']}:"/> 
-                  			<h:inputText value="#{gameConfigurationHome.instance.roundDuration}" required="true"/>
-                  			<h:outputText value="#{messages['gameConf.level']}:"/> 
-                  			<h:inputText value="#{gameConfigurationHome.instance.level}" required="true"/>
-                  			<h:outputText value="#{messages['gameConf.bid']}:"/> 
-                  			<h:inputText value="#{gameConfigurationHome.instance.bid}" required="true"/>
+                  			<s:decorate id="roundDurationField" template="/layout/edit.xhtml">
+			            		<ui:define name="label">
+		                  			<h:outputText value="#{messages['gameConf.roundDuration']}:"/> 
+			                	</ui:define>
+	                  			<rich:inputNumberSpinner value="#{gameConfigurationHome.instance.roundDuration}" required="true"/>
+	                  		</s:decorate>
+                  				
+                  			<s:decorate id="levelField" template="/layout/edit.xhtml">
+			            		<ui:define name="label">
+	                  				<h:outputText value="#{messages['gameConf.level']}:"/> 
+			                	</ui:define>
+			                	<rich:inputNumberSpinner value="#{gameConfigurationHome.instance.level}" required="true" />
+	                  		</s:decorate>
+	                  		
+	                  		<s:decorate id="bidField" template="/layout/edit.xhtml">
+			            		<ui:define name="label">
+		                  			<h:outputText value="#{messages['gameConf.bid']}:"/> 
+			                	</ui:define>
+	                  			<rich:inputNumberSpinner value="#{gameConfigurationHome.instance.bid}" required="true"/>
+	                  		</s:decorate>
                			</h:panelGrid>
                			
             		</s:validateAll>
 
-            		<h:messages/>
+            		<h:messages globalOnly="true"/>
             		<h:panelGrid columns="2">
             			<s:button styleClass="buttonBack" value="" view="/admin/gameConfigurationList.xhtml" title="#{messages['buttonTitle.back']}"/>
             			<h:commandButton value="" styleClass="buttonSave" action="#{gameConfigurationHome.persist()}" rendered="#{!gameConfigurationHome.managed}" title="#{messages['buttonTitle.gameConfAdd']}" />

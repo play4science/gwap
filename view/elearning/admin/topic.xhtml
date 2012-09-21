@@ -20,23 +20,29 @@
 				<div class="dialog">
          		<h:form>
 
-            		<s:validateAll><br />
-            			<h:outputText styleClass="adminForm" value="#{messages['topic.name']}:" />
-						<h:inputText id="topicName" styleClass="adminInput" value="#{topicHome.instance.name}" /><br /><br />
-                 
-                		<rich:pickList sourceListWidth="auto" targetListWidth="auto" listsHeight="auto" value="#{topicHome.list}" var="_term" >                
-            				<s:selectItems value="#{topicHome.allResources}" var="_term" itemValue="#{_term}" label="#{_term.tag.name}"/>
-        				</rich:pickList>
-               			
+            		<s:validateAll>
+            			<h:panelGrid columns="1">
+	            			<s:decorate id="topicNameField" template="/layout/edit.xhtml">
+			            		<ui:define name="label">
+			            			<h:outputText styleClass="adminForm" value="#{messages['topic.name']}:" />
+			                	</ui:define>
+								<h:inputText id="topicName" styleClass="adminInput" value="#{topicHome.instance.name}" /><br /><br />
+							</s:decorate>
+	                 
+	                		<rich:pickList sourceListWidth="auto" targetListWidth="auto" listsHeight="auto" value="#{topicHome.list}" var="_term" >                
+	            				<s:selectItems value="#{topicHome.allResources}" var="_term" itemValue="#{_term}" label="#{_term.tag.name}"/>
+	        				</rich:pickList>
+	               			
                			<h:panelGrid columns="2">
                				<s:button styleClass="buttonBack" value="" view="/admin/topicList.xhtml" title="#{messages['buttonTitle.back']}"/>
                				<h:commandButton value=""  styleClass="buttonSave" action="#{topicHome.persist()}" rendered="#{!topicHome.managed}" title="#{messages['buttonTitle.topicAdd']}" />
 							<h:commandButton value="" styleClass="buttonSave" action="#{topicHome.update()}" rendered="#{topicHome.managed}" title="#{messages['buttonTitle.topicSave']}"/>
                			</h:panelGrid>
+               			</h:panelGrid>
 
             		</s:validateAll>
 
-            		<h:messages/>
+            		<h:messages globalOnly="true"/>
 
          		</h:form>
          		</div>

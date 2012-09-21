@@ -20,22 +20,36 @@
      			<div class="dialog">
          		<h:form>
             		<s:validateAll>
-               			<h:panelGrid columns="2" columnClasses="termTable">
-               			
-                  			<h:outputText value="#{messages['terme.name']}:"/>
-                  			<h:inputText value="#{termHome.instance.tag.name}" required="true"/>
-                  			
-                  			<h:outputText value="#{messages['terme.enabled']}:"/>
-                  			<h:selectBooleanCheckbox value="#{termHome.instance.enabled}" required="true"/>
-                  			
-                  			<h:outputText value="#{messages['terme.rating']}:"/>
-                  			<rich:inputNumberSpinner value="#{termHome.instance.rating}" required="true" />
-                  			
-                  			<h:outputText value="#{messages['terme.confirmedTags']}:"/>
-                  			
-                 		 	<rich:dataTable id="confirmedTagsTable" value="#{termHome.instance.confirmedTags}" var="_tag">
-                 		 	
-                  				<h:column>
+            			<h:panelGrid columns="1">
+	                 		<s:decorate id="termNameField" template="/layout/edit.xhtml">
+			            		<ui:define name="label">
+				                	<h:outputText value="#{messages['terme.name']}" />
+			                	</ui:define>
+	                  			<h:inputText value="#{termHome.instance.tag.name}" id="termName" required="true"/>
+			            	</s:decorate>
+	                 			
+	                 		<s:decorate id="enabledField" template="/layout/edit.xhtml">
+			            		<ui:define name="label">
+		                 			<h:outputText value="#{messages['terme.enabled']}:"/>
+			                	</ui:define>
+		               			<h:selectBooleanCheckbox value="#{termHome.instance.enabled}" required="true"/>
+		               		</s:decorate>
+	                 			
+	                 		<s:decorate id="ratingField" template="/layout/edit.xhtml">
+			            		<ui:define name="label">
+		                 			<h:outputText value="#{messages['terme.rating']}:"/>
+			                	</ui:define>
+	                 			<rich:inputNumberSpinner value="#{termHome.instance.rating}" required="true" />
+	                 		</s:decorate>
+	                 		
+	                 		<s:decorate id="confirmedTagsField" template="/layout/edit.xhtml">
+			            		<ui:define name="label">
+		                 			<h:outputText value="#{messages['terme.confirmedTags']}:"/>
+			                	</ui:define>	
+	                 			
+	                		 	<rich:dataTable id="confirmedTagsTable" value="#{termHome.instance.confirmedTags}" var="_tag">
+	                		 	
+	                 				<h:column>
 			            			<h:inputText value="#{_tag.name}" rendered="#{!termHome.managed}"/>
 			            			<h:outputText value="#{_tag.name}" rendered="#{termHome.managed}"/>
 			        			</h:column>
@@ -46,20 +60,21 @@
 									</h:commandButton>
 								</h:column>
 								
-                  			</rich:dataTable>
-                  		</h:panelGrid>
-                  		
-                  		<h:panelGrid columns="3">
-                  		
-                  			<h:outputText value="#{messages['terme.addConfirmedTag']}"/>
-                  			<h:inputText value="#{termHome.newConfirmedTag}"/>
-	                		<h:commandButton value="" styleClass="buttonIncrease" action="#{termHome.addConfirmedTag}" title="#{messages['buttonTitle.assocAdd']}" />
-
-               			</h:panelGrid>
+	                 			</rich:dataTable>
+	                  		
+		                  		<h:panelGrid columns="3">
+		                  		
+		                  			<h:outputText value="#{messages['terme.addConfirmedTag']}"/>
+		                  			<h:inputText value="#{termHome.newConfirmedTag}"/>
+			                		<h:commandButton value="" styleClass="buttonIncrease" action="#{termHome.addConfirmedTag}" title="#{messages['buttonTitle.assocAdd']}" />
+		
+		               			</h:panelGrid>
+	                 		</s:decorate>
+                 		</h:panelGrid>
 
             		</s:validateAll>
 
-            		<h:messages/>
+            		<h:messages globalOnly="true"/>
             		<h:panelGrid columns="2">
 						<s:button styleClass="buttonBack" value="" view="/admin/termList.xhtml" title="#{messages['buttonTitle.back']}"/>
 	            		<h:commandButton value="" styleClass="buttonSave" action="#{termHome.persist}" rendered="#{!termHome.managed}" title="#{messages['buttonTitle.termAdd']}" />

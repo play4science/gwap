@@ -73,7 +73,7 @@ public class TermHome extends EntityHome<Term> {
 			newConfirmedTag = "";
 		}
 		else
-			facesMessages.add("Bitte geben Sie einen Confirmed Term an!");
+			facesMessages.addToControl("confirmedTagsTable", "Bitte geben Sie einen Confirmed Term an!");
 	}
 	
 	public void deleteConfirmedTerm(Long confirmedTagId) {
@@ -87,7 +87,7 @@ public class TermHome extends EntityHome<Term> {
 			}
 		}
 	}
-
+	
 	@Override
 	public String persist() {
 		List<Tag> enteredConfirmedTags = getInstance().getConfirmedTags();
