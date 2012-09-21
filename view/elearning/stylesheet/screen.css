@@ -112,11 +112,6 @@ hr.termina {
 	color: #a9a9a9;
 }
 
-.terminaTableCell {
-	vertical-align: middle;
-	padding-left: 5px;
-}
-
 /*-------------------------------------------------------------------------- */
 /*-------------------------------- DIVIDER --------------------------------- */
 /*-------------------------------------------------------------------------- */
@@ -691,6 +686,21 @@ input[type="button"].swapTerm:hover {
 	vertical-align:top; 
 	color:red;
 }
+
+.terminaPaletteTd {
+	padding-left: 25px;
+}
+
+.terminaSendListTd {
+	vertical-align: middle;
+	padding-left: 30px;
+}
+
+.terminaTableCell {
+	vertical-align: middle;
+	padding-left: 5px;
+}
+
 
 /*-------------------------------------------------------------------------- */
 /*------------------------------ UNNECESSARY? ------------------------------ */

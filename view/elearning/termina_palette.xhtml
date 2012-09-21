@@ -23,7 +23,7 @@
 		aufgerufen -->
 		
 			<a4j:form id="bereich3">
-				<table style="padding:25px;">
+				<table class="terminaPaletteTd">
 					<tr>
 						<td>
 							<s:validateAll>
@@ -32,7 +32,7 @@
 							</h:selectManyCheckbox><br />
 							</s:validateAll>
 						</td>
-						<td class="terminaTableCell"><a4j:commandButton id="sendButton" action="#{elearnTermina.choosePalette()}" styleClass="sendAssociation" title="#{messages['buttonTitle.confirm']}" value="" reRender="bereich1,bereich3"><s:defaultAction /></a4j:commandButton>
+						<td class="terminaSendListTd"><a4j:commandButton id="sendButton" action="#{elearnTermina.choosePalette()}" styleClass="sendAssociation" title="#{messages['buttonTitle.confirm']}" value="" reRender="bereich1,bereich3"><s:defaultAction /></a4j:commandButton>
 			</td>
 					</tr>
 				</table>
