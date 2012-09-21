@@ -119,12 +119,6 @@ public class Termina extends AbstractGameSessionBean {
 		
 		// 1. Create list of shown tags
 		int maxNrResults = gameConfiguration.getBid();
-
-		if (term.getConfirmedTags().size() < maxNrResults) {
-			gameRound.getResources().remove(term);
-			term = elearnTermBean.updateRandomTermMinConfirmedTags(maxNrResults);
-			gameRound.getResources().add(term);
-		}
 		
 		// Could be selected in a more intelligent way :)
 		tags = elearnTermBean.updateRandomTagsNotRelated(term, maxNrResults);
