@@ -28,6 +28,8 @@ import org.jboss.seam.framework.EntityHome;
 import org.jboss.seam.international.LocaleSelector;
 import org.jboss.seam.log.Log;
 
+import com.google.common.base.Strings;
+
 /**
  * @author Mislav Boras
  */
@@ -99,6 +101,10 @@ public class TopicHome extends EntityHome<Topic> {
 	
 	@Override
 	public String persist() {
+		if (Strings.isNullOrEmpty(getInstance().getName())) {
+			facesMessages.addToControl("topicName", "#{messages['topic.name']} #{messages['validator.notNull']}");
+			return null;
+		}
 		String persist = super.persist();
 		addResources();
 		return persist;
