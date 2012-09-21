@@ -18,6 +18,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 
 import org.hibernate.validator.NotNull;
 import org.jboss.seam.ScopeType;
@@ -75,6 +76,7 @@ public class Term extends Resource {
 	private Integer rating;
 	
 	@ManyToMany
+	@OrderBy("name")
 	private List<Tag> confirmedTags = new ArrayList<Tag>();
 
 	public Term() {
