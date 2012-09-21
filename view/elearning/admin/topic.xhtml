@@ -11,7 +11,7 @@
 
     <ui:define name="body">
 		<div id="content">
-		
+		<div class="contentWrapper">
 			<h1><h:outputText value="#{messages['pagetitle.admin.topicEdit']}" rendered="#{topicHome.managed}" /></h1>
 			<h1><h:outputText value="#{messages['pagetitle.admin.topicAdd']}" rendered="#{!topicHome.managed}" /></h1>
 			<hr class="pageTitle" /><br />
@@ -24,7 +24,7 @@
             			<h:outputText styleClass="adminForm" value="#{messages['topic.name']}:" />
 						<h:inputText styleClass="adminInput" value="#{topicHome.instance.name}" /><br /><br />
                  
-                		<rich:pickList value="#{topicHome.list}" var="_term" >                
+                		<rich:pickList sourceListWidth="auto" targetListWidth="auto" listsHeight="auto" value="#{topicHome.list}" var="_term" >                
             				<s:selectItems value="#{topicHome.allResources}" var="_term" itemValue="#{_term}" label="#{_term.tag.name}"/>
         				</rich:pickList>
                			
@@ -40,8 +40,11 @@
 
          		</h:form>
          		</div>
+         		<br /><br />
+         		<h:outputText value="#{messages['newtopic.explanation']}" escape="false" />
 
       		</f:view>
+		</div>
 		</div>
 		
         <br class="clear" />
