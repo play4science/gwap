@@ -13,7 +13,7 @@
 		
 		<table>
 			<tr>
-				<td style="padding-left:25px;" class="terminaTableCell"><h:outputText value="#{messages['buttonTitle.skipRound']}:" /></td>
+				<td id="skipRoundTd" class="terminaTableCell"><h:outputText value="#{messages['buttonTitle.skipRound']}:" /></td>
 				<td>
 					<h:commandButton id="switchTermButton" styleClass="nextRound" action="next" value="" title="#{messages['buttonTitle.skipRound']}" type="button" />
 					<a4j:jsFunction name="switchTerm" action="next" />

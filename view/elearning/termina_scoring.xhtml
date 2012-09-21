@@ -18,7 +18,7 @@
 		
 			<div class="contentWrapper">
 				<img class="gameIcon" src="#{internalBasePath}img/game_points.svg" />
-				<h:outputText styleClass="score" style="padding-left: 10px;" value="#{messages['termina.scoring.totalScore']}: #{gameSessionScore}" /><br /><br />
+				<h:outputText styleClass="score" value="#{messages['termina.scoring.totalScore']}: #{gameSessionScore}" /><br /><br />
 				<ui:include src="/widget/gameSessionResults.xhtml" />
 			
 				<div id="scoringDescription">

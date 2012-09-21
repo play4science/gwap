@@ -360,6 +360,15 @@ img.errors {
 	padding-left: 10px;
 }
 
+.foundAssocNum {
+	padding-left: 5px;
+	font-weight: bold;
+}
+
+.foundAssocText {
+	padding-left: 25px;
+}
+
 *.gamequestion {
 	font-size: 14px;
 	font-weight: bold; color : #474747;
@@ -421,6 +430,15 @@ img.errors {
 .passwordHint {
 	padding: 5px;
 	font-size: 8pt;
+}
+
+.requestedAssoc {
+	padding-left: 5px;
+}
+
+.score {
+	font-weight: bold;
+	padding-left: 10px;
 }
 
 *.standout {
@@ -655,6 +673,23 @@ input[type="button"].swapTerm:hover {
 
 #terminaNormalEndbutton {
 	padding-left: 60px;
+}
+
+#skipRoundTd {
+	padding-left: 25px;
+}
+
+.scoringCorrectAnswers {
+	vertical-align:top; 
+	color:green;
+}
+.scoringOwnAnswers {
+	vertical-align: top;
+}
+
+.scoringWrongAnswers  {
+	vertical-align:top; 
+	color:red;
 }
 
 /*-------------------------------------------------------------------------- */
@@ -1070,10 +1105,6 @@ label.error {
 /* =CONTENT
 -----------------------------------------------------------------------------*/
 
-/* text */
-.score {
-	font-weight: bold;
-}
 
 /* tables */
 .termTable {

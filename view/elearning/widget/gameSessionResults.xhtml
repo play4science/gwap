@@ -31,7 +31,7 @@
 		
 		<rich:subTable var="_foo" value="1">
 		
-			<rich:column style="vertical-align:top;">
+			<rich:column styleClass="scoringOwnAnswers">
 				<ui:repeat var="_tagging" value="#{_gameround.actions}">
 					<span style="color:#{_tagging.score > 0 ? 'green' : 'red'};">
 						<h:outputText value="#{_tagging.tag.name}"/><br/>
@@ -39,7 +39,7 @@
 				</ui:repeat>
 			</rich:column>
 			
-			<rich:column style="vertical-align:top; color:green;">
+			<rich:column styleClass="scoringCorrectAnswers">
 				<ui:repeat var="_term" value="#{elearnResults.getTopCorrectAnswers(_gameround)}">
 					<h:outputFormat value="{0} ({1}x)">
 						<f:param value="#{_term.term}" />
@@ -48,7 +48,7 @@
 				</ui:repeat>
 			</rich:column>
 			
-			<rich:column style="vertical-align:top; color:red;">
+			<rich:column styleClass="scoringWrongAnswers">
 				<ui:repeat var="_term" value="#{elearnResults.getTopWrongAnswers(_gameround)}">
 					<h:outputFormat value="{0} ({1}x)">
 						<f:param value="#{_term.term}" />
