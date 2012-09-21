@@ -134,6 +134,7 @@ public class TermHome extends EntityHome<Term> {
 		} catch (NoResultException e) {
 			tag = new Tag();
 			tag.setName(name);
+			tag.setLanguage(localeSelector.getLanguage());
 			entityManager.persist(tag);
 		}
 		return tag;
