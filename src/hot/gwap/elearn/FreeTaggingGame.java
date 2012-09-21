@@ -40,9 +40,9 @@ public class FreeTaggingGame extends AbstractGameSessionBean {
 
 	private static final long serialVersionUID = 1L;
 
-	@In(create=true)        private TaggingBean taggingBean;
-	@In(create=true) @Out	private Term term;
-	@In(create=true)		private TermBean elearnTermBean;
+	@In(create=true)        				private TaggingBean taggingBean;
+	@In(create=true) @Out(required=false)	private Term term;
+	@In(create=true)						private TermBean elearnTermBean;
 	
 	private Map<Integer, List<MatchingTag>> recommendedTags = new HashMap<Integer, List<MatchingTag>>();
 
@@ -79,13 +79,12 @@ public class FreeTaggingGame extends AbstractGameSessionBean {
 		term = elearnTermBean.updateSensibleTermForFreeTagging(level);
 		if (term == null) {
 			level++;
-			term = elearnTermBean.updateSensibleTermForFreeTagging(level);
 		}
 	}
 	
 	@Override
 	public Integer getRoundsLeft() {
-		if (term != null)
+		if (elearnTermBean.updateSensibleTermForFreeTagging(level) != null)
 			return 1;
 		else
 			return 0;
