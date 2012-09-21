@@ -17,11 +17,11 @@
 			<hr class="pageTitle" /><br />
 			
       		<f:view>
-
+				<div class="dialog">
          		<h:form>
 
             		<s:validateAll><br />
-            		
+            			<h:outputText value="#{messages['topic.name']}:" />
 						<h:inputText value="#{topicHome.instance.name}" />
                  
                 		<rich:pickList value="#{topicHome.list}" var="_term" >                
@@ -39,6 +39,7 @@
             		<h:messages/>
 
          		</h:form>
+         		</div>
 
       		</f:view>
 		</div>
