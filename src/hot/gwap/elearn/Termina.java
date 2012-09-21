@@ -85,7 +85,8 @@ public class Termina extends AbstractGameSessionBean {
 			gameConfiguration.setRoundDuration(60);
 		}
 
-		gameConfiguration.setLevel(1 + ((gameRound.getNumber()-1) / 10));
+		// New method: Level gets updated if no more terms exist (see endRound)
+		// gameConfiguration.setLevel(1 + ((gameRound.getNumber()-1) / 10));
 		
 		// find GameConfiguration if it exists, otherwise create it
 		try {
@@ -179,6 +180,11 @@ public class Termina extends AbstractGameSessionBean {
 	public void endRound() {
 		currentRoundScore -= scoreMultiplicator() * (gameConfiguration.getBid() - foundAssociations);
 		super.endRound();
+		entityManager.flush();
+		if (getRoundsLeft().equals(0)) {
+			nextGameConfiguration.setLevel(gameConfiguration.getLevel()+1);
+			log.info("Next level: #0", nextGameConfiguration.getLevel());
+		}
 	}
 	
 	public String choosePalette() {
@@ -209,6 +215,14 @@ public class Termina extends AbstractGameSessionBean {
 	
 	private Tag checkAssociation(String association, Term term) {
 		return TagSemantics.containsNotNormalized(term.getConfirmedTags(), association);
+	}
+	
+	@Override
+	public Integer getRoundsLeft() {
+		if (elearnTermBean.updateTerm(nextGameConfiguration) != null)
+			return 1;
+		else
+			return 0;
 	}
 
 	public void riseBid() {

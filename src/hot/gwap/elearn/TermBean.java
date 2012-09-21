@@ -59,7 +59,7 @@ public class TermBean implements Serializable {
 	
 	public Term updateTerm(GameConfiguration gameConfiguration) {
 		this.gameConfiguration = gameConfiguration;
-		return updateTerm();
+		return updateSensibleTerm();
 	}
 	
 	public Term updateRandomTerm() {
