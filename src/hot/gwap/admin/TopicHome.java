@@ -142,10 +142,9 @@ public class TopicHome extends EntityHome<Topic> {
 				}
 			}
 
-			for (String s : list) {
-				// log.info(s);
-				System.out.println(s);
-			}
+//			for (String s : list) {
+//				 log.info(s);
+//			}
 		}
 		
 		getInstance().setResources(selectedResources);
