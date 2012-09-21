@@ -40,14 +40,14 @@ textarea 										{ font-size:12px; padding-left:1px; }
 .actionButtons 			{ padding-left:1px; }
 .actionButtons select 	{ margin:5px 5px 5px 0; vertical-align:bottom; }
 
-.rich-table 			{ width: 50%; }
+.rich-table 			{ width: 100%; }
 .rich-stglpanel-body 	{ overflow: auto; }
 
 .rich-table-headercell {
     border-bottom: 1px solid #C0C0C0;
     border-right: 1px solid #C0C0C0;
     color: #000000;
-    font-size: 16px;
+    font-size: 12px;
     font-weight: bold;
     padding: 4px;
     text-align: center;
