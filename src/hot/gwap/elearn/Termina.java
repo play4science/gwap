@@ -184,11 +184,27 @@ public class Termina extends AbstractGameSessionBean {
 	public String choosePalette() {
 		foundAssociations = 0;
 		for (String tag : answers) {
-			if (TagSemantics.containsNotNormalized(term.getConfirmedTags(), tag) != null)
+			Tagging tagging = new Tagging();
+			initializeAction(tagging);
+			tagging.setResource(term);
+			Tag tagT = findOrCreateTag(tag);
+			tagging.setTag(tagT);
+			if (TagSemantics.containsNotNormalized(term.getConfirmedTags(), tag) != null) {
 				foundAssociations++;
-			log.info("Chose tag #0", tag);
+				tagging.setScore(scoreMultiplicator());
+			} else {
+				foundAssociations--;
+				tagging.setScore(-scoreMultiplicator());
+			}
+			entityManager.persist(tagging);
+			gameRound.getActions().add(tagging);
+			log.info("Chose tag #0", tagT);
 		}
-		currentRoundScore += foundAssociations*scoreMultiplicator();
+		if (foundAssociations > 0) {
+			currentRoundScore += foundAssociations*scoreMultiplicator();
+		} else {
+			foundAssociations = 0;
+		}
 		if (foundAssociations == gameConfiguration.getBid())
 			facesMessages.addFromResourceBundle("termina.term.correct");
 		return "next";

@@ -75,6 +75,7 @@ public class FreeTaggingGame extends AbstractGameSessionBean {
 	public void endRound() {
 		gameRound.getResources().add(term);
 		super.endRound();
+		entityManager.flush();
 		term = elearnTermBean.updateSensibleTermForFreeTagging(level);
 		if (term == null) {
 			level++;

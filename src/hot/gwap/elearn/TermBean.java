@@ -53,7 +53,6 @@ public class TermBean implements Serializable {
 		updateSensibleTerm();
 		if (term == null)
 			updateRandomTerm();
-		log.info("Updated term: #0", term);
 		return term;
 	}
 	
@@ -63,7 +62,7 @@ public class TermBean implements Serializable {
 	}
 	
 	private Term updateRandomTerm() {
-		log.info("Updating Random Term");
+		log.info("Updating random term");
 		
 		try {
 			Query query = null;
@@ -80,6 +79,7 @@ public class TermBean implements Serializable {
 			query.setParameter("language", localeSelector.getLanguage());
 			query.setMaxResults(1);
 			term = (Term) query.getSingleResult();
+			log.info("Updated random term: #0", term);
 			return term;
 		} catch(Exception e) {
 			log.info("Could not find a random term");
@@ -88,7 +88,7 @@ public class TermBean implements Serializable {
 	}
 	
 	private Term updateSensibleTerm() {
-		log.info("Updating Sensible Term");
+		log.info("Updating sensible term");
 		
 		try {
 			Query query = null;
@@ -108,6 +108,8 @@ public class TermBean implements Serializable {
 			query.setParameter("language", localeSelector.getLanguage());
 			query.setMaxResults(1);
 			term = (Term) query.getSingleResult();
+			
+			log.info("Updated sensible term: #0", term);
 			return term;
 		} catch(Exception e) {
 			log.info("Could not find a sensible term");
@@ -117,7 +119,7 @@ public class TermBean implements Serializable {
 	}
 
 	public Term updateSensibleTermForFreeTagging(Integer level) {
-		log.info("Updating Sensible Term For Free Tagging");
+		log.info("Updated sensible term for free tagging");
 		
 		try {
 			Query query = null;
@@ -127,6 +129,8 @@ public class TermBean implements Serializable {
 			query.setParameter("language", localeSelector.getLanguage());
 			query.setMaxResults(1);
 			term = (Term) query.getSingleResult();
+
+			log.info("Updated sensible term for free tagging: #0", term);
 			return term;
 		} catch(Exception e) {
 			log.info("Could not find a sensible term for free tagging");
