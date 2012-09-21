@@ -53,6 +53,8 @@ public class TermHome extends EntityHome<Term> {
 				getInstance().getConfirmedTags().add(new Tag());
 			}
 			getInstance().setTag(new Tag());
+			getInstance().setRating(1);
+			getInstance().setEnabled(true);
 		}
 	}
 	

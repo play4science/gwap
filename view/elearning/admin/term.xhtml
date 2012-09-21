@@ -24,8 +24,13 @@
                			
                   			<h:outputText value="#{messages['terme.name']}:"/>
                   			<h:inputText value="#{termHome.instance.tag.name}" required="true"/>
+                  			
                   			<h:outputText value="#{messages['terme.rating']}:"/>
-                  			<h:inputText value="#{termHome.instance.rating}" required="true"/>
+                  			<rich:inputNumberSpinner value="#{termHome.instance.rating}" required="true" />
+                  			
+                  			<h:outputText value="#{messages['terme.enabled']}:"/>
+                  			<h:selectBooleanCheckbox value="#{termHome.instance.enabled}" required="true"/>
+                  			
                   			<h:outputText value="#{messages['terme.confirmedTags']}:"/>
                   			
                  		 	<rich:dataTable id="confirmedTagsTable" value="#{termHome.instance.confirmedTags}" var="_tag">

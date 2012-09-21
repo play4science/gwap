@@ -40,6 +40,11 @@
 			        	<f:facet name="header"><h:outputText value="#{messages['terme.id']}"/></f:facet>
 			        	<h:outputText value="#{_resource.id}"/>
 			    	</rich:column>
+			  		  
+			    	<rich:column width="50px">
+			        	<f:facet name="header"><h:outputText value="#{messages['terme.enabled']}"/></f:facet>
+				        <h:selectBooleanCheckbox value="#{_resource.enabled}" disabled="true" />
+			    	</rich:column>
 			    	
 			    	<rich:column width="200px">
 			        	<f:facet name="header"><h:outputText value="#{messages['terme.name']}"/></f:facet>
