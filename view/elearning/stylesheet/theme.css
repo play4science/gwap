@@ -11,10 +11,6 @@ div.info 				{ font-size:1.2em; }
 h1						{ margin-top:0px; font-family:Arial, Verdana, Tahoma, sans-serif; font-size:18px; color:#0e1e79; }
 h2						{ font-size:12pt; font-weight:bold; }
 
-hr.pageTitle			{ width:500px; margin-left:0px; border-top: 1px solid #0e1e79; text-align:left; }
-hr.form					{ width:500px; height:1px; margin-left:5px; text-align:left; color:#a9a9a9; }
-hr.termina				{ width:700px; height:1px; margin-left:5px; text-align:left; color:#a9a9a9; }
-
 
 table.radio 					{ border:0; }
 table.radio td 					{ padding:0 2px; }
@@ -27,19 +23,6 @@ ul.bullets 						{ list-style:square; }
 ul.bullets li 					{ padding-bottom:2px; }
 
 
-/* =MESSAGES
------------------------------------------------------------------------------*/
-
-
-.message 					{ padding:5px; list-style:none; border:0; background:none; padding:0; color:#000; margin:5px 0 8px 0; font-size:12px; }
-
-.message li 				{ background:no-repeat left center; padding-top:1px; padding-left:20px; margin-left:3px; }
-
-.message li.infomsg 		{ background-image:url(../img/msginfo.png); }
-.message li.errormsg 		{ background-image:url(../img/msgerror.png); }
-.message li.warnmsg 		{ background-image:url(../img/msgwarn.png); }
-
-
 /* =FORMS
 -----------------------------------------------------------------------------*/
 
@@ -48,22 +31,6 @@ input[type=button] 								{ font-size:11px; margin:5px 5px 5px 0; cursor:pointe
 input[type=text], 
 input[type=password], 
 textarea 										{ font-size:12px; padding-left:1px; }
-
-#profileForm									{ width:500px; }
-#loginForm										{ width:500px; }
-
-.name 											{ width:200px; float:left; padding:5px; margin-top:3px; vertical-align:top; clear:left; }
-.required										{ padding:2px; font-weight:bold; color:#ff0000; }
-.requiredField									{ font-weight:bold;}
-.passwordHint									{ padding:5px; font-size:8pt; }
-
-/* Responsible for the red highlighting of missing inputs in forms */
-.error 											{ float: left; padding: 5px; }
-.errors 										{ color: #FF0000; vertical-align: middle; }
-img.errors 										{ padding-right: 5px; }
-.errors input, .errors textarea, .errors select { border: 1px solid red !important; }
-
-.resetPassword									{ padding:5px; font-size:8pt; }
  
 
 
@@ -90,11 +57,8 @@ select 					{ font-size:13px; }
 .tableControl select 				{ margin-left:2px; position:relative; top:1px; }
 
 
-.footer 						{ text-align:center; font-size:12px; margin-bottom:10px; }
-
 .body 							{ padding:30px; }
 
-.value 							{ float:left; padding:5px; }
 
 /* the specificity here is necessary to override the defaults */
 /*

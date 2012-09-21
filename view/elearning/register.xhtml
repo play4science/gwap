@@ -6,7 +6,8 @@
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:rich="http://richfaces.org/rich"
-    template="layout/template.xhtml">
+    template="layout/template.xhtml"
+                xmlns:a4j="http://richfaces.org/a4j">
 
 	<ui:define name="body">
 				
@@ -22,6 +23,10 @@
 		    
 	    		<h:form id="loginForm">
 					<p><h:outputText value="#{messages['register.mandatory']}" escape="false" /></p><br />
+				    
+					<a4j:outputPanel id="globalMessages" styleClass="globalMessage">
+						<rich:messages globalOnly="true" styleClass="messages" errorClass="errormsg" infoClass="infomsg" warnClass="warnmsg" rendered="#{showGlobalMessages != 'false'}"/>
+					</a4j:outputPanel> 
 				    
 				    <hr class="form"/>
 				    

@@ -16,23 +16,14 @@
 			<ui:include src="widget/gameheader.xhtml" />
 		
 		
-			<h:form id="bereich2">
-				<!-- 
-				<h:outputText class="gamequestion" value="#{messages['elearning2.frage.satz']}"/>
-				<h:outputText class="standout" id="questionTerm" value="#{term.tag.name}" rendered="#{!empty(term)}"/>
-				
-				<h:commandButton id="switchTermButton" action="next"  styleClass="nextRound" title="#{messages['termina.skipRound']}" value="" type="button" />
-				<a4j:jsFunction name="switchTerm" action="next"/>
-				-->
-			
-			</h:form>
+			<h:form id="bereich2"></h:form>
 		
 		<!-- Befindet sich der User im Palette Modus, so muss er die passenden Assoziationen zu dem 
 		Fragebegriff auswählen und bestätigen. Hierbei wird eine andere Methode in der CheckAssociation-Klasse 
 		aufgerufen -->
 		
 			<a4j:form id="bereich3">
-				<table>
+				<table style="padding:25px;">
 					<tr>
 						<td>
 							<s:validateAll>
@@ -49,8 +40,7 @@
 			</a4j:form>
 			
 			<ui:include src="/terminaGame/focusbereich.xhtml" />
-		
-		<!--  <s:button action="next" value="#{'Naechste Runde!'}"/>-->
+
 		</div>
         <br class="clear" />
     </ui:define>

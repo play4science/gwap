@@ -48,63 +48,18 @@
 			</tr>
 		</table>
 
-		<!-- <table width="60%" align="right">
-			<tr>
-				<td><s:link view="/admin/termList.xhtml" value="#{messages['admin.menu.termList']}" /></td>
-				<td><s:link view="/admin/topicList.xhtml" value="#{messages['admin.menu.topicList']}" /></td>
-				<td><s:link view="/admin/gameConfigurationList.xhtml" value="#{messages['admin.menu.gameConfigurationList']}" /></td>
-			</tr>
-		</table>-->
 
-		<!--
-		<ul>
-			<li>		
-    		   	<s:link id="headerImpressumId" view="/impressum.xhtml" value="#{messages['menu.impressum']}" propagation="none"/>
-			</li>
-			<li>
-    	    	<s:link id="menuRegisterId" view="/register.xhtml" value="#{messages['menu.register']}" rendered="#{not identity.loggedIn}" propagation="none"/>
-        	</li>
-			<li>
-    		   	<s:link id="menuLoginId" view="/login.xhtml" value="Login" rendered="#{not identity.loggedIn}" propagation="none"/>
-        	</li>
-			<li>
-				<s:link id="menuEditProfileId" view="/profile.xhtml" value="#{messages['menu.editProfile']}" rendered="#{identity.loggedIn}" propagation="none"/>
-			</li>
-			<li>		
-				<s:link id="headerLogoutId" view="/home.xhtml" action="#{identity.logout}" value="#{messages['menu.logout']}" rendered="#{identity.loggedIn}" propagation="none"/>
-			</li>
-			<li class="#{menuBean.getCssClass('/termina.xhtml')}">
-	        	<s:link view="/termina.xhtml" value="#{messages['menu.termina']}" propagation="none"/>
-        	</li>
-        	<li class="#{menuBean.getCssClass('/highscore.xhtml')}">
-	        	<s:link view="/highscore.xhtml" value="#{messages['menu.highscore']}" propagation="none"/>
-        	</li>
-
-			<li class="#{menuBean.getCssClass('/tagging.xhtml')}">
-	        	<s:link view="/tagging.xhtml" value="#{messages['menu.tagging']}" propagation="none"/>
-        	</li>
-        	<li class="#{menuBean.getCssClass('/addword.xhtml')}">
-	        	<s:link view="/addword.xhtml" value="#{messages['Terme hinzufuegen']}" propagation="none"/>
-        	</li>
-			<s:fragment rendered="#{s:hasPermission('elearning', 'view-admin-interface')}"> 
-				<li class="#{menuBean.getCssClass('/admin/admin.xhtml')}">
-    			   	<s:link view="/admin/admin.xhtml" value="#{messages['mit.menu.administrator']}" propagation="none"/>
-        		</li>
-			</s:fragment>
-		</ul> 
-		-->
 		
-		<span style="float:right;">
+		<span class="loggedIn">
 			<h:outputText value="#{messages['menu.signedInAs']}: " rendered="#{identity.loggedIn}"/>
-			<strong>
-				<h:outputText value="#{credentials.username}" id="headerWelcomeId" rendered="#{identity.loggedIn}" />
-			</strong>
+			<h:outputText value="#{credentials.username}" id="headerWelcomeId" rendered="#{identity.loggedIn}" />
 		</span>
 		<br />
 	</div>
     
 	<br class="clear" />
-	<!--
+	
+	<!-- FÜR MELDUNGEN
    	<a4j:outputPanel id="messages" style="position: absolute; top: 1em; vertical-align: middle;">
 				<rich:messages styleClass="messages"
                 	        errorClass="errormsg" infoClass="infomsg" warnClass="warnmsg"
@@ -119,34 +74,4 @@
 	</a4j:outputPanel> -->
 
 </ui:composition>
-<!-- <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:s="http://jboss.com/products/seam/taglib"
-    xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:rich="http://richfaces.org/rich"
-    xmlns:a4j="http://richfaces.org/a4j">
 
-	<div id="related">
-		<ui:include src="logo.xhtml" />
-		
-		<ul id="navMain">
-			<li>
-				<s:link view="/admin/termList.xhtml" value="#{messages['admin.menu.termList']}" />
-        	</li>
-    	</ul>
-    	<ul id="navMain">
-			<li>
-				<s:link view="/admin/topicList.xhtml" value="#{messages['admin.menu.topicList']}" />
-        	</li>
-    	</ul>
-    	    	<ul id="navMain">
-			<li>
-				<s:link view="/admin/gameConfigurationList.xhtml" value="#{messages['admin.menu.gameConfigurationList']}" />
-        	</li>
-    	</ul>
-    </div>
-</ui:composition>
--->

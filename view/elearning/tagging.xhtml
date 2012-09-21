@@ -18,24 +18,23 @@
 			
 			<ui:include src="widget/resourceTerm.xhtml" />
 			
-							<div id="related">
+			<div id="related">
 			
-					<div class="ongoingGameStatsCaption">
-						<h:outputText value="#{messages['tagging.enteredTags']}" />
-					</div>
+				<div class="ongoingGameStatsCaption">
+					<h:outputText value="#{messages['tagging.enteredTags']}" />
+				</div>
 					
-	 				<a4j:outputPanel id="recommendedTags" styleClass="ongoingGameStatsContent">
-						<a4j:repeat value="#{recommendedTags}" var="_recommendedTag">
-							<div id="enteredAssociations" class="#{_recommendedTag.matchType}">
-								<h:outputText value="#{_recommendedTag.tag}" />
-							</div>
-						</a4j:repeat>
-					</a4j:outputPanel>	
+	 			<a4j:outputPanel id="recommendedTags" styleClass="ongoingGameStatsContent">
+					<a4j:repeat value="#{recommendedTags}" var="_recommendedTag">
+						<div id="enteredAssociations" class="#{_recommendedTag.matchType}">
+							<h:outputText value="#{_recommendedTag.tag}" />
+						</div>
+					</a4j:repeat>
+				</a4j:outputPanel>	
 							
-				</div><br />
+			</div><br />
 			
 				<ui:include src="widget/tagForm.xhtml" />
-				<!--  <ui:include src="terminaGame/bereich4.xhtml" />-->
 				
 				<hr class="form" />
 				<br />

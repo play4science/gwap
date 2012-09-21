@@ -11,8 +11,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>#{messages['admin.title']}</title>
-
-		<link rel="shortcut icon" href="#{internalBasePath}img/favicon.ico" />
+		<link rel="shortcut icon" href="#{internalBasePath}img/termina_favicon.ico" />
 		<a:loadStyle src="/stylesheet/theme.css" />
 		<a:loadStyle src="/stylesheet/screen.css" media="all" />
 		<a:loadStyle media="screen and (max-device-width: 1024px)" src="/stylesheet/width1024.css" />
@@ -22,11 +21,11 @@
 	<body id="body">
 
 		<div id="wrapper">
-			<!--  <ui:include src="header.xhtml" />-->
 			<ui:include src="adminMenu.xhtml" />
 			<ui:insert name="body" />
 			<ui:include src="footer.xhtml" />
-			<!--  
+			
+			<!--  DEBUGLEISTE
 			<s:fragment rendered="#{init.debug}">
 				<div style="position: fixed; bottom: 10px; left: 0px; width: 100%; text-align: center;">
 					<a:log hotkey="D" />

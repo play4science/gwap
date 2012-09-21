@@ -8,8 +8,7 @@
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="http://richfaces.org/a4j">
 	
-	<h:outputText class="gamequestion" value="#{messages['tagging.frage.satz']}" />
-	<h:outputText class="standout" id="questionTerm" value="#{term.tag.name}" rendered="#{!empty(term)}" /><br />
-
+	<h:outputText style="padding-left:0px;" class="gamequestion" value="#{messages['tagging.frage.satz']}" />
+	<h:outputText class="standout" id="questionTerm" value="#{term.tag.name}" rendered="#{!empty(term)}" /><br /><br />
 	
 </ui:composition>

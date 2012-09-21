@@ -19,8 +19,8 @@
 					<td class="terminaTableCell"><a4j:commandButton action="#{elearnTermina.choose()}" styleClass="sendAssociation" title="Sende Assoziation" reRender="bereich1,bereich3,focusbereich" type="submit" /></td>
 				</tr>
 				<tr>
-					<td  colspan="3"><h:outputText class="gamequestion" value="#{messages['termina.foundAssoc']}"/>
-					<h:outputText style="padding-left:5px;" value="#{elearnTermina.foundAssociations}"/>
+					<td  colspan="3"><h:outputText style="padding-left:25px;" value="#{messages['termina.foundAssoc']}"/>
+					<h:outputText style="padding-left:5px; font-weight:bold;" value="#{elearnTermina.foundAssociations}"/>
 					<h:outputText style="padding-left:5px;" value="#{messages['termina.outof']} #{gameConfiguration.bid}"/></td>
 					
 				</tr>

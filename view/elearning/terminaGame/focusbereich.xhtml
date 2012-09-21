@@ -13,12 +13,12 @@
 		
 		<table>
 			<tr>
-				<td style="padding-left:20px;" class="terminaTableCell"><h:outputText value="#{messages['buttonTitle.skipRound']}:" /></td>
+				<td style="padding-left:25px;" class="terminaTableCell"><h:outputText value="#{messages['buttonTitle.skipRound']}:" /></td>
 				<td>
 					<h:commandButton id="switchTermButton" styleClass="nextRound" action="next" value="" title="#{messages['buttonTitle.skipRound']}" type="button" />
 					<a4j:jsFunction name="switchTerm" action="next" />
 				</td>
-				<td style="vertical-align:middle;">
+				<td class="gameConfigurationTd">
 					
 					<rich:progressBar id="progressbar" minValue="0" maxValue="#{gameConfiguration.roundDuration}" value="0.000001" label="bar" mode="client" />
 					<script type="text/javascript">
@@ -42,12 +42,11 @@
 	
 		<hr class="termina" />
 		
-		<!-- Anzeigen der Game Variablen Rundenanzahl, momentaner Score, die momentane Ansage, sowie die momentane Zeiteinstellung -->
 		<h:form id="bereich1" >
 			
-			<h:outputText value="#{messages['termina.changeConf']}" styleClass="score" /><br />
+			<h:outputText value="#{messages['termina.changeConf']}" /><br />
 		
-			<table >
+			<table>
 				
 				
 				<tr>

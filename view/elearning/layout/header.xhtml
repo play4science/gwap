@@ -48,31 +48,15 @@
 				</td>
 			</tr>
 		</table>
-		<!--
-		<ul>
-
-        	<li class="#{menuBean.getCssClass('/addword.xhtml')}">
-	        	<s:link view="/addword.xhtml" value="#{messages['Terme hinzufuegen']}" propagation="none"/>
-        	</li>
-			<s:fragment rendered="#{s:hasPermission('elearning', 'view-admin-interface')}"> 
-				<li class="#{menuBean.getCssClass('/admin/admin.xhtml')}">
-    			   	<s:link view="/admin/admin.xhtml" value="#{messages['mit.menu.administrator']}" propagation="none"/>
-        		</li>
-			</s:fragment>
-		</ul> 
-		-->
-		
-		<span style="float:right;">
+	
+		<span class="loggedIn">
 			<h:outputText value="#{messages['menu.signedInAs']}: " rendered="#{identity.loggedIn}"/>
-			<strong>
-				<h:outputText value="#{credentials.username}" id="headerWelcomeId" rendered="#{identity.loggedIn}" />
-			</strong>
+			<h:outputText value="#{credentials.username}" id="headerWelcomeId" rendered="#{identity.loggedIn}" />
 		</span>
 		<br />
 	</div>
-    
-	<br class="clear" />
-	<!--
+	
+		<!-- FÜR MELDUNGEN
    	<a4j:outputPanel id="messages" style="position: absolute; top: 1em; vertical-align: middle;">
 				<rich:messages styleClass="messages"
                 	        errorClass="errormsg" infoClass="infomsg" warnClass="warnmsg"
@@ -85,5 +69,7 @@
                     	    rendered="#{showGlobalMessages != 'false'}"
                     	    />
 	</a4j:outputPanel> -->
+    
+	<br class="clear" />
 
 </ui:composition>

@@ -28,7 +28,8 @@
 			    		
 			    				<input type="hidden" name="selectedTab" value="profileTab"/>
 								<h:panelGrid columns="1">
-								
+									<rich:messages styleClass="messages" globalOnly="true" errorClass="errormsg" infoClass="infomsg" warnClass="warnmsg" rendered="#{showGlobalMessages != 'false'}" />
+									
 			                    	<s:decorate id="languageField" template="/layout/edit.xhtml" rendered="#{localeSelector.supportedLocales.size() > 1}">
 			                    		<ui:define name="label">
 				                    		<h:outputText value="#{messages['person.language']}" />
@@ -105,8 +106,6 @@
 			                    			<s:selectItems value="#{profile.educations}" var="education" label="#{messages[education.key]}" noSelectionLabel="#{messages['general.pleaseSelect']}" />
 			                    		</h:selectOneMenu>
 			                    	</s:decorate>
-			                    	
-			                    	<rich:messages styleClass="messages" globalOnly="true" errorClass="errormsg" infoClass="infomsg" warnClass="warnmsg" rendered="#{showGlobalMessages != 'false'}" />
 					        	
 					        		<div class="actionButtons">
 		            					<h:commandButton styleClass="buttonSave" value="" title="#{messages['buttonTitle.update']}" action="#{profile.updateProfile()}"/>
