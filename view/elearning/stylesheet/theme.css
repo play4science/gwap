@@ -26,8 +26,10 @@ ul.bullets li 					{ padding-bottom:2px; }
 /* =FORMS
 -----------------------------------------------------------------------------*/
 
+/*
 input[type=submit], 
 input[type=button] 								{ font-size:11px; margin:5px 5px 5px 0; cursor:pointer; }
+*/
 input[type=text], 
 input[type=password], 
 textarea 										{ font-size:12px; padding-left:1px; }

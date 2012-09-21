@@ -943,6 +943,7 @@ input[type="button"].buttonDelete:hover {
 	vertical-align: top;
 }
 
+/*
 input[type="button"],input[type="submit"] {
 	display: block;
 	width: 50px;
@@ -958,6 +959,7 @@ input[type="button"],input[type="submit"] {
 input[type="submit"]:hover {
 	background: url('../img/button_login_active.svg');
 }
+*/
 
 input[type="button"].buttonIncrease {
 	display: block;

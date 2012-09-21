@@ -33,7 +33,7 @@
 						<h:outputText value="#{messages['termina.mehrfachauswahl']}" styleClass="passwordHint" />
 						</s:validateAll>
 						</td>
-						<td class="terminaTableCell"><a4j:commandButton action="#{elearnTermina.choosePalette()}" styleClass="sendAssociation" title="#{messages['buttonTitle.confirm']}" value="" reRender="bereich1,bereich3" />
+						<td class="terminaTableCell"><a4j:commandButton id="sendButton" action="#{elearnTermina.choosePalette()}" styleClass="sendAssociation" title="#{messages['buttonTitle.confirm']}" value="" reRender="bereich1,bereich3"><s:defaultAction /></a4j:commandButton>
 			</td>
 					</tr>
 				</table>
