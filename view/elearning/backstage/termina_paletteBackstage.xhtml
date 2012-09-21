@@ -29,9 +29,9 @@
 		aufgerufen -->
 		<a4j:form id="bereich3">
 			<s:validateAll>
-			<h:selectManyListbox id="answersListbox" value="#{elearnTerminaBackstage.answers}">
+			<h:selectManyCheckbox id="answersListbox" styleClass="answersListbox" value="#{elearnTerminaBackstage.answers}">
 				<s:selectItems value="#{elearnTerminaBackstage.tags}" var="tag" label="#{tag.name}" />
-			</h:selectManyListbox>
+			</h:selectManyCheckbox>
 			</s:validateAll>
 			<br></br>
 			<a4j:commandButton action="#{elearnTerminaBackstage.choosePalette()}" value="Sende Auswahl" reRender="bereich1,bereich3" type="submit"/>

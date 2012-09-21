@@ -27,11 +27,10 @@
 					<tr>
 						<td>
 							<s:validateAll>
-							<h:selectManyListbox id="answersListbox" value="#{elearnTermina.answers}">
-							<s:selectItems value="#{elearnTermina.tags}" var="tag" label="#{tag.name}" />
-						</h:selectManyListbox><br />
-						<h:outputText value="#{messages['termina.mehrfachauswahl']}" styleClass="passwordHint" />
-						</s:validateAll>
+							<h:selectManyCheckbox id="answersListbox" styleClass="answersListbox" value="#{elearnTermina.answers}" layout="pageDirection">
+								<s:selectItems value="#{elearnTermina.tags}" var="tag" label="#{tag.name}" />
+							</h:selectManyCheckbox><br />
+							</s:validateAll>
 						</td>
 						<td class="terminaTableCell"><a4j:commandButton id="sendButton" action="#{elearnTermina.choosePalette()}" styleClass="sendAssociation" title="#{messages['buttonTitle.confirm']}" value="" reRender="bereich1,bereich3"><s:defaultAction /></a4j:commandButton>
 			</td>
