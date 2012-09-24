@@ -101,7 +101,7 @@ public class CombineGameSessionBean extends AbstractGameSessionBean {
 		}
 	}
 
-	public void score(final Combination combination, final MatchType matchType) {
+	public void score(Combination combination, final MatchType matchType) {
 		if (currentRoundScore == null) {
 			currentRoundScore = 0; 
 		}

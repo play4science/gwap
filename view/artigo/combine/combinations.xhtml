@@ -75,7 +75,7 @@
 						value="#{_tag}"
 						onclick="onSelectTag('#{_tag.name}');"
 						oncomplete="onShowCombination();"
-						reRender="combinations"
+						reRender="combinations,score"
 						action="#{combinedTagBean.selectTag}">
 					</a4j:commandLink>
 					
@@ -115,7 +115,7 @@
             <a4j:poll id="poll"
                       interval="500" 
                       action="#{combineOpponentBean.updateOpponentTags()}"
-                      reRender="#{combineOpponentBean.updated ? 'combinations,opponentCombinedTags,reloadTagsForm' : 'reloadTagsForm'}" />
+                      reRender="#{combineOpponentBean.updated ? 'combinations,opponentCombinedTags,reloadTagsForm,score' : 'reloadTagsForm'}" />
             <ui:remove><!-- TODO: rerender only part that is really needed --></ui:remove>
         </h:form>
     </a4j:region>

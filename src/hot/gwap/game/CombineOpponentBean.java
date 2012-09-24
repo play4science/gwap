@@ -88,9 +88,10 @@ public class CombineOpponentBean implements Serializable {
 				updated = true;
 				
 				log.info("opponentCombinedTags (resId=#1): #0", opponentCombinedTags, resource.getId());
+				
+				Events.instance().raiseEvent("checkForMatchingCombinedTags");
 			}
 			
-			Events.instance().raiseEvent("checkForMatchingCombinedTags");
 		}
 		
 		return null;

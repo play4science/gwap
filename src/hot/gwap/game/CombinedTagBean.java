@@ -194,9 +194,12 @@ public class CombinedTagBean implements Serializable {
 			
 			addCombination();
 		} else {
-			combinedTag.setSecondTag(entityHelper.findTag(recommendedTag));
+			if (combinedTag.getFirstTag().getId().equals(tag.getId())) {
+				log.info("Two same tags cannot be combined");
+				return null;
+			}
+			combinedTag.setSecondTag(tag);
 			
-			checkForMatchingCombinedTags();
 			combineTags();
 			
 			recommendedTag = null;
@@ -230,7 +233,11 @@ public class CombinedTagBean implements Serializable {
 		}
 		
 		final Combination existingCombination = entityHelper.findCombination(combinedTag);
-		final Combination currentCombination;
+		final Combination currentCombination = combinations.get(0);
+		currentCombination.setCombinedTag(combinedTag);
+		log.info("Persisting combination: #0", currentCombination);
+		entityManager.persist(currentCombination);
+		
 		final MatchType matchType;
 		
 		if (existingCombination != null) {
@@ -240,10 +247,6 @@ public class CombinedTagBean implements Serializable {
 				combinations.remove(0);
 				return;
 			}
-			
-			combinations.set(0, existingCombination);
-			
-			currentCombination = existingCombination;
 			
 			combinationsToTest.add(currentCombination);
 			
@@ -255,19 +258,13 @@ public class CombinedTagBean implements Serializable {
 			// indirect match: combination was entered before, but not in the current session
 			matchType = MatchType.INDIRECT;
 		} else {
-			currentCombination = combinations.get(0);
-			currentCombination.setCombinedTag(combinedTag);
-			
-			log.info("Combination not found, persisting new one: #0", currentCombination);
-			entityManager.persist(currentCombination);
-			
 			matchType = MatchType.NONE;
 		}
 		
 		score(currentCombination, matchType);
 	}
 	
-	private void score(final Combination combination, final MatchType type) {
+	private void score(Combination combination, final MatchType type) {
 		matches.put(combination.getCombinedTag(), type);
 		combineGameSessionBean.score(combination, type);
 	}
