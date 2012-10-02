@@ -217,9 +217,8 @@ public class QuizQuestionBean {
 			for (ArtResourceTeaser t : teaser) {
 				if (t.getLanguage().equals("de")) {
 					String text = t.getDescription();
-					if (text.contains(artResource.getArtist().getForename())
-							|| text.contains(artResource.getArtist()
-									.getSurname())) {
+					if ((artResource.getArtist().getForename() != null && text.contains(artResource.getArtist().getForename()))
+							|| (artResource.getArtist().getSurname() != null && text.contains(artResource.getArtist().getSurname()))) {
 						return text;
 					}
 				}
