@@ -177,7 +177,7 @@ public class SolrSearchBean implements Serializable {
 		this.resultNumber = resultNumber;
 	}
 	public boolean customGameAllowed() {
-		return results.getNumFound() >= leastResultsForCustomGame;
+		return results != null && results.getNumFound() >= leastResultsForCustomGame;
 	}
 	
 	public String useQueryAsSource() {
