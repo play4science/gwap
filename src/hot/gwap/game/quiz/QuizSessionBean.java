@@ -129,9 +129,7 @@ public class QuizSessionBean implements Serializable {
 			} else {
 				return null;
 			}
-		} catch (NumberFormatException e) {
-			return null;
-		} catch (NullPointerException e2) {
+		} catch (Exception e) {
 			return null;
 		}
 
