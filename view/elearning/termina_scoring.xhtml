@@ -18,13 +18,16 @@
 		
 			<div class="contentWrapper">
 				<img class="gameIcon" src="#{internalBasePath}img/game_points.svg" />
-				<h:outputText styleClass="score" value="#{messages['termina.scoring.totalScore']}: #{gameSessionScore}" /><br /><br />
-				<ui:include src="/widget/gameSessionResults.xhtml" />
-			
+				
+				<h:outputText styleClass="score" value="#{messages['termina.scoring.totalScore']}: #{gameSessionScore}" /><br />
+				
 				<div id="scoringDescription">
 					<h:outputText value="#{messages['termina.scoring.description']}" escape="false"/>
 				</div>
+				<br />
+				<ui:include src="/widget/gameSessionResults.xhtml" />
 			
+				<br />
 				<s:button view="/termina.xhtml" styleClass="repeat" propagation="none" title="#{messages['buttonTitle.repeat']}" value=""/>
 			</div>
 		</div>

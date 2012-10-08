@@ -746,6 +746,10 @@ input[type="button"].swapTerm:hover {
 	padding-left: 5px;
 }
 
+.scoringExplanation {
+	vertical-align: middle;
+}
+
 
 /*-------------------------------------------------------------------------- */
 /*------------------------------ UNNECESSARY? ------------------------------ */

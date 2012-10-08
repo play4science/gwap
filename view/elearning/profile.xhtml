@@ -161,7 +161,7 @@
 										<ui:define name="label">
 				                    		<h:outputText value="#{messages['person.email']}" />
 										</ui:define>
-			                    		<h:inputText id="email" value="#{profile.email}" required="true" />
+			                    		<h:inputText id="email" value="#{person.email}" required="true" />
 			                    	</s:decorate>
 			                    	
 						        	<rich:messages styleClass="messages" globalOnly="true" errorClass="errormsg" infoClass="infomsg" warnClass="warnmsg" rendered="#{showGlobalMessages != 'false'}"/>

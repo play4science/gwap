@@ -18,16 +18,17 @@
 				<h1>#{messages['pagetitle.tagging.ended']}</h1>
 				<hr class="pageTitle" /><br /><br />
 				
+				<div id="scoringDescription">
+
+					<h:outputText value="#{messages['termina.scoring.description']}" escape="false"/>
+					
+				</div>
+				<br />
 				<ui:include src="/widget/gameSessionResults.xhtml">
 					<ui:param name="hideGameRoundScore" value="true"/>
 				</ui:include>
-				
-				<div id="scoringDescription">
-					<h:outputText value="#{messages['termina.scoring.description']}" escape="false"/>
-				</div>
-				
+				<br />
 				<s:button view="/tagging.xhtml" styleClass="repeat" title="#{messages['buttonTitle.tagging.repeat']}" propagation="none" value=""/>
-				
 			</div>
 			
 		</div>
