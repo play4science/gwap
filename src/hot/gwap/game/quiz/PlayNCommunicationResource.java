@@ -24,6 +24,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.transaction.Status;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Logger;
@@ -138,7 +139,9 @@ public class PlayNCommunicationResource extends AbstractResource {
 			/*
 			 * setting up dummy JSF FacesContext
 			 */
-			Transaction.instance().begin();
+			if (Transaction.instance().getStatus() == Status.STATUS_NO_TRANSACTION) {
+				Transaction.instance().begin();
+			}
 			// Conversation.instance().begin();
 			FacesContext facesContext = new FacesContextBuilder()
 					.getFacesContext(request, response, request.getSession());
