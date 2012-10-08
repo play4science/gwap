@@ -17,12 +17,15 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 /**
- * the location, where the player's id is from
+ * The location, where an IP address is from
  * 
  * @author Andre Reichstaller
  */
 @NamedQueries({
-	@NamedQuery(name="byCountryRegionCity", query="select il from IpBasedLocation il where il.country = :country and il.region = :region and il.city = :city")
+	@NamedQuery(name="byCountryRegionCity", 
+			query="select il from IpBasedLocation il where il.country = :country and il.region = :region and il.city = :city"),
+	@NamedQuery(name="byCountryWithoutRegionAndCity", 
+			query="select il from IpBasedLocation il where il.country = :country and il.region is NULL and il.city is NULL")
 })
 @Entity
 public class IpBasedLocation implements Serializable {
