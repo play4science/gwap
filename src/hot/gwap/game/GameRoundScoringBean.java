@@ -56,8 +56,9 @@ public class GameRoundScoringBean implements Serializable {
 				
 				if (resourceTaggingsByTagNameSize > 1)  // One tag is the currently given tag
 					matchingTag.setIndirectMatch(true);
-				else
-					spellCorrection.findSpellCorrectedTags(resource, matchingTag);
+				// Deactivate spell correction temporarily (does it fix ConcurrentRequestTimeout exceptions?)
+//				else
+//					spellCorrection.findSpellCorrectedTags(resource, matchingTag);
 			} 
 			
 			if (matchingTag.isIndirectMatch())
