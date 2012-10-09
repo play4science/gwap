@@ -17,7 +17,6 @@
 			<tr>
 				<td rowspan="2"><s:link view="/home.xhtml"><img id="logo" src="#{internalBasePath}img/termina_logo.svg" /></s:link></td>
 				<td align="center"><s:link id="menuHomeId" styleClass="menuItem #{menuBean.getCssClass('/home.xhtml')}" view="/home.xhtml" propagation="none" /></td>
-				<td align="center"><s:link id="menuImpressumId" styleClass="menuItem #{menuBean.getCssClass('/impressum.xhtml')}" view="/impressum.xhtml" propagation="none" /></td>
 				<td align="center"><s:link id="menuFAQId" styleClass="menuItem #{menuBean.getCssClass('/faq.xhtml')}" view="/faq.xhtml" propagation="none" /></td>
 				<td align="center"><s:link id="menuRegisterId" styleClass="menuItem #{menuBean.getCssClass('/register.xhtml')}" view="/register.xhtml" propagation="none" /></td>
 				<td align="center"><s:link id="menuTerminaId" styleClass="menuItem #{menuBean.getCssClass('/termina.xhtml')}" view="/termina.xhtml" propagation="none" /></td>
@@ -32,7 +31,6 @@
 			</tr>
 			<tr>
 				<td align="center"><s:link styleClass="menuLink #{menuBean.getCssClass('/home.xhtml')}" view="/home.xhtml" value="#{messages['menu.welcome']}" propagation="none"/></td>
-				<td align="center"><s:link styleClass="menuLink #{menuBean.getCssClass('/impressum.xhtml')}" view="/impressum.xhtml" value="#{messages['menu.impressum']}" propagation="none"/></td>
 				<td align="center"><s:link styleClass="menuLink #{menuBean.getCssClass('/faq.xhtml')}" view="/faq.xhtml" value="#{messages['menu.faq']}" propagation="none"/></td>
 				<td align="center">
 					<s:link styleClass="menuLink #{menuBean.getCssClass('/register.xhtml')}" view="/register.xhtml" value="#{messages['menu.register']}" rendered="#{not identity.loggedIn}" propagation="none"/>
