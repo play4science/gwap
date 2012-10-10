@@ -6,13 +6,11 @@
  * 
  */
 
-package gwap.mit;
+package gwap.search;
 
 import gwap.model.action.Bet;
 import gwap.model.resource.Statement;
-import gwap.search.SolrSearchBean;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,15 +28,15 @@ import org.jboss.seam.annotations.Scope;
  */
 @Name("mitSearchBean")
 @Scope(ScopeType.PAGE)
-public class SearchBean extends SolrSearchBean implements Serializable {
+public class MitSearchBean extends SolrSearchBean {
 
 	private static final long serialVersionUID = -6337457799491522338L;
 
 	protected static final List<SearchSpecialParameter> specialWords;
-	private Statement selectedStatement;
-	private Bet selectedBet;
+	protected Statement selectedStatement;
+	protected Bet selectedBet;
 	@In
-	EntityManager entityManager;
+	protected EntityManager entityManager;
 
 	
 	static {
@@ -51,7 +49,7 @@ public class SearchBean extends SolrSearchBean implements Serializable {
 		specialWords.add(new SearchSpecialParameter("istruito",		"cultivation:[1 TO *]",	"product(scale(cultivation_ratingcount,1,10),linear(abs(cultivation),0.05,1))"));
 	}
 	
-	public SearchBean() {
+	public MitSearchBean() {
 		RESULTS_PER_PAGE = 10;
 	}
 	
@@ -98,7 +96,7 @@ public class SearchBean extends SolrSearchBean implements Serializable {
 		else
 			selectedBet = null;
 		
-		log.info("Ausgewählte id in showDetail(): " + selectedStatementId);
+		log.info("Selected Statement in showDetail(): " + selectedStatementId);
 	}
 	
 	public Statement getSelectedStatement(){

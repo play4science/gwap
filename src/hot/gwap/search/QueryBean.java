@@ -33,6 +33,7 @@ public class QueryBean implements Serializable {
 	private String title;
 	private String location;
 	private String year;
+	private String letter;
 	
 	public void setNotEmptyParameters(Redirect redirect) {
 		if (!isNullOrEmpty(queryString))
@@ -47,6 +48,8 @@ public class QueryBean implements Serializable {
 			redirect.setParameter("location", location);
 		if (!isNullOrEmpty(year))
 			redirect.setParameter("year", year);
+		if (!isNullOrEmpty(letter))
+			redirect.setParameter("letter", letter);
 	}
 	
 	public String getQueryString() {
@@ -95,6 +98,14 @@ public class QueryBean implements Serializable {
 
 	public void setYear(String year) {
 		this.year = year;
+	}
+
+	public String getLetter() {
+		return letter;
+	}
+
+	public void setLetter(String letter) {
+		this.letter = letter;
 	}
 
 }

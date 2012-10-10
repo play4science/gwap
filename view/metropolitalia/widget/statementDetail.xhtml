@@ -1,0 +1,70 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:p4s="http://play4science.org/facelets">
+	
+	<ui:include src="/widget/googlemap.xhtml" />
+			
+			<script type="text/javascript">
+				__addLoadEvent(function() {
+					map.percentageView = true;
+					jQuery('#gmap').height(401);
+				 });
+			</script>	
+					
+			<a4j:outputPanel id="searchResultDetail">
+			
+				<div id="betScoringLegend">
+					<ui:include src="/widget/mapLegend.xhtml">
+						<ui:param name="withOwnChoice" value="#{bet}" />
+					</ui:include>
+				</div>
+			
+			
+				<s:fragment rendered="#{statement != null}">
+					<s:fragment rendered="#{bet == null}">
+						<script type="text/javascript">
+							map.displayPercentages(#{statement.id});
+						</script>
+					</s:fragment>
+					<s:fragment rendered="#{bet != null}">
+						<script type="text/javascript">
+							map.displayPercentagesByBet(#{bet.id});
+						</script>
+						<table style="padding-bottom: 20px">
+							<ui:include src="/widget/betScoring.xhtml">
+								<ui:param name="bet" value="#{bet}" />
+							</ui:include>
+						</table>
+					</s:fragment>
+					<script type="text/javascript">
+						colorChooser(#{statement.id});
+						resize();
+					</script>
+				
+					<h4><h:outputText value="#{messages['admin.statementOverview.characterization']}:" /></h4>
+					 
+					<div id="statementCharacterization" style="margin-top: 20px;">
+						<ui:include src="/widget/statementCharacterization.xhtml"/>
+					</div>
+					
+					<div id="statementHighlighting" style="margin-top: 20px;">
+						<h4 style="margin-bottom:2px;"><h:outputText value="#{messages['admin.statementOverview.highlighting']}:" /></h4>
+						<ui:include src="/widget/statementHighlightingWidget.xhtml"/>
+					</div>
+					
+					<div id="betPercentages" style="clear:both; margin-top: 20px;">
+						<ui:include src="/widget/betPercentages.xhtml">
+							<ui:param name="percentages" value="#{mitPokerScoring.getStatementPercentages(statement)}"/>
+						</ui:include>
+					</div>
+					
+				</s:fragment>
+			</a4j:outputPanel>
+</ui:composition>

@@ -129,22 +129,29 @@ function Map() {
 				}
 			}
 		}
+		try {
+			$('betDetailLocationName').innerHTML = this.title;
+			$('betDetailLocationPercentage').innerHTML = this.percentage + '%';
+		} catch (e) {}
 		if (map.mouseOver)
 			map.mouseOver(this, event);
 	};
-
 	this.mouseOutInternal = function(event) {
 		if (this instanceof google.maps.Marker && this != map.selected)
 			this.setIcon(map.markerImage);
 		if (!map.enabled)
 			return;
-		if (map.mouseOut)
-			map.mouseOut(this, event);
 		if (map.highlightNeighbors && !map.percentageView){
 			for(var i = 0; i < map.markers.length; i++){
 				map.markers[i].setOptions({fillOpacity:0});
 			}
 		}
+		try {
+			$('betDetailLocationName').innerHTML = "";
+			$('betDetailLocationPercentage').innerHTML = "";
+		} catch (e) {}
+		if (map.mouseOut)
+			map.mouseOut(this, event);
 	};
 	
 	this.updateLocationIdField = function() {

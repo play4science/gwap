@@ -60,82 +60,10 @@
 		
 		
 		<div id="content">
-		
-			<ui:include src="/widget/googlemap.xhtml" />
-			
-			<script type="text/javascript">
-				__addLoadEvent(function() {
-					map.percentageView = true;
-					maxWidthPossible = 600;
-					jQuery('#gmap').height(401);
-				 });
-
-				
-				map.mouseOver = function(object, event) {
-					$('betDetailLocationName').innerHTML = object.title;
-					$('betDetailLocationPercentage').innerHTML = object.percentage + '%';
-				};
-				map.mouseOut = function(object, event) {
-					$('betDetailLocationName').innerHTML = "";
-					$('betDetailLocationPercentage').innerHTML = "";
-				};
-				map.mouseClick = function(object, event) {
-					$('betDetailLocationName').innerHTML = "";
-					$('betDetailLocationPercentage').innerHTML = "";
-				};
-			</script>	
-					
-			<a4j:outputPanel id="searchResultDetail">
-			
-				<div id="betScoringLegend" style="width: 700px">
-					<ui:include src="/widget/mapLegend.xhtml">
-						<ui:param name="withOwnChoice" value="#{mitSearchBean.selectedBet}" />
-					</ui:include>
-				</div>
-			
-			
-				<s:fragment rendered="#{mitSearchBean.selectedStatement != null}">
-					<s:fragment rendered="#{mitSearchBean.selectedBet == null}">
-						<script type="text/javascript">
-							map.displayPercentages(#{mitSearchBean.selectedStatement.id});
-							colorChooser(#{mitSearchBean.selectedStatement.id});
-						</script>
-					</s:fragment>
-					<s:fragment rendered="#{mitSearchBean.selectedBet != null}">
-						<script type="text/javascript">
-							map.displayPercentagesByBet(#{mitSearchBean.selectedBet.id});
-							colorChooser(#{mitSearchBean.selectedStatement.id});
-						</script>
-						<table style="padding-bottom: 20px">
-							<ui:include src="/widget/betScoring.xhtml">
-								<ui:param name="bet" value="#{mitSearchBean.selectedBet}" />
-							</ui:include>
-						</table>
-					</s:fragment>
-				
-					<h4><h:outputText value="#{messages['admin.statementOverview.characterization']}:" /></h4>
-					 
-					<div id="statementCharacterization" style="margin-top: 20px;">
-						<ui:include src="/widget/statementCharacterization.xhtml">
-							<ui:param name="statement" value="#{mitSearchBean.selectedStatement}"/>
-						</ui:include>
-					</div>
-					
-					<div id="statementHighlighting" style="margin-top: 20px;">
-						<h4 style="margin-bottom:2px;"><h:outputText value="#{messages['admin.statementOverview.highlighting']}:" /></h4>
-						<ui:include src="/widget/statementHighlightingWidget.xhtml" >
-							<ui:param name="statement" value="#{mitSearchBean.selectedStatement}"/>
-						</ui:include>
-					</div>
-					
-					<div id="betPercentages" style="clear:both; margin-top: 20px;">
-						<ui:include src="/widget/betPercentages.xhtml">
-							<ui:param name="percentages" value="#{mitPokerScoring.getStatementPercentages(mitSearchBean.selectedStatement)}"/>
-						</ui:include>
-					</div>
-					
-				</s:fragment>
-			</a4j:outputPanel>
+			<ui:include src="/widget/statementDetail.xhtml">
+				<ui:param name="statement" value="#{mitSearchBean.selectedStatement}" />
+				<ui:param name="bet" value="#{mitSearchBean.selectedBet}" />
+			</ui:include>
 		</div>
     </ui:define>
 </ui:composition>

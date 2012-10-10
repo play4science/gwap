@@ -6,7 +6,7 @@
  * 
  */
 
-package gwap.mit;
+package gwap.search;
 
 
 /**
