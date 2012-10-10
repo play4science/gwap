@@ -124,3 +124,10 @@ function unsetAjaxLoader(nodeId) {
 	var node = document.getElementById(nodeId);
 	node.style.backgroundImage = "none";
 };
+
+var previouslyActiveItem = 0;
+function setItemActive(active) {
+	jQuery('#' + previouslyActiveItem).css('background-color','transparent');
+	jQuery('#' + active).css('background-color','#B8C9E1');
+	previouslyActiveItem = active;
+}

@@ -956,6 +956,8 @@
    <field name="cultivation_ratingcount" type="double" indexed="true" stored="true" multiValued="false" />
    <field name="highlighted" type="string_lc" indexed="true" stored="true" multiValued="true" />
    
+   <field name="statement_untokenized" type="string_lc" indexed="true" stored="false" multiValued="false" />
+   <copyField source="statement" dest="statement_untokenized"/>
 
    <!-- Uncommenting the following will create a "timestamp" field using
         a default value of "NOW" to indicate when each document was indexed.

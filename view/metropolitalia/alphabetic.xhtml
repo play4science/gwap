@@ -10,37 +10,47 @@
     xmlns:p4s="http://play4science.org/facelets"
     template="layout/template.xhtml">
 	
-    <ui:define name="body">
+	<ui:define name="body">
     
 	<div id="related">
 		<ui:include src="layout/logo.xhtml" />
 		<ui:include src="layout/menu.xhtml" />
 
-      	<rich:panel rendered="#{mitSearchBean.emptyResult}">
+		<div style="font-size:0.9em; margin-bottom:5px;">
+			<ui:repeat var="_letter" value="#{mitAlphabeticSearchBean.letters}">
+				<s:link view="/alphabetic.xhtml" value="#{_letter}" rendered="#{!_letter.equals(queryBean.letter)}">
+					<f:param name="letter" value="#{_letter}"/>
+					<f:param name="pageNumber" value="1"/>
+				</s:link>
+				<h:outputText value="#{_letter}" rendered="#{_letter.equals(letter)}" />
+			</ui:repeat>
+		</div>
+
+      	<rich:panel rendered="#{mitAlphabeticSearchBean.emptyResult}">
 			<h:outputText value="#{messages['search.noResults']}"/>
 			<br/>
 			<s:link view="/newstatement.xhtml" value="#{messages['statements.new']}"/>
 		</rich:panel>
 	    <div id="searchResults">
 	    	<div style="margin-bottom: 10px;">
-				<h:outputText value="#{messages['search.results']}" rendered="#{!mitSearchBean.emptyResult}" />
+				<h:outputText value="#{messages['search.alphabetic.results']} #{queryBean.letter}" rendered="#{!mitAlphabeticSearchBean.emptyResult}" />
 	    	</div>
 			<h:form>
-				<p4s:pagination viewId="/solrSearchResults.xhtml" style="margin:0 0 10px 0;"/>
+				<p4s:pagination viewId="/alphabetic.xhtml" style="margin:0 0 10px 0;"/>
 				<rich:dataTable id="resultsList"
-				               value="#{mitSearchBean.results}"
+				               value="#{mitAlphabeticSearchBean.results}"
 				               var="_doc"
-				               rendered="#{!mitSearchBean.emptyResult}"
+				               rendered="#{!mitAlphabeticSearchBean.emptyResult}"
 				               columnClasses="noBorder"
 				               styleClass="statementList"
 				               >
 					<rich:column>
 						<div id="#{_doc.getFieldValue('id')}">
-							<a4j:commandLink value="#{_doc.getFieldValue('statement')}" action="#{mitSearchBean.showDetail(_doc.getFieldValue('id'))}" reRender="searchResultDetail" styleClass="link" />
+							<a4j:commandLink value="#{_doc.getFieldValue('statement')}" action="#{mitAlphabeticSearchBean.showDetail(_doc.getFieldValue('id'))}" reRender="searchResultDetail" styleClass="link" />
 						</div>
 				    </rich:column>
 				</rich:dataTable>
-				<p4s:pagination viewId="/solrSearchResults.xhtml" style="margin:10px 0 0 0;"/> 
+				<p4s:pagination viewId="/alphabetic.xhtml" style="margin:10px 0 0 0;"/> 
 			</h:form>
 	    </div>
 	</div>
@@ -48,8 +58,8 @@
 		
 		<div id="content">
 			<ui:include src="/widget/statementDetail.xhtml">
-				<ui:param name="statement" value="#{mitSearchBean.selectedStatement}" />
-				<ui:param name="bet" value="#{mitSearchBean.selectedBet}" />
+				<ui:param name="statement" value="#{mitAlphabeticSearchBean.selectedStatement}" />
+				<ui:param name="bet" value="#{mitAlphabeticSearchBean.selectedBet}" />
 			</ui:include>
 		</div>
     </ui:define>

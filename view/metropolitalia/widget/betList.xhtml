@@ -9,15 +9,6 @@
     xmlns:a4j="http://richfaces.org/a4j"
     xmlns:p4s="http://play4science.org/facelets">
 
-	<script type="text/javascript">
-	var activeOld = 0;
-	function colorChooser(active) {
-		jQuery('#' + activeOld).css('background-color','transparent');
-		jQuery('#' + active).css('background-color','#B8C9E1');
-		activeOld = active;
-	}
-	</script>	
-
 	<h:form>
 
 		<s:fragment rendered="#{empty(mitBetList)}">

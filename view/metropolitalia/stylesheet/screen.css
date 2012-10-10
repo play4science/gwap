@@ -59,9 +59,10 @@ a:hover                                 { color: #0090FF; };
 #navAdmin li			            	{ margin-left: 10px; line-height:21px; padding:0; background:url(../img/arrowBig.gif) no-repeat 0 0; margin-bottom:.25em }
 #navAdmin li a           				{ font-size:0.7em; color:#000; line-height:22px; text-decoration:none; padding-left:30px; margin:0; }
 
-#navSub, #navMain                       { width:260px; margin:20px 0 25px 0 }
-#navSub li, #navMain li                 { line-height:21px; padding:0; background:url(../img/arrowBig.gif) no-repeat 0 0; margin-bottom:.25em }
-#navSub a, #navMain a                   { font-size:0.7em; color:#000; line-height:22px; text-decoration:none; padding-left:30px; margin:0; text-transform:uppercase; font-weight:bold }
+#navSub, #navMain, .navSub              { width:260px; margin:20px 0 25px 0 }
+#navSub li, #navMain li, .navSub li    { line-height:21px; padding:0; background:url(../img/arrowBig.gif) no-repeat 0 0; margin-bottom:.25em }
+#navSub a, #navMain a, .navSub a       { font-size:0.7em; color:#000; line-height:22px; text-decoration:none; padding-left:30px; margin:0; text-transform:uppercase; font-weight:bold }
+#related h1                             { font-size:0.8em; color:#000; line-height:22px; text-decoration:none; margin:10px 0 3px 0; text-transform:uppercase; font-weight:bold }
 
 
 #related .statementList a				{ color:black; text-decoration:none;  }
@@ -77,7 +78,8 @@ a:hover                                 { color: #0090FF; };
 -----------------------------------------------------------------------------*/
 #search input[type=text]                { background: transparent; width:200px; border: none; padding: 0 3px 0 1px; margin: 0; }
 #search input[type="submit"]            { background: url(../img/lupe.gif) no-repeat; height:17px; width:17px; margin: 0px; padding: 0px; border: none; }
-#search									{ border: 1px solid #666; } 
+#search									 { border: 1px solid #666; }
+.navSub #search                          { margin-left: 30px;}
 
 
 #game                                   { margin-top:25px }

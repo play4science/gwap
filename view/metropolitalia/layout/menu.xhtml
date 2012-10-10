@@ -23,9 +23,9 @@
         	<li>
         		<a href="http://blog.metropolitalia.org"><h:outputText value="#{messages['menu.blog']}" /></a>
         	</li>
-			<!-- <li>
+			<li>
         		<s:link view="/highscore.xhtml" value="#{messages['menu.highscore']}"/>
-        	</li> -->
+        	</li>
         	<s:fragment rendered="#{identity.loggedIn}">
 				<li>
 		        	<s:link view="/bets.xhtml" value="#{messages['menu.bets']}" propagation="none" includePageParams="false"/>
@@ -44,6 +44,14 @@
     	</ul>
 
 		<s:fragment rendered="#{!hideSubmenu}">
+		<h1><h:outputText value="#{messages['menu.statements']}" /></h1>
+		<ul class="navSub" style="margin-top: 0px;">
+			<li>
+    			<s:link view="/alphabetic.xhtml" value="#{messages['menu.search.alphabetic']}" propagation="none">
+    				<f:param name="letter" value="A"/>
+    			</s:link>
+  			</li>
+    		<li>
 		    <div id="search">  	
 				<h:form>
 					<h:inputText value="#{queryBean.queryString}" id="searchField" required="true" placeholder="#{messages['menu.search.placeholder']}" />
@@ -56,11 +64,12 @@
 				</h:form>
 			</div>
 			<div class="clear" style="height:10px;"/>
-			
-			<rich:messages styleClass="messages" globalOnly="true"
-		       	errorClass="errormsg" infoClass="infomsg" warnClass="warnmsg"
-	    	   	rendered="#{showGlobalMessages != 'false'}"
-	    	/>
+			</li>
+    	</ul>
+		<rich:messages styleClass="messages" globalOnly="true"
+	       	errorClass="errormsg" infoClass="infomsg" warnClass="warnmsg"
+    	   	rendered="#{showGlobalMessages != 'false'}"
+    	/>
 		</s:fragment>
     	
     </div>
