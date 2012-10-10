@@ -16,29 +16,6 @@
 
 		<div id="content">			
 			<rich:tabPanel switchType="client">
-				<rich:tab label="#{messages['highscore.bestBets']}" style="background-color: transparent; border-bottom:none; ">
-					<rich:dataTable styleClass="highscoreTable" value="#{mitHighscore.bestBets}" var="_score">			
-						<rich:column styleClass="#{_score.person.id == person.id ? 'self' : null}">
-							<f:facet name="header">
-								<h:outputText value="#{messages['highscore.statement']}"/>
-							</f:facet>
-							<h:outputText value="#{_score.resource.text}" />
-						</rich:column>
-						<rich:column styleClass="#{_score.person.id == person.id ? 'self' : null}">
-							<f:facet name="header">
-								<h:outputText value="#{messages['score']}"/>
-							</f:facet>
-							<h:outputText value="#{_score.score}" />
-						</rich:column>
-						<rich:column width="120px" styleClass="#{_score.person.id == person.id ? 'self' : null}">
-							<f:facet name="header">
-								<h:outputText value="#{messages['highscore.username']}"/>
-							</f:facet>
-							<h:outputText value="#{_score.person.username}" rendered="#{_score.person.username.length() > 0}" />
-							<h:outputText value="#{messages['general.guest']}" rendered="#{_score.person.username.length() == 0}" />
-						</rich:column>
-					</rich:dataTable>
-				</rich:tab>
 				<rich:tab label="#{messages['highscore.bestPlayers']}" style="background-color: transparent; border-bottom:none;">
 					<rich:dataTable styleClass="highscoreTable" value="#{mitHighscore.bestUsers}" var="_score">			
 						<rich:column width="120px" styleClass="#{_score.person.id == person.id ? 'self' : null}">
