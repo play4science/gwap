@@ -6,12 +6,22 @@
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:rich="http://richfaces.org/rich"
-    xmlns:a4j="http://richfaces.org/a4j">
+    xmlns:a4j="http://richfaces.org/a4j"
+    template="layout/template.xhtml">
 
-  <div id="footer">
-  	<s:link view="/impressum.xhtml" propagation="none">#{messages['footer.impressum']}</s:link> || #{' '}
-  	<s:link view="/privacy.xhtml" propagation="none">#{messages['description.privacy.label']}</s:link>
-	<h:outputText value="#{messages['footer']}" escape="false" propagation="none" />
-  </div>
+    <ui:define name="body">
 
+		<div id="content">
+		
+			<div class="contentWrapper">
+		
+				<h1>#{messages['description.privacy.label']}</h1>
+				<hr class="pageTitle" /><br />
+			
+				<h:outputText value="#{messages['description.privacy.text']}" escape="false" /><br /><br />
+			</div>
+		</div>
+		
+        <br class="clear" />
+    </ui:define>
 </ui:composition>
