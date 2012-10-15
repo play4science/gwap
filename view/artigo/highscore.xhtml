@@ -23,40 +23,12 @@
 					
 						<rich:dataTable styleClass="highscoreTable" summary="Highscore" value="#{_highscore.highscoreDaily}" var="_score" rendered="#{_highscore.highscoreDaily.size() > 0}">			
 							<f:facet name="header"><h:outputText value="#{messages['score.daily']}" /></f:facet>
-							<rich:column width="80%" styleClass="#{_score.personId == person.id ? 'self' : null}">
-								<f:facet name="header">
-									<h:outputText value="#{messages['score.user']}"/>
-								</f:facet>
-								<h:outputText value="#{_score.person.username}" rendered="#{_score.person.username.length() > 0}" />
-								<h:outputText value="#{messages['general.guest']}" rendered="#{_score.person.username.length() == 0}" />
-							</rich:column>
-							<rich:column width="20%" styleClass="#{_score.personId == person.id ? 'self' : null}">
-								<f:facet name="header">
-									<h:outputText value="#{messages['score']}"/>
-								</f:facet>
-								<h:outputText value="#{_score.score}" />
-							</rich:column>
+							<ui:include src="/widget/highscoreInsideTable.xhtml" />
 						</rich:dataTable>
 					
 				 		<rich:dataTable styleClass="highscoreTable" summary="Highscore" value="#{_highscore.highscoreMonthly}" var="_score" rendered="#{_highscore.highscoreMonthly.size() > 0}">
 							<f:facet name="header"><h:outputText value="#{messages['score.monthly']}" /></f:facet>
-							<rich:column width="80%" styleClass="#{_score.personId == person.id ? 'self' : null}">
-								<f:facet name="header">
-									<h:outputText value="#{messages['score.user']}"/>
-								</f:facet>
-											
-								<h:outputText value="#{_score.person.username}" rendered="#{_score.person.username.length() > 0}" />
-								<s:fragment rendered="#{_score.person.email.length()> 0 and s:hasPermission('artigo', 'highscore-'.concat(customSource.name))}">
-									<a href="mailto:#{_score.person.forename} #{_score.person.surname} &lt;#{_score.person.email}&gt;">E-Mail</a>
-								</s:fragment>
-								<h:outputText value="#{messages['general.guest']}" rendered="#{_score.person.username.length() == 0}" />
-							</rich:column>
-							<rich:column width="20%" styleClass="#{_score.personId == person.id ? 'self' : null}">
-								<f:facet name="header">
-									<h:outputText value="#{messages['score']}"/>
-								</f:facet>
-								<h:outputText value="#{_score.score}" />
-							</rich:column>
+							<ui:include src="/widget/highscoreInsideTable.xhtml" />
 						</rich:dataTable>
 						
 	        		</rich:tab>

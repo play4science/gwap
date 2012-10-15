@@ -7,6 +7,7 @@
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:rich="http://richfaces.org/rich"
     xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:c="http://java.sun.com/jstl/core"
     template="layout/template.xhtml">
 
     <ui:define name="body">
@@ -15,7 +16,19 @@
 		</div>
 
 		<div id="content">
-			<ui:include src="widget/highscore.xhtml" />
+			<rich:tabPanel switchType="client" width="1%">
+				<c:forEach items="#{highscoreBean.highscores}" var="_highscore">
+					<rich:dataTable styleClass="highscoreTable" summary="Highscore" value="#{_highscore.highscoreDaily}" var="_score" rendered="#{_highscore.highscoreDaily.size() > 0}">			
+						<f:facet name="header"><h:outputText value="#{messages['score.daily']}" /></f:facet>
+						<ui:include src="/widget/highscoreInsideTable.xhtml" />
+					</rich:dataTable>
+				
+			 		<rich:dataTable styleClass="highscoreTable" summary="Highscore" value="#{_highscore.highscoreMonthly}" var="_score" rendered="#{_highscore.highscoreMonthly.size() > 0}">
+						<f:facet name="header"><h:outputText value="#{messages['score.monthly']}" /></f:facet>
+						<ui:include src="/widget/highscoreInsideTable.xhtml" />
+					</rich:dataTable>
+				</c:forEach>
+    		</rich:tabPanel>
 		</div>
 		
         <br class="clear" />
