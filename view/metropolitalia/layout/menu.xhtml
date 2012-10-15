@@ -20,9 +20,9 @@
 					<s:link view="/admin/index.xhtml" value="#{messages['admin.menu.index']}" propagation="none"/>
         		</li>
         	</s:fragment>
-        	<li>
-        		<a href="http://blog.metropolitalia.org"><h:outputText value="#{messages['menu.blog']}" /></a>
-        	</li>
+    		<li>
+    			<s:link view="/recognize.xhtml" value="#{messages['menu.recognize']}" propagation="none" />
+    		</li>
 			<li>
         		<s:link view="/highscore.xhtml" value="#{messages['menu.highscore']}"/>
         	</li>
@@ -31,27 +31,19 @@
 		        	<s:link view="/bets.xhtml" value="#{messages['menu.bets']}" propagation="none" includePageParams="false"/>
 	        	</li>
         	</s:fragment>
-        </ul>
-    	<ul id="navSub">
-    	<s:fragment rendered="#{!hideSubmenu}">
-    		<li>
-    			<s:link view="/recognize.xhtml" value="#{messages['menu.recognize']}" propagation="none" />
-    		</li>
     		<li>
     			<s:link view="/newstatement.xhtml" value="#{messages['menu.newstatement']}" propagation="none" rendered="#{mitCoins.canEnterStatement()}" />
     		</li>
+        </ul>
+    	<ul id="navSub">
+    	<s:fragment rendered="#{!hideSubmenu}">
+        	<li>
+        		<a href="http://blog.metropolitalia.org"><h:outputText value="#{messages['menu.blog']}" /></a>
+        	</li>
     	</s:fragment>
     	</ul>
 
 		<s:fragment rendered="#{!hideSubmenu}">
-		<h1><h:outputText value="#{messages['menu.statements']}" /></h1>
-		<ul class="navSub" style="margin-top: 0px;">
-			<li>
-    			<s:link view="/alphabetic.xhtml" value="#{messages['menu.search.alphabetic']}" propagation="none">
-    				<f:param name="letter" value="A"/>
-    			</s:link>
-  			</li>
-    		<li>
 		    <div id="search">  	
 				<h:form>
 					<h:inputText value="#{queryBean.queryString}" id="searchField" required="true" placeholder="#{messages['menu.search.placeholder']}" />
@@ -64,12 +56,11 @@
 				</h:form>
 			</div>
 			<div class="clear" style="height:10px;"/>
-			</li>
-    	</ul>
-		<rich:messages styleClass="messages" globalOnly="true"
-	       	errorClass="errormsg" infoClass="infomsg" warnClass="warnmsg"
-    	   	rendered="#{showGlobalMessages != 'false'}"
-    	/>
+			
+			<rich:messages styleClass="messages" globalOnly="true"
+		       	errorClass="errormsg" infoClass="infomsg" warnClass="warnmsg"
+	    	   	rendered="#{showGlobalMessages != 'false'}"
+	    	/>
 		</s:fragment>
     	
     </div>
