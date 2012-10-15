@@ -78,6 +78,11 @@ public class GameConfigurationHome extends EntityHome<GameConfiguration>{
 	@Begin(join = true)
 	public void create() {
 		super.create();
+		if (gameConfigurationId == null) {
+			getInstance().setBid(1);
+			getInstance().setLevel(1);
+			getInstance().setRoundDuration(60);
+		}
 	}
 
     @Override

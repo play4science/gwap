@@ -53,6 +53,8 @@ public class TermHome extends EntityHome<Term> {
 				getInstance().getConfirmedTags().add(new Tag());
 			}
 			getInstance().setTag(new Tag());
+			getInstance().setRating(1);
+			getInstance().setEnabled(true);
 		}
 	}
 	
@@ -71,7 +73,7 @@ public class TermHome extends EntityHome<Term> {
 			newConfirmedTag = "";
 		}
 		else
-			facesMessages.add("Bitte geben Sie einen Confirmed Term an!");
+			facesMessages.addToControl("confirmedTagsTable", "Bitte geben Sie einen Confirmed Term an!");
 	}
 	
 	public void deleteConfirmedTerm(Long confirmedTagId) {
@@ -85,7 +87,7 @@ public class TermHome extends EntityHome<Term> {
 			}
 		}
 	}
-
+	
 	@Override
 	public String persist() {
 		List<Tag> enteredConfirmedTags = getInstance().getConfirmedTags();
@@ -132,6 +134,7 @@ public class TermHome extends EntityHome<Term> {
 		} catch (NoResultException e) {
 			tag = new Tag();
 			tag.setName(name);
+			tag.setLanguage(localeSelector.getLanguage());
 			entityManager.persist(tag);
 		}
 		return tag;

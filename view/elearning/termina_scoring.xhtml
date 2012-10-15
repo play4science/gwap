@@ -1,0 +1,37 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    template="layout/template.xhtml">
+
+    <ui:define name="body">
+
+		<div id="content">
+		
+				<h1>#{messages['pagetitle.termina.ended']}</h1>
+				<hr class="pageTitle" /><br />
+		
+			<div class="contentWrapper">
+				<img class="gameIcon" src="#{internalBasePath}img/game_points.svg" />
+				
+				<h:outputText styleClass="score" value="#{messages['termina.scoring.totalScore']}: #{gameSessionScore}" /><br />
+				
+				<div id="scoringDescription">
+					<h:outputText value="#{messages['termina.scoring.description']}" escape="false"/>
+				</div>
+				<br />
+				<ui:include src="/widget/gameSessionResults.xhtml" />
+			
+				<br />
+				<s:button view="/termina.xhtml" styleClass="repeat" propagation="none" title="#{messages['buttonTitle.repeat']}" value=""/>
+			</div>
+		</div>
+		
+        <br class="clear" />
+    </ui:define>
+</ui:composition>

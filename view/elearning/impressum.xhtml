@@ -10,22 +10,27 @@
     template="layout/template.xhtml">
 
     <ui:define name="body">
-		<div id="related">
-			<ui:include src="layout/menu.xhtml" />
-			<ul id="navSub">
-	   			<li>
-	    		   	
-	    		</li>
-	    		<li>
-	   		   		
-	   			</li>
-		   	</ul>
-		</div>
 
 		<div id="content">
-			Lehr- und Forschungseinheit<br></br>
-			Programmier- und Modellierungssprachen<br></br>
-			LMU
+		
+			<div class="contentWrapper">
+		
+				<h1>#{messages['pagetitle.impressum']}</h1>
+				<hr class="pageTitle" /><br />
+			
+				<h2>#{messages['impressum.anschrift']}</h2>
+				<h:outputText value="#{messages['impressum.adresse']}" escape="false" /><br /><br />
+			
+				<h2>#{messages['impressum.mail']}</h2>
+				<a id="impressumEMail" href="MAILTO:wwwmaster@pms.ifi.lmu.de" value="#{messages['impressum.email']}">#{messages['impressum.email']}</a><br /><br />
+			
+				<h2>#{messages['impressum.mitwirkende']}</h2>
+				<h:outputText value="#{messages['impressum.personen']}" escape="false" /><br /><br />
+				
+				<h:outputText value="#{messages['impressum.institut']}" /><br /><br />
+				<h:outputText  value="#{messages['impressum.disclaimer']}" />
+				
+			</div>
 		</div>
 		
         <br class="clear" />

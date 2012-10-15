@@ -20,6 +20,6 @@ import org.jboss.seam.framework.EntityQuery;
 public class TermList extends EntityQuery<Term> {
 
 	public TermList() {
-		setEjbql("select t from Term t");
+		setEjbql("select t from Term t order by t.tag.name");
 	}
 }

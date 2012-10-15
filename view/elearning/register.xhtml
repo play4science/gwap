@@ -1,0 +1,102 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="layout/template.xhtml"
+                xmlns:a4j="http://richfaces.org/a4j">
+
+	<ui:define name="body">
+				
+		<div id="content">
+		
+			<h1>#{messages['pagetitle.register']}</h1>
+			<hr class="pageTitle" /><br />
+			
+			
+			<p><h:outputText value="#{messages['register.explanation']}" /></p><br />
+			
+		    <div class="dialog">
+		    
+	    		<h:form id="loginForm">
+					<p><h:outputText value="#{messages['register.mandatory']}" escape="false" /></p><br />
+				    
+					<a4j:outputPanel id="globalMessages" styleClass="globalMessage">
+						<rich:messages globalOnly="true" styleClass="messages" errorClass="errormsg" infoClass="infomsg" warnClass="warnmsg" rendered="#{showGlobalMessages != 'false'}"/>
+					</a4j:outputPanel> 
+				    
+				    <hr class="form"/>
+				    
+					<h:panelGrid columns="1">
+					
+			        	<s:decorate id="usernameField" template="/layout/edit.xhtml">
+			            	<ui:define name="label">
+			                	<h:outputText value="#{messages['person.username']}" styleClass="requiredField" />
+			                </ui:define>
+			                <h:inputText id="username" value="#{person.username}" required="true" />
+			            </s:decorate>
+			            
+			            <s:decorate id="emailField" template="/layout/edit.xhtml">
+							<ui:define name="label">
+				            	<h:outputText value="#{messages['person.email']}" styleClass="requiredField" />
+			                </ui:define>
+			                <h:inputText id="email" value="#{person.email}" required="true"/>
+			            </s:decorate>
+			            
+			            <hr class="form" />
+			            
+			            <s:decorate id="passwordField" template="/layout/edit.xhtml">
+							<ui:define name="label">
+				            	<h:outputText value="#{messages['person.password']}" styleClass="requiredField" />
+							</ui:define>
+			                <h:inputSecret id="password" value="#{register.password}" required="true" />
+			            </s:decorate>
+			            <h:outputText value="#{messages['register.passwordHint']}" styleClass="passwordHint" />
+			            
+			            <s:decorate id="passwordConfirmationField" template="/layout/edit.xhtml">
+							<ui:define name="label">
+				            	<h:outputText value="#{messages['person.passwordConfirmation']}" styleClass="requiredField" />
+			    			</ui:define>
+			                <h:inputSecret id="passwordConfirmation" value="#{register.passwordConfirmation}" required="true" />
+			            </s:decorate>
+			            
+			            <hr class="form" />
+			            
+						<s:decorate id="forenameField" template="/layout/edit.xhtml">
+							<ui:define name="label">
+			                	<h:outputText value="#{messages['person.forename']}" />
+			               	</ui:define>
+			                <h:inputText id="forename" value="#{person.forename}"/>
+			            </s:decorate>
+			            
+						<s:decorate id="surnameField" template="/layout/edit.xhtml">
+							<ui:define name="label">
+				            	<h:outputText value="#{messages['person.surname']}" />
+				            </ui:define>
+			                <h:inputText id="surname" value="#{person.surname}"/>
+			            </s:decorate>
+			            
+			            <s:decorate id="languageField" template="/layout/edit.xhtml" rendered="#{localeSelector.supportedLocales.size() > 1}">
+			            	<ui:define name="label">
+				            	<h:outputText value="#{messages['person.language']}" />
+			    	        </ui:define>
+			        		<h:selectOneMenu id="language" value="#{localeSelector.language}">
+					    		<f:selectItems value="#{localeSelector.supportedLocales}"/>
+							</h:selectOneMenu>
+						</s:decorate>
+						
+						<hr class="form" />
+						
+						<div class="actionButtons">
+							<h:commandButton id="submit" value="" action="#{register.createPerson}" title="#{messages['buttonTitle.register']}" styleClass="buttonRegister" />
+						</div>
+					</h:panelGrid>
+	    		</h:form>
+		    </div>
+		</div>
+		<br class="clear" />
+	</ui:define>
+</ui:composition>

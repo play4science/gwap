@@ -11,52 +11,79 @@
 
     <ui:define name="body">
 		<div id="content">
-      <f:view>
-     
-         <h:form>
-
-            <s:validateAll>
-
-               <h:panelGrid columns="2">
-                  <h:outputText value="#{messages['admin.term.name']}:"/> <h:inputText value="#{termHome.instance.tag.name}" required="true"/>
-                  <h:outputText value="#{messages['admin.term.rating']}:"/> <h:inputText value="#{termHome.instance.rating}" required="true"/>
-                  <h:outputText value="#{messages['admin.term.confirmedTags']}:"/>
-                  <rich:dataTable id="confirmedTagsTable" value="#{termHome.instance.confirmedTags}" var="_tag">
-                  	<h:column>
-			            <h:inputText value="#{_tag.name}" rendered="#{!termHome.managed}"/>
-			            <h:outputText value="#{_tag.name}" rendered="#{termHome.managed}"/>
-			        </h:column>
-						<h:column>
-							<h:commandLink action="#{termHome.deleteConfirmedTerm(_tag.id)}" value="#{messages['delete']}">
-							<!-- <f:param name="confirmedTagId" value="#{_tag.id}"/> -->
-							</h:commandLink>
-						</h:column>
-                  </rich:dataTable>
-                  <h:outputText value="#{messages['admin.term.addConfirmedTag']}"/>
-                  <h:panelGroup>
-                  	<h:inputText value="#{termHome.newConfirmedTag}"/>
-	                <h:commandButton value="#{messages['add']}" action="#{termHome.addConfirmedTag}" />
-                  </h:panelGroup>
-
-               </h:panelGrid>
-
-            </s:validateAll>
-
-            <h:messages/>
-
-            <h:commandButton 
-						value="#{messages['admin.term.persist']}"
-						action="#{termHome.persist}" 
-						rendered="#{!termHome.managed}" />
-					<h:commandButton 
-						value="#{messages['admin.term.update']}"
-						action="#{termHome.update}" 
-						rendered="#{termHome.managed}" />
-         </h:form>
-
-      </f:view>
-      </div>
 		
+			<h1><h:outputText value="#{messages['pagetitle.admin.termEdit']}" rendered="#{termHome.managed}" /></h1>
+			<h1><h:outputText value="#{messages['pagetitle.admin.termAdd']}" rendered="#{!termHome.managed}" /></h1>
+			<hr class="pageTitle" /><br />
+			
+      		<f:view>
+     			<div class="dialog">
+         		<h:form>
+            		<s:validateAll>
+            			<h:panelGrid columns="1">
+	                 		<s:decorate id="termNameField" template="/layout/edit.xhtml">
+			            		<ui:define name="label">
+				                	<h:outputText value="#{messages['terme.name']}" />
+			                	</ui:define>
+	                  			<h:inputText value="#{termHome.instance.tag.name}" id="termName" required="true"/>
+			            	</s:decorate>
+	                 			
+	                 		<s:decorate id="enabledField" template="/layout/edit.xhtml">
+			            		<ui:define name="label">
+		                 			<h:outputText value="#{messages['terme.enabled']}:"/>
+			                	</ui:define>
+		               			<h:selectBooleanCheckbox value="#{termHome.instance.enabled}" required="true"/>
+		               		</s:decorate>
+	                 			
+	                 		<s:decorate id="ratingField" template="/layout/edit.xhtml">
+			            		<ui:define name="label">
+		                 			<h:outputText value="#{messages['terme.rating']}:"/>
+			                	</ui:define>
+	                 			<rich:inputNumberSpinner value="#{termHome.instance.rating}" required="true" />
+	                 		</s:decorate>
+	                 		
+	                 		<s:decorate id="confirmedTagsField" template="/layout/edit.xhtml">
+			            		<ui:define name="label">
+		                 			<h:outputText value="#{messages['terme.confirmedTags']}:"/>
+			                	</ui:define>	
+	                 			
+	                		 	<rich:dataTable id="confirmedTagsTable" value="#{termHome.instance.confirmedTags}" var="_tag">
+	                		 	
+	                 				<h:column>
+			            			<h:inputText value="#{_tag.name}" rendered="#{!termHome.managed}"/>
+			            			<h:outputText value="#{_tag.name}" rendered="#{termHome.managed}"/>
+			        			</h:column>
+			        			
+								<h:column>
+									<h:commandButton styleClass="buttonDelete" action="#{termHome.deleteConfirmedTerm(_tag.id)}" value="" title="#{messages['buttonTitle.assocDelete']}">
+									<!-- <f:param name="confirmedTagId" value="#{_tag.id}"/> -->
+									</h:commandButton>
+								</h:column>
+								
+	                 			</rich:dataTable>
+	                  		
+		                  		<h:panelGrid columns="3">
+		                  		
+		                  			<h:outputText value="#{messages['terme.addConfirmedTag']}"/>
+		                  			<h:inputText value="#{termHome.newConfirmedTag}"/>
+			                		<h:commandButton value="" styleClass="buttonIncrease" action="#{termHome.addConfirmedTag}" title="#{messages['buttonTitle.assocAdd']}" />
+		
+		               			</h:panelGrid>
+	                 		</s:decorate>
+                 		</h:panelGrid>
+
+            		</s:validateAll>
+
+            		<h:messages globalOnly="true"/>
+            		<h:panelGrid columns="2">
+						<s:button styleClass="buttonBack" value="" view="/admin/termList.xhtml" title="#{messages['buttonTitle.back']}"/>
+	            		<h:commandButton value="" styleClass="buttonSave" action="#{termHome.persist}" rendered="#{!termHome.managed}" title="#{messages['buttonTitle.termAdd']}" />
+						<h:commandButton value="" styleClass="buttonSave" action="#{termHome.update}" rendered="#{termHome.managed}" title="#{messages['buttonTitle.termSave']}" />
+         			</h:panelGrid>
+         		</h:form>
+				</div>
+      		</f:view>
+		</div>		
         <br class="clear" />
     </ui:define>
 </ui:composition>

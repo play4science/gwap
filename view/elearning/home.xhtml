@@ -10,22 +10,17 @@
     template="layout/template.xhtml">
 
     <ui:define name="body">
-		<div id="related">
-			<ui:include src="layout/menu.xhtml" />
-			<ul id="navSub">
-	   			<li>
-	    		   	
-	    		</li>
-	    		<li>
-	   		   		
-	   			</li>
-		   	</ul>
-		</div>
 
 		<div id="content">
-			<p style="font-weight: bold;">Willkommen bei der assoziativen E-Learning-Plattform Termina!</p>
-			<p>Im &nbsp;<s:link view="/termina.xhtml">Termina-Spiel</s:link> stellst du dein Wissen unter Beweis und kannst dich in der &nbsp;<s:link view="/highscore.xhtml">Bestenliste</s:link> profilieren.</p> 
-			<p>Versuche, beim &nbsp;<s:link view="/tagging.xhtml">freien Üben</s:link> so viele Assoziationen zu finden wie möglich. Und sehe, was andere Nutzer mit den Begriffen verbinden.</p>
+		
+			<div class="contentWrapper">
+			
+				<h1>#{messages['pagetitle.home']}</h1>
+				<hr class="pageTitle" /><br />
+			
+				<p><h:outputText value="#{messages['home.welcome']}" propagation="none" escape="false" /></p>
+				
+			</div>
 		</div>
 		
 		

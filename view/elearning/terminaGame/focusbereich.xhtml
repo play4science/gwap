@@ -8,6 +8,70 @@
     xmlns:rich="http://richfaces.org/rich"
     xmlns:a4j="http://richfaces.org/a4j">
 
+	<h:form id="countdown">
+		
+		
+		<table>
+			<tr>
+				<td id="skipRoundTd" class="terminaTableCell"><h:outputText value="#{messages['buttonTitle.skipRound']}:" /></td>
+				<td>
+					<h:commandButton id="switchTermButton" styleClass="nextRound" action="next" value="" title="#{messages['buttonTitle.skipRound']}" type="button" />
+					<a4j:jsFunction name="switchTerm" action="next" />
+				</td>
+				<td class="gameConfigurationTd">
+					
+					<rich:progressBar id="progressbar" minValue="0" maxValue="#{gameConfiguration.roundDuration}" value="0.000001" label="bar" mode="client" />
+					<script type="text/javascript">
+						countdown.callbackStep = function() {
+							#{rich:component('progressbar')}.setValue(this.duration - this.seconds + 0.000001);
+							#{rich:component('progressbar')}.setLabel(this.seconds);
+						};
+		
+						countdown.callbackStop = function() {
+							switchTerm();
+						};
+	
+						countdown.start(#{gameConfiguration.roundDuration});
+			
+					</script>
+				</td>
+			</tr>
+		</table>
+		
+		</h:form>
+	
+		<hr class="termina" />
+		
+		<h:form id="bereich1" >
+			
+			<h:outputText value="#{messages['termina.changeConf']}" /><br />
+		
+			<table>
+				
+				
+				<tr>
+					<td><h:outputText value="#{messages['termina.ansage.anzahl']}" /></td>
+					<td><a4j:commandButton styleClass="buttonDecrease" action="#{elearnTermina.lowerBid()}" value="" title="#{messages['buttonTitle.decrease']}" reRender="bereich1"/></td>
+					<td><h:outputText value="#{elearnTermina.nextGameConfiguration.bid}"/></td>
+					<td><a4j:commandButton styleClass="buttonIncrease" action="#{elearnTermina.riseBid()}" value="" title="#{messages['buttonTitle.increase']}" reRender="bereich1"/></td>
+				</tr>
+				
+				<tr>
+					<td><h:outputText value="#{messages['termina.zeit.anzahl']}"  /></td>
+					<td><a4j:commandButton styleClass="buttonDecrease" action="#{elearnTermina.lowerRoundDuration()}" value="" title="#{messages['buttonTitle.decrease']}" reRender="bereich1"/></td>
+					<td><h:outputText value="#{elearnTermina.nextGameConfiguration.roundDuration}"/></td>
+					<td><a4j:commandButton styleClass="buttonIncrease" action="#{elearnTermina.riseRoundDuration()}" value="" title="#{messages['buttonTitle.increase']}" reRender="bereich1"/></td>
+					</tr>
+					
+			</table>
+
+			<script type="text/javascript">
+				if(#{gameConfiguration.bid}==#{elearnTermina.foundAssociations})
+					countdown.stop();		
+				</script>	
+			
+		</h:form>
+
 		<h:form id="focusbereich">
 			<script type="text/javascript">
 	  			document.getElementById('bereich3:inputassoc').focus();

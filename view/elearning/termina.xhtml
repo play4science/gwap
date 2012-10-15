@@ -10,36 +10,47 @@
     template="layout/template.xhtml">
 
     <ui:define name="body">
-		<div id="related">
-			<ui:include src="layout/menu.xhtml" />
-		</div>
 
 
 		<div id="content">
-			
+			<div class="contentWrapper">
+			<h1>#{messages['pagetitle.termina']}</h1>
+			<hr class="pageTitle" /><br />	
 			<h:form>
+			
 				<f:view>
-					<h:outputText value="#{messages['termina.start.header']}" escape="false" />
-					<br></br>
-					<br></br>
-					#{messages['elearn.ansage.anzahl']}<h:outputText value="#{gameConfiguration.bid}"/>
-					<h:commandButton action="#{elearnGameConfigurationBean.riseBid()}" value="+"/>
-					<h:commandButton action="#{elearnGameConfigurationBean.lowerBid()}" value="-"/>*
-					<br></br>
-					#{messages['elearn.zeit.anzahl']}<h:outputText value="#{gameConfiguration.roundDuration}"/>
-					<h:commandButton action="#{elearnGameConfigurationBean.riseRoundDuration()}" value="+"/>
-					<h:commandButton action="#{elearnGameConfigurationBean.lowerRoundDuration()}" value="-"/>**
-					<br></br>
-					<br></br>
-					<h:commandButton action="continueGame" value="#{messages['termina.start']}" style="font-size:16px; font-weight: bold; width: 100px;"></h:commandButton>
-					<br></br>
-					<br></br>
-					<p class="configlow">*: <h:outputText value="#{messages['termina.description.bid']}" />
-					<br></br>
-					**: <h:outputText value="#{messages['termina.description.roundDuration']}"/></p>
+				
+					
+					<div class="dialog">
+						<br />
+						
+						<table class="gameConfiguration">
+							<tr>
+								<td colspan="1" class="gameConfigurationTd"><h:outputText styleClass="requiredField" colspan="2" value="#{messages['termina.start']}"/></td>
+								<td colspan="3"><h:commandButton styleClass="buttonStart" action="continueGame" value="" title="#{messages['buttonTitle.termina.start']}" /></td>
+							</tr>
+							<tr>
+								<td colspan="4"><br /><h:outputText value="#{messages['termina.configure']}"/></td>
+							</tr>
+							<tr>
+								<td><h:outputText value="#{messages['termina.ansage.anzahl']}"/></td>
+								<td><h:commandButton styleClass="buttonDecrease" action="#{elearnGameConfigurationBean.lowerBid()}" value="" title="#{messages['buttonTitle.decrease']}"/></td>
+								<td><h:outputText value="#{gameConfiguration.bid}"/></td>
+								<td><h:commandButton styleClass="buttonIncrease" action="#{elearnGameConfigurationBean.riseBid()}" value="" title="#{messages['buttonTitle.increase']}"/></td>
+							</tr>
+							<tr>
+								<td><h:outputText value="#{messages['termina.zeit.anzahl']}" /></td>
+								<td><h:commandButton styleClass="buttonDecrease" action="#{elearnGameConfigurationBean.lowerRoundDuration()}" value="" title="#{messages['buttonTitle.decrease']}"/></td>
+								<td><h:outputText value="#{gameConfiguration.roundDuration}"/></td>
+								<td><h:commandButton styleClass="buttonIncrease" action="#{elearnGameConfigurationBean.riseRoundDuration()}" value="" title="#{messages['buttonTitle.increase']}"/></td>
+							</tr>
+						</table>
+						<br /><br />
+					</div>
 				</f:view>
-		</h:form>
-		
+		</h:form><br /><br />
+		<p><h:outputText value="#{messages['termina.explanation']}" /></p>
+		</div>
 		</div>
 		
         <br class="clear" />

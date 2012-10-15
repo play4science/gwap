@@ -10,19 +10,27 @@
     template="layout/template.xhtml">
 
     <ui:define name="body">
-		<div id="related">
-			<ui:include src="layout/menu.xhtml" />
-		</div>
 
 		<div id="content">
-			<ui:include src="/widget/gameSessionResults.xhtml">
-				<ui:param name="hideGameRoundScore" value="true"/>
-			</ui:include>
-			<s:button view="/tagging.xhtml" propagation="none" value="#{messages['tagging.playAgain']}"/>
+		
+			<div class="contentWrapper">
 			
-			<div style="padding-top:40px; font-size: small;">
-				<h:outputText value="#{messages['termina.scoring.description']}" escape="false"/>
+				<h1>#{messages['pagetitle.tagging.ended']}</h1>
+				<hr class="pageTitle" /><br /><br />
+				
+				<div id="scoringDescription">
+
+					<h:outputText value="#{messages['termina.scoring.description']}" escape="false"/>
+					
+				</div>
+				<br />
+				<ui:include src="/widget/gameSessionResults.xhtml">
+					<ui:param name="hideGameRoundScore" value="true"/>
+				</ui:include>
+				<br />
+				<s:button view="/tagging.xhtml" styleClass="repeat" title="#{messages['buttonTitle.tagging.repeat']}" propagation="none" value=""/>
 			</div>
+			
 		</div>
 		
         <br class="clear" />

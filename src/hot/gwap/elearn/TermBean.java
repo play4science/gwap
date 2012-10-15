@@ -53,17 +53,16 @@ public class TermBean implements Serializable {
 		updateSensibleTerm();
 		if (term == null)
 			updateRandomTerm();
-		log.info("Updated term: #0", term);
 		return term;
 	}
 	
 	public Term updateTerm(GameConfiguration gameConfiguration) {
 		this.gameConfiguration = gameConfiguration;
-		return updateTerm();
+		return updateSensibleTerm();
 	}
 	
-	public Term updateRandomTerm() {
-		log.info("Updating Random Term");
+	private Term updateRandomTerm() {
+		log.info("Updating random term");
 		
 		try {
 			Query query = null;
@@ -80,6 +79,7 @@ public class TermBean implements Serializable {
 			query.setParameter("language", localeSelector.getLanguage());
 			query.setMaxResults(1);
 			term = (Term) query.getSingleResult();
+			log.info("Updated random term: #0", term);
 			return term;
 		} catch(Exception e) {
 			log.info("Could not find a random term");
@@ -87,25 +87,29 @@ public class TermBean implements Serializable {
 		}
 	}
 	
-	public Term updateSensibleTerm() {
-		log.info("Updating Sensible Term");
+	private Term updateSensibleTerm() {
+		log.info("Updating sensible term");
 		
 		try {
 			Query query = null;
-			if (gameConfiguration != null && gameConfiguration.getTopic() != null) {
-				query = entityManager.createNamedQuery("term.randomByTopicNotInGameSession");
-				query.setParameter("topic", gameConfiguration.getTopic());
+			if (gameConfiguration != null) {
+				if (gameConfiguration.getTopic() != null) {
+					query = entityManager.createNamedQuery("term.sensibleRandomForGameWithTopic");
+					query.setParameter("topic", gameConfiguration.getTopic());
+				} else {
+					query = entityManager.createNamedQuery("term.sensibleRandomForGame");
+				}
+				query.setParameter("level", gameConfiguration.getLevel());
+				query.setParameter("minConfirmedTags", gameConfiguration.getBid().longValue());
 			} else {
-				query = entityManager.createNamedQuery("term.randomByLevelNotInGameSession");
-				if (gameConfiguration != null)
-					query.setParameter("level", gameConfiguration.getLevel());
-				else
-					query.setParameter("level", 1);
+				query = entityManager.createNamedQuery("term.sensibleRandomForGameWithoutConfig");
 			}
 			query.setParameter("gameSession", gameSession);
 			query.setParameter("language", localeSelector.getLanguage());
 			query.setMaxResults(1);
 			term = (Term) query.getSingleResult();
+			
+			log.info("Updated sensible term: #0", term);
 			return term;
 		} catch(Exception e) {
 			log.info("Could not find a sensible term");
@@ -115,7 +119,7 @@ public class TermBean implements Serializable {
 	}
 
 	public Term updateSensibleTermForFreeTagging(Integer level) {
-		log.info("Updating Sensible Term For Free Tagging");
+		log.info("Updated sensible term for free tagging");
 		
 		try {
 			Query query = null;
@@ -125,34 +129,12 @@ public class TermBean implements Serializable {
 			query.setParameter("language", localeSelector.getLanguage());
 			query.setMaxResults(1);
 			term = (Term) query.getSingleResult();
+
+			log.info("Updated sensible term for free tagging: #0", term);
 			return term;
 		} catch(Exception e) {
 			log.info("Could not find a sensible term for free tagging");
 			term = null;
-			return null;
-		}
-	}
-
-	public Term updateRandomTermMinConfirmedTags(int maxNrResults) {
-		log.info("Updating Random Term Min Confirmed Tags");
-		
-		try {
-			Query query = entityManager.createNamedQuery("term.randomByLevelMinConfirmedTags");
-			if (gameSession != null) {
-				query = entityManager.createNamedQuery("term.randomByLevelMinConfirmedTagsNotInGameSession");
-				query.setParameter("gameSession", gameSession);
-			}
-			query.setParameter("language", localeSelector.getLanguage());
-			if (gameConfiguration != null)
-				query.setParameter("level", gameConfiguration.getLevel());
-			else
-				query.setParameter("level", 1);
-			query.setParameter("minConfirmedTags", maxNrResults);
-			query.setMaxResults(1);
-			term = (Term) query.getSingleResult();
-			return term;
-		} catch(Exception e) {
-			log.info("Could not find a random term min confirmed tags");
 			return null;
 		}
 	}

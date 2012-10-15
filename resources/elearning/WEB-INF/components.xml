@@ -96,7 +96,7 @@
 
   <factory
 		name="basePath"
-		value="http://www.artigo.org/elearning/"
+		value="http://termina.pms.ifi.lmu.de/"
 	/>
 	<!-- TODO: set basePath via build.properties
 		value="@basePath@"

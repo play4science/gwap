@@ -78,7 +78,10 @@ public class HighscoreBean implements Serializable {
 		{
 			HighscoreSet set=new HighscoreSet();
 			set.setGameType(g);
-			if ("accentiurbani".equals(platform) || "elearning".equals(platform)) {
+			if ("accentiurbani".equals(platform)) {
+				set.setHighscoreAll(updateHighscorePerGameSession(g));
+			} else if ("elearning".equals(platform)) {
+				set.setHighscoreDaily(updateHighscoreDaily(g));
 				set.setHighscoreAll(updateHighscorePerGameSession(g));
 			} else {
 //				set.setHighscoreAll(updateHighscore(g));

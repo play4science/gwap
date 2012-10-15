@@ -72,7 +72,7 @@ public class TerminaBackstage extends Termina{
 	
 	@Override
 	public Integer getRoundsLeft() {
-		if (elearnTermBean.updateSensibleTerm() != null)
+		if (elearnTermBean.updateTerm(gameConfiguration) != null)
 			return 1;
 		else
 			return 0;

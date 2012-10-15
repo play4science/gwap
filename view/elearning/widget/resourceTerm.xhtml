@@ -7,9 +7,8 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="http://richfaces.org/a4j">
-
-	<h:outputText class="gamequestion" value="#{messages['elearning.frage.satz']}" />
-	<div class="standout">
-		<h:outputText id="questionTerm" value="#{term.tag.name}" rendered="#{!empty(term)}" />
-	</div>
+	
+	<h:outputText styleClass="taggingQuestion" class="gamequestion" value="#{messages['tagging.frage.satz']}" />
+	<h:outputText class="standout" id="questionTerm" value="#{term.tag.name}" rendered="#{!empty(term)}" /><br /><br />
+	
 </ui:composition>

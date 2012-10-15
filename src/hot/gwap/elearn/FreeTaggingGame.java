@@ -11,7 +11,6 @@ package gwap.elearn;
 import gwap.action.TaggingBean;
 import gwap.game.AbstractGameSessionBean;
 import gwap.model.GameRound;
-import gwap.model.action.Action;
 import gwap.model.action.Tagging;
 import gwap.model.resource.Term;
 import gwap.wrapper.MatchingTag;
@@ -40,9 +39,9 @@ public class FreeTaggingGame extends AbstractGameSessionBean {
 
 	private static final long serialVersionUID = 1L;
 
-	@In(create=true)        private TaggingBean taggingBean;
-	@In(create=true) @Out	private Term term;
-	@In(create=true)		private TermBean elearnTermBean;
+	@In(create=true)        				private TaggingBean taggingBean;
+	@In(create=true) @Out(required=false)	private Term term;
+	@In(create=true)						private TermBean elearnTermBean;
 	
 	private Map<Integer, List<MatchingTag>> recommendedTags = new HashMap<Integer, List<MatchingTag>>();
 
@@ -63,9 +62,10 @@ public class FreeTaggingGame extends AbstractGameSessionBean {
 		if (tagging.getTag() == null) {
 			log.info("Could not add tag to gameround as it is invalid.");
 		} else {
-			List<Action> actions = gameRound.getActions();
-			actions.add(tagging);
-			log.info("Added #0 to game round", tagging.getTag().getName());
+			gameRound.getActions().add(tagging);
+			if (TerminaMatching.isAssociationInConfirmedTags(tagging.getTag().getName(), term))
+				tagging.setScore(1);
+			log.info("Added #0 to game round", tagging.getTag());
 		}
 		recommendedTags.put(gameRound.getNumber(), taggingBean.getRecommendedTags());
 		return null;
@@ -75,16 +75,16 @@ public class FreeTaggingGame extends AbstractGameSessionBean {
 	public void endRound() {
 		gameRound.getResources().add(term);
 		super.endRound();
+		entityManager.flush();
 		term = elearnTermBean.updateSensibleTermForFreeTagging(level);
 		if (term == null) {
 			level++;
-			term = elearnTermBean.updateSensibleTermForFreeTagging(level);
 		}
 	}
 	
 	@Override
 	public Integer getRoundsLeft() {
-		if (term != null)
+		if (elearnTermBean.updateSensibleTermForFreeTagging(level) != null)
 			return 1;
 		else
 			return 0;

@@ -10,12 +10,13 @@
 
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<title>Termina</title>
-
-		<link rel="shortcut icon" href="#{internalBasePath}img/favicon.ico" />
+		<title>#{messages['platform.name']}</title>
+		<link rel="stylesheet" media="screen and (max-device-width: 1024px)" href="/stylesheet/width1024.css" />
+		<link rel="shortcut icon" href="#{internalBasePath}img/termina_favicon.ico" />
 		<a:loadStyle src="/stylesheet/theme.css" />
 		<a:loadStyle src="/stylesheet/screen.css" media="all" />
 		<a:loadScript src="/javascript/common.js"/>
+		<a:loadStyle media="screen and (max-device-width: 1024px)" src="/stylesheet/width1024.css" />
 		<ui:insert name="head" />
 	</head>
 
@@ -26,6 +27,7 @@
 			<ui:insert name="body" />
 			<ui:include src="footer.xhtml" />
 			
+			<!-- DEBUGLEISTE
 			<s:fragment rendered="#{init.debug}">
 				<div style="position: fixed; bottom: 10px; left: 0px; width: 100%; text-align: center;">
 					<a:log hotkey="D" />
@@ -42,6 +44,7 @@
 					</p>
 				</div>
 			</s:fragment>
+			-->
 		</div>
 	</body>
 	

@@ -7,28 +7,29 @@
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:rich="http://richfaces.org/rich"
     xmlns:a4j="http://richfaces.org/a4j"
-    xmlns:c="http://java.sun.com/jstl/core"
     template="layout/template.xhtml">
 
     <ui:define name="body">
-		<div id="related">
-			<ui:include src="layout/menu.xhtml" />
-		</div>
 
 		<div id="content">
-			<rich:tabPanel switchType="client" width="1%">
-				<c:forEach items="#{highscoreBean.highscores}" var="_highscore">
+			<div class="contentWrapper">
+			
+				<h1>#{messages['pagetitle.highscore']}</h1>
+				<hr class="pageTitle" /><br />
+				
+				<h:outputText value="#{messages['highscore.explanation']}" /><br /><br />
+				<ui:repeat var="_highscore" value="#{highscoreBean.highscores}">
 					<rich:dataTable styleClass="highscoreTable" summary="Highscore" value="#{_highscore.highscoreDaily}" var="_score" rendered="#{_highscore.highscoreDaily.size() > 0}">			
 						<f:facet name="header"><h:outputText value="#{messages['score.daily']}" /></f:facet>
 						<ui:include src="/widget/highscoreInsideTable.xhtml" />
 					</rich:dataTable>
-				
-			 		<rich:dataTable styleClass="highscoreTable" summary="Highscore" value="#{_highscore.highscoreMonthly}" var="_score" rendered="#{_highscore.highscoreMonthly.size() > 0}">
-						<f:facet name="header"><h:outputText value="#{messages['score.monthly']}" /></f:facet>
+					<br/>
+					<rich:dataTable styleClass="highscoreTable" summary="Highscore" value="#{_highscore.highscoreAll}" var="_score" rendered="#{_highscore.highscoreAll.size() > 0}">			
+						<f:facet name="header"><h:outputText value="#{messages['score.all']}" /></f:facet>
 						<ui:include src="/widget/highscoreInsideTable.xhtml" />
 					</rich:dataTable>
-				</c:forEach>
-    		</rich:tabPanel>
+				</ui:repeat>
+			</div>
 		</div>
 		
         <br class="clear" />

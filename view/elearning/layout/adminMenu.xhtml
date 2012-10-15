@@ -8,23 +8,68 @@
     xmlns:rich="http://richfaces.org/rich"
     xmlns:a4j="http://richfaces.org/a4j">
 
-	<div id="related">
-		<ui:include src="logo.xhtml" />
+	<script type="text/javascript"></script>
+	<noscript><div class="noscript"><h:outputText value="#{messages['general.javascriptDisabled']}" /></div></noscript>
+
+	<div id="navHeader">
+	<br />
+		<table width="100%">
+			<tr>
+				<td rowspan="2"><s:link view="/home.xhtml"><img id="logo" src="#{internalBasePath}img/termina_logo.svg" /></s:link></td>
+				<td align="center"><s:link id="menuHomeId" styleClass="menuItem #{menuBean.getCssClass('/home.xhtml')}" view="/home.xhtml" propagation="none" /></td>
+				<td align="center"><s:link id="menuFAQId" styleClass="menuItem #{menuBean.getCssClass('/faq.xhtml')}" view="/faq.xhtml" propagation="none" /></td>
+				<td align="center"><s:link id="menuRegisterId" styleClass="menuItem #{menuBean.getCssClass('/register.xhtml')}" view="/register.xhtml" propagation="none" /></td>
+				<td align="center"><s:link id="menuTerminaId" styleClass="menuItem #{menuBean.getCssClass('/termina.xhtml')}" view="/termina.xhtml" propagation="none" /></td>
+				<td align="center"><s:link id="menuTaggingId" styleClass="menuItem #{menuBean.getCssClass('/tagging.xhtml')}" view="/tagging.xhtml" propagation="none" /></td>
+				<td align="center"><s:link id="menuHighscoreId" styleClass="menuItem #{menuBean.getCssClass('/highscore.xhtml')}" view="/highscore.xhtml" propagation="none" /></td>
+				<td align="center"><s:link id="menuLoginId" styleClass="menuItem #{menuBean.getCssClass('/login.xhtml')}" view="/login.xhtml" propagation="none" /></td>
+				<td rowspan="2">
+					<s:link view="/admin/termList.xhtml" styleClass="menuLink #{menuBean.getCssClass('/admin/term.xhtml')}" value="#{messages['menu.admin.termList']}" /><br />
+					<s:link view="/admin/topicList.xhtml" styleClass="menuLink #{menuBean.getCssClass('/admin/topic.xhtml')}" value="#{messages['menu.admin.topicList']}" /><br />
+					<s:link view="/admin/gameConfigurationList.xhtml" styleClass="menuLink #{menuBean.getCssClass('/admin/gameConfiguration.xhtml')}" value="#{messages['menu.admin.gameConfList']}" />
+				</td>
+			</tr>
+			<tr>
+				<td align="center"><s:link styleClass="menuLink #{menuBean.getCssClass('/home.xhtml')}" view="/home.xhtml" value="#{messages['menu.welcome']}" propagation="none"/></td>
+				<td align="center"><s:link styleClass="menuLink #{menuBean.getCssClass('/faq.xhtml')}" view="/faq.xhtml" value="#{messages['menu.faq']}" propagation="none"/></td>
+				<td align="center">
+					<s:link styleClass="menuLink #{menuBean.getCssClass('/register.xhtml')}" view="/register.xhtml" value="#{messages['menu.register']}" rendered="#{not identity.loggedIn}" propagation="none"/>
+					<s:link styleClass="menuLink #{menuBean.getCssClass('/profile.xhtml')}" view="/profile.xhtml" value="#{messages['menu.profile']}" rendered="#{identity.loggedIn}" propagation="none"/>
+					</td>
+				<td align="center"><s:link styleClass="menuLink #{menuBean.getCssClass('/termina.xhtml')}" view="/termina.xhtml" value="#{messages['menu.termina']}" propagation="none"/></td>
+				<td align="center"><s:link styleClass="menuLink #{menuBean.getCssClass('/tagging.xhtml')}" view="/tagging.xhtml" value="#{messages['menu.tagging']}" propagation="none"/></td>
+				<td align="center"><s:link styleClass="menuLink #{menuBean.getCssClass('/highscore.xhtml')}" view="/highscore.xhtml" value="#{messages['menu.highscore']}" propagation="none"/></td>
+				<td align="center">
+					<s:link styleClass="menuLink #{menuBean.getCssClass('/login.xhtml')}" view="/login.xhtml" value="#{messages['menu.login']}" rendered="#{not identity.loggedIn}" propagation="none"/>
+					<s:link styleClass="menuLink #{menuBean.getCssClass('/login.xhtml')}" view="/home.xhtml" action="#{identity.logout}" value="#{messages['menu.logout']}" rendered="#{identity.loggedIn}" propagation="none"/>
+				</td>
+			</tr>
+		</table>
+
+
 		
-		<ul id="navMain">
-			<li>
-				<s:link view="/admin/termList.xhtml" value="#{messages['admin.menu.termList']}" />
-        	</li>
-    	</ul>
-    	<ul id="navMain">
-			<li>
-				<s:link view="/admin/topicList.xhtml" value="#{messages['admin.menu.topicList']}" />
-        	</li>
-    	</ul>
-    	    	<ul id="navMain">
-			<li>
-				<s:link view="/admin/gameConfigurationList.xhtml" value="#{messages['admin.menu.gameConfigurationList']}" />
-        	</li>
-    	</ul>
-    </div>
+		<span class="loggedIn">
+			<h:outputText value="#{messages['menu.signedInAs']}: " rendered="#{identity.loggedIn}"/>
+			<h:outputText value="#{credentials.username}" id="headerWelcomeId" rendered="#{identity.loggedIn}" />
+		</span>
+		<br />
+	</div>
+    
+	<br class="clear" />
+	
+	<!-- FÜR MELDUNGEN
+   	<a4j:outputPanel id="messages" style="position: absolute; top: 1em; vertical-align: middle;">
+				<rich:messages styleClass="messages"
+                	        errorClass="errormsg" infoClass="infomsg" warnClass="warnmsg"
+                    	    rendered="#{showGlobalMessages != 'false'}"
+                    	    />
+    </a4j:outputPanel> 
+	<a4j:outputPanel id="globalMessages" style="position: absolute; top: 1em; vertical-align: middle;">
+				<rich:messages globalOnly="true" styleClass="messages"
+                	        errorClass="errormsg" infoClass="infomsg" warnClass="warnmsg"
+                    	    rendered="#{showGlobalMessages != 'false'}"
+                    	    />
+	</a4j:outputPanel> -->
+
 </ui:composition>
+

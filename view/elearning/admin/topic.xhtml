@@ -11,37 +11,47 @@
 
     <ui:define name="body">
 		<div id="content">
-      <f:view>
+		<div class="contentWrapper">
+			<h1><h:outputText value="#{messages['pagetitle.admin.topicEdit']}" rendered="#{topicHome.managed}" /></h1>
+			<h1><h:outputText value="#{messages['pagetitle.admin.topicAdd']}" rendered="#{!topicHome.managed}" /></h1>
+			<hr class="pageTitle" /><br />
+			
+      		<f:view>
+				<div class="dialog">
+         		<h:form>
 
-         <h:form>
+            		<s:validateAll>
+            			<h:panelGrid columns="1">
+	            			<s:decorate id="topicNameField" template="/layout/edit.xhtml">
+			            		<ui:define name="label">
+			            			<h:outputText styleClass="adminForm" value="#{messages['topic.name']}:" />
+			                	</ui:define>
+								<h:inputText id="topicName" styleClass="adminInput" value="#{topicHome.instance.name}" /><br /><br />
+							</s:decorate>
+	                 
+	                		<rich:pickList sourceListWidth="auto" targetListWidth="auto" listsHeight="auto" value="#{topicHome.list}" var="_term" >                
+	            				<s:selectItems value="#{topicHome.allResources}" var="_term" itemValue="#{_term}" label="#{_term.tag.name}"/>
+	        				</rich:pickList>
+	               			
+               			<h:panelGrid columns="2">
+               				<s:button styleClass="buttonBack" value="" view="/admin/topicList.xhtml" title="#{messages['buttonTitle.back']}"/>
+               				<h:commandButton value=""  styleClass="buttonSave" action="#{topicHome.persist()}" rendered="#{!topicHome.managed}" title="#{messages['buttonTitle.topicAdd']}" />
+							<h:commandButton value="" styleClass="buttonSave" action="#{topicHome.update()}" rendered="#{topicHome.managed}" title="#{messages['buttonTitle.topicSave']}"/>
+               			</h:panelGrid>
+               			</h:panelGrid>
 
-            <s:validateAll>
+            		</s:validateAll>
 
-				<h:inputText value="#{topicHome.instance.name}" />
-                  
-                  
-                  <rich:pickList value="#{topicHome.list}" var="_term"> 
-            			<s:selectItems value="#{topicHome.allResources}" var="_term" itemValue="#{_term}" label="#{_term.tag.name}"/>
-        		  </rich:pickList>
-                  
-                  
-              	 <h:commandButton 
-						value="#{messages['admin.topic.persist']}"
-						action="#{topicHome.persist()}" 
-						rendered="#{!topicHome.managed}" />
-					<h:commandButton 
-						value="#{messages['admin.topic.update']}"
-						action="#{topicHome.update()}" 
-						rendered="#{topicHome.managed}" />
+            		<h:messages globalOnly="true"/>
 
-            </s:validateAll>
+         		</h:form>
+         		</div>
+         		<br /><br />
+         		<h:outputText value="#{messages['newtopic.explanation']}" escape="false" />
 
-            <h:messages/>
-
-         </h:form>
-
-      </f:view>
-      </div>
+      		</f:view>
+		</div>
+		</div>
 		
         <br class="clear" />
     </ui:define>

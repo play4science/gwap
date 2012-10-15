@@ -9,19 +9,23 @@
 	xmlns:a4j="http://richfaces.org/a4j">
 
 	<a4j:form id="bereich3">
+		<h:messages class="standout2"/>
 		<s:validateAll>
-			<h:panelGrid columns="2">
-				<h:outputText class="gamequestion"
-					value="#{messages['elearning3.frage.satz']}" />
-				<h:inputText id="inputassoc" value="#{elearnTermina.association}"
-					required="false" />
-			</h:panelGrid>
+		
+			<table>
+				<tr>
+					<td class="terminaTableCell"><h:outputText class="gamequestion" value="#{messages['termina.frage.satz']}" /></td>
+					<td class="terminaTableCell"><h:inputText id="inputassoc" value="#{elearnTermina.association}"  required="false" /></td>
+					<td class="terminaTableCell"><a4j:commandButton id="sendButton" action="#{elearnTermina.choose()}" styleClass="sendAssociation" title="Sende Assoziation" reRender="bereich1,bereich3,focusbereich"><s:defaultAction /></a4j:commandButton></td>
+				</tr>
+				<tr>
+					<td  colspan="3"><h:outputText styleClass="foundAssocText" value="#{messages['termina.foundAssoc']}"/>
+					<h:outputText styleClass="foundAssocNum" value="#{elearnTermina.foundAssociations}"/>
+					<h:outputText styleClass="requestedAssoc" value="#{messages['termina.outof']} #{gameConfiguration.bid}"/></td>
+					
+				</tr>
+			</table>
 		</s:validateAll>
-			<h:messages />
-
-			<a4j:commandButton action="#{elearnTermina.choose()}"
-				value="Sende Assoziation" reRender="bereich1,bereich3,focusbereich"
-				type="submit" />
 	</a4j:form>
 
 </ui:composition>

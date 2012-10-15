@@ -1,0 +1,181 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    template="layout/template.xhtml">
+
+	<ui:define name="body">
+				
+		<div id="content">
+					
+			<h1>#{messages['pagetitle.profile']}</h1>
+			<hr class="pageTitle" /><br />
+			
+			<div class="contentWrapper">
+			
+				<rich:tabPanel switchType="client" id='tabPanel' selectedTab="#{selectedTab}">
+			
+        			<rich:tab label="#{messages['profile.general']}" id="profileTab">
+        		
+		            	
+		            	
+		            		<h:form id="profileForm">
+			    		
+			    				<input type="hidden" name="selectedTab" value="profileTab"/>
+								<h:panelGrid columns="1">
+									<rich:messages styleClass="messages" globalOnly="true" errorClass="errormsg" infoClass="infomsg" warnClass="warnmsg" rendered="#{showGlobalMessages != 'false'}" />
+									
+			                    	<s:decorate id="languageField" template="/layout/edit.xhtml" rendered="#{localeSelector.supportedLocales.size() > 1}">
+			                    		<ui:define name="label">
+				                    		<h:outputText value="#{messages['person.language']}" />
+			    	               		</ui:define>	
+			        					<h:selectOneMenu id="language" value="#{person.language}">
+				    						<f:selectItems value="#{localeSelector.supportedLocales}"/>
+										</h:selectOneMenu>
+									</s:decorate>
+									
+									<s:decorate id="forenameField" template="/layout/edit.xhtml">
+										<ui:define name="label">
+			                    			<h:outputText value="#{messages['person.forename']}" />
+			                    		</ui:define>
+			                    		<h:inputText id="forename" value="#{person.forename}"/>
+			                    	</s:decorate>
+			                    	
+									<s:decorate id="surnameField" template="/layout/edit.xhtml">
+										<ui:define name="label">
+				                    		<h:outputText value="#{messages['person.surname']}" />
+				                    	</ui:define>
+			                       		<h:inputText id="surname" value="#{person.surname}"/>
+			                    	</s:decorate>
+			                    
+			                    	<s:fragment rendered="#{profile.showHometownField}">
+				                    	<h:inputHidden id="locationId" value="#{locationId}" converter="javax.faces.Long" />
+				                    	
+				                    	<s:decorate id="homeTownField" template="/layout/edit.xhtml">
+											<ui:define name="label">
+					                    		<h:outputText value="#{messages['person.hometown']}" />
+					                    	</ui:define>
+				                        	<h:inputText value="#{profile.homeTownName}" id="textLocation" />
+				                        	
+											<rich:suggestionbox for="textLocation" id="textLocationSuggestionbox" suggestionAction="#{geoBean.getLocationsByApproximateName}" var="location" fetchValue="#{location.name}" minChars="2" rowClasses="autocomplete" selectedClass="autocompleteSelected">
+												<rich:column><h:outputText value="#{location.name}" /></rich:column>
+												<rich:column><h:outputText value="#{messages['locationType.'.concat(location.type)]}" /></rich:column>
+												<a4j:support ajaxSingle="true" event="onselect" action="#{geoBean.doNothing()}" reRender="locationId" oncomplete="selectLocationInSuggestionbox()">
+													<f:setPropertyActionListener value="#{location.id}" target="#{locationId}" />
+												</a4j:support>
+											</rich:suggestionbox>
+				                    	</s:decorate>
+			                    	</s:fragment>
+	
+			                    	<s:decorate id="emailField" template="/layout/edit.xhtml">
+										<ui:define name="label">
+				                    		<h:outputText value="#{messages['person.email']}" />
+			                    		</ui:define>
+			                    		<h:outputText id="email" value="#{person.email} "/>
+			                    		<a4j:commandLink onclick="RichFaces.switchTab('tabPanel', 'emailTab', 'profileTab')" value="#{messages['profile.changeEmail']}"/>
+			                    	</s:decorate>
+			                    	
+			                    	<s:decorate id="genderField" template="/layout/edit.xhtml">
+										<ui:define name="label">
+				                    		<h:outputText value="#{messages['person.gender']}" />
+			                    		</ui:define>
+			                    		<h:selectOneMenu id="gender" value="#{person.gender}">
+			                    			<s:selectItems value="#{profile.genders}" var="gender" label="#{messages[gender.key]}" noSelectionLabel="#{messages['general.pleaseSelect']}" />
+			                    		</h:selectOneMenu>
+			                    	</s:decorate>
+			                    	
+									<s:decorate id="birthyearField" template="/layout/edit.xhtml">
+										<ui:define name="label">
+				                    		<h:outputText value="#{messages['person.birthyear']}" />
+				                    	</ui:define>
+			                    		<h:selectOneMenu id="birthyear" value="#{person.birthyear}">
+			                    			<s:selectItems value="#{profile.birthyears}" var="birthyear" label="#{birthyear}" noSelectionLabel="#{messages['general.pleaseSelect']}" />
+			                    		</h:selectOneMenu>
+			                    	</s:decorate>
+			                    	
+			                    	<s:decorate id="educationField" template="/layout/edit.xhtml">
+										<ui:define name="label">
+				                    		<h:outputText value="#{messages['person.education']}" />
+			                    		</ui:define>
+			                    		<h:selectOneMenu id="education" value="#{person.education}">
+			                    			<s:selectItems value="#{profile.educations}" var="education" label="#{messages[education.key]}" noSelectionLabel="#{messages['general.pleaseSelect']}" />
+			                    		</h:selectOneMenu>
+			                    	</s:decorate>
+					        	
+					        		<div class="actionButtons">
+		            					<h:commandButton styleClass="buttonSave" value="" title="#{messages['buttonTitle.update']}" action="#{profile.updateProfile()}"/>
+		        					</div>
+								</h:panelGrid>
+		            		</h:form>
+
+        			</rich:tab>
+        			
+		        	<rich:tab label="#{messages['person.password']}" id="passwordTab">
+		        	
+			
+			    		
+			    			<h:form id="passwordForm">
+			    			
+			    				<input type="hidden" name="selectedTab" value="passwordTab"/>
+								<h:panelGrid columns="1">
+								
+									<s:decorate id="passwordField" template="/layout/edit.xhtml">
+										<ui:define name="label">
+				                    		<h:outputText value="#{messages['person.password']}" />
+										</ui:define>
+			                    		<h:inputSecret id="password" value="#{profile.password}" required="true" />
+			                    	</s:decorate>
+			                    	
+			                    	<s:decorate id="passwordConfirmationField" template="/layout/edit.xhtml">
+										<ui:define name="label">
+				                    		<h:outputText value="#{messages['person.passwordConfirmation']}" />
+			    						</ui:define>
+			                    		<h:inputSecret id="passwordConfirmation" value="#{profile.passwordConfirmation}" required="true" />
+			                    	</s:decorate>
+			                    	
+   			                    	<rich:messages styleClass="messages" globalOnly="true" errorClass="errormsg" infoClass="infomsg" warnClass="warnmsg" rendered="#{showGlobalMessages != 'false'}"/>
+						        
+							        <div class="actionButtons">
+							            <h:commandButton styleClass="buttonSave" value="" title="#{messages['buttonTitle.update']}" action="#{profile.updatePassword()}"/>
+							        </div>
+								</h:panelGrid>
+			    			</h:form>
+		
+			        	
+		        	</rich:tab>
+		        	<rich:tab label="#{messages['person.email']}" id="emailTab">
+		        	
+			      
+			        	
+			    			<h:form id="emailForm">
+			    			
+			    				<input type="hidden" name="selectedTab" value="emailTab"/>
+								<h:panelGrid columns="1">
+								
+									<s:decorate id="emailField" template="/layout/edit.xhtml">
+										<ui:define name="label">
+				                    		<h:outputText value="#{messages['person.email']}" />
+										</ui:define>
+			                    		<h:inputText id="email" value="#{person.email}" required="true" />
+			                    	</s:decorate>
+			                    	
+						        	<rich:messages styleClass="messages" globalOnly="true" errorClass="errormsg" infoClass="infomsg" warnClass="warnmsg" rendered="#{showGlobalMessages != 'false'}"/>
+						        
+							        <div class="actionButtons">
+							            <h:commandButton styleClass="buttonSave" value="" title="#{messages['buttonTitle.update']}" action="#{profile.updateEmail()}"/>
+							        </div>
+			               		</h:panelGrid>
+							</h:form>
+
+		        	</rich:tab>
+				</rich:tabPanel>
+			</div>
+		</div>
+		<br class="clear" />
+	</ui:define>
+</ui:composition>

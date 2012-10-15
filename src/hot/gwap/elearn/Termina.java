@@ -85,7 +85,8 @@ public class Termina extends AbstractGameSessionBean {
 			gameConfiguration.setRoundDuration(60);
 		}
 
-		gameConfiguration.setLevel(1 + ((gameRound.getNumber()-1) / 10));
+		// New method: Level gets updated if no more terms exist (see endRound)
+		// gameConfiguration.setLevel(1 + ((gameRound.getNumber()-1) / 10));
 		
 		// find GameConfiguration if it exists, otherwise create it
 		try {
@@ -118,12 +119,6 @@ public class Termina extends AbstractGameSessionBean {
 		
 		// 1. Create list of shown tags
 		int maxNrResults = gameConfiguration.getBid();
-
-		if (term.getConfirmedTags().size() < maxNrResults) {
-			gameRound.getResources().remove(term);
-			term = elearnTermBean.updateRandomTermMinConfirmedTags(maxNrResults);
-			gameRound.getResources().add(term);
-		}
 		
 		// Could be selected in a more intelligent way :)
 		tags = elearnTermBean.updateRandomTagsNotRelated(term, maxNrResults);
@@ -155,7 +150,7 @@ public class Termina extends AbstractGameSessionBean {
 		initializeAction(tagging);
 		tagging.setResource(term);
 		
-		Tag tag = checkAssociation(association, term);
+		Tag tag = TerminaMatching.checkAssociationInConfirmedTags(association, term);
 		
 		if (tag != null) {
 			log.info("Association '#0' is correct for term '#1'", association, term);
@@ -179,16 +174,37 @@ public class Termina extends AbstractGameSessionBean {
 	public void endRound() {
 		currentRoundScore -= scoreMultiplicator() * (gameConfiguration.getBid() - foundAssociations);
 		super.endRound();
+		entityManager.flush();
+		if (getRoundsLeft().equals(0)) {
+			nextGameConfiguration.setLevel(gameConfiguration.getLevel()+1);
+			log.info("Next level: #0", nextGameConfiguration.getLevel());
+		}
 	}
 	
 	public String choosePalette() {
 		foundAssociations = 0;
 		for (String tag : answers) {
-			if (TagSemantics.containsNotNormalized(term.getConfirmedTags(), tag) != null)
+			Tagging tagging = new Tagging();
+			initializeAction(tagging);
+			tagging.setResource(term);
+			Tag tagT = findOrCreateTag(tag);
+			tagging.setTag(tagT);
+			if (TagSemantics.containsNotNormalized(term.getConfirmedTags(), tag) != null) {
 				foundAssociations++;
-			log.info("Chose tag #0", tag);
+				tagging.setScore(scoreMultiplicator());
+			} else {
+				foundAssociations--;
+				tagging.setScore(-scoreMultiplicator());
+			}
+			entityManager.persist(tagging);
+			gameRound.getActions().add(tagging);
+			log.info("Chose tag #0", tagT);
 		}
-		currentRoundScore += foundAssociations*scoreMultiplicator();
+		if (foundAssociations > 0) {
+			currentRoundScore += foundAssociations*scoreMultiplicator();
+		} else {
+			foundAssociations = 0;
+		}
 		if (foundAssociations == gameConfiguration.getBid())
 			facesMessages.addFromResourceBundle("termina.term.correct");
 		return "next";
@@ -207,8 +223,12 @@ public class Termina extends AbstractGameSessionBean {
 		return zeitbonus * gameConfiguration.getLevel();
 	}
 	
-	private Tag checkAssociation(String association, Term term) {
-		return TagSemantics.containsNotNormalized(term.getConfirmedTags(), association);
+	@Override
+	public Integer getRoundsLeft() {
+		if (elearnTermBean.updateTerm(nextGameConfiguration) != null)
+			return 1;
+		else
+			return 0;
 	}
 
 	public void riseBid() {

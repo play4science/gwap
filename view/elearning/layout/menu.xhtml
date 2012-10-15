@@ -8,9 +8,9 @@
     xmlns:rich="http://richfaces.org/rich"
     xmlns:a4j="http://richfaces.org/a4j">
 	
-	
+<!--
 	<div>
-	
+
 		<s:link view="/home.html" propagation="none">
 			<h:graphicImage value="/img/elearnlogo.gif"
 							id="logo"
@@ -19,6 +19,7 @@
 		               		width="452"
 		               		/>
 		</s:link>
+
 	    
 	    <br class="clear"/>
 	    
@@ -34,9 +35,9 @@
 			<li class="#{menuBean.getCssClass('/tagging.xhtml')}">
 	        	<s:link view="/tagging.xhtml" value="#{messages['menu.tagging']}" propagation="none"/>
         	</li>
-        	<!--<li class="#{menuBean.getCssClass('/addword.xhtml')}">
+        	<li class="#{menuBean.getCssClass('/addword.xhtml')}">
 	        	<s:link view="/addword.xhtml" value="#{messages['Terme hinzufuegen']}" propagation="none"/>
-        	</li>-->
+        	</li>
 			<s:fragment rendered="#{s:hasPermission('elearning', 'view-admin-interface')}"> 
 				<li class="#{menuBean.getCssClass('/admin/admin.xhtml')}">
     			   	<s:link view="/admin/admin.xhtml" value="#{messages['mit.menu.administrator']}" propagation="none"/>
@@ -44,4 +45,5 @@
 			</s:fragment>
     	</ul>
     </div>
-</ui:composition>
+ -->
+    </ui:composition>
