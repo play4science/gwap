@@ -158,9 +158,7 @@ public class HighscoreBean implements Serializable {
 				queryPerson.setParameter("pid", person.getId());
 				try {
 					Highscore personalHighscore = (Highscore) queryPerson.getSingleResult();
-					Highscore highscore = new Highscore();
-					highscore.setPerson(person);
-					res.add(highscore);
+					personalHighscore.setPerson(person);
 					res.add(personalHighscore);
 				} catch (NoResultException e) {	}
 			}
