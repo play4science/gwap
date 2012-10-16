@@ -37,6 +37,8 @@ import org.jboss.seam.international.LocaleSelector;
 @Scope(ScopeType.CONVERSATION)
 public class Termina extends AbstractGameSessionBean {
 
+	private static final int WRONG_ASSOCIATION_SCORE = -1;
+
 	private static final long serialVersionUID = -4140570198882726459L;
 
 	@In(required=false) @Out(required=false)	protected GameConfiguration gameConfiguration;
@@ -121,10 +123,27 @@ public class Termina extends AbstractGameSessionBean {
 		int maxNrResults = gameConfiguration.getBid();
 		
 		// Could be selected in a more intelligent way :)
-		tags = elearnTermBean.updateRandomTagsNotRelated(term, maxNrResults);
+		List<Tag> notRelatedTags = elearnTermBean.updateRandomTagsNotRelated(term, maxNrResults);
+
+		List<Tag> rejectedTags = term.getRejectedTags();
+		Collections.shuffle(rejectedTags);
 		
+		tags = new ArrayList<Tag>();
+		
+		// Add wrong entries
+		int rejectedNr = 0;
 		for (int i = 0; i < maxNrResults; i++) {
-			tags.add(term.getConfirmedTags().get(i));
+			if (Math.random() > 0.33333 && rejectedNr < rejectedTags.size())
+				tags.add(rejectedTags.get(rejectedNr++));
+			else
+				tags.add(notRelatedTags.get(i));
+		}
+		
+		// Add correct entries
+		List<Tag> confirmedTags = term.getConfirmedTags();
+		Collections.shuffle(confirmedTags);
+		for (int i = 0; i < maxNrResults; i++) {
+			tags.add(confirmedTags.get(i));
 		}
 		Collections.shuffle(tags);
 		
@@ -150,19 +169,28 @@ public class Termina extends AbstractGameSessionBean {
 		initializeAction(tagging);
 		tagging.setResource(term);
 		
-		Tag tag = TerminaMatching.checkAssociationInConfirmedTags(association, term);
+		Tag tag = TerminaMatching.checkAssociationInList(association, term.getConfirmedTags());
 		
 		if (tag != null) {
 			log.info("Association '#0' is correct for term '#1'", association, term);
 			facesMessages.addFromResourceBundle("termina.term.correct");
 			tagging.setTag(tag);
-			tagging.setScore(scoreMultiplicator());
 			foundAssociations++;
+			tagging.setScore(scoreMultiplicator());
 			currentRoundScore += scoreMultiplicator();
 		} else {
-			log.info("Association '#0' is wrong for term '#1'", association, term);
-			facesMessages.addFromResourceBundle("termina.term.wrong");
-			tagging.setTag(findOrCreateTag(association));
+			tag = TerminaMatching.checkAssociationInList(association, term.getRejectedTags());
+			if (tag != null) {
+				log.info("Association '#0' is wrong for term '#1'", association, term);
+				facesMessages.addFromResourceBundle("termina.term.wrong");
+				tagging.setTag(tag);
+				tagging.setScore(WRONG_ASSOCIATION_SCORE);
+				currentRoundScore += WRONG_ASSOCIATION_SCORE;
+			} else {
+				log.info("Association '#0' is unknown for term '#1'", association, term);
+				facesMessages.addFromResourceBundle("termina.term.unknown");
+				tagging.setTag(findOrCreateTag(association));
+			}
 		}
 		previousTaggings.add(tagging.getTag());
 		entityManager.persist(tagging);
@@ -189,7 +217,7 @@ public class Termina extends AbstractGameSessionBean {
 			tagging.setResource(term);
 			Tag tagT = findOrCreateTag(tag);
 			tagging.setTag(tagT);
-			if (TagSemantics.containsNotNormalized(term.getConfirmedTags(), tag) != null) {
+			if (term.getConfirmedTags().contains(tagT)) {
 				foundAssociations++;
 				tagging.setScore(scoreMultiplicator());
 			} else {
@@ -286,29 +314,29 @@ public class Termina extends AbstractGameSessionBean {
 	/**
 	 * Important: Normalize the tag first, e.g. with TagSemantics.normalize()
 	 *  
-	 * @param recommendedTagName
+	 * @param tagName
 	 * @return
 	 */
-	public Tag findOrCreateTag(String recommendedTagName) {
-        if (recommendedTagName.length() > 0) {
+	public Tag findOrCreateTag(String tagName) {
+        if (tagName.length() > 0) {
         	String language = localeSelector.getLanguage();
-			log.info("Added '#0' to recommended tags.", recommendedTagName);
+			log.info("Added '#0' to tags.", tagName);
 	
 			Query query = entityManager.createNamedQuery("tag.tagByNameAndLanguage");
 			query.setParameter("language", language);
-			query.setParameter("name", recommendedTagName);
+			query.setParameter("name", tagName);
 			Tag tag;
 			try {
 				tag = (Tag) query.getSingleResult();
 			} catch (NonUniqueResultException e) {
-				log.error("The tag #0 (#1) is not unique", recommendedTagName, language);
+				log.error("The tag #0 (#1) is not unique", tagName, language);
 				@SuppressWarnings("unchecked")
 				List<Tag> tagList = query.getResultList();
 				tag = tagList.get(0);
 			} catch(NoResultException e) {
-				log.info("The tag #0 (#1) is new", recommendedTagName, language);
+				log.info("The tag #0 (#1) is new", tagName, language);
 				tag = new Tag();
-				tag.setName(recommendedTagName);
+				tag.setName(tagName);
 				tag.setLanguage(language);
 				entityManager.persist(tag);
 			}

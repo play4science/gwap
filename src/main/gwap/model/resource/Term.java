@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -79,6 +80,11 @@ public class Term extends Resource {
 	@OrderBy("name")
 	private List<Tag> confirmedTags = new ArrayList<Tag>();
 
+	@ManyToMany
+	@JoinTable(name="term_rejectedtag")
+	@OrderBy("name")
+	private List<Tag> rejectedTags = new ArrayList<Tag>();
+
 	public Term() {
 	}
 
@@ -96,6 +102,14 @@ public class Term extends Resource {
 
 	public void setConfirmedTags(List<Tag> confirmedTags) {
 		this.confirmedTags = confirmedTags;
+	}
+
+	public List<Tag> getRejectedTags() {
+		return rejectedTags;
+	}
+
+	public void setRejectedTags(List<Tag> rejectedTags) {
+		this.rejectedTags = rejectedTags;
 	}
 
 	public Integer getRating() {

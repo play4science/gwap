@@ -15,13 +15,13 @@
 				<rich:column>
 					<h:outputText value="#{messages['termina.scoring.userTags']}" />
 				</rich:column>
-				<rich:column colspan="2">
+				<rich:column colspan="3">
 					<h:outputText value="#{messages['termina.scoring.otherTags']}" />
 				</rich:column>
 			</rich:columnGroup>
 		</f:facet>
 		
-		<rich:column colspan="3">
+		<rich:column colspan="4">
 			<h:outputText value="#{messages['termina.round']} #{_gameround.number}" />
 			(<b><h:outputText value="#{_gameround.resources.get(0).tag.name}"/></b>)
 			<s:fragment rendered="#{!hideGameRoundScore}">:				
@@ -33,9 +33,10 @@
 		
 			<rich:column styleClass="scoringOwnAnswers">
 				<ui:repeat var="_tagging" value="#{_gameround.actions}">
-					<span style="color:#{_tagging.score > 0 ? 'green' : 'red'};">
-						<h:outputText value="#{_tagging.tag.name}"/><br/>
-					</span>
+					<h:outputText value="#{_tagging.tag.name}" styleClass="scoringCorrectAnswers" rendered="#{_tagging.score > 0}" />
+					<h:outputText value="#{_tagging.tag.name}" styleClass="scoringWrongAnswers" rendered="#{_tagging.score &lt; 0}" />
+					<h:outputText value="#{_tagging.tag.name}" styleClass="scoringUnknownAnswers" rendered="#{_tagging.score == null || _tagging.score == 0}" />
+					<br/>
 				</ui:repeat>
 			</rich:column>
 			
@@ -50,6 +51,15 @@
 			
 			<rich:column styleClass="scoringWrongAnswers">
 				<ui:repeat var="_term" value="#{elearnResults.getTopWrongAnswers(_gameround)}">
+					<h:outputFormat value="{0} ({1}x)">
+						<f:param value="#{_term.term}" />
+						<f:param value="#{_term.appearence}" />
+					</h:outputFormat><br/>
+				</ui:repeat>
+			</rich:column>
+			
+			<rich:column styleClass="scoringUnknownAnswers">
+				<ui:repeat var="_term" value="#{elearnResults.getTopUnknownAnswers(_gameround)}">
 					<h:outputFormat value="{0} ({1}x)">
 						<f:param value="#{_term.term}" />
 						<f:param value="#{_term.appearence}" />

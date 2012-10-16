@@ -144,4 +144,12 @@ public class Tag implements Serializable {
 		this.gameRounds = gameRounds;
 	}
 	
+	@Override
+	public boolean equals(Object other) {
+		return other != null && 
+				other instanceof Tag &&
+				((Tag)other).getId() != null &&
+				((Tag)other).getId().equals(getId());
+	}
+	
 }

@@ -15,7 +15,7 @@
 			<table>
 				<tr>
 					<td class="terminaTableCell"><h:outputText class="gamequestion" value="#{messages['termina.frage.satz']}" /></td>
-					<td class="terminaTableCell"><h:inputText id="inputassoc" value="#{elearnTermina.association}"  required="false" /></td>
+					<td class="terminaTableCell"><h:inputText id="inputassoc" value="#{elearnTermina.association}" autocomplete="off" required="false" /></td>
 					<td class="terminaTableCell"><a4j:commandButton id="sendButton" action="#{elearnTermina.choose()}" styleClass="sendAssociation" title="Sende Assoziation" reRender="bereich1,bereich3,focusbereich"><s:defaultAction /></a4j:commandButton></td>
 				</tr>
 				<tr>

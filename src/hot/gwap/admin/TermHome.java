@@ -26,6 +26,7 @@ import org.jboss.seam.annotations.web.RequestParameter;
 import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.framework.EntityHome;
 import org.jboss.seam.international.LocaleSelector;
+import org.jboss.seam.international.StatusMessage.Severity;
 import org.jboss.seam.log.Log;
 
 /**
@@ -37,13 +38,13 @@ public class TermHome extends EntityHome<Term> {
 	private static final long serialVersionUID = 8849610213839186469L;
 
 	@RequestParameter		Long termId;
-	@RequestParameter       Long confirmedTagId;
 	@In                     private FacesMessages facesMessages;
 	@In                     private EntityManager entityManager;
 	@In                     private LocaleSelector localeSelector;
 	@Logger                 private Log log;
 	
 	private String newConfirmedTag;
+	private String newRejectedTag;
 	
 	@Override @Begin(join=true)
 	public void create() {
@@ -68,15 +69,20 @@ public class TermHome extends EntityHome<Term> {
 
 	public void addConfirmedTag() {
 		if (newConfirmedTag != null && newConfirmedTag.length() > 0) {
-			getInstance().getConfirmedTags().add(findOrCreateTag(newConfirmedTag));
-			facesMessages.add("Confirmed Term #{newConfirmedTag} wurde erfolgreich hinzugefügt!");
+			Tag tag = findOrCreateTag(newConfirmedTag);
+			if (getInstance().getRejectedTags().contains(tag)) {
+				facesMessages.add(Severity.ERROR, "Eine Assoziation kann nicht sowohl bestätigt als auch falsch sein!");
+				return;
+			}
+			getInstance().getConfirmedTags().add(tag);
+			facesMessages.add("Bestätigte Assoziation #{newConfirmedTag} wurde erfolgreich hinzugefügt!");
 			newConfirmedTag = "";
 		}
 		else
-			facesMessages.addToControl("confirmedTagsTable", "Bitte geben Sie einen Confirmed Term an!");
+			facesMessages.addToControl("confirmedTagsTable", "Bitte geben Sie eine bestätigte Assoziation an!");
 	}
 	
-	public void deleteConfirmedTerm(Long confirmedTagId) {
+	public void deleteConfirmedTag(Long confirmedTagId) {
 		if (confirmedTagId != null) {
 			List<Tag> confirmedTags = getInstance().getConfirmedTags();
 			for (int i = 0; i < confirmedTags.size(); i++) {
@@ -88,13 +94,48 @@ public class TermHome extends EntityHome<Term> {
 		}
 	}
 	
-	@Override
-	public String persist() {
+	public void addRejectedTag() {
+		if (newRejectedTag != null && newRejectedTag.length() > 0) {
+			Tag tag = findOrCreateTag(newRejectedTag);
+			if (getInstance().getConfirmedTags().contains(tag)) {
+				facesMessages.add(Severity.ERROR, "Eine Assoziation kann nicht sowohl bestätigt als auch falsch sein!");
+				return;
+			}
+			getInstance().getRejectedTags().add(tag);
+			facesMessages.add("Falsche Assoziation #{newRejectedTag} wurde erfolgreich hinzugefügt!");
+			newRejectedTag = "";
+		}
+		else
+			facesMessages.addToControl("RejectedTagsTable", "Bitte geben Sie eine falsche Assoziation an!");
+	}
+	
+	public void deleteRejectedTag(Long rejectedTagId) {
+		if (rejectedTagId != null) {
+			List<Tag> rejectedTags = getInstance().getRejectedTags();
+			for (int i = 0; i < rejectedTags.size(); i++) {
+				if (rejectedTags.get(i).getId() == rejectedTagId) {
+					rejectedTags.remove(i);
+					break;
+				}
+			}
+		}
+	}
+	
+	private boolean associationsValid() {
+		// Check if a tag is both in confirmed tags and in rejected tags
+		for (Tag confirmed : getInstance().getConfirmedTags()) {
+			if (getInstance().getRejectedTags().contains(confirmed)) {
+				facesMessages.add(Severity.ERROR, "Eine Assoziation kann nicht sowohl bestätigt als auch falsch sein! Bitte aus einem der beiden Felder entfernen");
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	private void updateAssociations() {
+		// Fix confirmed tags list
 		List<Tag> enteredConfirmedTags = getInstance().getConfirmedTags();
 		getInstance().setConfirmedTags(new ArrayList<Tag>());
-
-		getInstance().setTag(findOrCreateTag(getInstance().getTag().getName()));
-		
 		for (Tag tag : enteredConfirmedTags) {
 			if (tag.getName() != null && tag.getName().length() > 0) {
 				Tag t = findOrCreateTag(tag.getName());
@@ -102,6 +143,26 @@ public class TermHome extends EntityHome<Term> {
 			}
 		}
 
+		// Fix rejected tags list
+		List<Tag> enteredRejectedTags = getInstance().getRejectedTags();
+		getInstance().setRejectedTags(new ArrayList<Tag>());
+		for (Tag tag : enteredRejectedTags) {
+			if (tag.getName() != null && tag.getName().length() > 0) {
+				Tag t = findOrCreateTag(tag.getName());
+				getInstance().getRejectedTags().add(t);
+			}
+		}
+	}
+	
+	@Override
+	public String persist() {
+		getInstance().setTag(findOrCreateTag(getInstance().getTag().getName()));
+		
+		if (!associationsValid())
+			return null;
+		
+		updateAssociations();
+		
 		String result = super.persist();
 		if (result.equals("persisted")) {
 			facesMessages.add("Term #0 wurde erfolgreich geändert!", getInstance().getTag().getName());
@@ -112,9 +173,8 @@ public class TermHome extends EntityHome<Term> {
 	
 	@Override
 	public String update() {
-		//FIXME Handle adding / deleting of terms intelligently
-//		List<Term> enteredConfirmedTerms = getInstance().getConfirmedTerms();
-//		getInstance().setConfirmedTerms(new ArrayList<Term>());
+		if (!associationsValid())
+			return null;
 
 		String result = super.update();
 		if (result.equals("updated")) {
@@ -146,6 +206,14 @@ public class TermHome extends EntityHome<Term> {
 
 	public void setNewConfirmedTag(String newConfirmedTerm) {
 		this.newConfirmedTag = newConfirmedTerm;
+	}
+
+	public String getNewRejectedTag() {
+		return newRejectedTag;
+	}
+
+	public void setNewRejectedTag(String newRejectedTag) {
+		this.newRejectedTag = newRejectedTag;
 	}
 	
 }

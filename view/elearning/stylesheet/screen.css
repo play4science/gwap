@@ -180,109 +180,15 @@ div .ongoingGameStatsContent {
 /*-------------------------------------------------------------------------- */
 /*------------------------------- MENU,LINKS ------------------------------- */
 /*-------------------------------------------------------------------------- */
-#impressumEMail {
-	background: url(../img/envelope.png) no-repeat scroll 0 1px transparent;
-	padding: 1px 0 1px 25px;
-}
-
-#menuFAQId {
-	background: url('../img/menu_faq.png') bottom;
-}
-
-#menuFAQId:hover,#menuFAQId:focus,#menuFAQId.active {
-	background-position: 0 0;
-}
-
-#menuHighscoreId {
-	width: 80px;
-	height: 60px;
-	background: url('../img/menu_highscore.png') bottom;
-}
-
-#menuHighscoreId:hover,#menuHighscoreId:focus,#menuHighscoreId.active {
-	background-position: 0 0;
-}
-
-#menuHomeId {
-	width: 60px;
-	height: 55px;
-	background: url('../img/menu_home.png') bottom;
-}
-
-#menuHomeId:hover,#menuHomeId:focus,#menuHomeId.active {
-	background-position: 0 0;
-}
-
-#menuImpressumId {
-	background: url('../img/menu_impressum.png') bottom;
-}
-
-#menuImpressumId:hover,#menuImpressumId:focus,#menuImpressumId.active {
-	background-position: 0 0;
-}
-
-#menuLoginId {
-	width: 90px;
-	height: 60px;
-	background: url('../img/menu_login.png') bottom;
-}
-
-#menuLoginId:hover,#menuLoginId:focus,#menuLoginId.active {
-	background-position: 0 0;
-}
-
-#menuLogoutId {
-	width: 60px;
-	height: 55px;
-	background: url('../img/menu_logout.png') bottom;
-}
-
-#menuLogoutId:hover,#menuLogoutId:focus {
-	background-position: 0 0;
-}
-
-#menuProfileId {
-	width: 90px;
-	height: 65px;
-	background: url('../img/menu_profile.png') bottom;
-}
-
-#menuProfileId:hover,#menuProfileId:focus,#menuProfileId.active {
-	background-position: 0 0;
-}
-
-#menuRegisterId {
-	width: 90px;
-	height: 60px;
-	background: url('../img/menu_register.png') bottom;
-}
-
-#menuRegisterId:hover,#menuRegisterId:focus,#menuRegisterId.active {
-	background-position: 0 0;
-}
-
-#menuTaggingId {
-	background: url('../img/menu_tagging.png') bottom;
-}
-
-#menuTaggingId:hover,#menuTaggingId:focus,#menuTaggingId.active {
-	background-position: 0 0;
-}
-
-#menuTerminaId {
-	width: 90px;
-	height: 60px;
-	background: url('../img/menu_termina.png') bottom;
-}
-
-#menuTerminaId:hover,#menuTerminaId:focus,#menuTerminaId.active {
-	background-position: 0 0;
-}
 
 .menuItem {
 	display: block;
 	width: 60px;
 	height: 60px;
+}
+
+.menuItem:hover,.menuItem:focus,.menuItem.active {
+	background-position: 0 0;
 }
 
 .menuLink {
@@ -299,6 +205,61 @@ a.menuLink:hover,a.menuLink.active {
 a.menuLink:visited {
 	text-decoration: none;
 	color: #a9a9a9;
+}
+
+#impressumEMail {
+	background: url(../img/envelope.png) no-repeat scroll 0 1px transparent;
+	padding: 1px 0 1px 25px;
+}
+
+#menuFAQId {
+	background: url('../img/menu_faq.png') bottom;
+}
+
+#menuHighscoreId {
+	width: 80px;
+	height: 60px;
+	background: url('../img/menu_highscore.png') bottom;
+}
+
+#menuHomeId {
+	width: 60px;
+	height: 55px;
+	background: url('../img/menu_home.png') bottom;
+}
+
+#menuLoginId {
+	width: 90px;
+	height: 60px;
+	background: url('../img/menu_login.png') bottom;
+}
+
+#menuLogoutId {
+	width: 60px;
+	height: 55px;
+	background: url('../img/menu_logout.png') bottom;
+}
+
+#menuProfileId {
+	width: 90px;
+	height: 65px;
+	background: url('../img/menu_profile.png') bottom;
+}
+
+#menuRegisterId {
+	width: 90px;
+	height: 60px;
+	background: url('../img/menu_register.png') bottom;
+}
+
+#menuTaggingId {
+	background: url('../img/menu_tagging.png') bottom;
+}
+
+#menuTerminaId {
+	width: 90px;
+	height: 60px;
+	background: url('../img/menu_termina.png') bottom;
 }
 
 .resetPassword { 
@@ -719,16 +680,16 @@ input[type="button"].swapTerm:hover {
 	padding-left: 25px;
 }
 
-.scoringCorrectAnswers {
-	vertical-align:top; 
-	color:green;
-}
-.scoringOwnAnswers {
+.scoringOwnAnswers, .scoringCorrectAnswers, .scoringUnknownAnswers, .scoringWrongAnswers {
 	vertical-align: top;
 }
-
+.scoringCorrectAnswers {
+	color:green;
+}
+.scoringUnknownAnswers  {
+	color:#CC8811;
+}
 .scoringWrongAnswers  {
-	vertical-align:top; 
 	color:red;
 }
 
@@ -748,63 +709,6 @@ input[type="button"].swapTerm:hover {
 
 .scoringExplanation {
 	vertical-align: middle;
-}
-
-
-/*-------------------------------------------------------------------------- */
-/*------------------------------ UNNECESSARY? ------------------------------ */
-/*-------------------------------------------------------------------------- */
-#logodiv {
-	float: left;
-	width: 25%;
-	height: auto;
-	margin-top: 1em;
-	margin-left: 1em;
-}
-
-*.alignmentright {
-	
-}
-
-html {
-	height: 100%
-}
-
-#navLanguage {
-	
-}
-
-#search {
-	float: right;
-}
-
-/* divider */
-#enteredAssociations {
-	align: left;
-}
-
-#taggingLeft {
-	float: left;
-}
-
-#taggingRight {
-	
-}
-
-
-.terminaButton {
-	float: left;
-}
-
-.terminaGame {
-	width: 650px;
-	border-width: 2px;
-	border-style: solid;
-	border-color: #a9a9a9;
-}
-
-.terminaProgress {
-	
 }
 
 /* =NAVIGATION

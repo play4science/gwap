@@ -76,10 +76,16 @@ import org.jboss.seam.annotations.Scope;
 					"and t.id=tg.tag.id " +
 					"group by t.name order by count(*) desc"),
 	@NamedQuery(
-			name="tagging.topWrongAnswers",
+			name="tagging.topUnknownAnswers",
 			query="select new gwap.wrapper.BackstageAnswer(t.name, count(*)) from Term r join r.taggings tg join tg.tag t " +
 					"where r.id=:resourceId and tg.gameRound.gameSession.externalSessionId=:externalSessionId " +
-					"and t.id not in (select t2.id from r.confirmedTags t2) " +
+					"and t.id not in (select t2.id from r.confirmedTags t2) and t.id not in (select t2.id from r.rejectedTags t2) " +
+					"group by t.name order by count(*) desc"),
+	@NamedQuery(
+			name="tagging.topWrongAnswers",
+			query="select new gwap.wrapper.BackstageAnswer(t.name, count(*)) from Term r join r.rejectedTags t join r.taggings tg join tg.gameRound gr " +
+					"where r.id=:resourceId and gr.gameSession.externalSessionId=:externalSessionId " +
+					"and t.id=tg.tag.id " +
 					"group by t.name order by count(*) desc"),
 	@NamedQuery(
 			name="tagging.topCorrectAnswersGeneral",
@@ -88,10 +94,16 @@ import org.jboss.seam.annotations.Scope;
 					"and t.id=tg.tag.id " +
 					"group by t.name order by count(*) desc"),
 	@NamedQuery(
-			name="tagging.topWrongAnswersGeneral",
+			name="tagging.topUnknownAnswersGeneral",
 			query="select new gwap.wrapper.BackstageAnswer(t.name, count(*)) from Term r join r.taggings tg join tg.tag t " +
 					"where r.id=:resourceId " +
-					"and t.id not in (select t2.id from r.confirmedTags t2) " + 
+					"and t.id not in (select t2.id from r.confirmedTags t2) and t.id not in (select t2.id from r.rejectedTags t2) " + 
+					"group by t.name order by count(*) desc"),
+	@NamedQuery(
+			name="tagging.topWrongAnswersGeneral",
+			query="select new gwap.wrapper.BackstageAnswer(t.name, count(*)) from Term r join r.rejectedTags t join r.taggings tg " +
+					"where r.id=:resourceId " +
+					"and t.id=tg.tag.id " +
 					"group by t.name order by count(*) desc"),
 	@NamedQuery(
 			name = "tagging.tagFrequencyBySource",

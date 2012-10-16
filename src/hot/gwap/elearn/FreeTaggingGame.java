@@ -63,8 +63,10 @@ public class FreeTaggingGame extends AbstractGameSessionBean {
 			log.info("Could not add tag to gameround as it is invalid.");
 		} else {
 			gameRound.getActions().add(tagging);
-			if (TerminaMatching.isAssociationInConfirmedTags(tagging.getTag().getName(), term))
+			if (TerminaMatching.isAssociationInList(tagging.getTag().getName(), term.getConfirmedTags()))
 				tagging.setScore(1);
+			if (TerminaMatching.isAssociationInList(tagging.getTag().getName(), term.getRejectedTags()))
+				tagging.setScore(-1);
 			log.info("Added #0 to game round", tagging.getTag());
 		}
 		recommendedTags.put(gameRound.getNumber(), taggingBean.getRecommendedTags());

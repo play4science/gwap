@@ -41,6 +41,14 @@ public class Results implements Serializable {
 		return list;
 	}
 	
+	public List<BackstageAnswer> getTopUnknownAnswers(GameRound gameRound) {
+		Query q = entityManager.createNamedQuery("tagging.topUnknownAnswersGeneral");
+		q.setParameter("resourceId", gameRound.getResources().get(0).getId());
+		q.setMaxResults(5);
+		List<BackstageAnswer> list = q.getResultList();
+		return list;
+	}
+	
 	public List<BackstageAnswer> getTopWrongAnswers(GameRound gameRound) {
 		Query q = entityManager.createNamedQuery("tagging.topWrongAnswersGeneral");
 		q.setParameter("resourceId", gameRound.getResources().get(0).getId());

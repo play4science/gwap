@@ -9,19 +9,20 @@
 package gwap.elearn;
 
 import gwap.model.Tag;
-import gwap.model.resource.Term;
 import gwap.tools.TagSemantics;
+
+import java.util.List;
 
 /**
  * @author kneissl
  */
 public class TerminaMatching {
 
-	public static boolean isAssociationInConfirmedTags(String association, Term term) {
-		return checkAssociationInConfirmedTags(association, term) != null;
+	public static boolean isAssociationInList(String association, List<Tag> termList) {
+		return checkAssociationInList(association, termList) != null;
 	}
 	
-	public static Tag checkAssociationInConfirmedTags(String association, Term term) {
-		return TagSemantics.containsNotNormalized(term.getConfirmedTags(), association);
+	public static Tag checkAssociationInList(String association, List<Tag> termList) {
+		return TagSemantics.containsNotNormalized(termList, association);
 	}
 }

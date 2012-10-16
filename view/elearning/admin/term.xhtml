@@ -55,7 +55,7 @@
 			        			</h:column>
 			        			
 								<h:column>
-									<h:commandButton styleClass="buttonDelete" action="#{termHome.deleteConfirmedTerm(_tag.id)}" value="" title="#{messages['buttonTitle.assocDelete']}">
+									<h:commandButton styleClass="buttonDelete" action="#{termHome.deleteConfirmedTag(_tag.id)}" value="" title="#{messages['buttonTitle.assocDelete']}">
 									<!-- <f:param name="confirmedTagId" value="#{_tag.id}"/> -->
 									</h:commandButton>
 								</h:column>
@@ -67,6 +67,35 @@
 		                  			<h:outputText value="#{messages['terme.addConfirmedTag']}"/>
 		                  			<h:inputText value="#{termHome.newConfirmedTag}"/>
 			                		<h:commandButton value="" styleClass="buttonIncrease" action="#{termHome.addConfirmedTag}" title="#{messages['buttonTitle.assocAdd']}" />
+		
+		               			</h:panelGrid>
+	                 		</s:decorate>
+	                 		
+	                 		<s:decorate id="rejectedTagsField" template="/layout/edit.xhtml">
+			            		<ui:define name="label">
+		                 			<h:outputText value="#{messages['terme.rejectedTags']}:"/>
+			                	</ui:define>	
+	                 			
+	                		 	<rich:dataTable id="rejectedTagsTable" value="#{termHome.instance.rejectedTags}" var="_tag">
+	                		 	
+	                 				<h:column>
+			            			<h:inputText value="#{_tag.name}" rendered="#{!termHome.managed}"/>
+			            			<h:outputText value="#{_tag.name}" rendered="#{termHome.managed}"/>
+			        			</h:column>
+			        			
+								<h:column>
+									<h:commandButton styleClass="buttonDelete" action="#{termHome.deleteRejectedTag(_tag.id)}" value="" title="#{messages['buttonTitle.assocDelete']}">
+									<!-- <f:param name="rejectedTagId" value="#{_tag.id}"/> -->
+									</h:commandButton>
+								</h:column>
+								
+	                 			</rich:dataTable>
+	                  		
+		                  		<h:panelGrid columns="3">
+		                  		
+		                  			<h:outputText value="#{messages['terme.addRejectedTag']}"/>
+		                  			<h:inputText value="#{termHome.newRejectedTag}" />
+			                		<h:commandButton value="" styleClass="buttonIncrease" action="#{termHome.addRejectedTag}" title="#{messages['buttonTitle.assocAdd']}" />
 		
 		               			</h:panelGrid>
 	                 		</s:decorate>
