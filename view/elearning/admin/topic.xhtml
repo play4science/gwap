@@ -26,12 +26,30 @@
 			            		<ui:define name="label">
 			            			<h:outputText styleClass="adminForm" value="#{messages['topic.name']}:" />
 			                	</ui:define>
-								<h:inputText id="topicName" styleClass="adminInput" value="#{topicHome.instance.name}" /><br /><br />
+								<h:inputText id="topicName" styleClass="adminInput" value="#{topicHome.instance.name}" />
 							</s:decorate>
-	                 
-	                		<rich:pickList sourceListWidth="auto" targetListWidth="auto" listsHeight="auto" value="#{topicHome.list}" var="_term" >                
-	            				<s:selectItems value="#{topicHome.allResources}" var="_term" itemValue="#{_term}" label="#{_term.tag.name}"/>
-	        				</rich:pickList>
+							
+							<s:decorate id="topicEnabledField" template="/layout/edit.xhtml">
+			            		<ui:define name="label">
+			            			<h:outputText styleClass="adminForm" value="#{messages['topic.enabled']}:" />
+			                	</ui:define>
+								<h:selectBooleanCheckbox id="topicEnabled" styleClass="adminInput" value="#{topicHome.instance.enabled}" />
+							</s:decorate>
+
+							<br/>
+							
+							<s:decorate id="termListField" template="/layout/edit.xhtml">
+			            		<ui:define name="label">
+			            			<h:outputText styleClass="adminForm" value="#{messages['topic.termList']}:" />
+			                	</ui:define>
+		            			<h:outputText value="#{messages['topic.termList.info']}:" styleClass="adminForm" style="font-size:0.8em" />
+		                		<rich:pickList sourceListWidth="175px" targetListWidth="175px" listsHeight="300px"
+		                			removeAllControlLabel="#{messages['picklist.removeAll']}" removeControlLabel="#{messages['picklist.remove']}"
+		                			copyAllControlLabel="#{messages['picklist.copyAll']}" copyControlLabel="#{messages['picklist.copy']}"
+		                			value="#{topicHome.list}" var="_term" >                
+		            				<s:selectItems value="#{topicHome.allResources}" var="_term" itemValue="#{_term}" label="#{_term.tag.name}"/>
+		        				</rich:pickList>
+	        				</s:decorate>
 	               			
                			<h:panelGrid columns="2">
                				<s:button styleClass="buttonBack" value="" view="/admin/topicList.xhtml" title="#{messages['buttonTitle.back']}"/>

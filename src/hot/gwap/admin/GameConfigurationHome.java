@@ -65,7 +65,7 @@ public class GameConfigurationHome extends EntityHome<GameConfiguration>{
 	public List<SelectItem> getSelectTopics() {
 		option = new ArrayList();
 		if (selectTopics == null) {
-			Query q = entityManager.createNamedQuery("topic.topicsByName");
+			Query q = entityManager.createNamedQuery("topic.all");
 			selectTopics = q.getResultList();
 		}
 		for (Topic t : selectTopics){

@@ -33,6 +33,6 @@ import org.jboss.seam.framework.EntityQuery;
 @Name("topicList")
 public class TopicList extends EntityQuery<Term>{
 	public TopicList() {
-		setEjbql("select t from Topic t");
+		setEjbql("select t from Topic t order by t.name");
 	}
 }

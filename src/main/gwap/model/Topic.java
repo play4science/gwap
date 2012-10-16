@@ -26,8 +26,10 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 
 @NamedQueries({
-	@NamedQuery(name="topic.topicsByName", 
-				query="select t from Topic t order by t.name")
+	@NamedQuery(name="topic.all", 
+				query="from Topic order by name"),
+	@NamedQuery(name="topic.enabled",
+				query="from Topic where enabled=true order by name")
 })
 /**
  * A topic is a combination of resources and can be used to group
@@ -47,6 +49,8 @@ public class Topic implements Serializable {
 	private Long id;
 	
 	private String name;
+	
+	private Boolean enabled;
 
 	@ManyToMany
 	private List<Resource> resources = new ArrayList<Resource>();
@@ -65,6 +69,14 @@ public class Topic implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Boolean getEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
 	}
 
 	public List<Resource> getResources() {

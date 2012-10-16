@@ -33,6 +33,16 @@
 								<td colspan="4"><br /><h:outputText value="#{messages['termina.configure']}"/></td>
 							</tr>
 							<tr>
+								<td><h:outputText value="#{messages['termina.topic']}"/></td>
+								<td><h:selectOneMenu value="#{elearnGameConfigurationBean.topicId}">
+									<s:selectItems value="#{elearnGameConfigurationBean.availableTopics}" 
+										noSelectionLabel="#{messages['termina.topic.all']}"
+										var="_topic"
+										itemValue="#{_topic.id}"
+										label="#{_topic.name}"/>
+								</h:selectOneMenu></td>
+							</tr>
+							<tr>
 								<td><h:outputText value="#{messages['termina.ansage.anzahl']}"/></td>
 								<td><h:commandButton styleClass="buttonDecrease" action="#{elearnGameConfigurationBean.lowerBid()}" value="" title="#{messages['buttonTitle.decrease']}"/></td>
 								<td><h:outputText value="#{gameConfiguration.bid}"/></td>
