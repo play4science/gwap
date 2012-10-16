@@ -34,7 +34,7 @@
 							</tr>
 							<tr>
 								<td><h:outputText value="#{messages['termina.topic']}"/></td>
-								<td><h:selectOneMenu value="#{elearnGameConfigurationBean.topicId}">
+								<td colspan="3"><h:selectOneMenu value="#{elearnGameConfigurationBean.topicId}" style="margin-left:20px">
 									<s:selectItems value="#{elearnGameConfigurationBean.availableTopics}" 
 										noSelectionLabel="#{messages['termina.topic.all']}"
 										var="_topic"

@@ -18,11 +18,20 @@ import java.util.List;
  */
 public class TerminaMatching {
 
-	public static boolean isAssociationInList(String association, List<Tag> termList) {
-		return checkAssociationInList(association, termList) != null;
+	public static boolean isAssociationInList(String association, List<Tag> tagList) {
+		return checkAssociationInList(association, tagList) != null;
 	}
 	
-	public static Tag checkAssociationInList(String association, List<Tag> termList) {
-		return TagSemantics.containsNotNormalized(termList, association);
+	public static Tag checkAssociationInList(String association, List<Tag> tagList) {
+		String associationNormalized = normalize(association);
+		for (Tag tag : tagList) {
+			if (associationNormalized.equals(normalize(tag.getName())))
+				return tag;
+		}
+		return null;
+	}
+	
+	private static String normalize(String tag) {
+		return TagSemantics.normalizeDiacritics(TagSemantics.normalize(tag)).replaceAll("[^a-z0-9]", "");
 	}
 }

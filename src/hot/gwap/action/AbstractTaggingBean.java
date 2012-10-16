@@ -81,7 +81,7 @@ public abstract class AbstractTaggingBean<GenericTagging> implements Serializabl
 	
 	public GenericTagging recommendTag(Resource resource, boolean returnNull) {
 		if (recommendedTag != null)
-			recommendedTag.setName(TagSemantics.normalize(recommendedTag.getName()));
+			recommendedTag.setName(recommendedTag.getName().trim());
 		
 		if (recommendedTag == null || recommendedTag.getName() == null || recommendedTag.getName().length() == 0) {
 			if (returnNull)
