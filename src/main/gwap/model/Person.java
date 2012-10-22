@@ -71,7 +71,9 @@ public class Person implements Serializable {
 	@Id	@GeneratedValue
 	private Long id;
 	
-	private String externalUsername; 
+	private String externalUsername;
+	
+	private String note;
 	
 	@ManyToOne								private Person personConnected; // the person it is connected to (if it exists)
 	@OneToMany(mappedBy="personConnected")	private Set<Person> connectedPersons = new HashSet<Person>(); // persons, that are connected to this person (reflexive).
@@ -341,4 +343,13 @@ public class Person implements Serializable {
 	public void setEmailVerifyToken(String emailVerifyToken) {
 		this.emailVerifyToken = emailVerifyToken;
 	}
+
+	public String getNote() {
+		return note;
+	}
+
+	public void setNote(String note) {
+		this.note = note;
+	}
+	
 }

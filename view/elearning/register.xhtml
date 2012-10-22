@@ -47,7 +47,24 @@
 			            </s:decorate>
 			            
 			            <hr class="form" />
+			            			            
+			            <s:decorate id="externalUsernameField" template="/layout/edit.xhtml">
+				            <ui:define name="label">
+			                	<h:outputText value="#{messages['person.externalUsername']}" />
+			                </ui:define>
+			                <h:inputText id="externalUsername" value="#{person.externalUsername}" />
+			            </s:decorate>
 			            
+			            <s:decorate id="noteField" template="/layout/edit.xhtml">
+				            <ui:define name="label">
+			                	<h:outputText value="#{messages['person.note']}" />
+			                </ui:define>
+			                <h:inputText id="note" value="#{person.note}" />
+			            </s:decorate>
+			            <h:outputText value="#{messages['register.noteHint']}" styleClass="passwordHint" />
+			            
+			            <hr class="form" />  
+			                   
 			            <s:decorate id="passwordField" template="/layout/edit.xhtml">
 							<ui:define name="label">
 				            	<h:outputText value="#{messages['person.password']}" styleClass="requiredField" />
