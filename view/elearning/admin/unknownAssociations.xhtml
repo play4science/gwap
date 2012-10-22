@@ -1,0 +1,71 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    template="../layout/adminTemplate.xhtml">
+
+    <ui:define name="body">
+		<div id="content">
+			<div class="contentWrapper">
+			
+				<h1>#{messages['pagetitle.admin.unknownAssociationsList']}</h1>
+				<hr class="pageTitle" /><br />
+				
+				<h:outputText value="#{messages['admin.unknownAssociations.explanation']}" escape="false" /><br />
+				
+				<h:outputText value="#{messages['admin.unknownAssociations.noResourceFound']}" rendered="#{empty unknownAssociations.resultList}" />
+			
+			    <h:form>
+			
+				<rich:dataTable id="unknownAssociationsList" styleClass="top" value="#{unknownAssociations.resultList}" var="_resource">
+				
+				   	<rich:column>
+					   	<f:facet name="header" ><h:outputText value="#{messages['unknownAssociationsList.association']}"/></f:facet>
+						<ui:repeat var="_association" value="#{_resource.associations}">
+				   			<a4j:commandButton action="#{unknownAssociations.confirm()}" styleClass="buttonConfirmInlineInactive" 
+				   				onclick="jQuery(this).removeClass('buttonConfirmInlineInactive').addClass('buttonConfirmInline')">
+				    			<f:param name="termId" value="#{_resource.term.id}"/>
+				    			<f:param name="tagId" value="#{_association.id}"/>
+				   			</a4j:commandButton>
+				   			<a4j:commandButton action="#{unknownAssociations.reject()}" styleClass="buttonRejectInlineInactive"  
+				   				onclick="jQuery(this).removeClass('buttonRejectInlineInactive').addClass('buttonRejectInline')">
+				    			<f:param name="termId" value="#{_resource.term.id}"/>
+				    			<f:param name="tagId" value="#{_association.id}"/>
+				   			</a4j:commandButton>
+				        	<h:outputText value="#{_association.name}"/>
+				        	<br/>
+				    	</ui:repeat>
+			    	</rich:column>
+			    	
+			    	<rich:column>
+			        	<f:facet name="header" ><h:outputText value="#{messages['terme.name']}"/></f:facet>
+			        	<h:outputText value="#{_resource.term.tag.name}"/>
+			    	</rich:column>
+			    	
+			    	<rich:column>
+			        	<f:facet name="header" ><h:outputText value="#{messages['terme.confirmedTags']}"/></f:facet>
+			        	<ui:repeat value="#{_resource.term.confirmedTags}" var="_tag" varStatus="_status">
+			        		<h:outputText value="#{_tag.name}"/><h:outputText value=", " rendered="#{!_status.last}" />
+			        	</ui:repeat>
+			    	</rich:column>
+			    	
+			    	<rich:column>
+			        	<f:facet name="header" ><h:outputText value="#{messages['terme.rejectedTags']}"/></f:facet>
+			        	<ui:repeat value="#{_resource.term.rejectedTags}" var="_tag" varStatus="_status">
+			        		<h:outputText value="#{_tag.name}"/><h:outputText value=", " rendered="#{!_status.last}" />
+			        	</ui:repeat>
+			    	</rich:column>
+			    	
+				</rich:dataTable>
+				</h:form>
+			</div>
+		</div>
+		
+        <br class="clear" />
+    </ui:define>
+</ui:composition>

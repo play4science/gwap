@@ -123,7 +123,13 @@ import org.jboss.seam.annotations.Scope;
 					"order by r.externalId, t.tag.language, t.tag.name"),
 	@NamedQuery(
 			name = "tagging.taggingsByTagNameResourceAndGameround",
-			query = "select t from Tagging t where lower(t.tag.name)=lower(:tagName) and t.resource=:resource and t.gameRound = :gameRound")
+			query = "select t from Tagging t where lower(t.tag.name)=lower(:tagName) and t.resource=:resource and t.gameRound = :gameRound"),
+	@NamedQuery(
+			name="tagging.unknownAnswers",
+			query="select r.id, t.id, count(*) from Term r join r.taggings tg join tg.tag t " +
+					"where t.id not in (select t2.id from r.confirmedTags t2) and t.id not in (select t2.id from r.rejectedTags t2) " + 
+					"group by r.id, t.id order by r.id, count(*) desc")
+
 })
 
 @Entity

@@ -478,14 +478,38 @@ img.errors {
 /*-------------------------------- BUTTONS --------------------------------- */
 /*-------------------------------------------------------------------------- */
 
+input[type="button"].buttonRejectInline {
+	background: url('../img/button_delete_active.svg');
+}
+input[type="button"].buttonConfirmInline {
+	background: url('../img/button_login_active.svg');
+}
+input[type="button"].buttonRejectInlineInactive {
+	background: url('../img/button_delete_inactive.svg');
+}
+input[type="button"].buttonConfirmInlineInactive {
+	background: url('../img/button_login_inactive.svg');
+}
+input[type="button"].buttonRejectInline, input[type="button"].buttonConfirmInline, 
+input[type="button"].buttonRejectInlineInactive, input[type="button"].buttonConfirmInlineInactive {
+	display: inline-block;
+	background-size: cover;
+	width: 20px;
+	height: 20px;
+	margin: 0 3px 0 3px;
+	border: none;
+	cursor: pointer;
+}
 input[type="submit"].buttonConfirm {
-	display: block;
 	width: 50px;
 	height: 50px;
 	padding: .3em;
 	background: url('../img/button_login_inactive.svg');
 	border: none;
 	cursor: pointer
+}
+input[type="submit"].buttonConfirm {
+	display: block;
 }
 
 input[type="submit"].buttonConfirm:hover {
@@ -709,6 +733,10 @@ input[type="button"].swapTerm:hover {
 
 .scoringExplanation {
 	vertical-align: middle;
+}
+
+table.top td {
+	vertical-align: top;
 }
 
 /* =NAVIGATION

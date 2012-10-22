@@ -71,7 +71,7 @@ public class TermHome extends EntityHome<Term> {
 		if (newConfirmedTag != null && newConfirmedTag.length() > 0) {
 			Tag tag = findOrCreateTag(newConfirmedTag);
 			if (getInstance().getRejectedTags().contains(tag)) {
-				facesMessages.add(Severity.ERROR, "Eine Assoziation kann nicht sowohl bestätigt als auch falsch sein!");
+				facesMessages.addFromResourceBundle(Severity.ERROR, "admin.term.associationAddError");
 				return;
 			}
 			getInstance().getConfirmedTags().add(tag);
@@ -98,7 +98,7 @@ public class TermHome extends EntityHome<Term> {
 		if (newRejectedTag != null && newRejectedTag.length() > 0) {
 			Tag tag = findOrCreateTag(newRejectedTag);
 			if (getInstance().getConfirmedTags().contains(tag)) {
-				facesMessages.add(Severity.ERROR, "Eine Assoziation kann nicht sowohl bestätigt als auch falsch sein!");
+				facesMessages.addFromResourceBundle(Severity.ERROR, "admin.term.associationAddError");
 				return;
 			}
 			getInstance().getRejectedTags().add(tag);
