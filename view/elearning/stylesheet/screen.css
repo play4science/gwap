@@ -188,7 +188,7 @@ div .ongoingGameStatsContent {
 }
 
 .menuItem:hover,.menuItem:focus,.menuItem.active {
-	background-position: 0 0;
+	background-position: 0 0 !important;
 }
 
 .menuLink {
