@@ -378,6 +378,13 @@ img.errors {
 	background-image: url(../img/msgwarn.png);
 }
 
+.infoMessage {
+	background-color: #ff9;
+	border: 1px solid #f90;
+	padding: 2px;
+	margin: 0 0 5px 0;
+}
+
 .ongoingGameStatsCaption {
 	font-weight: bold;
 	align: left;

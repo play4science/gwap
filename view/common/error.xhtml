@@ -10,10 +10,10 @@
     <ui:param name="showGlobalMessages" value="false"/>
     <ui:define name="body">
 
-        <h1>Error</h1>
-        <p>Something bad happened :-(</p>
+        <h1><h:outputText value="#{messages['general.error']}" /></h1>
+        <p><h:outputText value="#{messages['general.error.text']}"/></p>
 
-        <h:messages id="errorMessage" styleClass="messages"/>
+        <p><h:messages id="errorMessage" styleClass="messages"/></p>
 
     </ui:define>
 </ui:composition>

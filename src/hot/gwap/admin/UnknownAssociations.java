@@ -96,4 +96,12 @@ public class UnknownAssociations implements Serializable {
 			ua.getAssociations().add(new TagWithCount(association, (Long) row[2]));
 		}
 	}
+	
+	public boolean hasEntries() {
+		Query q = entityManager.createNamedQuery("tagging.unknownAnswersCount");
+		if (((Number)q.getSingleResult()).longValue() > 0)
+			return true;
+		else
+			return false;
+	}
 }

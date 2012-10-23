@@ -24,6 +24,9 @@
    </rule>
   </navigation>
  </page>
+ <page view-id="/admin/*" login-required="true">
+  <restrict>#{s:hasPermission('elearning', 'view-admin-interface')}</restrict>
+ </page>
  <exception class="org.jboss.seam.framework.EntityNotFoundException">
   <redirect view-id="/error.xhtml">
    <message severity="warn">#{messages['org.jboss.seam.framework.EntityNotFoundException']}</message>

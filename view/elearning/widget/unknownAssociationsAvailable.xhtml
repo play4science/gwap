@@ -1,0 +1,17 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j">
+
+	<s:fragment rendered="#{s:hasPermission('elearning', 'view-admin-interface') and unknownAssociations.hasEntries()}">
+		<div class="infoMessage">
+			<h:outputText value="#{messages['admin.unknownAssociations.available']} "/>
+			<s:link view="/admin/unknownAssociations.xhtml" value="#{messages['admin.unknownAssociations.availableLinkText']}" propagation="none"/>.
+		</div>
+	</s:fragment>
+</ui:composition>

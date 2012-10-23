@@ -21,11 +21,10 @@
 	<body id="body">
 
 		<div id="wrapper">
-			<ui:include src="adminMenu.xhtml" />
+			<ui:include src="header.xhtml" />
 			<ui:insert name="body" />
 			<ui:include src="footer.xhtml" />
 			
-			<!--  DEBUGLEISTE
 			<s:fragment rendered="#{init.debug}">
 				<div style="position: fixed; bottom: 10px; left: 0px; width: 100%; text-align: center;">
 					<a:log hotkey="D" />
@@ -42,7 +41,6 @@
 					</p>
 				</div>
 			</s:fragment>
-			-->
 		</div>
 	</body>
 	
