@@ -6,3 +6,5 @@ create table term_rejectedtag (
 	constraint fkf6dad30922bf61e9 FOREIGN KEY (rejectedtags_id) REFERENCES tag(id),
     constraint fkf6dad309ab41a2e6 FOREIGN KEY (term_id) REFERENCES term(id)
 );
+
+alter table person add column note varchar(255);
