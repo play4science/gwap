@@ -20,24 +20,40 @@
 				
 				<h:outputText value="#{messages['admin.unknownAssociations.noResourceFound']}" rendered="#{empty unknownAssociations.resultList}" />
 			
-			    <h:form>
+			    <h:form style="padding:0;">
+			    <script type="text/javascript">
+			    	function buttonClick(button) {
+				    	var b = jQuery(button)
+				    	if (b.hasClass('buttonConfirmInlineInactive')) {
+				    		b.removeClass('buttonConfirmInlineInactive').addClass('buttonConfirmInline');
+				    		b.attr('disabled', 'disabled');
+				    		b.next().attr('disabled', 'disabled');
+				    	} else {
+				    		b.removeClass('buttonRejectInlineInactive').addClass('buttonRejectInline');
+				    		b.attr('disabled', 'disabled');
+				    		b.prev().attr('disabled', 'disabled');
+				    	}
+				    }
+			    </script>
+
+				<s:link view="/admin/unknownAssociations.xhtml" value="#{messages['admin.unknownAssociations.reload']}" propagation="none"/>
 			
 				<rich:dataTable id="unknownAssociationsList" styleClass="top" value="#{unknownAssociations.resultList}" var="_resource">
 				
-				   	<rich:column>
-					   	<f:facet name="header" ><h:outputText value="#{messages['unknownAssociationsList.association']}"/></f:facet>
+				   	<rich:column width="150px">
+					   	<f:facet name="header" ><h:outputText value="#{messages['admin.unknownAssociations.association']}"/></f:facet>
 						<ui:repeat var="_association" value="#{_resource.associations}">
 				   			<a4j:commandButton action="#{unknownAssociations.confirm()}" styleClass="buttonConfirmInlineInactive" 
-				   				onclick="jQuery(this).removeClass('buttonConfirmInlineInactive').addClass('buttonConfirmInline')">
+				   				onclick="buttonClick(this)">
 				    			<f:param name="termId" value="#{_resource.term.id}"/>
-				    			<f:param name="tagId" value="#{_association.id}"/>
+				    			<f:param name="tagId" value="#{_association.tag.id}"/>
 				   			</a4j:commandButton>
 				   			<a4j:commandButton action="#{unknownAssociations.reject()}" styleClass="buttonRejectInlineInactive"  
-				   				onclick="jQuery(this).removeClass('buttonRejectInlineInactive').addClass('buttonRejectInline')">
+				   				onclick="buttonClick(this)">
 				    			<f:param name="termId" value="#{_resource.term.id}"/>
-				    			<f:param name="tagId" value="#{_association.id}"/>
+				    			<f:param name="tagId" value="#{_association.tag.id}"/>
 				   			</a4j:commandButton>
-				        	<h:outputText value="#{_association.name}"/>
+				        	<h:outputText value="#{_association.tag.name} (#{_association.count}x)"/>
 				        	<br/>
 				    	</ui:repeat>
 			    	</rich:column>
@@ -62,6 +78,8 @@
 			    	</rich:column>
 			    	
 				</rich:dataTable>
+				<s:link view="/admin/unknownAssociations.xhtml" value="#{messages['admin.unknownAssociations.reload']}" propagation="none"/>
+				
 				</h:form>
 			</div>
 		</div>

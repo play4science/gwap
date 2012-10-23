@@ -8,7 +8,6 @@
 
 package gwap.wrapper;
 
-import gwap.model.Tag;
 import gwap.model.resource.Term;
 
 import java.util.List;
@@ -20,13 +19,14 @@ import java.util.List;
  * @author Fabian Kneissl
  */
 public class UnknownAssociation {
-	private List<Tag> associations;
+	
+	private List<TagWithCount> associations;
 	private Term term;
 
-	public List<Tag> getAssociations() {
+	public List<TagWithCount> getAssociations() {
 		return associations;
 	}
-	public void setAssociations(List<Tag> associations) {
+	public void setAssociations(List<TagWithCount> associations) {
 		this.associations = associations;
 	}
 	public Term getTerm() {

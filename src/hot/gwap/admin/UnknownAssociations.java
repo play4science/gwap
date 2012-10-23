@@ -10,6 +10,7 @@ package gwap.admin;
 
 import gwap.model.Tag;
 import gwap.model.resource.Term;
+import gwap.wrapper.TagWithCount;
 import gwap.wrapper.UnknownAssociation;
 
 import java.io.Serializable;
@@ -77,7 +78,9 @@ public class UnknownAssociations implements Serializable {
 	}
 
 	private void createList() {
+		log.info("Loading unknown associations list");
 		Query q = entityManager.createNamedQuery("tagging.unknownAnswers");
+		@SuppressWarnings("unchecked")
 		List<Object[]> termTagCount = q.getResultList();
 		resultList = new ArrayList<UnknownAssociation>();
 		UnknownAssociation ua = new UnknownAssociation();
@@ -87,9 +90,10 @@ public class UnknownAssociations implements Serializable {
 				resultList.add(ua);
 				ua = new UnknownAssociation();
 				ua.setTerm(term);
-				ua.setAssociations(new ArrayList<Tag>());
+				ua.setAssociations(new ArrayList<TagWithCount>());
 			}
-			ua.getAssociations().add(entityManager.find(Tag.class, row[1]));
+			Tag association = entityManager.find(Tag.class, row[1]);
+			ua.getAssociations().add(new TagWithCount(association, (Long) row[2]));
 		}
 	}
 }
