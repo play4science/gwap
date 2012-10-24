@@ -34,15 +34,15 @@ public class Register implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-	@Logger					 private Log log;
+	@Logger					 protected Log log;
 	@In                      private EntityManager entityManager;
-	@In                      private FacesMessages facesMessages;
+	@In                      protected FacesMessages facesMessages;
 	@In                      private Credentials credentials;
 	@In                      private Identity identity; 
-	@In	@Out                 private Person person;
+	@In	@Out                 protected Person person;
 	@In                      private LocaleSelector localeSelector;
 	@In(create = true)		 private Renderer renderer;
-	@Length(min=6, max=20)   private String password;
+	@Length(min=6, max=30)   private String password;
 	private String passwordConfirmation;
 	
 	public String createPerson() {

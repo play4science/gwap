@@ -50,18 +50,17 @@
 			            			            
 			            <s:decorate id="externalUsernameField" template="/layout/edit.xhtml">
 				            <ui:define name="label">
-			                	<h:outputText value="#{messages['person.externalUsername']}" />
+			                	<h:outputText value="#{messages['person.externalUsername']}" styleClass="requiredField" />
 			                </ui:define>
-			                <h:inputText id="externalUsername" value="#{person.externalUsername}" />
+			                <h:inputText id="externalUsername" value="#{person.externalUsername}" required="true" />
 			            </s:decorate>
 			            
-			            <s:decorate id="noteField" template="/layout/edit.xhtml">
-				            <ui:define name="label">
-			                	<h:outputText value="#{messages['person.note']}" />
-			                </ui:define>
-			                <h:inputText id="note" value="#{person.note}" />
+			            <s:decorate id="externalPasswordField" template="/layout/edit.xhtml">
+							<ui:define name="label">
+				            	<h:outputText value="#{messages['register.externalPassword']}" styleClass="requiredField" />
+							</ui:define>
+			                <h:inputSecret id="externalPassword" value="#{elearnRegister.externalPassword}" required="true" />
 			            </s:decorate>
-			            <h:outputText value="#{messages['register.noteHint']}" styleClass="passwordHint" />
 			            
 			            <hr class="form" />  
 			                   
@@ -69,7 +68,7 @@
 							<ui:define name="label">
 				            	<h:outputText value="#{messages['person.password']}" styleClass="requiredField" />
 							</ui:define>
-			                <h:inputSecret id="password" value="#{register.password}" required="true" />
+			                <h:inputSecret id="password" value="#{elearnRegister.password}" required="true" />
 			            </s:decorate>
 			            <h:outputText value="#{messages['register.passwordHint']}" styleClass="passwordHint" />
 			            
@@ -77,7 +76,7 @@
 							<ui:define name="label">
 				            	<h:outputText value="#{messages['person.passwordConfirmation']}" styleClass="requiredField" />
 			    			</ui:define>
-			                <h:inputSecret id="passwordConfirmation" value="#{register.passwordConfirmation}" required="true" />
+			                <h:inputSecret id="passwordConfirmation" value="#{elearnRegister.passwordConfirmation}" required="true" />
 			            </s:decorate>
 			            
 			            <hr class="form" />
@@ -108,7 +107,7 @@
 						<hr class="form" />
 						
 						<div class="actionButtons">
-							<h:commandButton id="submit" value="" action="#{register.createPerson}" title="#{messages['buttonTitle.register']}" styleClass="buttonRegister" />
+							<h:commandButton id="submit" value="" action="#{elearnRegister.createPerson}" title="#{messages['buttonTitle.register']}" styleClass="buttonRegister" />
 						</div>
 					</h:panelGrid>
 	    		</h:form>
