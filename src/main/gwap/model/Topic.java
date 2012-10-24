@@ -29,7 +29,9 @@ import org.jboss.seam.annotations.Scope;
 	@NamedQuery(name="topic.all", 
 				query="from Topic order by name"),
 	@NamedQuery(name="topic.enabled",
-				query="from Topic where enabled=true order by name")
+				query="from Topic where enabled=true order by name"),
+	@NamedQuery(name="topic.byName",
+				query="from Topic where name = :name")
 })
 /**
  * A topic is a combination of resources and can be used to group

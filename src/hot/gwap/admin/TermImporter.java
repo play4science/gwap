@@ -9,11 +9,11 @@
 package gwap.admin;
 
 import gwap.model.Tag;
+import gwap.model.Topic;
 import gwap.model.resource.Term;
 import gwap.wrapper.ImportedTerm;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
@@ -34,6 +34,8 @@ import org.jboss.seam.log.Log;
 
 import au.com.bytecode.opencsv.CSVReader;
 
+import com.google.common.base.Strings;
+
 /**
  * @author Fabian Kneißl
  */
@@ -52,6 +54,7 @@ public class TermImporter {
 	private String contentType;
 	private boolean ignoreFirstLine = false;
 	private List<ImportedTerm> terms;
+	private boolean termsEnabled = true;
 	
 	public void upload() {
 		if (data == null) {
@@ -66,32 +69,33 @@ public class TermImporter {
 			if (ignoreFirstLine)
 				csvReader.readNext();
 			while ((line = csvReader.readNext()) != null) {
-				// "term", "associations", "rating"
-				//    0           1           2
+				// "topic", "rating", "term", "associations"
+				//    0         1       2          3
 				ImportedTerm t = new ImportedTerm();
-				t.setTerm(line[0].trim());
-				String[] associationsArray = line[1].split(", *");
+				t.setTerm(line[2].trim());
+				String[] associationsArray = line[3].split(", *");
 				List<String> associations = new ArrayList<String>();
 				for (String association : associationsArray) {
 					associations.add(association.trim());
 				}
 				t.setAssociations(associations);
-				t.setRating(Integer.parseInt(line[2]));
-				
+				t.setRating(Integer.parseInt(line[1]));
+				t.setTopic(line[0].trim());
 				terms.add(t);
 			}
 			facesMessages.add("Prepared #0 statements, please review them for correctness and submit if correct.", terms.size());
 			log.info("#0 statements parsed", terms.size());
-		} catch (IOException e) {
+		} catch (Exception e) {
 			terms = null;
 			log.error("Error parsing csv file #0", e, name);
+			facesMessages.add("Error parsing csv file: #0", e);
 		}
 	}
 	
 	public void doImport() {
 		for (ImportedTerm t : terms) {
 			Term term = new Term();
-			term.setEnabled(true);
+			term.setEnabled(termsEnabled);
 			term.setRating(t.getRating());
 			term.setTag(findOrCreateTag(t.getTerm()));
 			entityManager.persist(term);
@@ -101,14 +105,32 @@ public class TermImporter {
 				confirmedTags.add(findOrCreateTag(association));
 			}
 			
+			if (!Strings.isNullOrEmpty(t.getTopic())) {
+				Topic topic = findOrCreateTopic(t.getTopic());
+				topic.getResources().add(term);
+			}
 		}
 		terms = null;
 	}
 	
+	private Topic findOrCreateTopic(String name) {
+		Query q = entityManager.createNamedQuery("topic.byName");
+		q.setParameter("name", name);
+		Topic topic;
+		try {
+			topic = (Topic) q.getSingleResult();
+		} catch (NoResultException e) {
+			topic = new Topic();
+			topic.setName(name);
+			entityManager.persist(topic);
+		}
+		return topic;
+	}
+
 	private Tag findOrCreateTag(String name) {
 		Query q = entityManager.createNamedQuery("tag.tagByNameAndLanguage");
 		q.setParameter("name", name);
-		q.setParameter("language", "de");
+		q.setParameter("language", localeSelector.getLanguage());
 		Tag tag;
 		try {
 			tag = (Tag) q.getSingleResult();
@@ -154,6 +176,12 @@ public class TermImporter {
 	}
 	public List<ImportedTerm> getTerms() {
 		return terms;
+	}
+	public boolean isTermsEnabled() {
+		return termsEnabled;
+	}
+	public void setTermsEnabled(boolean termsEnabled) {
+		this.termsEnabled = termsEnabled;
 	}
 	
 }

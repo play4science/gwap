@@ -15,6 +15,7 @@ import java.util.List;
  */
 public class ImportedTerm {
 	private String term;
+	private String topic;
 	private Integer rating;
 	private List<String> associations;
 
@@ -27,6 +28,14 @@ public class ImportedTerm {
 
 	public void setTerm(String term) {
 		this.term = term;
+	}
+
+	public String getTopic() {
+		return topic;
+	}
+
+	public void setTopic(String topic) {
+		this.topic = topic;
 	}
 
 	public Integer getRating() {
