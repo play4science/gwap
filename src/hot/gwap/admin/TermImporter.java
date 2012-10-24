@@ -122,6 +122,7 @@ public class TermImporter {
 		} catch (NoResultException e) {
 			topic = new Topic();
 			topic.setName(name);
+			topic.setEnabled(termsEnabled);
 			entityManager.persist(topic);
 		}
 		return topic;
