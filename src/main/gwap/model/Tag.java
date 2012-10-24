@@ -86,7 +86,7 @@ public class Tag implements Serializable {
 	@OneToMany(mappedBy="tag")	private List<Tagging> taggings = new ArrayList<Tagging>();
 	@ManyToMany(mappedBy="opponentTags") private List<GameRound> gameRounds = new ArrayList<GameRound>();
 
-	@Length(min=1,max=50)
+	@Length(min=1)
 	private String name;
 	private Boolean blacklisted;
 	private String language;
