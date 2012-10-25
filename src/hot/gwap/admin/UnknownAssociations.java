@@ -83,11 +83,12 @@ public class UnknownAssociations implements Serializable {
 		@SuppressWarnings("unchecked")
 		List<Object[]> termTagCount = q.getResultList();
 		resultList = new ArrayList<UnknownAssociation>();
-		UnknownAssociation ua = new UnknownAssociation();
+		UnknownAssociation ua = null;
 		for (Object[] row : termTagCount) {
 			Term term = entityManager.find(Term.class, row[0]);
-			if (ua.getTerm() == null || !ua.getTerm().getId().equals(term.getId())) {
-				resultList.add(ua);
+			if (ua == null || ua.getTerm() == null || !ua.getTerm().getId().equals(term.getId())) {
+				if (ua != null)
+					resultList.add(ua);
 				ua = new UnknownAssociation();
 				ua.setTerm(term);
 				ua.setAssociations(new ArrayList<TagWithCount>());
@@ -95,6 +96,8 @@ public class UnknownAssociations implements Serializable {
 			Tag association = entityManager.find(Tag.class, row[1]);
 			ua.getAssociations().add(new TagWithCount(association, (Long) row[2]));
 		}
+		if (ua != null)
+			resultList.add(ua);
 	}
 	
 	public boolean hasEntries() {
