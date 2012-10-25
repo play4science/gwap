@@ -131,21 +131,29 @@ public class HighscoreBean implements Serializable {
 	
 	public List<Highscore> updateHighscoreLastMonth(GameType gameType) {
 		Date now = new Date();
-		Calendar calendar = new GregorianCalendar();
-		calendar.setTime(now);
-		calendar.set(Calendar.DAY_OF_MONTH, 1);
-		calendar.set(Calendar.HOUR_OF_DAY, 0);
-		calendar.set(Calendar.MINUTE, 0);
-		calendar.set(Calendar.SECOND, 0);
 		
-		// Month before
-		calendar.add(Calendar.MONTH, -1);
-		Date beginOfLastMonth = calendar.getTime();
+		// first Day of this month
+		Calendar calendarUpper= new GregorianCalendar();
+		calendarUpper.setTime(now);
+		calendarUpper.set(Calendar.DAY_OF_MONTH, 1);
+		calendarUpper.set(Calendar.HOUR_OF_DAY, 0);
+		calendarUpper.set(Calendar.MINUTE, 0);
+		calendarUpper.set(Calendar.SECOND, 0);
+		Date beginOfThisMonth = calendarUpper.getTime();
+		
+		// first Day of last month
+		Calendar calendarLower = (Calendar) calendarUpper.clone();
+		calendarLower.add(Calendar.MONTH, -1);
+		Date beginOfLastMonth = calendarLower.getTime();
 
-		return updateHighscoreByInterval(gameType, beginOfLastMonth);
+		return updateHighscoreByInterval(gameType, beginOfLastMonth, beginOfThisMonth);
 	}
 	
 	public List<Highscore> updateHighscoreByInterval(GameType gameType, Date dateLowerBound) {
+		return updateHighscoreByInterval(gameType, dateLowerBound, new Date());
+	}
+	
+	public List<Highscore> updateHighscoreByInterval(GameType gameType, Date dateLowerBound, Date dateUpperBound) {
 		log.info("Updating Highscore");
 
 		Query query;
@@ -158,7 +166,7 @@ public class HighscoreBean implements Serializable {
 		
 		query.setParameter("gametype", gameType);
 		
-		query.setParameter("dateUpperBound", new Date());
+		query.setParameter("dateUpperBound", dateUpperBound);
 		query.setParameter("dateLowerBound", dateLowerBound);
 		query.setMaxResults(5);
 		List<Highscore> res = query.getResultList();
