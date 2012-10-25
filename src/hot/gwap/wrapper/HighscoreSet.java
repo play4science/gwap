@@ -13,6 +13,7 @@ public class HighscoreSet {
 	@DataModel              private List<Highscore> highscoreAll;
 	@DataModel              private List<Highscore> highscoreDaily;
 	@DataModel              private List<Highscore> highscoreMonthly;
+	@DataModel              private List<Highscore> highscoreLastMonth;
 							private GameType gameType;
 							
 	public List<Highscore> getHighscoreAll() {
@@ -26,6 +27,12 @@ public class HighscoreSet {
 	}
 	public void setHighscoreMonthly(List<Highscore> highscoreMonthly) {
 		this.highscoreMonthly = highscoreMonthly;
+	}
+	public List<Highscore> getHighscoreLastMonth() {
+		return highscoreLastMonth;
+	}
+	public void setHighscoreLastMonth(List<Highscore> highscoreLastMonth) {
+		this.highscoreLastMonth = highscoreLastMonth;
 	}
 	public List<Highscore> getHighscoreDaily() {
 		return highscoreDaily;

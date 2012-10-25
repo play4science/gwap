@@ -57,6 +57,7 @@ public class HighscoreBean implements Serializable {
 	@DataModel               private List<Highscore> highscoreAll;
 	@DataModel               private List<Highscore> highscoreDaily;
 	@DataModel               private List<Highscore> highscoreMonthly;
+	@DataModel               private List<Highscore> highscoreLastMonth;
 	
 	public List<HighscoreSet> getHighscores()
 	{
@@ -86,6 +87,7 @@ public class HighscoreBean implements Serializable {
 			} else {
 //				set.setHighscoreAll(updateHighscore(g));
 				set.setHighscoreMonthly(updateHighscoreMonthly(g));
+				set.setHighscoreLastMonth(updateHighscoreLastMonth(g));
 				set.setHighscoreDaily(updateHighscoreDaily(g));
 			}
 			highscores.add(set);
@@ -125,6 +127,22 @@ public class HighscoreBean implements Serializable {
 		Date beginOfMonth = calendar.getTime();
 
 		return updateHighscoreByInterval(gameType, beginOfMonth);
+	}
+	
+	public List<Highscore> updateHighscoreLastMonth(GameType gameType) {
+		Date now = new Date();
+		Calendar calendar = new GregorianCalendar();
+		calendar.setTime(now);
+		calendar.set(Calendar.DAY_OF_MONTH, 1);
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		
+		// Month before
+		calendar.add(Calendar.MONTH, -1);
+		Date beginOfLastMonth = calendar.getTime();
+
+		return updateHighscoreByInterval(gameType, beginOfLastMonth);
 	}
 	
 	public List<Highscore> updateHighscoreByInterval(GameType gameType, Date dateLowerBound) {

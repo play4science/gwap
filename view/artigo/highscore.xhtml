@@ -30,6 +30,11 @@
 							<f:facet name="header"><h:outputText value="#{messages['score.monthly']}" /></f:facet>
 							<ui:include src="/widget/highscoreInsideTable.xhtml" />
 						</rich:dataTable>
+
+				 		<rich:dataTable styleClass="highscoreTable" summary="Highscore" value="#{_highscore.highscoreLastMonth}" var="_score" rendered="#{_highscore.highscoreLastMonth.size() > 0}">
+							<f:facet name="header"><h:outputText value="#{messages['score.lastMonth']}" /></f:facet>
+							<ui:include src="/widget/highscoreInsideTable.xhtml" />
+						</rich:dataTable>
 						
 	        		</rich:tab>
 				</c:forEach>
