@@ -19,7 +19,6 @@ import java.util.GregorianCalendar;
 
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import org.jboss.seam.ScopeType;
@@ -65,10 +64,10 @@ public class ResourceBean implements Serializable {
 	@Observer("updateResource")
 	public void updateResource() {
 		String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
-		if (viewId.equals("/home.xhtml")) {
-			dailyResource(); 
-		} else if (viewId.startsWith("/custom/")) {
-			updateRandomResourceBySource();
+		if (viewId.equals("/home.xhtml") || viewId.startsWith("/custom/")) {
+			dailyResource();
+			if (resource == null) // Fallback option if no images with teasers exist
+				updateRandomResource();
 		} else if (viewId.equals("/tagging.xhtml")) {
 			if (resourceId == null) {
 				updateLeastTaggedResource();
@@ -136,11 +135,8 @@ public class ResourceBean implements Serializable {
 		int dayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
 		int year = calendar.get(Calendar.YEAR);
 
-		try {
+		if (results.size() > 0)
 			resource = results.get((dayOfYear * year) % results.size());
-		} catch (NoResultException e) {
-			facesMessages.add("#{messages['general.noResource']}");
-		}
 	}
 	
 	public void updateLeastTaggedResource() {
@@ -179,21 +175,7 @@ public class ResourceBean implements Serializable {
 		
 		// Resources with Desciptions
 		try {
-			Query query = entityManager.createNamedQuery("artResource.random");
-			query.setMaxResults(1);
-			this.resource = (ArtResource) query.getSingleResult();
-		} catch(Exception e) {
-			facesMessages.add("#{messages['general.noResource']}");
-		}
-	}
-	
-	public void updateRandomResourceBySource() {
-		log.info("Updating Random Resource");
-		
-		// Resources with Desciptions
-		try {
 			Query query = customSourceBean.query("artResource.random");
-			query.setParameter("source", customSourceBean.getCustomSource());
 			query.setMaxResults(1);
 			this.resource = (ArtResource) query.getSingleResult();
 		} catch(Exception e) {
