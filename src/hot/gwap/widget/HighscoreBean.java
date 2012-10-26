@@ -182,7 +182,7 @@ public class HighscoreBean implements Serializable {
 			if (!containedTopX) {
 				Query queryPerson = entityManager.createNamedQuery("highscore.byPersonAndInterval");
 				queryPerson.setParameter("gametype", gameType);
-				queryPerson.setParameter("dateUpperBound", new Date());
+				queryPerson.setParameter("dateUpperBound", dateUpperBound);
 				queryPerson.setParameter("dateLowerBound", dateLowerBound);
 				queryPerson.setParameter("pid", person.getId());
 				try {
