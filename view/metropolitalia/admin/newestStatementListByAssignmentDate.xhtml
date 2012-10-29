@@ -13,7 +13,7 @@
 		<div id="content">
 		<h:form>
 			<h:selectOneMenu
-				value="#{mitAdminStatementListByAssignmentDate.maximumResults}"
+				value="#{mitStatementListByAssignmentDate.maximumResults}"
 				id="dateRestriction" onchange="submit()">
 				<f:selectItem itemLabel="10" itemValue="10" />
 				<f:selectItem itemLabel="20" itemValue="20" />
@@ -22,7 +22,7 @@
 				
 			</h:selectOneMenu>
 			<rich:dataTable id="newestStatementList"
-				value="#{mitAdminStatementListByAssignmentDate.resultList}"
+				value="#{mitStatementListByAssignmentDate.resultList}"
 				var="_resource">
 				<ui:include src="/widget/newestStatementTable.xhtml">
 					<ui:param name="locationAssignment" value="#{_resource}" />

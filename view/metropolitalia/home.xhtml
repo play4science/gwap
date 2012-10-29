@@ -11,34 +11,43 @@
 	<ui:define name="body">
 		<div id="related">
 			<ui:include src="layout/menu.xhtml" />
+			<ui:include src="widget/newestStatementList.xhtml" />
 		</div>
 	
 		<div id="content">
 			<div id="hideGmap"/>
-			<ui:include src="/widget/googlemap.xhtml" />
+			<ui:include src="widget/statementDetail.xhtml">
+				<ui:param name="statement" value="#{mitStatementListByAssignmentDate.selectedStatement}" />
+			</ui:include>
 			<a4j:loadScript src="javascript/infobubble.js" />
 			<script type="text/javascript">
-			
-			map.gmapOptions['disableDefaultUI'] = true;
-			map.gmapOptions['disableDoubleClickZoom'] = true;
-			map.gmapOptions['draggable'] = false;
-			map.gmapOptions['scrollwheel'] = false;
-
 			jQuery('#hideGmap').click(function() { window.location.href = "recognize.html"; });
 			jQuery('#hideGmap').css("cursor", "pointer");
+			jQuery('#betScoringLegend').hide();
+			function hideTeaser() {
+				jQuery('#hideGmap').hide();
+				jQuery('#statementsTeaser').hide();
+				jQuery('#betScoringLegend').show();
+				for (var i = 0; i &lt; infobubbles.length; i++) {
+					infobubbles[i].close();
+				}
+			}
+			var infobubbles = [];
 			</script>
 			<ui:repeat var="_statement" value="#{statementsTeaser.statementList}">
 				<script type="text/javascript">
 				__addLoadEvent(function() {
-					new InfoBubble({
+					var bubble = new InfoBubble({
 						content: "#{_statement.statement.text}", 
 						position: new google.maps.LatLng(#{_statement.geoPoint.latitude}, #{_statement.geoPoint.longitude}),
 						map: gmap, hideCloseButton: true, disableAutoPan: true, arrowPosition:60, arrowStyle:1
-					}).open();
+					});
+					infobubbles.push(bubble);
+					bubble.open();
 				});
 				</script>
 			</ui:repeat>
-			<div style="margin-top:5px;">
+			<div style="margin-top:5px;" id="statementsTeaser">
 				<h:outputText value="#{statementsTeaser.teaser}"/>
 			</div>
 		</div>
