@@ -56,12 +56,12 @@ a:hover                                 { color: #0090FF; };
 #navAdmin div                           { line-height:1.1em }
 #navAdmin div a                         { color:#000; line-height:1.1em; text-transform:uppercase; text-decoration:none; font-weight:bold; }
 #navAdmin div a:hover	                { background:#b8c9e1 }
-#navAdmin li			            	{ margin-left: 10px; line-height:21px; padding:0; background:url(../img/arrowBig.gif) no-repeat 0 0; margin-bottom:.25em }
-#navAdmin li a           				{ font-size:0.7em; color:#000; line-height:22px; text-decoration:none; padding-left:30px; margin:0; }
+#navAdmin li			            	{ font-size:0.7em; margin-left: 10px; line-height:21px; padding:0; background:url(../img/arrowBig.gif) no-repeat 0 0; margin-bottom:.25em }
+#navAdmin li a           				{ color:#000; line-height:22px; text-decoration:none; padding-left:30px; margin:0; }
 
 #navSub, #navMain, .navSub              { width:260px; margin:20px 0 25px 0 }
-#navSub li, #navMain li, .navSub li    { line-height:21px; padding:0; background:url(../img/arrowBig.gif) no-repeat 0 0; margin-bottom:.25em }
-#navSub a, #navMain a, .navSub a       { font-size:0.7em; color:#000; line-height:22px; text-decoration:none; padding-left:30px; margin:0; text-transform:uppercase; font-weight:bold }
+#navSub li, #navMain li, .navSub li    { font-size:0.7em; line-height:21px; padding:0; background:url(../img/arrowBig.gif) no-repeat 0 0; margin-bottom:.25em }
+#navSub a, #navMain a, .navSub a       { color:#000; line-height:22px; text-decoration:none; padding-left:30px; margin:0; text-transform:uppercase; font-weight:bold }
 #related h1                             { font-size:0.8em; color:#000; line-height:22px; text-decoration:none; margin:10px 0 3px 0; text-transform:uppercase; font-weight:bold }
 
 
