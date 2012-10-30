@@ -17,33 +17,24 @@
 			<s:link view="/newstatement.xhtml" value="#{messages['bets.new']}"></s:link>
 		</s:fragment>
 		<s:fragment rendered="#{!empty(mitBetList)}">
-	    	<div style="margin-bottom: 10px;">
+	    	<h2>
 				<h:outputText value="#{messages['menu.bets']}:" />
-	    	</div>
+	    	</h2>
+			<p4s:pagination viewId="/alphabetic.xhtml" style="margin:0 0 10px 0;"/>
 		   	<rich:dataTable value="#{mitBetList.betList}" var="_bet" id="bets" style="width:100%; float: left;" styleClass="statementList">
-		    <rich:column>
-		    	<table>
-			    	<tr>
-			    		<td style="width: 100%">
-				    		<div id="betDetailList">
-				    			<div style="float: right" >
-				    				<a4j:commandLink action="#{mitBetList.showDetail(_bet.id)}" reRender= "betDetails,paginationPanel">
-				    				<h:outputFormat value="#{messages['game.recognizeScoring.list.points']}" styleClass="coins">
-										<f:param value="#{_bet.score}"/>
-									</h:outputFormat>
-									</a4j:commandLink>
-									
-								</div>
-				    			<div style="width: 70%" id="#{_bet.id}">
-				    				<a4j:commandLink action="#{mitBetList.showDetail(_bet.id)}"  reRender= "betDetails,paginationPanel"><h:outputText value="#{_bet.resource.asText()}" /></a4j:commandLink>
-				    			</div>
-				    		</div>
-			    		</td>
-			    		<td>
-			    		</td>
-			    	</tr>
-		    	</table>
-			</rich:column>
+			    <rich:column>
+	    			<div style="float: right" >
+	    				<a4j:commandLink action="#{mitBetList.showDetail(_bet.id)}" reRender= "betDetails,paginationPanel">
+	    				<h:outputFormat value="#{messages['game.recognizeScoring.list.points']}" styleClass="coins">
+							<f:param value="#{_bet.score}"/>
+						</h:outputFormat>
+						</a4j:commandLink>
+						
+					</div>
+	    			<div style="width: 70%" id="#{_bet.id}">
+	    				<a4j:commandLink action="#{mitBetList.showDetail(_bet.id)}"  reRender= "betDetails,paginationPanel"><h:outputText value="#{_bet.resource.asText()}" /></a4j:commandLink>
+	    			</div>
+				</rich:column>
 			</rich:dataTable>
 			<p4s:pagination viewId="/bets.xhtml" style="margin:10px 0 0 0;"/>	
 			<rich:panel id="paginationPanel">

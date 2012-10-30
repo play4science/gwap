@@ -22,9 +22,9 @@
 			<s:link view="/newstatement.xhtml" value="#{messages['statements.new']}"/>
 		</rich:panel>
 	    <div id="searchResults">
-	    	<div style="margin-bottom: 10px;">
+	    	<h2>
 				<h:outputText value="#{messages['search.results']}" rendered="#{!mitSearchBean.emptyResult}" />
-	    	</div>
+	    	</h2>
 			<h:form>
 				<p4s:pagination viewId="/solrSearchResults.xhtml" style="margin:0 0 10px 0;"/>
 				<rich:dataTable id="resultsList"

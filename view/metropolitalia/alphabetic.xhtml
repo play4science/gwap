@@ -32,9 +32,9 @@
 			<s:link view="/newstatement.xhtml" value="#{messages['statements.new']}"/>
 		</rich:panel>
 	    <div id="searchResults">
-	    	<div style="margin-bottom: 10px;">
-				<h:outputText value="#{messages['search.alphabetic.results']} #{queryBean.letter}" rendered="#{!mitAlphabeticSearchBean.emptyResult}" />
-	    	</div>
+	    	<h2>
+				<h:outputText value="#{messages['search.alphabetic.results']} #{queryBean.letter}:" rendered="#{!mitAlphabeticSearchBean.emptyResult}" />
+	    	</h2>
 			<h:form>
 				<p4s:pagination viewId="/alphabetic.xhtml" style="margin:0 0 10px 0;"/>
 				<rich:dataTable id="resultsList"

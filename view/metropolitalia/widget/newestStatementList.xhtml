@@ -8,11 +8,11 @@
     xmlns:rich="http://richfaces.org/rich"
     xmlns:a4j="http://richfaces.org/a4j">
 
-   	<div style="margin: 10px 0 10px 0;">
+   	<h2>
 		<h:outputText value="#{messages['widget.newestStatementList.title']}"/>
-   	</div>
+   	</h2>
    	<h:form>
-	<rich:dataTable id="latestStatementList" styleClass="statementList" value="#{mitStatementListByAssignmentDate.resultList}" var="_resource" rows="5">
+	<rich:dataTable id="latestStatementList" styleClass="statementList" value="#{mitStatementListByAssignmentDate.resultList}" var="_resource" rows="7">
 		<rich:column>
 			<a4j:commandLink value="#{_resource.resource.text}" action="#{mitStatementListByAssignmentDate.showDetail(_resource.id)}" reRender="searchResultDetail" oncomplete="hideTeaser()" styleClass="link" />
 		</rich:column>

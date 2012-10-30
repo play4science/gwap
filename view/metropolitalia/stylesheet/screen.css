@@ -27,9 +27,9 @@ body                                    { padding:0px 24px 220px 24px; backgroun
 #navLanguage                            { float:left }
 #navHeader                              { margin-top: .5em; font-size: .8em; }
 #search                                 { float:left }
-#logo                                   { margin: 12px 0 50px 0; width: 300px; }
+#logo                                   { margin: 12px 0 50px 0; width: 300px; font-weight: bold }
 #ad                                     { float:right; margin:24px 0 }
-#related                                { float:left; width:300px; margin-right:24px; display:inline; font-size: 1.1em }
+#related                                { float:left; width:300px; margin-right:24px; display:inline }
 #content,                                
 #content-image                          { display:inline }
 #content                                { float:left; margin-top: 40px; width:650px; }
@@ -46,27 +46,28 @@ a:hover                                 { color: #0090FF; };
 #navLanguage li.active a                { background:#b8c9e1; font-size:1.2em }
 
 #navHeader li                           { float:left; margin-right:2em }
-#navHeader li a                         { font-size:1em; color:#000; font-weight:bold; text-transform:uppercase; text-decoration:none }
+#navHeader li a                         { color:#000; font-weight:bold; text-transform:uppercase; text-decoration:none }
 #navHeader .coins                       { font-weight: bold; text-transform:uppercase; }
 
 #ad p                                   { float:left; margin-right:2em; text-transform:uppercase; font-weight:bold; font-size:.9em; padding-top:.75em }
 #ad img                                 { float:left }
 
 #navAdmin 								{ margin: 10px }
-#navAdmin div                           { line-height:1.1em }
-#navAdmin div a                         { color:#000; line-height:1.1em; text-transform:uppercase; text-decoration:none; font-weight:bold; }
+#navAdmin div a                         { color:#000; text-transform:uppercase; text-decoration:none; font-weight:bold; }
 #navAdmin div a:hover	                { background:#b8c9e1 }
-#navAdmin li			            	{ font-size:0.7em; margin-left: 10px; line-height:21px; padding:0; background:url(../img/arrowBig.gif) no-repeat 0 0; margin-bottom:.25em }
+#navAdmin li			            	{ font-size:0.9em; margin-left: 10px; line-height:1.2em; padding:0; background:url(../img/arrowBig.gif) no-repeat 0 0; margin-bottom:.25em }
 #navAdmin li a           				{ color:#000; line-height:22px; text-decoration:none; padding-left:30px; margin:0; }
 
 #navSub, #navMain, .navSub              { width:260px; margin:20px 0 25px 0 }
-#navSub li, #navMain li, .navSub li    { font-size:0.7em; line-height:21px; padding:0; background:url(../img/arrowBig.gif) no-repeat 0 0; margin-bottom:.25em }
-#navSub a, #navMain a, .navSub a       { color:#000; line-height:22px; text-decoration:none; padding-left:30px; margin:0; text-transform:uppercase; font-weight:bold }
-#related h1                             { font-size:0.8em; color:#000; line-height:22px; text-decoration:none; margin:10px 0 3px 0; text-transform:uppercase; font-weight:bold }
+#navSub li, #navMain li, .navSub li    { font-size:0.9em; line-height:1.2em; padding:0; background:url(../img/arrowBig.gif) no-repeat 0 0; margin-bottom:.25em }
+#navSub a, #navMain a, .navSub a        { color:#000; line-height:1.2em; text-decoration:none; padding-left:30px; margin:0; text-transform:uppercase; font-weight:bold }
+#related h1                             { font-size:1.1em; color:#000; line-height:1.2em; text-decoration:none; margin:10px 0 3px 0; text-transform:uppercase; font-weight:bold }
+#related h2                             { font-size:1.1em; margin: .7em 0 .5em 0; font-weight: normal }
 
 
 #related .statementList a				{ color:black; text-decoration:none;  }
 #related .statementList a:hover			{ background:#B8C9E1; text-decoration:none;  }
+#related .statementList div             { padding-top:1px }
 .link									{ color:black; }
 .link a:hover							{ background: #B8C9E1; }
 
