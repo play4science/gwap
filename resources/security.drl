@@ -57,10 +57,18 @@ then
 	c.grant();
 end
 
-rule ArtigoCanAccessDetailedHighscore
+rule ArtigoCanAccessDetailedHighscoreKunsthalleKarlsruhe
 when
 	c: PermissionCheck(target == "artigo", action == "highscore-kunsthalle-karlsruhe")
 	Role(name == "artigo.kunsthalle-karlsruhe")
+then
+	c.grant();
+end
+
+rule ArtigoCanAccessDetailedHighscoreAmherstCollege
+when
+	c: PermissionCheck(target == "artigo", action == "highscore-amherst-college")
+	Role(name == "artigo.amherst-college")
 then
 	c.grant();
 end
