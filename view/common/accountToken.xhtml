@@ -36,7 +36,7 @@
 			                    	<h:inputSecret id="passwordConfirmation" value="#{accountToken.passwordConfirmation}" required="true" />
 			                    </s:decorate>
 						        <div class="actionButtons">
-						            <h:commandButton id="submit" value="#{messages['profile.doUpdatePassword']}" action="#{accountToken.updatePassword()}"/>
+						            <h:commandButton id="submit" styleClass="buttonSave" value="#{messages['profile.doUpdatePassword']}" action="#{accountToken.updatePassword()}"/>
 						        </div>
 			               	</h:panelGrid>
 						</h:form>

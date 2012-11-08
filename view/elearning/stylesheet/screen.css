@@ -897,6 +897,7 @@ input[type="submit"].buttonDelete:hover {
 }
 
 input[type="submit"].buttonSave {
+    color: transparent;
 	display: block;
 	width: 50px;
 	height: 50px;
