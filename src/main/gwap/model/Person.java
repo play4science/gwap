@@ -51,7 +51,7 @@ import org.jboss.seam.annotations.security.management.UserRoles;
 		@NamedQuery(name = "person.byEmailVerifyToken", query = "select p from Person p where p.emailVerifyToken = :emailVerifyToken"),
 		@NamedQuery(name = "person.countByUsername", query = "select count(p) from Person p where lower(p.username)=lower(:username)"),
 		@NamedQuery(name = "person.hasRole", query = "select p from Person p join p.roles r where r.role=:role and p.id=:personId"),
-		@NamedQuery(name = "person.hasRole", query = "select p from Person p join p.roles r where r.role=:role and p.id=:personId")
+		@NamedQuery(name = "person.byForenameAndSurname", query = "select p from Person p where p.forename=:forename and p.surname=:surname")
 		//@NamedQuery(name = "person.allPoints", query = "select p.name,sum(la.score) from Person p, LocationAssignment la, StatementCharacterization sc where la.person = p group by p")
 })
 

@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
@@ -358,7 +359,8 @@ public class ArtResource extends Resource {
 	private Person artist;
 	
 	@ManyToOne							private Source source;
-	@OneToMany(mappedBy="resource")		private Set<ArtResourceTitle> titles = new HashSet<ArtResourceTitle>();
+	@OneToMany(mappedBy="resource",
+		cascade=CascadeType.PERSIST)	private Set<ArtResourceTitle> titles = new HashSet<ArtResourceTitle>();
 	@OneToMany(mappedBy="resource")		private List<ArtResourceTeaser> teasers = new ArrayList<ArtResourceTeaser>();
 	
 	private String path;
