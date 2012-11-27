@@ -11,11 +11,14 @@
     template="/layout/adminTemplate.xhtml">
 
     <ui:define name="body">
+		<div id="related">
+			<ui:include src="/layout/logo.xhtml" />
+			<ui:include src="/layout/menu.xhtml" />
+		</div>
 		<div id="content">
 		
 			<h1>ArtResource importer</h1>
 			
-			<div class="contentWrapper">
 			<p>Before uploading the csv file on this page, do the following.</p>
 			<ul>
 			<li>Create a new source in the database, e.g.:		
@@ -97,7 +100,6 @@
 				</h:panelGrid>
 				
 			</h:form>
-			</div>
 		</div>
 		
         <br class="clear" />
