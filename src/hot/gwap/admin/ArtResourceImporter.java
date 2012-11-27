@@ -20,8 +20,6 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -64,67 +62,65 @@ public class ArtResourceImporter {
 			return;
 		}
 		log.info("Uploaded term csv file #0 of size #1", name, size);
-		Source source = entityManager.find(Source.class, sourceId);
 		Reader inFile = new InputStreamReader(new ByteArrayInputStream(data));
-		CSVReader csvReader = new CSVReader(inFile, ',', '"', 1); // reader, separator, delimiter, skip #files
-		String[] line;
-		resources = new ArrayList<ImportedArtResource>();
-		HashSet<String> allFilenames = new HashSet<String>();
+		Source source = entityManager.find(Source.class, sourceId);
 		try {
-			// Skip first line
-			csvReader.readNext();
-			while ((line = csvReader.readNext()) != null) {
-				if (line.length != 9)
-					throw new ImportException("Malformed row, wrong number of columns: '"+line+"'");
-				// "filename", "image id", "title", "artist", "year created", "location", "institution", "origin", "easement"
-				//     0           1          2         3           4              5            6           7          8
-				ImportedArtResource r = new ImportedArtResource();
-				r.setFilename(getContentOf(line, 0));
-				r.setImageID(getContentOf(line, 1));
-				r.setTitle(getContentOf(line, 2));
-				String name = getContentOf(line, 3);
-				// Intelligently find forename and surname
-				Pattern p = Pattern.compile("(.* )?((?:\\p{Lower}+ )?(?:\\p{Alpha}+')?\\p{Upper}[\\p{Alpha}-]+)");
-				Matcher matcher = p.matcher(name);
-				if (!matcher.matches())
-					throw new ImportException("Could not find forename and surname for name '"+name+"'");
-				r.setArtistForename(matcher.group(1));
-				r.setArtistSurname(matcher.group(2));
-				r.setYearCreated(getContentOf(line, 4));
-				r.setLocation(getContentOf(line, 5));
-				r.setInstitution(getContentOf(line, 6));
-				r.setOrigin(getContentOf(line, 7));
-				String easementAsString = getContentOf(line, 8);
-				if (easementAsString != null) {
-					if ("true".equalsIgnoreCase(easementAsString))
-						r.setEasement(true);
-					else if ("false".equalsIgnoreCase(easementAsString))
-						r.setEasement(false);
-					else
-						throw new ImportException("Easement should be either 'true' or 'false' and not '"+easementAsString+"'");
-				}
-				// Check for illegal characters in filename
-				if (!r.getFilename().matches(FILENAME_REGEXP))
-					throw new ImportException("Filename must not contain characters other than "+FILENAME_REGEXP+": "+r.getFilename());
-				// Check for correct year
-				if (r.getYearCreated() != null && !r.getYearCreated().matches("[1-9][0-9]*"))
-					throw new ImportException("Year created does not represent a year: "+r.getYearCreated());
-				// Check if image file exists
-				String filePath = source.getUrl() + r.getFilename();
-				if (!new File(filePath).canRead())
-					throw new ImportException("Image with filename '"+filePath+"' does not exist.");
-				// Check for duplicate filenames
-				if (allFilenames.contains(r.getFilename()))
-					throw new ImportException("Duplicate entry for filename '"+r.getFilename()+"'.");
-				allFilenames.add(r.getFilename());
-				resources.add(r);
-			}
+			parse(inFile, source);
 			facesMessages.add("Prepared #0 resources, please review them for correctness and submit if correct.", resources.size());
 			log.info("#0 statements parsed", resources.size());
 		} catch (Exception e) {
 			resources = null;
 			log.error("Error parsing csv file #0", e, name);
 			facesMessages.add("Error parsing csv file: #0", e);
+		}
+	}
+	
+	public void parse(Reader inFile, Source source) throws Exception {
+		CSVReader csvReader = new CSVReader(inFile, ',', '"', 1); // reader, separator, delimiter, skip #rows
+		String[] line;
+		resources = new ArrayList<ImportedArtResource>();
+		HashSet<String> allFilenames = new HashSet<String>();
+		while ((line = csvReader.readNext()) != null) {
+			// filename, image id, title, artistForename, artistSurname, year created, location, institution, origin, easement
+			//     0        1        2         3               4              5            6           7          8     9
+			if (line.length != 10)
+				throw new ImportException("Malformed row, wrong number of columns: '"+line+"'");
+			ImportedArtResource r = new ImportedArtResource();
+			r.setFilename(getContentOf(line, 0));
+			r.setImageID(getContentOf(line, 1));
+			r.setTitle(getContentOf(line, 2));
+			// Intelligently find forename and surname
+			//Pattern p = Pattern.compile("(?:(.*) )?((?:\\p{Lower}+ )?(?:\\p{Alpha}+')?\\p{Upper}[\\p{Alpha}-]+)");
+			r.setArtistForename(getContentOf(line, 3));
+			r.setArtistSurname(getContentOf(line, 4));
+			r.setYearCreated(getContentOf(line, 5));
+			r.setLocation(getContentOf(line, 6));
+			r.setInstitution(getContentOf(line, 7));
+			r.setOrigin(getContentOf(line, 8));
+			String easementAsString = getContentOf(line, 9);
+			if (easementAsString != null) {
+				if ("true".equalsIgnoreCase(easementAsString))
+					r.setEasement(true);
+				else if ("false".equalsIgnoreCase(easementAsString))
+					r.setEasement(false);
+				else
+					throw new ImportException("Easement should be either 'true' or 'false' and not '"+easementAsString+"'");
+			}
+			// Check for illegal characters in filename
+			if (!r.getFilename().matches(FILENAME_REGEXP))
+				throw new ImportException("Filename must not contain characters other than "+FILENAME_REGEXP+": "+r.getFilename());
+			// Check for correct year
+			if (r.getYearCreated() != null && !r.getYearCreated().matches("[1-9][0-9]*"))
+				throw new ImportException("Year created does not represent a year: "+r.getYearCreated());
+			// Check if image file exists
+			String filePath = source.getUrl() + r.getFilename();
+			if (!new File(filePath).canRead())
+				throw new ImportException("Image with filename '"+filePath+"' does not exist.");
+			// Check for duplicate filenames
+			if (allFilenames.contains(r.getFilename()))
+				throw new ImportException("Duplicate entry for filename '"+r.getFilename()+"'.");
+			allFilenames.add(r.getFilename());
+			resources.add(r);
 		}
 	}
 	
