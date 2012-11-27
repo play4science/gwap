@@ -42,19 +42,19 @@ public class ArtResourceImporterTest {
 		assertEquals(2, importer.getResources().size());
 		
 		ImportedArtResource r = importer.getResources().get(0);
-		assertEquals("image1.jpg", r.getFilename());
-		assertEquals("img1", r.getImageID());
+		assertEquals("image1.jpg", r.getPath());
+		assertEquals("img1", r.getExternalId());
 		assertEquals("Die Ursprünge von ARTigo", r.getTitle());
 		assertEquals("Hubertus", r.getArtistForename());
 		assertEquals("Kohle", r.getArtistSurname());
-		assertEquals("2004", r.getYearCreated());
+		assertEquals("2004", r.getDateCreated());
 		assertEquals("München", r.getLocation());
 		assertEquals("Ludwig-Maximilians-Universität München", r.getInstitution());
 		assertEquals("Privatbesitz", r.getOrigin());
 		assertTrue(r.getEasement());
 		
 		r = importer.getResources().get(1);
-		assertEquals("image2.jpg", r.getFilename());
+		assertEquals("image2.jpg", r.getPath());
 		assertEquals("François", r.getArtistForename());
 		assertEquals("Bry", r.getArtistSurname());
 	}

@@ -1,0 +1,105 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:c="http://java.sun.com/jstl/core"
+    template="/layout/adminTemplate.xhtml">
+
+    <ui:define name="body">
+		<div id="content">
+		
+			<h1>ArtResource importer</h1>
+			
+			<div class="contentWrapper">
+			<p>Before uploading the csv file on this page, do the following.</p>
+			<ul>
+			<li>Create a new source in the database, e.g.:		
+<pre>insert into source (id, url, name, homepage) 
+	values (6, '/usr/local/home/kneissl/testimages/', 'test', null);
+</pre>		
+			</li>
+			<li>Copy the (resized) images to the mentioned url/directory of all cluster servers
+			</li>
+			</ul>	<br /><br />
+			
+			<h:form enctype="multipart/form-data">
+				
+				<s:fileUpload id="file" data="#{adminArtResourceImporter.data}" fileName="#{adminArtResourceImporter.name}" fileSize="#{adminArtResourceImporter.size}" contentType="#{adminArtResourceImporter.contentType}"/>
+				<h:panelGrid columns="2">
+					<s:decorate template="/layout/edit.xhtml">
+						<ui:define name="label"><h:outputText value="Source id" /></ui:define>
+						<h:inputText value="#{adminArtResourceImporter.sourceId}" />
+					</s:decorate>
+				</h:panelGrid>
+				<h:commandButton value="Upload" action="#{adminArtResourceImporter.upload}" /><br/>
+				<h:outputText value="#{adminArtResourceImporter.resources.size()} #{messages['admin.artResourceImport.resourcesLoaded']}" rendered="#{!empty adminArtResourceImporter.resources}" />
+				
+				<rich:dataTable value="#{adminArtResourceImporter.resources}" var="_resource" rendered="#{!empty adminArtResourceImporter.resources}" styleClass="with-borders">
+					
+					<rich:column>
+				    	<f:facet name="header"><h:outputText value="#{messages['image.path']}"/></f:facet>
+				        <h:outputText value="#{_resource.path}" />
+				    </rich:column>
+				    
+					<rich:column>
+				    	<f:facet name="header"><h:outputText value="#{messages['image.externalId']}"/></f:facet>
+				        <h:outputText value="#{_resource.externalId}" />
+				    </rich:column>
+				    
+					<rich:column>
+				    	<f:facet name="header"><h:outputText value="#{messages['image.title']}"/></f:facet>
+				        <h:outputText value="#{_resource.title}" />
+				    </rich:column>
+				    
+					<rich:column>
+				    	<f:facet name="header"><h:outputText value="#{messages['image.artistForename']}"/></f:facet>
+				        <h:outputText value="#{_resource.artistForename}" />
+				    </rich:column>
+				    
+					<rich:column>
+				    	<f:facet name="header"><h:outputText value="#{messages['image.artistSurname']}"/></f:facet>
+				        <h:outputText value="#{_resource.artistSurname}" />
+				    </rich:column>
+				    
+					<rich:column>
+				    	<f:facet name="header"><h:outputText value="#{messages['image.dateCreated']}"/></f:facet>
+				        <h:outputText value="#{_resource.dateCreated}" />
+				    </rich:column>
+				    
+					<rich:column>
+				    	<f:facet name="header"><h:outputText value="#{messages['image.location']}"/></f:facet>
+				        <h:outputText value="#{_resource.location}" />
+				    </rich:column>
+				    
+					<rich:column>
+				    	<f:facet name="header"><h:outputText value="#{messages['image.institution']}"/></f:facet>
+				        <h:outputText value="#{_resource.institution}" />
+				    </rich:column>
+				    
+					<rich:column>
+				    	<f:facet name="header"><h:outputText value="#{messages['image.origin']}"/></f:facet>
+				        <h:outputText value="#{_resource.origin}" />
+				    </rich:column>
+				    
+					<rich:column>
+				    	<f:facet name="header"><h:outputText value="#{messages['image.easement']}"/></f:facet>
+				        <h:outputText value="#{_resource.easement}" />
+				    </rich:column>
+				    				    
+				</rich:dataTable>
+				<h:panelGrid columns="2">
+					<h:commandButton value="do upload" action="#{adminArtResourceImporter.doImport()}" rendered="#{!empty adminArtResourceImporter.resources}" />
+				</h:panelGrid>
+				
+			</h:form>
+			</div>
+		</div>
+		
+        <br class="clear" />
+    </ui:define>
+</ui:composition>

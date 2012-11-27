@@ -9,19 +9,18 @@
 package gwap.wrapper;
 
 import gwap.model.resource.ArtResource;
-import gwap.model.resource.ArtResourceTitle;
 
 
 /**
  * @author  Fabian Kneißl
  */
 public class ImportedArtResource {
-	private String filename;
-	private String imageID;
+	private String path;
+	private String externalId;
 	private String title;
 	private String artistForename;
 	private String artistSurname;
-	private String yearCreated;
+	private String dateCreated;
 	private String location;
 	private String institution;
 	private String origin;
@@ -30,20 +29,20 @@ public class ImportedArtResource {
 	public ImportedArtResource() {
 	}
 
-	public String getFilename() {
-		return filename;
+	public String getPath() {
+		return path;
 	}
 
-	public void setFilename(String filename) {
-		this.filename = filename;
+	public void setPath(String path) {
+		this.path = path;
 	}
 
-	public String getImageID() {
-		return imageID;
+	public String getExternalId() {
+		return externalId;
 	}
 
-	public void setImageID(String imageID) {
-		this.imageID = imageID;
+	public void setExternalId(String externalId) {
+		this.externalId = externalId;
 	}
 
 	public String getTitle() {
@@ -70,12 +69,12 @@ public class ImportedArtResource {
 		this.artistSurname = artistSurname;
 	}
 
-	public String getYearCreated() {
-		return yearCreated;
+	public String getDateCreated() {
+		return dateCreated;
 	}
 
-	public void setYearCreated(String yearCreated) {
-		this.yearCreated = yearCreated;
+	public void setDateCreated(String dateCreated) {
+		this.dateCreated = dateCreated;
 	}
 
 	public String getLocation() {
@@ -112,16 +111,13 @@ public class ImportedArtResource {
 
 	public ArtResource toArtResource() {
 		ArtResource r = new ArtResource();
-		r.setDateCreated(yearCreated);
+		r.setDateCreated(dateCreated);
 		r.setEasement(easement);
-		r.setExternalId(imageID);
+		r.setExternalId(externalId);
 		r.setInstitution(institution);
 		r.setLocation(location);
 		r.setOrigin(origin);
-		r.setPath(filename);
-		ArtResourceTitle arTitle = new ArtResourceTitle();
-		arTitle.setTitle(title);
-		r.getTitles().add(arTitle);
+		r.setPath(path);
 		return r;
 	}
 
