@@ -49,6 +49,7 @@ public class ArtResourceImporter {
 	@Logger					private Log log;
 	@In						private FacesMessages facesMessages;
 	@In                     private LocaleSelector localeSelector;
+	@In(create=true)		private ArtResourceEnabled adminArtResourceEnabled;
 	
 	private byte[] data;
 	private String name;
@@ -149,6 +150,8 @@ public class ArtResourceImporter {
 			artResource.setSource(source);
 			Person artist = findOrCreateArtist(r.getArtistForename(), r.getArtistSurname());
 			artResource.setArtist(artist);
+			
+			adminArtResourceEnabled.updateArtResource(artResource);
 		}
 		facesMessages.add("Successfully imported #0 images.", resources.size());
 		resources = null;

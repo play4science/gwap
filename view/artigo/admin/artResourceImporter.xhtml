@@ -40,7 +40,7 @@
 					</s:decorate>
 				</h:panelGrid>
 				<h:commandButton value="Upload" action="#{adminArtResourceImporter.upload}" /><br/>
-				<h:outputText value="#{adminArtResourceImporter.resources.size()} #{messages['admin.artResourceImport.resourcesLoaded']}" rendered="#{!empty adminArtResourceImporter.resources}" />
+				<h:messages/>
 				
 				<rich:dataTable value="#{adminArtResourceImporter.resources}" var="_resource" rendered="#{!empty adminArtResourceImporter.resources}" styleClass="with-borders">
 					
@@ -96,7 +96,7 @@
 				    				    
 				</rich:dataTable>
 				<h:panelGrid columns="2">
-					<h:commandButton value="do upload" action="#{adminArtResourceImporter.doImport()}" rendered="#{!empty adminArtResourceImporter.resources}" />
+					<h:commandButton value="Do import" action="#{adminArtResourceImporter.doImport()}" rendered="#{!empty adminArtResourceImporter.resources}" />
 				</h:panelGrid>
 				
 			</h:form>
