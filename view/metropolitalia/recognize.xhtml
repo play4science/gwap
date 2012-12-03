@@ -94,7 +94,7 @@ function setActive(name) {
 			</div>
 			
 			<br />
-			<rich:messages styleClass="messages" errorClass="error" infoClass="info" />
+			<rich:messages id="messages" styleClass="messages" errorClass="error" infoClass="info" />
 			
 			<a4j:form id="locationFormLeft" styleClass="right" style="margin:15px 0 5px 0;">
 				<h:commandLink id="skipRound" action="next" styleClass="button">
@@ -115,7 +115,7 @@ function setActive(name) {
 			</div>
 			<ui:include src="recognizeGame/highlighting.xhtml" />
 			<ui:include src="recognizeGame/characterization.xhtml" />
-			<ui:include src="recognizeGame/characterizationResults.xhtml" />
+			<!-- <ui:include src="recognizeGame/characterizationResults.xhtml" /> -->
 		</div>
 		 
 		<br class="clear" />

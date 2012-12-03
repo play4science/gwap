@@ -73,7 +73,7 @@ public class LocationHierarchy implements Serializable {
 	
 	private Float correlation;
 	
-	// Type is defined as to be from location to sublocation
+	// Name is defined as to be from location to sublocation
 	@Enumerated(EnumType.STRING)
 	private LocationHierarchyType type;
 	

@@ -11,9 +11,20 @@
 
 	<div id="characterizationResult" style="display: none;">
 		<a4j:form id="characterizationResultForm">
-			<ui:include src="characterizationMainPanel.xhtml">
-				<ui:param name="disabled" value="true"/>
+			<h2><h:outputText value="#{messages['game.recognize.characterize']}" /></h2>
+			<div class="right">
+				<h:commandLink id="next" action="next" styleClass="button" disabled="#{disabled}" style="#{disabled ? 'display:none' : ''}">
+					<span><span class="checkmark-no"/><h:outputText value="#{messages['game.recognize.skipCharacterization']}"/></span>
+				</h:commandLink>
+			</div>
+			<br class="clear" />
+			<p4s:speechbubble statement="#{statement}" />
+			
+			<ui:include src="/widget/statementCharacterizationResult.xhtml">
+				<ui:param name="characterizations" value="#{mitRecognize.characterizations}"/>
 			</ui:include>
+			
+			<br class="clear" />
 
 			<div class="right">
 				<h:commandLink id="nextButton" action="next" styleClass="button">
@@ -26,13 +37,6 @@
 				$('characterizationResultForm:nextButton').onclick();
 			}
 			</script>
-						
-			<style type="text/css">
-#characterizationResultForm .rich-inslider-track-decor-2 img { width:0; height:8px; background-color: lightblue; }
-#characterizationResultForm .genderSlider .rich-inslider-track-decor-2 img { width:#{mitRecognize.getCharacterizationAsPercentage('gender')}%; }
-#characterizationResultForm .maturitySlider .rich-inslider-track-decor-2 img { width:#{mitRecognize.getCharacterizationAsPercentage('maturity')}%; }
-#characterizationResultForm .cultivationSlider .rich-inslider-track-decor-2 img { width:#{mitRecognize.getCharacterizationAsPercentage('cultivation')}%; }
-			</style>
 		</a4j:form>
 	</div>
 </ui:composition>

@@ -79,15 +79,16 @@
 						</tr>
 						</s:fragment>
 						
-						<s:fragment rendered="#{mitRecognize.getCharacterizationAction(_round) != null}">
+						<s:fragment rendered="#{mitRecognize.getCharacterizationActions(_round) != null}">
 						<tr>
 							<td colspan="2">
-								<ui:include src="/widget/statementCharacterizationOwnValues.xhtml">
-									<ui:param name="statement" value="#{mitRecognize.getCharacterizationAction(_round).statement}" />
+								<ui:include src="/widget/statementCharacterizationResult.xhtml">
+									<ui:param name="statement" value="#{_round.resources[0]}" />
+									<ui:param name="characterizations" value="#{mitRecognize.getCharacterizationActions(_round)}" />
 								</ui:include>
 							</td>
 							<td>
-								<p4s:points value="#{mitRecognize.getCharacterizationAction(_round).score}" />
+								<p4s:points value="#{mitRecognize.getCharacterizationScore(_round)}" />
 							</td>
 						</tr>
 						</s:fragment>

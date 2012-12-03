@@ -51,7 +51,9 @@
 					<h4><h:outputText value="#{messages['admin.statementOverview.characterization']}:" /></h4>
 					 
 					<div id="statementCharacterization" style="margin-top: 20px;">
-						<ui:include src="/widget/statementCharacterization.xhtml"/>
+						<ui:include src="/widget/statementCharacterizationResult.xhtml">
+							<ui:param name="characterizations" value="#{characterizationBean.getByResource(statement)}" />
+						</ui:include>
 					</div>
 					
 					<div id="statementHighlighting" style="margin-top: 20px;">

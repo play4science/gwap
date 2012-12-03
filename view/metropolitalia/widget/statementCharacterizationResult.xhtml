@@ -1,0 +1,37 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- Parameters: characterizations, statement, disabled -->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:t="http://myfaces.apache.org/tomahawk"
+    xmlns:c="http://java.sun.com/jstl/core"
+    xmlns:p4s="http://play4science.org/facelets">
+	
+<ui:repeat var="_characterization" value="#{characterizations}">
+<h:outputText value="#{messagesHelper.getConcatenated('game.recognize.', _characterization.name)}" styleClass="bargraphTitle" />
+<div class="bargraph" style="width:340px;">
+    <ul class="bars">
+		<c:forEach items="#{characterizationBean.getAvailableItems(_characterization.name)}" varStatus="loop" var="item">
+	        <li class="bar#{loop.index+1} navybar" style="height:#{characterizationBean.getResult(statement.id, _characterization.name).getResultAsPercentage(item).intValue()}px">
+	        	<span><h:outputText value="#{characterizationBean.getResult(statement.id, _characterization.name).getResult(item)}"/></span>
+	        </li>
+        </c:forEach>
+    </ul>
+	<ul class="label">
+		<li class="#{_characterization.value == 1 ? 'active' : ''}"><h:outputText value="#{messagesHelper.getConcatenated('game.recognize.', _characterization.name,'.low')}" /></li>
+		<li class="#{_characterization.value == 2 ? 'active' : ''}"><h:outputText value="#{messagesHelper.getConcatenated('game.recognize.', _characterization.name,'.high')}" /></li>
+		<li class="#{_characterization.value == 3 ? 'active' : ''}"><h:outputText value="#{messagesHelper.getConcatenated('game.recognize.', _characterization.name,'.all')}" /></li>
+		<li class="#{_characterization.value == 0 ? 'active' : ''}"><h:outputText value="#{messagesHelper.getConcatenated('game.recognize.', _characterization.name,'.none')}" /></li>
+	</ul>
+	<ul class="y-axis">
+		<li>100%</li><li>50%</li><li>0%</li>
+	</ul>
+</div>
+</ui:repeat>
+		
+</ui:composition>

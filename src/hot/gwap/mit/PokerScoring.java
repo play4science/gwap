@@ -11,21 +11,23 @@ package gwap.mit;
 import gwap.NotEnoughDataException;
 import gwap.model.Person;
 import gwap.model.action.Bet;
+import gwap.model.action.Characterization;
 import gwap.model.action.LocationAssignment;
 import gwap.model.action.StatementAnnotation;
-import gwap.model.action.StatementCharacterization;
 import gwap.model.resource.Location;
 import gwap.model.resource.Location.LocationType;
 import gwap.model.resource.LocationHierarchy;
 import gwap.model.resource.Resource;
 import gwap.model.resource.Statement;
 import gwap.model.resource.StatementToken;
+import gwap.tools.CharacterizationBean;
+import gwap.tools.CharacterizationBean.ResultForType;
+import gwap.tools.Pair;
 import gwap.wrapper.LocationPercentage;
 import gwap.wrapper.Percentage;
 import gwap.wrapper.Score;
 import gwap.wrapper.StatementTokenPercentage;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,8 +53,8 @@ import org.jboss.seam.log.Log;
 @Scope(ScopeType.STATELESS)
 public class PokerScoring {
 	
-	public static final int CHARACTERIZATION_BONUS_TENDENCY = 5;
-	public static final int CHARACTERIZATION_BONUS_10_PERCENT = 10;
+	public static final int CHARACTERIZATION_BONUS_30_PERCENT = 5;
+	public static final int CHARACTERIZATION_BONUS_50_PERCENT = 10;
 	private static final int STATEMENT_CREATED = 10;
 	public static final int ANNOTATION_LIKE_MAJORITY = 10;
 	public static final int ANNOTATION_LIKE_THIRD = 5;
@@ -67,6 +69,7 @@ public class PokerScoring {
 	
 	@In		private EntityManager entityManager;
 	@Logger private Log log;
+	@In     private CharacterizationBean characterizationBean;
 	
 	/**
 	 * Returns the score for a person's LocationAssignment
@@ -85,45 +88,45 @@ public class PokerScoring {
 		return new Score(score, percentage);
 	}
 	
-	public Integer characterization(StatementCharacterization characterization) throws NotEnoughDataException {
+	public Integer characterization(Resource resource, Characterization[] characterizations) throws NotEnoughDataException {
 		int score = 0;
-		characterization.setScore(score);
-		String[] types = new String[] { "gender", "maturity", "cultivation" };
-		try {
-			List<StatementCharacterization> allCharacterizations = null;
-			for (String type : types) {
-				Percentage percentage = getCharacterizationResult(characterization.getStatement(), type);
-				Method getMethod = characterization.getClass().getDeclaredMethod("get" + type.substring(0, 1).toUpperCase() + type.substring(1), null);
-				Integer value = (Integer) getMethod.invoke(characterization);
-				if (percentage.getTotal() > MIN_NR_FOR_STATISTICS) {
-					// Calculate score for this characterization
-					if (Math.abs(percentage.getFraction().intValue() - value.intValue()) <= 10)
-						score += CHARACTERIZATION_BONUS_10_PERCENT;
-					else if (Math.signum(percentage.getFraction().intValue()) == Math.signum(value.intValue()))
-						score += CHARACTERIZATION_BONUS_TENDENCY;
-				} else if (percentage.getTotal() == MIN_NR_FOR_STATISTICS) {
-					// Calculate score for all characterizations
-					if (allCharacterizations == null)
-						allCharacterizations = entityManager.createNamedQuery("statementCharacterization.byStatement")
-							.setParameter("statement", characterization.getStatement())
-							.getResultList();
-					for (int i = 0; i < allCharacterizations.size(); i++) {
-						StatementCharacterization sc = allCharacterizations.get(i);
-						if (Math.abs(percentage.getFraction().intValue() - value) <= 10)
-							sc.setScore(sc.getScore() + CHARACTERIZATION_BONUS_10_PERCENT);
-						else if (Math.signum(percentage.getFraction().intValue()) == Math.signum(value))
-							sc.setScore(sc.getScore() + CHARACTERIZATION_BONUS_TENDENCY);
-						if (sc.getId().equals(characterization.getId()))
-							score = sc.getScore();
-					}
-				} else
-					throw new NotEnoughDataException();
+		
+		boolean validCharacterization = false;
+		for (Characterization c : characterizations) {
+			if (characterizationBean.isValueSet(c)) {
+				validCharacterization = true;
+				break;
 			}
-		} catch (NotEnoughDataException e) {
-			throw new NotEnoughDataException();
-		} catch (Exception e) {
 		}
-		characterization.setScore(score);
+		
+		if (validCharacterization) {
+			boolean hasEnoughData = false;
+			for (Characterization c : characterizations) {
+				if (characterizationBean.isValueSet(c) && !characterizationBean.isValueUnknown(c)) {
+					ResultForType result = characterizationBean.getResult(resource.getId(), c.getName());
+					Percentage percentage = new Percentage(0, result.getTotal());
+					// Check if value is there
+					for (Pair<Integer, Integer> p : result.getResult()) {
+						if (c.getValue().equals(p.a)) {
+							percentage = new Percentage(p.b, result.getTotal());
+							break;
+						}
+					}
+					if (percentage.getTotal() >= MIN_NR_FOR_STATISTICS) {
+						hasEnoughData = true;
+						int scoreSingle = 0;
+						if (percentage.getFraction() >= 0.5)
+							scoreSingle = CHARACTERIZATION_BONUS_50_PERCENT;
+						else if (percentage.getFraction() >= 0.3)
+							scoreSingle = CHARACTERIZATION_BONUS_30_PERCENT;
+						c.setScore(scoreSingle);
+						score += scoreSingle;
+					}
+				}
+			}
+			if (!hasEnoughData)
+				throw new NotEnoughDataException();
+		}
 		return score;
 	}
 
@@ -365,30 +368,6 @@ public class PokerScoring {
 		int total = ((Number)q2.getSingleResult()).intValue();
 		
 		return total;
-	}
-	
-	public Percentage getCharacterizationResult(Statement statement, String type) {
-		if (type == null || 
-				!(type.equals("gender") || type.equals("maturity") || type.equals("cultivation"))) {
-			log.warn("Could not calculate "+type+" percentage because of wrong type '"+type+"'");
-			return null;
-		}
-
-		try {
-			Percentage percentage = (Percentage) entityManager.createNamedQuery("statementCharacterization."+type+"PercentageByStatement").setParameter("statement", statement).getSingleResult();
-			log.info("Characterization #3 for #0: #4 (sum #1, count: #2)", statement, percentage.getSum(), percentage.getTotal(), type, percentage.getFraction());
-			return percentage;
-		} catch (Exception e) {
-			log.warn("Could not calculate "+type+" percentage", e);
-			return null;
-		}
-	}
-	
-	public int getCharacterizationAsPercentage(Statement statement, String type){
-		Percentage result = getCharacterizationResult(statement, type);
-		if (result != null && result.getFraction() != null) 
-			return (result.getFraction().intValue()+100)/2;
-		return 0;
 	}
 	
 	public Bet getBet(Statement statement, Person person) {

@@ -55,6 +55,7 @@
 	<classpathentry kind="lib" path="lib/jcl-over-slf4j.jar"/>
 	<classpathentry kind="lib" path="lib/resteasy-jettison-provider.jar"/>
 	<classpathentry kind="lib" path="lib/testng-jdk15.jar"/>
+	<classpathentry kind="lib" path="lib/tomahawk12-1.1.14.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.jboss.ide.eclipse.as.core.server.runtime.runtimeTarget/JBoss 4.2 Runtime"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">

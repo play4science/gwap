@@ -1,5 +1,6 @@
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- Parameters: characterizations, statement, disabled -->
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
     xmlns:s="http://jboss.com/products/seam/taglib"
     xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -7,52 +8,26 @@
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:rich="http://richfaces.org/rich"
     xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:t="http://myfaces.apache.org/tomahawk"
+    xmlns:c="http://java.sun.com/jstl/core"
     xmlns:p4s="http://play4science.org/facelets">
 	
-	<style type="text/css">
-		#characterizationResult .rich-inslider-track-decor-2 img { width:0; height:8px; background-color: lightblue; }
-		#characterizationResult .genderSlider .rich-inslider-track-decor-2 img { width:#{mitPokerScoring.getCharacterizationAsPercentage(statement,'gender')}%;}
-		#characterizationResult .maturitySlider .rich-inslider-track-decor-2 img { width:#{mitPokerScoring.getCharacterizationAsPercentage(statement,'maturity')}%; }
-		#characterizationResult .cultivationSlider .rich-inslider-track-decor-2 img { width:#{mitPokerScoring.getCharacterizationAsPercentage(statement,'cultivation')}%;}
-	</style>
-	<div id="characterizationResult">
-		<table>
-			<tr>
-				<ui:include src="/widget/characterizationSlider.xhtml">
-					<ui:param name="fieldName" value="genderSlider" />
-					<ui:param name="title" value="#{messages['game.recognize.genders']}" />
-					<ui:param name="lowText" value="#{messages['person.gender.female']}" />
-					<ui:param name="highText" value="#{messages['person.gender.male']}" />
-					<ui:param name="value" value="#{mitPokerScoring.getCharacterizationResult(statement,'gender').fraction}" />
-					<ui:param name="disabled" value="true" />
-				</ui:include>
-				<td><h:outputText style="margin-left: 10px" value="(#{mitPokerScoring.getCharacterizationResult(statement,'gender').total} #{messages['admin.statementOverview.persons']})" /></td>
-			</tr>
-	
-			<tr>
-				<ui:include src="/widget/characterizationSlider.xhtml">
-					<ui:param name="fieldName" value="maturitySlider" />
-					<ui:param name="title" value="#{messages['game.recognize.maturity']}" />
-					<ui:param name="lowText" value="#{messages['game.recognize.maturity.low']}" />
-					<ui:param name="highText" value="#{messages['game.recognize.maturity.high']}" />
-					<ui:param name="value" value="#{mitPokerScoring.getCharacterizationResult(statement,'maturity').fraction}" />
-					<ui:param name="disabled" value="true" />
-				</ui:include>
-				<td><h:outputText style="margin-left: 10px" value="(#{mitPokerScoring.getCharacterizationResult(statement,'maturity').total} #{messages['admin.statementOverview.persons']})" /></td>
-			</tr>
-	
-			<tr>
-				<ui:include src="/widget/characterizationSlider.xhtml">
-					<ui:param name="fieldName" value="cultivationSlider" />
-					<ui:param name="title" value="#{messages['game.recognize.cultivation']}" />
-					<ui:param name="lowText" value="#{messages['game.recognize.cultivation.low']}" />
-					<ui:param name="highText" value="#{messages['game.recognize.cultivation.high']}" />
-					<ui:param name="value" value="#{mitPokerScoring.getCharacterizationResult(statement,'cultivation').fraction}" />
-					<ui:param name="disabled" value="true" />
-				</ui:include>
-				<td><h:outputText style="margin-left: 10px" value="(#{mitPokerScoring.getCharacterizationResult(statement,'cultivation').total} #{messages['admin.statementOverview.persons']})" /></td>
-			</tr>
-		</table>
-	</div>
+
+	<h:dataTable value="#{characterizations}" var="_characterization" styleClass="characterizationTable">
+		<h:column>
+			<h:outputText value="#{messagesHelper.getConcatenated('game.recognize.', _characterization.name)}" styleClass="header" />
+			<t:selectOneRadio id="char" value="#{_characterization.value}" layout="spread">
+				<f:selectItem itemLabel="#{messagesHelper.getConcatenated('game.recognize.', _characterization.name,'.low')}" itemValue="1" />
+				<f:selectItem itemLabel="#{messagesHelper.getConcatenated('game.recognize.', _characterization.name,'.high')}" itemValue="2"/>
+				<f:selectItem itemLabel="#{messagesHelper.getConcatenated('game.recognize.', _characterization.name,'.all')}" itemValue="3"/>
+				<f:selectItem itemLabel="#{messagesHelper.getConcatenated('game.recognize.', _characterization.name,'.none')}" itemValue="0"/>
+			</t:selectOneRadio>
+		</h:column>
+		<c:forEach items="#{characterizationBean.getAvailableItems(_characterization.name)}" varStatus="loop" var="item">
+			<h:column>
+				<t:radio for="char" index="#{loop.index}" />
+			</h:column>
+		</c:forEach>
+	</h:dataTable>
 		
 </ui:composition>

@@ -13,15 +13,15 @@ import gwap.game.AbstractGameSessionBean;
 import gwap.model.GameRound;
 import gwap.model.action.Action;
 import gwap.model.action.Bet;
+import gwap.model.action.Characterization;
 import gwap.model.action.Familiarity;
 import gwap.model.action.LocationAssignment;
 import gwap.model.action.StatementAnnotation;
-import gwap.model.action.StatementCharacterization;
 import gwap.model.resource.Location;
 import gwap.model.resource.Statement;
 import gwap.model.resource.StatementToken;
+import gwap.tools.CharacterizationBean;
 import gwap.wrapper.LocationPercentage;
-import gwap.wrapper.Percentage;
 import gwap.wrapper.Score;
 
 import java.util.ArrayList;
@@ -50,6 +50,7 @@ public class Recognize extends AbstractGameSessionBean {
 	@In						private StatementBean mitStatementBean;
 	@In(required=false)@Out(required=false) private Long locationId;
 	@In						private PokerScoring mitPokerScoring;
+	@In                     private CharacterizationBean characterizationBean;
 	
 	@Out
 	private List<Location> breadcrumbLocations = new ArrayList<Location>();
@@ -58,7 +59,7 @@ public class Recognize extends AbstractGameSessionBean {
 	private boolean skipCharacterizationResult;
 	private int roundNrUsingAtLeastAssignedStatement = 0;
 
-	private StatementCharacterization statementCharacterization;
+	private Characterization[] characterizations;
 	private Familiarity familiarity;
 	private StatementAnnotation statementAnnotation;
 	private LocationAssignment locationAssignment;
@@ -78,10 +79,7 @@ public class Recognize extends AbstractGameSessionBean {
 		gameRound.getResources().add(statement);
 		locationId = null;
 		breadcrumbLocations.clear();
-		statementCharacterization = new StatementCharacterization();
-		statementCharacterization.setGender(0);
-		statementCharacterization.setMaturity(0);
-		statementCharacterization.setCultivation(0);
+		characterizations = CharacterizationBean.createAndInitializeCharacterizations(statement);
 		statementAnnotation = null;
 		locationAssignment = null;
 		familiarity = null;
@@ -228,30 +226,37 @@ public class Recognize extends AbstractGameSessionBean {
 		}
 	}
 	
-	public void characterize() {
-		if(!statementCharacterization.isEmpty()){
-			log.info("Saving characterization");
-			if (statementCharacterization.getId() != null)
-				return;
-			initializeAction(statementCharacterization);
-			statementCharacterization.setStatement(statement);
-			entityManager.persist(statementCharacterization);
-			gameRound.getActions().add(statementCharacterization);
-			entityManager.flush();
-			try {
-				addToScore(mitPokerScoring.characterization(statementCharacterization));
-				if (statementCharacterization.getScore() > 0)
-					facesMessages.addFromResourceBundle(Severity.INFO, "game.recognize.gainedPoints", statementCharacterization.getScore());
-				else
-					facesMessages.addFromResourceBundle(Severity.INFO, "game.recognize.gainedNoPoints");
-				facesMessages.addFromResourceBundle(Severity.INFO, "game.recognize.characterizationResult.seeAbove");
-			} catch (NotEnoughDataException e) {
-				facesMessages.addFromResourceBundle(Severity.INFO, "game.recognize.characterizationResult.notEnoughData");
+	public String characterize() {
+		boolean noAnswerGiven = true;
+		log.info("Saving characterization");
+		for (Characterization c : characterizations) {
+			if (CharacterizationBean.isValueSet(c)) {
+				log.info("#0 characterized with #1=#2", statement, c.getName(), c.getValue());
+				noAnswerGiven = false;
+				initializeAction(c);
+				c.setResource(statement);
+				entityManager.persist(c);
+				gameRound.getActions().add(c);
 			}
-		} else {
+		}
+		entityManager.flush();
+		characterizationBean.clearCache();
+		try {
+			Integer score = mitPokerScoring.characterization(statement, characterizations);
+			addToScore(score);
+			if (score > 0)
+				facesMessages.addFromResourceBundle(Severity.INFO, "game.recognize.gainedPoints", score);
+//			else
+//				facesMessages.addFromResourceBundle(Severity.INFO, "game.recognize.gainedNoPoints");
+//			facesMessages.addFromResourceBundle(Severity.INFO, "game.recognize.characterizationResult.seeAbove");
+		} catch (NotEnoughDataException e) {
+//			facesMessages.addFromResourceBundle(Severity.INFO, "game.recognize.characterizationResult.notEnoughData");
+		}
+		if (noAnswerGiven) {
 			log.info("Characterization NOT saved (empty)");
 			skipCharacterizationResult = true;
 		}
+		return "next";
 	}
 	
 	public void createBet() {
@@ -285,13 +290,13 @@ public class Recognize extends AbstractGameSessionBean {
 		this.selectedTokens = selectedTokens;
 	}
 
-	public StatementCharacterization getStatementCharacterization() {
-		return statementCharacterization;
+	public Characterization[] getCharacterizations() {
+		return characterizations;
 	}
 
-	public void setStatementCharacterization(
-			StatementCharacterization statementCharacterization) {
-		this.statementCharacterization = statementCharacterization;
+	public void setCharacterizations(
+			Characterization[] characterizations) {
+		this.characterizations = characterizations;
 	}
 	
 	public Integer getPoints() {
@@ -311,25 +316,34 @@ public class Recognize extends AbstractGameSessionBean {
 	public boolean getSkipCharacterizationResult() {
 		return skipCharacterizationResult;
 	}
-
-	/**
-	 * Calculates the average value of the defined characterization type
-	 * 
-	 * @param type one of 'gender', 'maturity' or 'cultivation'
-	 * @return a value normalized to the range [0,100] instead of [-100,100]
-	 */
-	public int getCharacterizationAsPercentage(String type) {
-		if (statementCharacterization.getId() != null) {
-			Percentage result = mitPokerScoring.getCharacterizationResult(statement, type);
-			if (result != null && result.getTotal() >= PokerScoring.MIN_NR_FOR_STATISTICS) {
-				return (result.getFraction().intValue()+100)/2;
-			}
-		}
-		return 0;
+	
+	public Integer getCharacterizationScore(GameRound round) {
+		int score = 0;
+		for (Characterization c : getCharacterizationActions(round))
+			if (c.getScore() != null)
+				score += c.getScore();
+		return score;
 	}
 
-	public StatementCharacterization getCharacterizationAction(GameRound round) {
-		return getAction(round, StatementCharacterization.class);
+	/**
+	 * Retrieves all default characterizations for this game and especially 
+	 * the characterizations entered by the player.
+	 * 
+	 * @param round
+	 * @return array of all Characterizations
+	 */
+	public Characterization[] getCharacterizationActions(GameRound round) {
+		Characterization[] chars = CharacterizationBean.createCharacterizations(round.getResources().get(0));
+		for (Action a : round.getActions())
+			if (a instanceof Characterization) {
+				Characterization c = (Characterization)a;
+				for (int i = 0; i < chars.length; i++) {
+					if (chars[i].getName().equals(c.getName())) {
+						chars[i] = c;
+					}
+				}
+			}
+		return chars;
 	}
 	
 	public StatementAnnotation getAnnotationAction(GameRound round) {

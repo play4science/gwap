@@ -75,7 +75,7 @@ import javax.persistence.OneToOne;
 				"(" +
 				" (a.class = Bet and a.revisedBet is null) or " +
 				"  a.class = LocationAssignment or " +
-				"  a.class = StatementCharacterization or a.class = StatementAnnotation" +
+				"  a.class = Characterization or a.class = StatementAnnotation" +
 				") and " +
 				"a.score > 0 " +
 				"and a.gameRound.gameSession.gameType.name=:gametype " +
@@ -87,7 +87,7 @@ import javax.persistence.OneToOne;
 				"(" +
 				" (a.class = Bet and a.revisedBet is null) or " +
 				"  a.class = LocationAssignment or " +
-				"  a.class = StatementCharacterization or a.class = StatementAnnotation" +
+				"  a.class = Characterization or a.class = StatementAnnotation" +
 				") and " +
 				"(p = :person or p.personConnected = :person) " +
 				"and a.gameRound.gameSession.gameType.name=:gametype " + 
