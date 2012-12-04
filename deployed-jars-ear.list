@@ -18,9 +18,12 @@ opencsv-2.2.jar
 #lucene-core.jar
 #hibernate-search.jar
 #hibernate-commons-annotations.jar
-apache-solr-solrj-3.6.0.jar
+apache-solr-solrj-4.0.0.jar
+httpcore.jar
+httpclient.jar
+httpmime.jar
 #commons-codec.jar
-commons-httpclient.jar
+#commons-httpclient.jar
 #commons-io.jar
 #jcl-over-slf4j.jar
 slf4j-api.jar

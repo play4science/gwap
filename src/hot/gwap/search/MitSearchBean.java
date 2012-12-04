@@ -41,12 +41,12 @@ public class MitSearchBean extends SolrSearchBean {
 	
 	static {
 		specialWords = new ArrayList<SearchSpecialParameter>();
-		specialWords.add(new SearchSpecialParameter("femminile", 	"gender:[* TO -1]",		"product(scale(gender_ratingcount,1,10),linear(abs(gender),0.05,1))"));
-		specialWords.add(new SearchSpecialParameter("maschile",		"gender:[1 TO *]",		"product(scale(gender_ratingcount,1,10),linear(abs(gender),0.05,1))"));
-		specialWords.add(new SearchSpecialParameter("giovane",		"maturity:[* TO -1]",	"product(scale(maturity_ratingcount,1,10),linear(abs(maturity),0.05,1))"));
-		specialWords.add(new SearchSpecialParameter("anziano",		"maturity:[1 TO *]",	"product(scale(maturity_ratingcount,1,10),linear(abs(maturity),0.05,1))"));
-		specialWords.add(new SearchSpecialParameter("poco-istruito","cultivation:[* TO -1]","product(scale(cultivation_ratingcount,1,10),linear(abs(cultivation),0.05,1))"));
-		specialWords.add(new SearchSpecialParameter("istruito",		"cultivation:[1 TO *]",	"product(scale(cultivation_ratingcount,1,10),linear(abs(cultivation),0.05,1))"));
+		specialWords.add(new SearchSpecialParameter("femminile", 	"gender:1"));
+		specialWords.add(new SearchSpecialParameter("maschile",		"gender:2"));
+		specialWords.add(new SearchSpecialParameter("giovane",		"maturity:1"));
+		specialWords.add(new SearchSpecialParameter("anziano",		"maturity:2"));
+		specialWords.add(new SearchSpecialParameter("poco-istruito","cultivation:1"));
+		specialWords.add(new SearchSpecialParameter("istruito",		"cultivation:2"));
 	}
 	
 	public MitSearchBean() {

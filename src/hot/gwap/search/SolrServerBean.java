@@ -8,14 +8,18 @@
 
 package gwap.search;
 
+import java.io.IOException;
 import java.io.Serializable;
-import java.net.MalformedURLException;
 
-import org.apache.commons.httpclient.Credentials;
-import org.apache.commons.httpclient.UsernamePasswordCredentials;
-import org.apache.commons.httpclient.auth.AuthScope;
+import org.apache.http.HttpException;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpRequestInterceptor;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.impl.auth.BasicScheme;
+import org.apache.http.impl.client.AbstractHttpClient;
+import org.apache.http.protocol.HttpContext;
 import org.apache.solr.client.solrj.SolrServer;
-import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
+import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Factory;
 import org.jboss.seam.annotations.In;
@@ -31,6 +35,22 @@ import org.jboss.seam.log.Log;
 @Name("solrServerBean")
 @Scope(ScopeType.STATELESS)
 public class SolrServerBean implements Serializable {
+
+	public class PreEmptiveBasicAuthenticator implements HttpRequestInterceptor {
+
+		private final UsernamePasswordCredentials credentials;
+
+		public PreEmptiveBasicAuthenticator(String user, String pass) {
+		    credentials = new UsernamePasswordCredentials(user, pass);
+		}
+		
+		@Override
+		public void process(HttpRequest request, HttpContext context)
+				throws HttpException, IOException {
+			request.addHeader(BasicScheme.authenticate(credentials,"US-ASCII",false));
+		}
+
+	}
 
 	private static final long serialVersionUID = 1L;
 
@@ -52,26 +72,20 @@ public class SolrServerBean implements Serializable {
 		log.info("Connecting to solr server");
 		String url = "http://localhost:8080/solr/" + platform;
 		solrServer = null;
-		try {
-			solrServer = new CommonsHttpSolrServer(url);
-			CommonsHttpSolrServer server = (CommonsHttpSolrServer) solrServer;
-			server.getHttpClient().getParams().setAuthenticationPreemptive(true);
-			AuthScope scope = new AuthScope(AuthScope.ANY_HOST,AuthScope.ANY_PORT,null, null);
-			if (solrUsername != null && solrPassword != null)
-				server.getHttpClient().getState().setCredentials(scope, (Credentials) new UsernamePasswordCredentials(solrUsername, solrPassword));
-			server.setSoTimeout(1000); // socket read timeout
-			server.setConnectionTimeout(100);
-			server.setDefaultMaxConnectionsPerHost(100);
-			server.setMaxTotalConnections(100);
+		solrServer = new HttpSolrServer(url);
+		HttpSolrServer server = (HttpSolrServer) solrServer;
+		if (solrUsername != null && solrPassword != null)
+			((AbstractHttpClient)server.getHttpClient()).addRequestInterceptor(new PreEmptiveBasicAuthenticator(solrUsername, solrPassword));
+		server.setSoTimeout(1000); // socket read timeout
+		server.setConnectionTimeout(100);
+		server.setDefaultMaxConnectionsPerHost(100);
+		server.setMaxTotalConnections(100);
 //			server.setFollowRedirects(false); // defaults to false
-			// allowCompression defaults to false.
-			// Server side must support gzip or deflate for this to have any effect.
-			server.setAllowCompression(true);
-			server.setMaxRetries(1); // defaults to 0. > 1 not recommended.
+		// allowCompression defaults to false.
+		// Server side must support gzip or deflate for this to have any effect.
+		server.setAllowCompression(true);
+		server.setMaxRetries(1); // defaults to 0. > 1 not recommended.
 //			server.setParser(new XMLResponseParser()); // binary parser is used by default
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
 	}
 
 	public String getSolrPassword() {

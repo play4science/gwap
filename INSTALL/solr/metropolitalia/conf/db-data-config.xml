@@ -8,33 +8,29 @@
                 deltaQuery="select resource_id as id from bet where created > '${dataimporter.last_index_time}'
                 			union select resource_id as id from locationassignment where created > '${dataimporter.last_index_time}'
                 			union select statement_id as id from statementannotation where created > '${dataimporter.last_index_time}'
-                			union select statement_id as id from statementcharacterization where created > '${dataimporter.last_index_time}'
+                			union select statement_id as id from characterization where created > '${dataimporter.last_index_time}'
                 			union select id from statement where createdate > '${dataimporter.last_index_time}'"
                 deletedPkQuery="select id from statement where enabled=false">
 
 			<!-- If the column names are the same as the field names, no field entries have to be specified for these -->
 
-            <entity name="statement"
+            <entity name="statementText"
                     query="select text as statement from statement where id=${statement.id}"/>
             <entity name="standard"
                     query="select array_to_string(array(select t.value from statementstandardtoken st join token t on st.token_id=t.id where st.statement_id=${statement.id} order by sequencenumber), ' ') as standard"/>
             
             <entity name="locations"
-                    query="select location_id, location.name as location_name from locationassignment join location on location_id=location.id where resource_id=${statement.id} and notevaluated=false union all select location_id, location.name as location_name from bet join location on location_id=location.id where resource_id=${statement.id} and notevaluated=false"/>
+                    query="select array_to_string(array(select location_id from locationassignment where resource_id=${statement.id} and notevaluated=false union all select location_id from bet where resource_id=${statement.id} and notevaluated=false), ' ') as location_id"/>
             
+            <entity name="locationNames"
+                    query="select array_to_string(array(select location.name as location_name from locationassignment join location on location_id=location.id where resource_id=${statement.id} and notevaluated=false union all select location.name location_name from bet join location on location_id=location.id where resource_id=${statement.id} and notevaluated=false), ' ') as location_name"/>
+                    
             <entity name="gender"
-            		query="select sum(gender)/count(gender) as gender from statementcharacterization where statement_id=${statement.id} and gender is not null" />
+            		query="select array_to_string(array(select value from characterization where resource_id=${statement.id} and name='gender' and value > 0), ' ') as gender" />
             <entity name="maturity"
-            		query="select sum(maturity)/count(maturity) as maturity from statementcharacterization where statement_id=${statement.id} and maturity is not null" />
+            		query="select array_to_string(array(select value from characterization where resource_id=${statement.id} and name='maturity' and value > 0), ' ') as maturity" />
             <entity name="cultivation"
-            		query="select sum(cultivation)/count(cultivation) as cultivation from statementcharacterization where statement_id=${statement.id} and cultivation is not null" />
-
-            <entity name="gender_ratingcount"
-            		query="select count(gender) as gender_ratingcount from statementcharacterization where statement_id=${statement.id} and gender is not null" />
-            <entity name="maturity_ratingcount"
-            		query="select count(maturity) as maturity_ratingcount from statementcharacterization where statement_id=${statement.id} and maturity is not null" />
-            <entity name="cultivation_ratingcount"
-            		query="select count(cultivation) as cultivation_ratingcount from statementcharacterization where statement_id=${statement.id} and cultivation is not null" />
+            		query="select array_to_string(array(select value from characterization where resource_id=${statement.id} and name='cultivation' and value > 0), ' ') as cultivation" />
 
             <entity name="highlighted"
                     query="select t.value as highlighted from statementannotation_statementtoken sast join statementtoken st on sast.statementtokens_id=st.id join token t on st.token_id=t.id where st.statement_id=${statement.id}"/>
