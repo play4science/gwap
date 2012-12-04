@@ -8,7 +8,7 @@
                 deltaQuery="select resource_id as id from bet where created > '${dataimporter.last_index_time}'
                 			union select resource_id as id from locationassignment where created > '${dataimporter.last_index_time}'
                 			union select statement_id as id from statementannotation where created > '${dataimporter.last_index_time}'
-                			union select statement_id as id from characterization where created > '${dataimporter.last_index_time}'
+                			union select resource_id as id from characterization where created > '${dataimporter.last_index_time}'
                 			union select id from statement where createdate > '${dataimporter.last_index_time}'"
                 deletedPkQuery="select id from statement where enabled=false">
 
