@@ -27,6 +27,7 @@ import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
+import org.apache.solr.common.SolrException;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Create;
 import org.jboss.seam.annotations.Destroy;
@@ -107,6 +108,8 @@ public class SolrSearchBean implements Serializable {
 			paginationControl.setNumResults(results.getNumFound());
 			dirty = false;
 			log.info("Got #0 results for query '#1'", results.getNumFound(), solrQuery.getQuery());
+		} catch (SolrException e) {
+			log.info("Could not complete query", e);
 		} catch (SolrServerException e) {
 			log.info("Could not complete query", e);
 		}
