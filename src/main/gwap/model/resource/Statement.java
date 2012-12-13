@@ -63,7 +63,8 @@ import org.jboss.seam.annotations.Scope;
 					"order by random()"),
 	@NamedQuery(name="statement.byCreator", query="select s from Statement s where s.creator=:person and s.enabled=true"),
 	@NamedQuery(name="statement.countByCreator", query="select count(s.id) from Statement s where s.creator=:person and s.enabled=true"),
-	@NamedQuery(name="statement.byCreateDate", query="select s from Statement s where s.createDate != null order by createDate")
+	@NamedQuery(name="statement.byCreateDate", query="select s from Statement s where s.createDate != null order by createDate"),
+	@NamedQuery(name="statement.byText", query="from Statement where text = :text")
 })
 
 /**

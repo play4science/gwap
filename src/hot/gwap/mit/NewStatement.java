@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
@@ -58,16 +59,25 @@ public class NewStatement implements Serializable {
 		if (statement == null) {
 			if (text != null && text.length() > 2) {
 				if (standardText != null && standardText.length() > 2) {
-					log.info("Creating statement '#0'", text);
-					statement = new Statement();
-					statement.setCreator(person);
-					statement.setEnabled(true);
-					statement.setCreateDate(new Date());
-					entityManager.persist(statement);
-					StatementHelper.createStatementTokens(statement, text, entityManager);
-					StatementHelper.createStatementStandardTokens(statement, standardText, entityManager);
-					entityManager.flush();
-					log.info("#0 created", statement);
+					text = text.trim();
+					standardText = standardText.trim();
+					Query query = entityManager.createNamedQuery("statement.byText").setParameter("text", text);
+					if (query.getResultList().size() > 0) {
+						statement = (Statement) query.getResultList().get(0);
+						log.info("Statement already exists: '#0' (id: #1)", text, statement.getId());
+					} else {
+						log.info("Creating statement '#0'", text);
+						statement = new Statement();
+						statement.setText(text);
+						statement.setCreator(person);
+						statement.setEnabled(true);
+						statement.setCreateDate(new Date());
+						entityManager.persist(statement);
+						StatementHelper.createStatementTokens(statement, text, entityManager);
+						StatementHelper.createStatementStandardTokens(statement, standardText, entityManager);
+						entityManager.flush();
+						log.info("#0 created", statement);
+					}
 				} else
 					facesMessages.addToControlFromResourceBundle("standardText", "game.newstatement.standardTextTooShort");
 			} else
@@ -82,7 +92,7 @@ public class NewStatement implements Serializable {
 		}
 		return null;
 	}
-
+	
 	public boolean assignLocation() {
 		log.info("Trying to assign locationId #0 to statement #1", locationId, statement);
 		if (locationId == null || locationId <= 0)
