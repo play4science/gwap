@@ -19,7 +19,7 @@
 				edit.focus();
 				var div = document.createElement("div");
 				div.appendChild(document.createTextNode(tag));
-				#{rich:element('recommendedTags')}.appendChild(div);
+				#{rich:element('recommendedTags')}.lastChild.appendChild(div);
 				new Effect.Highlight(div);
 			};</script>
 

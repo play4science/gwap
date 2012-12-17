@@ -14,12 +14,15 @@
 		 	<ui:include src="layout/logo.xhtml" />
 			<ui:include src="layout/mainMenuOnly.xhtml" />
 			<ul id="navSub" />
-	 		<a4j:outputPanel id="recommendedTags" styleClass="ongoingGameStatsContent">
+	 		<a4j:outputPanel id="recommendedTags">
+				<span class="ongoingGameStatsCaption"><h:outputText value="#{messages['game.enteredTags']}" /> (<h:outputText value="#{recommendedTags.rowCount}" />)</span>
+	 			<span class="ongoingGameStatsContent">
 				<a4j:repeat value="#{recommendedTags}" var="_recommendedTag">
 					<div class="#{_recommendedTag.matchType}">
 						<h:outputText value="#{_recommendedTag.tag}" />
 					</div>
 				</a4j:repeat>
+				</span>
 			</a4j:outputPanel>
 		</div>
 
