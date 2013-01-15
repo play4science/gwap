@@ -46,24 +46,24 @@ public class Recognize extends AbstractGameSessionBean {
 	private static final long serialVersionUID = 1L;
 
 	@In(create=true)
-	@Out					private Statement statement;
-	@In						private StatementBean mitStatementBean;
-	@In(required=false)@Out(required=false) private Long locationId;
-	@In						private PokerScoring mitPokerScoring;
-	@In                     private CharacterizationBean characterizationBean;
+	@Out					protected Statement statement;
+	@In						protected StatementBean mitStatementBean;
+	@In(required=false)@Out(required=false) protected Long locationId;
+	@In						protected PokerScoring mitPokerScoring;
+	@In                     protected CharacterizationBean characterizationBean;
 	
 	@Out
-	private List<Location> breadcrumbLocations = new ArrayList<Location>();
-	private Map<StatementToken, Boolean> selectedTokens = new HashMap<StatementToken, Boolean>();
+	protected List<Location> breadcrumbLocations = new ArrayList<Location>();
+	protected Map<StatementToken, Boolean> selectedTokens = new HashMap<StatementToken, Boolean>();
 
-	private boolean skipCharacterizationResult;
-	private int roundNrUsingAtLeastAssignedStatement = 0;
+	protected boolean skipCharacterizationResult;
+	protected int roundNrUsingAtLeastAssignedStatement = 0;
 
-	private Characterization[] characterizations;
-	private Familiarity familiarity;
-	private StatementAnnotation statementAnnotation;
-	private LocationAssignment locationAssignment;
-	private Integer points;
+	protected Characterization[] characterizations;
+	protected Familiarity familiarity;
+	protected StatementAnnotation statementAnnotation;
+	protected LocationAssignment locationAssignment;
+	protected Integer points;
 
 	
 	@Override

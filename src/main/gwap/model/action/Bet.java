@@ -29,7 +29,9 @@ import org.jboss.seam.annotations.Scope;
 	@NamedQuery(name="bet.allWithPerson",
 			query="from Bet where person is not null"),
 	@NamedQuery(name="bet.byScore",
-			query="select b from Bet b where b.score != null and b.person != null order by b.score desc")
+			query="select b from Bet b where b.score != null and b.person != null order by b.score desc"),
+	@NamedQuery(name="bet.byResourceAndPoints",
+			query="select b from Bet b where b.resource = :resource and b.revisedBet is null and b.points = :points")
 })
 
 /**
@@ -44,6 +46,8 @@ import org.jboss.seam.annotations.Scope;
 public class Bet extends LocationAssignment {
 	
 	private static final long serialVersionUID = 1L;
+
+	public static final int POKER_POINTS = 1;
 
 	private Integer points;
 	

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<pageflow-definition
+  xmlns="http://jboss.com/products/seam/pageflow"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://jboss.com/products/seam/pageflow http://jboss.com/products/seam/pageflow-2.0.xsd"
+  name="mitPoker">
+  
+	<start-page name="start" view-id="/poker.xhtml">
+		<action expression="#{mitPoker.startGameSession()}" />
+		<transition name="next" to="roundToPlay">
+			<action expression="#{mitPoker.endRound()}" />
+ 		</transition>
+	</start-page>
+	
+	<page name="game" view-id="/poker.xhtml">
+ 		<transition name="next" to="roundToPlay">
+			<action expression="#{mitPoker.endRound()}" />
+ 		</transition>
+	</page>
+	
+	<decision name="roundToPlay" expression="#{mitPoker.roundsLeft > 0}">
+		<transition name="true" to="game">
+			<action expression="#{mitPoker.startRound()}" />
+		</transition>
+		<transition name="false" to="scoring">
+			<action expression="#{mitPoker.endGameSession()}" />
+		</transition>
+	</decision>
+	
+	<page name="scoring" view-id="/pokerScoring.xhtml">
+	</page>
+</pageflow-definition>

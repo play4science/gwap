@@ -62,6 +62,8 @@ public class PokerScoring {
 	private static final double LOCATION_ASSIGNMENT_ND_FACTOR = 0.03;
 	private static final int BET_MAX_SCORE = 100;
 	private static final double BET_ND_FACTOR = 0.09;
+	private static final int POKER_CORRECT = 10;
+	private static final int POKER_CORRECT_SMALL = 20;
 	
 	public static final int MIN_NR_FOR_STATISTICS = 3;
 	
@@ -87,7 +89,30 @@ public class PokerScoring {
 		log.info("Score for LocationAssignment #0 with percentage #1 is #2", la, percentage, score);
 		return new Score(score, percentage);
 	}
-	
+
+	/**
+	 * Calculates the score for a given LocationAssignment in the poker game
+	 * 
+	 * @param locationAssignment
+	 * @return null if the location does not equal the predefined location
+	 */
+	public Integer poker(LocationAssignment locationAssignment) {
+		Query query = entityManager.createNamedQuery("bet.byResourcePointsAndLocation");
+		query.setParameter("resource", locationAssignment.getResource());
+		query.setParameter("points", Bet.POKER_POINTS);
+		query.setParameter("location", locationAssignment.getLocation());
+		List<Bet> bets = query.getResultList();
+		if (bets.isEmpty())
+			return null;
+		else {
+			int score = POKER_CORRECT;
+			if (bets.get(0).getLocation().getType().getLevel() >= 4)
+				score = POKER_CORRECT_SMALL;
+			locationAssignment.setScore(score);
+			return score;
+		}
+	}
+
 	public Integer characterization(Resource resource, Characterization[] characterizations) throws NotEnoughDataException {
 		int score = 0;
 		
@@ -404,5 +429,5 @@ public class PokerScoring {
 					return "border: 4px solid black;";
 			}
 		return "";
-	}	
+	}
 }

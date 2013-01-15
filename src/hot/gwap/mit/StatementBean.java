@@ -78,6 +78,9 @@ public class StatementBean implements Serializable {
 			if (statement == null)
 				sensibleForLocationAssignment();
 		}
+		if (statement == null && viewId.equals("/poker.xhtml")) {
+			sensibleForPoker();
+		}
 		if (statement == null) {
 			random();
 		}
@@ -113,6 +116,29 @@ public class StatementBean implements Serializable {
 			query = entityManager.createNamedQuery("statement.nextSensibleForLocationAssignmentByPerson").setParameter("person", person);
 		else
 			query = entityManager.createNamedQuery("statement.nextSensibleForLocationAssignment");
+		query.setMaxResults(5);
+		try {
+			List<Long> list = query.getResultList();
+			if (list.size() == 0)
+				throw new NoResultException();
+			int rnd = new Random().nextInt(list.size());
+			long statementId = (Long) list.get(rnd);
+			statement = entityManager.find(Statement.class, statementId);
+			log.info("Statement is #0", statement);
+			logPredefinedStatementLocations();
+		} catch (NoResultException e) {
+			statement = null;
+			log.info("Could not retrieve a statemement");
+		}
+	}
+	
+	private void sensibleForPoker() {
+		log.info("Update sensible for poker statement");
+		Query query;
+		if (person != null)
+			query = entityManager.createNamedQuery("statement.nextSensibleForPokerByPerson").setParameter("person", person);
+		else
+			query = entityManager.createNamedQuery("statement.nextSensibleForPoker");
 		query.setMaxResults(5);
 		try {
 			List<Long> list = query.getResultList();
