@@ -21,9 +21,12 @@
 	<div class="ongoingGameStatsContent">
 		<div id="breadcrumbLocations"/>
 		<div id="submitLocation" style="display:none; float:right;">
-			<a4j:commandLink action="#{mapsHelper.submitFunction(submitFunction)}" oncomplete="completed('location');" reRender="score,coins" styleClass="button paddingRight">
+			<a4j:commandLink action="#{mapsHelper.submitFunction(submitFunction)}" oncomplete="completed('location');" reRender="score,coins" styleClass="button paddingRight" rendered="#{!submitAction}">
 				<span><span class="checkmark-yes"/><h:outputText value="#{messages['game.recognize.submitLocation']}" /></span>
 			</a4j:commandLink>
+			<h:commandLink action="submit" styleClass="button paddingRight" rendered="#{submitAction}">
+				<span><span class="checkmark-yes"/><h:outputText value="#{messages['game.recognize.submitLocation']}" /></span>
+			</h:commandLink>
 			<a4j:commandLink onclick="map.displayParentMarkers(); if (!map.selected) { jQuery('#submitLocation').hide(); }" styleClass="button">
 				<span><span class="checkmark-no"/><h:outputText value="#{messages['game.recognize.lastLocation']}" /></span>
 			</a4j:commandLink>

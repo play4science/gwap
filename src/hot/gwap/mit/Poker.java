@@ -23,7 +23,7 @@ import org.jboss.seam.international.StatusMessage.Severity;
 public class Poker extends Recognize {
 	private static final long serialVersionUID = 1L;
 
-	private boolean canCreateBet;
+	private boolean isCorrect;
 	
 	@Override
 	public void startGameSession() {
@@ -33,7 +33,7 @@ public class Poker extends Recognize {
 	@Override
 	public void startRound() {
 		super.startRound();
-		canCreateBet = false;
+		isCorrect = false;
 	}
 	
 	@Override
@@ -48,12 +48,13 @@ public class Poker extends Recognize {
 		Integer score = mitPokerScoring.poker(locationAssignment);
 		if (score != null) {
 			addToScore(score);
-			if (score > 0)
+			if (score > 0) {
 				facesMessages.addFromResourceBundle(Severity.INFO, "game.poker.correct");
+				isCorrect = true;
+			}
 		}
 		if (score == null || score == 0) {
 			facesMessages.addFromResourceBundle(Severity.INFO, "game.poker.wrong");
-			canCreateBet = true;
 		}
 		entityManager.persist(locationAssignment);
 		gameRound.getActions().add(locationAssignment);
@@ -70,8 +71,8 @@ public class Poker extends Recognize {
 		super.createBet();
 	}
 
-	public boolean getCanCreateBet() {
-		return canCreateBet;
+	public boolean getIsCorrect() {
+		return isCorrect;
 	}
 
 }

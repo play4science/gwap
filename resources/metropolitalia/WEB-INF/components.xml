@@ -79,6 +79,7 @@
 			<value>mitStatementLabeler.jpdl.xml</value>
 			<value>mitRecognize.jpdl.xml</value>
 			<value>mitRecognizeSingle.jpdl.xml</value>
+			<value>mitPoker.jpdl.xml</value>
 		</bpm:pageflow-definitions>
 	</bpm:jbpm>
 	

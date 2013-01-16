@@ -8,16 +8,39 @@
   
 	<start-page name="start" view-id="/poker.xhtml">
 		<action expression="#{mitPoker.startGameSession()}" />
+ 		<transition name="submit" to="isCorrect">
+ 			<action expression="#{mitPoker.assignLocation()}"/>
+ 		</transition>
 		<transition name="next" to="roundToPlay">
 			<action expression="#{mitPoker.endRound()}" />
  		</transition>
 	</start-page>
 	
 	<page name="game" view-id="/poker.xhtml">
+ 		<transition name="submit" to="isCorrect">
+ 			<action expression="#{mitPoker.assignLocation()}"/>
+ 		</transition>
  		<transition name="next" to="roundToPlay">
 			<action expression="#{mitPoker.endRound()}" />
  		</transition>
 	</page>
+	
+	<page name="wrong" view-id="/pokerRequest.xhtml">
+		<transition name="sureCorrect" to="roundToPlay">
+			<action expression="#{mitPoker.createBet()}" />
+			<action expression="#{mitPoker.endRound()}" />
+ 		</transition>
+		<transition name="next" to="roundToPlay">
+			<action expression="#{mitPoker.endRound()}" />
+ 		</transition>
+	</page>
+	
+	<decision name="isCorrect" expression="#{mitPoker.isCorrect}">
+		<transition name="true" to="roundToPlay">
+			<action expression="#{mitPoker.endRound()}" />
+		</transition>
+		<transition name="false" to="wrong"/>
+	</decision>
 	
 	<decision name="roundToPlay" expression="#{mitPoker.roundsLeft > 0}">
 		<transition name="true" to="game">

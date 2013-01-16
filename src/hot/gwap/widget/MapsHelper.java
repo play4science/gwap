@@ -27,7 +27,7 @@ public class MapsHelper implements Serializable {
 	@Logger                      private Log log;
 
 	// Security measure! Include your method call in this list!
-	private static String[] allowedSubmitFunctions = new String[] { "mitRecognize.assignLocation", "mitNewStatement.createStatement" };
+	private static String[] allowedSubmitFunctions = new String[] { "mitRecognize.assignLocation", "mitPoker.assignLocation", "mitNewStatement.createStatement" };
 
 	public Object submitFunction(String classAndMethod) {
 		boolean allowed = false;
@@ -55,7 +55,7 @@ public class MapsHelper implements Serializable {
 				log.error("Method could not be invoked: "+classAndMethod, t);
 			}
 		} else {
-			log.info("Did not allow submitFunction $0", classAndMethod);
+			log.info("Did not allow submitFunction #0", classAndMethod);
 		}
 		return null;
 	}
