@@ -14,7 +14,6 @@ import gwap.model.GameRound;
 import gwap.model.action.Action;
 import gwap.model.action.Bet;
 import gwap.model.action.Characterization;
-import gwap.model.action.Familiarity;
 import gwap.model.action.LocationAssignment;
 import gwap.model.action.StatementAnnotation;
 import gwap.model.resource.Location;
@@ -60,7 +59,6 @@ public class Recognize extends AbstractGameSessionBean {
 	protected int roundNrUsingAtLeastAssignedStatement = 0;
 
 	protected Characterization[] characterizations;
-	protected Familiarity familiarity;
 	protected StatementAnnotation statementAnnotation;
 	protected LocationAssignment locationAssignment;
 	protected Integer points;
@@ -82,7 +80,6 @@ public class Recognize extends AbstractGameSessionBean {
 		characterizations = CharacterizationBean.createAndInitializeCharacterizations(statement);
 		statementAnnotation = null;
 		locationAssignment = null;
-		familiarity = null;
 		points = null;
 		selectedTokens.clear();
 		skipCharacterizationResult = false;
@@ -164,22 +161,6 @@ public class Recognize extends AbstractGameSessionBean {
 			}
 		}
 		return breadcrumbLocations;
-	}
-	
-	public void familiarAndAssignLocation(Long locationId) {
-		familiarity(true);
-		assignLocation(locationId);
-	}
-	
-	public void familiarity(boolean familiar) {
-		if (familiarity != null)
-			return;
-		log.info("#0 rated as familiar=#1 by #2", statement, familiar, person);
-		familiarity = new Familiarity();
-		initializeAction(familiarity);
-		familiarity.setFamiliar(familiar);
-		entityManager.persist(familiarity);
-		gameRound.getActions().add(familiarity);
 	}
 	
 	public void highlightWords() {

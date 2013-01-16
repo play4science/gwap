@@ -47,7 +47,9 @@
 			<a4j:queue name="eventsQueue" ignoreDupResponses="true"/>
 			
 			<div id="location">
-				<p4s:speechbubble statement="#{statement}" />
+				<h:form>
+					<p4s:speechbubble statement="#{statement}" />
+				</h:form>
 				<ui:include src="/widget/locationAssignment.xhtml" />
 			</div>
 		</div>

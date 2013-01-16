@@ -1,0 +1,50 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    template="layout/template.xhtml">
+
+    <ui:define name="body">
+		<a4j:form id="form">
+			<div id="related">
+				<ui:include src="/layout/menu.xhtml">
+					<ui:param name="hideSubmenu" value="true" />
+				</ui:include>
+				<br class="clear"/>
+				
+				<div class="clear" style="height:30px;"/>
+				
+				<ui:include src="/widget/locationAssignmentBreadcrumbs.xhtml">
+					<ui:param name="submitFunction" value="mitNewPokerStatement.createStatement" />
+					<ui:param name="whereFromText" value="#{messages['game.newstatement.whereFrom']}" />
+				</ui:include>
+			</div>
+	
+			<div id="content">
+				<h2><h:outputText value="#{messages['game.poker.newstatement.enterStatement']}"/></h2>
+				<blockquote class="speechbubble">
+					<p style="margin-bottom: 1em;"><h:inputTextarea id="text" value="#{mitNewPokerStatement.text}" rows="3" cols="60" /></p>
+					<h:outputText value="#{messages['game.newstatement.standardForm']}" /><h:inputTextarea id="standardText" value="#{mitNewPokerStatement.standardText}" rows="2" cols="60" />
+				</blockquote>
+				<div class="messages" id="clickOnMap">
+					<rich:messages />
+				</div>
+
+				<div class="right" style="margin-bottom: 10px">
+					<a4j:commandLink action="#{mitNewPokerStatement.createStatement()}" reRender="text" styleClass="button">
+						<span><span class="checkmark-yes"/><h:outputText value="#{messages['game.newstatement.submitStatement']}"/></span>
+					</a4j:commandLink>
+				</div>
+				<ui:include src="/widget/locationAssignment.xhtml"/>
+			</div>
+		</a4j:form>
+		 
+		<br class="clear" />
+		
+    </ui:define>
+</ui:composition>

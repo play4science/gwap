@@ -7,19 +7,20 @@
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:rich="http://richfaces.org/rich"
     xmlns:a4j="http://richfaces.org/a4j"
-    xmlns:p4s="http://play4science.org/facelets"
     template="layout/template.xhtml">
 
     <ui:define name="body">
 		<div id="related">
-			<ui:include src="/layout/menu.xhtml"/>
+			<ui:include src="/layout/menu.xhtml">
+				<ui:param name="hideSubmenu" value="true" />
+			</ui:include>	
 		</div>
 
 		<div id="content">
-			<div style="margin:10em 1em; text-align:center">
-				<div style="margin-bottom:2em"><s:button view="/poker.xhtml" propagation="none" value="#{messages['game.poker.menu.play']}"/></div>
-				<div><s:button view="/pokerNewStatement.xhtml" propagation="none" value="#{messages['game.poker.menu.newStatement']}"/></div>
-			</div>
+			<h2><h:outputText value="#{messages['game.newstatement.statementCreated']}"/></h2>
+			<br/>
+			<s:button view="/pokerNewStatement.xhtml" propagation="none" value="#{messages['game.newstatement.createAnotherStatement']}" />
+			<s:button view="/poker.xhtml" propagation="none" value="#{messages['game.poker.nextRound']}" />
 		</div>
 		 
 		<br class="clear" />

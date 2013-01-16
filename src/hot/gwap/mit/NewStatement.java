@@ -42,18 +42,18 @@ public class NewStatement implements Serializable {
 
 	@Logger					Log log;
 	
-	@In						private EntityManager entityManager;
-	@In(create=true)		private Person person;
-	@In						private FacesMessages facesMessages;
-	@In						private Coins mitCoins;
-	@In(required=false)@Out(required=false) private Long locationId;
+	@In						protected EntityManager entityManager;
+	@In(create=true)		protected Person person;
+	@In						protected FacesMessages facesMessages;
+	@In						protected Coins mitCoins;
+	@In(required=false)@Out(required=false) protected Long locationId;
 	
 	@Out
-	private List<Location> breadcrumbLocations = new ArrayList<Location>();
-	private String text;
-	private String standardText;
-	private Integer points;
-	private Statement statement;
+	protected List<Location> breadcrumbLocations = new ArrayList<Location>();
+	protected String text;
+	protected String standardText;
+	protected Integer points;
+	protected Statement statement;
 
 	public String createStatement() {
 		if (statement == null) {
