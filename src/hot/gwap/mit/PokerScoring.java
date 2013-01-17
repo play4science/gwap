@@ -62,8 +62,8 @@ public class PokerScoring {
 	private static final double LOCATION_ASSIGNMENT_ND_FACTOR = 0.03;
 	private static final int BET_MAX_SCORE = 100;
 	private static final double BET_ND_FACTOR = 0.09;
-	private static final int POKER_CORRECT = 10;
-	private static final int POKER_CORRECT_SMALL = 20;
+	public static final int POKER_CORRECT = 10;
+	public static final int POKER_CORRECT_DIFFICULT = 20;
 	
 	public static final int MIN_NR_FOR_STATISTICS = 3;
 	
@@ -96,7 +96,7 @@ public class PokerScoring {
 	 * @param locationAssignment
 	 * @return null if the location does not equal the predefined location
 	 */
-	public Integer poker(LocationAssignment locationAssignment) {
+	public Score poker(LocationAssignment locationAssignment) {
 		Query query = entityManager.createNamedQuery("bet.byResourcePointsAndLocation");
 		query.setParameter("resource", locationAssignment.getResource());
 		query.setParameter("points", Bet.POKER_POINTS);
@@ -104,12 +104,13 @@ public class PokerScoring {
 		List<Bet> bets = query.getResultList();
 		if (bets.isEmpty())
 			return null;
-		else {
+		else { // LocationAssignment.location is the same as bet.location
+			Percentage percentage = getRawPercentage(locationAssignment.getLocation(), locationAssignment.getResource());
 			int score = POKER_CORRECT;
-			if (bets.get(0).getLocation().getType().getLevel() >= 4)
-				score = POKER_CORRECT_SMALL;
+			if (percentage.getTotal() >= 2 && percentage.getFraction() <= 0.4)
+				score = POKER_CORRECT_DIFFICULT;
 			locationAssignment.setScore(score);
-			return score;
+			return new Score(score, percentage);
 		}
 	}
 
@@ -242,6 +243,32 @@ public class PokerScoring {
 		}
 		entityManager.flush();
 	}
+	
+	public void updateScoreForPokerBets(Resource resource) {
+		List<Bet> bets = entityManager.createNamedQuery("bet.byResourceAndPoints")
+				.setParameter("resource", resource)
+				.setParameter("points", Bet.POKER_POINTS)
+				.getResultList();
+		for (Bet bet : bets)
+			updateScoreForPokerBet(bet);
+	}
+
+	public void updateScoreForPokerBet(Bet bet) {
+		entityManager.refresh(bet);
+		bet.setScore(0);
+		bet.setCurrentMatch(0);
+		if (bet.getPoints() != null) {
+			Percentage percentage = getRawPercentage(bet.getLocation(), bet.getResource());
+			if (percentage.getTotal() > 0) {
+				double deviation = Math.abs(percentage.getPercentage() - bet.getPoints());
+				int score = getNormalDistributedScore(deviation, BET_ND_FACTOR, BET_MAX_SCORE);
+				log.info("Score for bet #0 with deviation #1 (bet on #3%, really #4%) is #2", bet, deviation, score, bet.getPoints(), percentage);
+				bet.setScore(score);
+				bet.setCurrentMatch(percentage.getPercentage().intValue());
+			}
+		}
+		entityManager.flush();
+	}
 
 	/**
 	 * Probability density function of the normal distribution with one variance-like factor.
@@ -254,6 +281,14 @@ public class PokerScoring {
 	private int getNormalDistributedScore(double normalScore, double preMultiplicator, int maximumScore) {
 		double score = maximumScore * 2.5 * 1.0/Math.sqrt(2*Math.PI) * Math.exp(-0.5*Math.pow(normalScore * preMultiplicator, 2));
 		return (int) Math.round(score);
+	}
+
+	private Percentage getRawPercentage(Location location, Resource resource) {
+		Number sum = (Number) entityManager.createNamedQuery("locationAssignment.countByResourceAndLocation")
+				.setParameter("resource", resource).setParameter("location", location).getSingleResult();
+		Number total = (Number) entityManager.createNamedQuery("locationAssignment.countByResource")
+				.setParameter("resource", resource).getSingleResult();
+		return new Percentage(sum, total);
 	}
 	
 	private Percentage getFuzzyPercentage(Location location, Resource resource) {

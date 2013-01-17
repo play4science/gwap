@@ -9,6 +9,7 @@
 package gwap.mit;
 
 import gwap.model.action.Bet;
+import gwap.wrapper.Score;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
@@ -45,20 +46,19 @@ public class Poker extends Recognize {
 	public boolean assignLocation(Long locationId) {
 		super.assignLocation(locationId);
 		// different to Recognize, do scoring now
-		Integer score = mitPokerScoring.poker(locationAssignment);
-		if (score != null) {
-			addToScore(score);
-			if (score > 0) {
-				facesMessages.addFromResourceBundle(Severity.INFO, "game.poker.correct");
-				isCorrect = true;
+		Score score = mitPokerScoring.poker(locationAssignment);
+		if (score != null && score.getScore() > 0) {
+			addToScore(score.getScore());
+			isCorrect = true;
+			if (score.getScore() == PokerScoring.POKER_CORRECT_DIFFICULT) {
+				facesMessages.addFromResourceBundle(Severity.INFO, "game.poker.correct.difficult");
+			} else if (score.getScore() == PokerScoring.POKER_CORRECT) {
+				facesMessages.addFromResourceBundle(Severity.INFO, "game.poker.correct.easy");
 			}
-		}
-		if (score == null || score == 0) {
-			facesMessages.addFromResourceBundle(Severity.INFO, "game.poker.wrong");
 		}
 		entityManager.persist(locationAssignment);
 		gameRound.getActions().add(locationAssignment);
-		mitPokerScoring.updateScoreForBets(locationAssignment.getResource());
+		mitPokerScoring.updateScoreForPokerBets(locationAssignment.getResource());
 		return true;
 	}
 	
