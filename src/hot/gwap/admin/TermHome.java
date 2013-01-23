@@ -10,6 +10,7 @@ package gwap.admin;
 
 import gwap.model.Tag;
 import gwap.model.resource.Term;
+import gwap.wrapper.BackstageAnswer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -198,6 +199,24 @@ public class TermHome extends EntityHome<Term> {
 			entityManager.persist(tag);
 		}
 		return tag;
+	}
+	
+	public List<BackstageAnswer> getTopCorrectAnswers() {
+		Query q = entityManager.createNamedQuery("tagging.topCorrectAnswersGeneral");
+		q.setParameter("resourceId", getId());
+		return q.getResultList();
+	}
+	
+	public List<BackstageAnswer> getTopUnknownAnswers() {
+		Query q = entityManager.createNamedQuery("tagging.topUnknownAnswersGeneral");
+		q.setParameter("resourceId", getId());
+		return q.getResultList();
+	}
+	
+	public List<BackstageAnswer> getTopWrongAnswers() {
+		Query q = entityManager.createNamedQuery("tagging.topWrongAnswersGeneral");
+		q.setParameter("resourceId", getId());
+		return q.getResultList();
 	}
 
 	public String getNewConfirmedTag() {

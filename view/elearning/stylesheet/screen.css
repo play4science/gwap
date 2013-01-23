@@ -798,6 +798,22 @@ input[type="button"].buttonUpload:hover {
 	background: url('../img/button_upload_active.svg');
 }
 
+input[type="button"].buttonStatistics {
+	display: block;
+	width: 30px;
+	height: 30px;
+	color: #5858FA;
+	font-weight: bold;
+	padding: .3em;
+	background: url('../img/button_statistics_inactive.svg');
+	border: none;
+	cursor: pointer
+}
+
+input[type="button"].buttonStatistics:hover {
+	background: url('../img/button_statistics_active.svg');
+}
+
 #navLanguage li {
 	float: left;
 	margin-right: .1em;
@@ -1108,6 +1124,15 @@ label.error {
 /* tables */
 .termTable {
 	vertical-align: top;
+}
+table.borderedTable tr td, table.borderedTable tr th {
+    border-top: 1px solid gray;
+    border-left: 1px solid gray;
+    padding:0 3px;
+}
+table.borderedTable {
+    border-bottom: 1px solid gray;
+    border-right: 1px solid gray;
 }
 
 .menuTableCell {
