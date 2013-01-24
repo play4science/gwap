@@ -112,7 +112,7 @@ public class ArtResourceImporter {
 			if (!r.getPath().matches(FILENAME_REGEXP))
 				throw new ImportException("Filename must not contain characters other than "+FILENAME_REGEXP+": "+r.getPath());
 			// Check for correct year
-			if (r.getDateCreated() != null && !r.getDateCreated().matches("[1-9][0-9]*"))
+			if (r.getDateCreated() != null && !r.getDateCreated().matches(".*[1-9][0-9]*.*"))
 				throw new ImportException("Year created does not represent a year: "+r.getDateCreated());
 			// Check if image file exists
 			String filePath = source.getUrl() + r.getPath();

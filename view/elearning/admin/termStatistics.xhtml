@@ -1,0 +1,62 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    template="/layout/adminTemplate.xhtml">
+
+    <ui:define name="body">
+		<div id="content">
+		
+			<h1><h:outputText value="#{messages['pagetitle.admin.termStatistics']} '#{termHome.instance.tag.name}'" /></h1>
+			<hr class="pageTitle" /><br />
+			
+			<table class="borderedTable" cellspacing="0" cellpadding="0" border="0">
+			<tr>
+			<th><h:outputText value="#{messages['terme.confirmed']}" /></th>
+			<th><h:outputText value="#{messages['terme.rejected']}" /></th>
+			<th><h:outputText value="#{messages['terme.unknown']}" /></th>
+			</tr>
+			<tr>
+			<td class="scoringCorrectAnswers">
+				<ui:repeat var="_term" value="#{termHome.getTopCorrectAnswers()}">
+					<h:outputFormat value="{0} ({1}x)">
+						<f:param value="#{_term.term}" />
+						<f:param value="#{_term.appearence}" />
+					</h:outputFormat><br/>
+				</ui:repeat>
+			</td>
+			<td class="scoringWrongAnswers">
+				<ui:repeat var="_term" value="#{termHome.getTopWrongAnswers()}">
+					<h:outputFormat value="{0} ({1}x)">
+						<f:param value="#{_term.term}" />
+						<f:param value="#{_term.appearence}" />
+					</h:outputFormat><br/>
+				</ui:repeat>
+			</td>
+			
+			<td class="scoringUnknownAnswers">
+				<ui:repeat var="_term" value="#{termHome.getTopUnknownAnswers()}">
+					<h:outputFormat value="{0} ({1}x)">
+						<f:param value="#{_term.term}" />
+						<f:param value="#{_term.appearence}" />
+					</h:outputFormat><br/>
+				</ui:repeat>
+			</td>
+			</tr>
+			</table>
+			
+			<br/>
+			
+			<s:button view="/admin/term.xhtml" propagation="none"  styleClass="buttonEdit" value="" title="#{messages['buttonTitle.termEdit']}">
+    			<f:param name="termId" value="#{termHome.id}"/>
+    		</s:button>
+      		
+		</div>		
+        <br class="clear" />
+    </ui:define>
+</ui:composition>

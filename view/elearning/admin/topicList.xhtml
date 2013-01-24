@@ -57,7 +57,10 @@
 			    	<rich:column>
 			        	<f:facet name="header" ><h:outputText value="#{messages['topic.content']}"/></f:facet>
 			        	<ui:repeat value="#{_resource.resources}" var="_term" varStatus="_status">
-			        		<h:outputText value="#{_term.tag.name}"/><h:outputText value=", " rendered="#{!_status.last}" />
+			        		<s:link view="/admin/termStatistics.xhtml" propagation="none" value="#{_term.tag.name}">
+				    			<f:param name="termId" value="#{_term.id}"/>
+			        		</s:link>
+			        		<br/>
 			        	</ui:repeat>
 			    	</rich:column>
 			    	

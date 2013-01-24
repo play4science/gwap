@@ -27,6 +27,9 @@
 			    		<s:button view="/admin/term.xhtml" propagation="none"  styleClass="buttonEdit" value="" title="#{messages['buttonTitle.termEdit']}">
 			    			<f:param name="termId" value="#{_resource.id}"/>
 			    		</s:button>
+			    		<s:button view="/admin/termStatistics.xhtml" propagation="none" styleClass="buttonStatistics" value="" title="#{messages['buttonTitle.termStatistics']}">
+			    			<f:param name="termId" value="#{_resource.id}"/>
+			    		</s:button>
 			    	</rich:column>
 			    	
 			    	<rich:column width="50px">
@@ -52,7 +55,7 @@
 			    	<rich:column width="500px">
 			        	<f:facet name="header"><h:outputText value="#{messages['terme.confirmedTags']}"/></f:facet>
 			        	<ui:repeat value="#{_resource.confirmedTags}" var="_tag" varStatus="_status">
-			        		<h:outputText value="#{_tag.name}"/><h:outputText value=", " rendered="#{!_status.last}" />
+			        		<h:outputText value="#{_tag.name}"/><br/>
 			        	</ui:repeat>
 			    	</rich:column>
 			</rich:dataTable>
