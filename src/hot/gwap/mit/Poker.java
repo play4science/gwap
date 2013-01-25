@@ -9,6 +9,8 @@
 package gwap.mit;
 
 import gwap.model.action.Bet;
+import gwap.model.action.PokerBet;
+import gwap.model.resource.Location;
 import gwap.wrapper.Score;
 
 import org.jboss.seam.ScopeType;
@@ -67,8 +69,21 @@ public class Poker extends Recognize {
 	}
 	
 	public void createBet() {
-		points = Bet.POKER_POINTS;
-		super.createBet();
+		if (locationAssignment == null)
+			return;
+		Location location = locationAssignment.getLocation();
+		log.info("Creating poker bet for statement #1 and location #2", statement, location);
+		Bet bet = new PokerBet();
+		initializeAction(bet);
+		bet.setLocation(location);
+		bet.setResource(statement);
+		scoreAssignLocation();
+		
+		entityManager.persist(bet);
+		gameRound.getActions().add(bet);
+		bet.setNotEvaluated(true);
+		entityManager.flush();
+		mitPokerScoring.updateScoreForBets(bet.getResource());
 	}
 
 	public boolean getIsCorrect() {

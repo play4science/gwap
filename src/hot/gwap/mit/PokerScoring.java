@@ -97,9 +97,8 @@ public class PokerScoring {
 	 * @return null if the location does not equal the predefined location
 	 */
 	public Score poker(LocationAssignment locationAssignment) {
-		Query query = entityManager.createNamedQuery("bet.byResourcePointsAndLocation");
+		Query query = entityManager.createNamedQuery("pokerBet.byResourceAndLocation");
 		query.setParameter("resource", locationAssignment.getResource());
-		query.setParameter("points", Bet.POKER_POINTS);
 		query.setParameter("location", locationAssignment.getLocation());
 		List<Bet> bets = query.getResultList();
 		if (bets.isEmpty())
@@ -245,9 +244,8 @@ public class PokerScoring {
 	}
 	
 	public void updateScoreForPokerBets(Resource resource) {
-		List<Bet> bets = entityManager.createNamedQuery("bet.byResourceAndPoints")
+		List<Bet> bets = entityManager.createNamedQuery("pokerBet.byResource")
 				.setParameter("resource", resource)
-				.setParameter("points", Bet.POKER_POINTS)
 				.getResultList();
 		for (Bet bet : bets)
 			updateScoreForPokerBet(bet);

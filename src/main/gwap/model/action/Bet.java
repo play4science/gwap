@@ -18,22 +18,18 @@ import org.jboss.seam.annotations.Scope;
 
 @NamedQueries({
 	@NamedQuery(name="bet.byResource", 
-			query="select b from Bet b where b.resource = :resource and b.revisedBet is null"), 
+			query="select b from Bet b where b.class=Bet and b.resource = :resource and b.revisedBet is null"), 
 	@NamedQuery(name="bet.byPerson", 
-			query="select b from Bet b where (b.person = :person or exists (select id from Person p where p.personConnected = :person and p.id = b.person.id)) and b.revisedBet is null order by b.resource.text,b.created desc"),
+			query="select b from Bet b where b.class=Bet and (b.person = :person or exists (select id from Person p where p.personConnected = :person and p.id = b.person.id)) and b.revisedBet is null order by b.resource.text,b.created desc"),
 	@NamedQuery(name="bet.byPersonWithoutScore", 
-			query="select b from Bet b where (b.person = :person or exists (select id from Person p where p.personConnected = :person and p.id = b.person.id)) and b.revisedBet is null " +
+			query="select b from Bet b where b.class=Bet and (b.person = :person or exists (select id from Person p where p.personConnected = :person and p.id = b.person.id)) and b.revisedBet is null " +
 					"and b.score is null"), 
 	@NamedQuery(name="bet.byResourceAndPerson", 
-			query="select b from Bet b where b.resource = :resource and (b.person = :person or exists (select id from Person p where p.personConnected = :person and p.id = b.person.id)) and b.revisedBet is null"),
+			query="select b from Bet b where b.class=Bet and b.resource = :resource and (b.person = :person or exists (select id from Person p where p.personConnected = :person and p.id = b.person.id)) and b.revisedBet is null"),
 	@NamedQuery(name="bet.allWithPerson",
-			query="from Bet where person is not null"),
+			query="select b from Bet b where b.class=Bet and b.person is not null"),
 	@NamedQuery(name="bet.byScore",
-			query="select b from Bet b where b.score != null and b.person != null order by b.score desc"),
-	@NamedQuery(name="bet.byResourceAndPoints",
-			query="select b from Bet b where b.resource = :resource and b.revisedBet is null and b.points = :points"),
-	@NamedQuery(name="bet.byResourcePointsAndLocation",
-			query="select b from Bet b where b.resource = :resource and b.revisedBet is null and b.points = :points and b.location = :location")
+			query="select b from Bet b where b.class=Bet and b.score != null and b.person != null order by b.score desc")
 })
 
 /**
@@ -49,11 +45,9 @@ public class Bet extends LocationAssignment {
 	
 	private static final long serialVersionUID = 1L;
 
-	public static final int POKER_POINTS = 1;
-
-	private Integer points;
+	protected Integer points;
 	
-	private Integer currentMatch;
+	protected Integer currentMatch;
 	
 	@OneToOne private Bet revisedBet;
 	

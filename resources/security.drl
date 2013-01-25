@@ -140,3 +140,11 @@ when
 then
 	c.grant();
 end
+
+rule MetropolitaliaCanPlayPoker
+when
+	c: PermissionCheck(target == "metropolitalia", action == "poker")
+	Role(name == "metropolitalia.hiwi")
+then
+	c.grant();
+end

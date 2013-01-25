@@ -35,6 +35,11 @@
 	    		<li>
 	    			<s:link view="/newstatement.xhtml" value="#{messages['menu.newstatement']}" propagation="none" rendered="#{mitCoins.canEnterStatement()}" />
 	    		</li>
+	    		<s:fragment rendered="#{s:hasPermission('metropolitalia', 'poker')}">
+	    		<li>
+	    			<s:link view="/pokerSelection.xhtml" propagation="none" value="#{messages['menu.poker']}"/>
+	    		</li>
+	    		</s:fragment>
 	        </ul>
 	    	<ul id="navSub">
 	        	<li>

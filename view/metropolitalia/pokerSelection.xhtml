@@ -17,8 +17,15 @@
 
 		<div id="content">
 			<div style="margin:10em 1em; text-align:center">
-				<div style="margin-bottom:2em"><s:button view="/poker.xhtml" propagation="none" value="#{messages['game.poker.menu.play']}"/></div>
-				<div><s:button view="/pokerNewStatement.xhtml" propagation="none" value="#{messages['game.poker.menu.newStatement']}"/></div>
+				<s:link view="/poker.xhtml" propagation="none" styleClass="button" style="margin-bottom:2em">
+					<span><h:outputText value="#{messages['game.poker.menu.play']}" /></span>
+				</s:link>
+				<s:link view="/pokerNewStatement.xhtml" propagation="none" styleClass="button" style="margin-bottom:2em; clear:both">
+					<span><h:outputText value="#{messages['game.poker.menu.newStatement']}" /></span>
+				</s:link>
+				<s:link view="/pokerBets.xhtml" propagation="none" styleClass="button" style="margin-bottom:2em; clear:both">
+					<span><h:outputText value="#{messages['game.poker.menu.bets']}" /></span>
+				</s:link>
 			</div>
 		</div>
 		 

@@ -1,0 +1,44 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:p4s="http://play4science.org/facelets">
+
+	<h:form>
+
+		<s:fragment rendered="#{empty(mitPokerBetList)}">
+			<h:outputText value="#{messages['poker.bets.none']}" />
+			<br />
+			<s:link view="/pokerNewStatement.xhtml" value="#{messages['poker.bets.new']}"></s:link>
+		</s:fragment>
+		<s:fragment rendered="#{!empty(mitPokerBetList)}">
+	    	<h2>
+				<h:outputText value="#{messages['menu.poker.bets']}:" />
+	    	</h2>
+			<p4s:pagination viewId="/pokerBets.xhtml" style="margin:0 0 10px 0;"/>
+		   	<rich:dataTable value="#{mitPokerBetList.betList}" var="_bet" id="bets" style="width:100%; float: left;" styleClass="statementList">
+			    <rich:column>
+	    			<div style="float: right" >
+	    				<a4j:commandLink action="#{mitPokerBetList.showDetail(_bet.id)}" reRender= "betDetails,paginationPanel">
+	    				<h:outputFormat value="#{messages['game.recognizeScoring.list.points']}" styleClass="coins">
+							<f:param value="#{_bet.score}"/>
+						</h:outputFormat>
+						</a4j:commandLink>
+						
+					</div>
+	    			<div style="width: 70%" id="#{_bet.id}">
+	    				<a4j:commandLink action="#{mitPokerBetList.showDetail(_bet.id)}"  reRender= "betDetails,paginationPanel"><h:outputText value="#{_bet.resource.asText()}" /></a4j:commandLink>
+	    			</div>
+				</rich:column>
+			</rich:dataTable>
+			<p4s:pagination viewId="/bets.xhtml" style="margin:10px 0 0 0;"/>	
+			<rich:panel id="paginationPanel">
+			</rich:panel>	
+		</s:fragment>
+	</h:form>
+</ui:composition>
