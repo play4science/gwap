@@ -14,7 +14,10 @@
    	<h:form>
 	<rich:dataTable id="latestStatementList" styleClass="statementList" value="#{mitStatementListByAssignmentDate.resultList}" var="_resource" rows="7">
 		<rich:column>
-			<a4j:commandLink value="#{_resource.resource.text}" action="#{mitStatementListByAssignmentDate.showDetail(_resource.id)}" reRender="searchResultDetail" oncomplete="hideTeaser()" styleClass="link" />
+			<a4j:commandLink action="#{mitStatementListByAssignmentDate.showDetail(_resource.id)}" reRender="searchResultDetail" oncomplete="hideTeaser()" styleClass="link tooltip">
+  					<h:outputText value="#{_resource.resource.asText()}" />
+  					<ui:include src="/widget/standardExpression.xhtml"><ui:param name="text" value="#{_resource.resource.standardAsText()}" /></ui:include>
+			</a4j:commandLink>
 		</rich:column>
 	</rich:dataTable>
    	</h:form>

@@ -347,6 +347,25 @@ License: MIT + GNU GPLv2 by Nicolas Gallagher, http://nicolasgallagher.com/pure-
 	padding-top: 5px;
 }
 
+a.tooltip {
+  position: relative;
+}
+a.tooltip span.info {
+  display:none;
+  background:transparent;
+}
+a.tooltip:hover span.info {
+  display:block;
+  position:absolute;
+  top:20px;
+  left:20px;
+  width:300px;
+  background:#ffffcc;
+  border:1px solid black;
+  z-index:1000;
+  padding:1px;
+}
+
 /* =GameSession rating
 -----------------------------------------------------------------------------*/
 .ratingstar								{width:24px; height:23px;}

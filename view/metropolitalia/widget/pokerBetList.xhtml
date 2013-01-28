@@ -18,21 +18,24 @@
 		</s:fragment>
 		<s:fragment rendered="#{!empty(mitPokerBetList)}">
 	    	<h2>
-				<h:outputText value="#{messages['menu.poker.bets']}:" />
+				<h:outputText value="#{messages['game.poker.menu.bets']}:" />
 	    	</h2>
 			<p4s:pagination viewId="/pokerBets.xhtml" style="margin:0 0 10px 0;"/>
 		   	<rich:dataTable value="#{mitPokerBetList.betList}" var="_bet" id="bets" style="width:100%; float: left;" styleClass="statementList">
 			    <rich:column>
 	    			<div style="float: right" >
 	    				<a4j:commandLink action="#{mitPokerBetList.showDetail(_bet.id)}" reRender= "betDetails,paginationPanel">
-	    				<h:outputFormat value="#{messages['game.recognizeScoring.list.points']}" styleClass="coins">
-							<f:param value="#{_bet.score}"/>
-						</h:outputFormat>
+	    					<h:outputFormat value="#{messages['game.recognizeScoring.list.points']}" styleClass="coins">
+								<f:param value="#{_bet.score}"/>
+							</h:outputFormat>
 						</a4j:commandLink>
 						
 					</div>
 	    			<div style="width: 70%" id="#{_bet.id}">
-	    				<a4j:commandLink action="#{mitPokerBetList.showDetail(_bet.id)}"  reRender= "betDetails,paginationPanel"><h:outputText value="#{_bet.resource.asText()}" /></a4j:commandLink>
+	    				<a4j:commandLink action="#{mitPokerBetList.showDetail(_bet.id)}"  reRender="betDetails,paginationPanel" styleClass="tooltip">
+	    					<h:outputText value="#{_bet.resource.asText()}" />
+	    					<ui:include src="/widget/standardExpression.xhtml"><ui:param name="text" value="#{_bet.resource.standardAsText()}" /></ui:include>
+	    				</a4j:commandLink>
 	    			</div>
 				</rich:column>
 			</rich:dataTable>

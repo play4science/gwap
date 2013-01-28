@@ -32,7 +32,10 @@
 						
 					</div>
 	    			<div style="width: 70%" id="#{_bet.id}">
-	    				<a4j:commandLink action="#{mitBetList.showDetail(_bet.id)}"  reRender= "betDetails,paginationPanel"><h:outputText value="#{_bet.resource.asText()}" /></a4j:commandLink>
+	    				<a4j:commandLink action="#{mitBetList.showDetail(_bet.id)}"  reRender="betDetails,paginationPanel" styleClass="tooltip">
+	    					<h:outputText value="#{_bet.resource.asText()}" />
+	    					<ui:include src="/widget/standardExpression.xhtml"><ui:param name="text" value="#{_bet.resource.standardAsText()}" /></ui:include>
+	    				</a4j:commandLink>
 	    			</div>
 				</rich:column>
 			</rich:dataTable>
