@@ -11,12 +11,7 @@
 
 	<h:form>
 
-		<s:fragment rendered="#{empty(mitPokerBetList)}">
-			<h:outputText value="#{messages['poker.bets.none']}" />
-			<br />
-			<s:link view="/pokerNewStatement.xhtml" value="#{messages['poker.bets.new']}"></s:link>
-		</s:fragment>
-		<s:fragment rendered="#{!empty(mitPokerBetList)}">
+		<s:fragment rendered="#{!empty(mitPokerBetList.betList)}">
 	    	<h2>
 				<h:outputText value="#{messages['game.poker.menu.bets']}:" />
 	    	</h2>
