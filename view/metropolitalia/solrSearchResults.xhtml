@@ -36,7 +36,7 @@
 				               >
 					<rich:column>
 						<div id="#{_doc.getFieldValue('id')}">
-							<a4j:commandLink value="#{_doc.getFieldValue('statement')}" action="#{mitSearchBean.showDetail(_doc.getFieldValue('id'))}" reRender="searchResultDetail" styleClass="link tooltip">
+							<a4j:commandLink action="#{mitSearchBean.showDetail(_doc.getFieldValue('id'))}" reRender="searchResultDetail" styleClass="link tooltip">
 								<h:outputText value="#{_doc.getFieldValue('statement')}" />
 	    						<ui:include src="/widget/standardExpression.xhtml"><ui:param name="text" value="#{_doc.getFieldValue('standard')}" /></ui:include>
 							</a4j:commandLink>
