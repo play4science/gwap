@@ -7,3 +7,5 @@ test-*
 .*.xml.jsfdia
 .*.jpdl.xml
 .*.gpd.xml
+bootstrap/data
+bootstrap/tmp
