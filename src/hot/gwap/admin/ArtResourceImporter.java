@@ -96,47 +96,51 @@ public class ArtResourceImporter {
 		String[] line;
 		resources = new ArrayList<ImportedArtResource>();
 		HashSet<String> allFilenames = new HashSet<String>();
-		while ((line = csvReader.readNext()) != null) {
-			// filename, image id, title, artistForename, artistSurname, year created, location, institution, origin, easement
-			//     0        1        2         3               4              5            6           7          8     9
-			if (line.length != 10)
-				throw new ImportException("Malformed row, wrong number of columns: '"+line+"'");
-			ImportedArtResource r = new ImportedArtResource();
-			r.setPath(getContentOf(line, 0));
-			r.setExternalId(getContentOf(line, 1));
-			r.setTitle(getContentOf(line, 2));
-			// Intelligently find forename and surname
-			//Pattern p = Pattern.compile("(?:(.*) )?((?:\\p{Lower}+ )?(?:\\p{Alpha}+')?\\p{Upper}[\\p{Alpha}-]+)");
-			r.setArtistForename(getContentOf(line, 3));
-			r.setArtistSurname(getContentOf(line, 4));
-			r.setDateCreated(getContentOf(line, 5));
-			r.setLocation(getContentOf(line, 6));
-			r.setInstitution(getContentOf(line, 7));
-			r.setOrigin(getContentOf(line, 8));
-			String easementAsString = getContentOf(line, 9);
-			if (easementAsString != null) {
-				if ("true".equalsIgnoreCase(easementAsString))
-					r.setEasement(true);
-				else if ("false".equalsIgnoreCase(easementAsString))
-					r.setEasement(false);
-				else
-					throw new ImportException("Easement should be either 'true' or 'false' and not '"+easementAsString+"'");
+		try {
+			while ((line = csvReader.readNext()) != null) {
+				// filename, image id, title, artistForename, artistSurname, year created, location, institution, origin, easement
+				//     0        1        2         3               4              5            6           7          8     9
+				if (line.length != 10)
+					throw new ImportException("Malformed row, wrong number of columns: '"+line+"'");
+				ImportedArtResource r = new ImportedArtResource();
+				r.setPath(getContentOf(line, 0));
+				r.setExternalId(getContentOf(line, 1));
+				r.setTitle(getContentOf(line, 2));
+				// Intelligently find forename and surname
+				//Pattern p = Pattern.compile("(?:(.*) )?((?:\\p{Lower}+ )?(?:\\p{Alpha}+')?\\p{Upper}[\\p{Alpha}-]+)");
+				r.setArtistForename(getContentOf(line, 3));
+				r.setArtistSurname(getContentOf(line, 4));
+				r.setDateCreated(getContentOf(line, 5));
+				r.setLocation(getContentOf(line, 6));
+				r.setInstitution(getContentOf(line, 7));
+				r.setOrigin(getContentOf(line, 8));
+				String easementAsString = getContentOf(line, 9);
+				if (easementAsString != null) {
+					if ("true".equalsIgnoreCase(easementAsString))
+						r.setEasement(true);
+					else if ("false".equalsIgnoreCase(easementAsString))
+						r.setEasement(false);
+					else
+						throw new ImportException("Easement should be either 'true' or 'false' and not '"+easementAsString+"'");
+				}
+				// Check for illegal characters in filename
+				if (!r.getPath().matches(FILENAME_REGEXP))
+					throw new ImportException("Filename must not contain characters other than "+FILENAME_REGEXP+": "+r.getPath());
+				// Check for correct year
+				if (r.getDateCreated() != null && !r.getDateCreated().matches(".*[1-9][0-9]*.*"))
+					throw new ImportException("Year created does not represent a year: "+r.getDateCreated());
+				// Check if image file exists
+				String filePath = source.getUrl() + r.getPath();
+				if (!new File(filePath).canRead())
+					throw new ImportException("Image with filename '"+filePath+"' does not exist.");
+				// Check for duplicate filenames
+				if (allFilenames.contains(r.getPath()))
+					throw new ImportException("Duplicate entry for filename '"+r.getPath()+"'.");
+				allFilenames.add(r.getPath());
+				resources.add(r);
 			}
-			// Check for illegal characters in filename
-			if (!r.getPath().matches(FILENAME_REGEXP))
-				throw new ImportException("Filename must not contain characters other than "+FILENAME_REGEXP+": "+r.getPath());
-			// Check for correct year
-			if (r.getDateCreated() != null && !r.getDateCreated().matches(".*[1-9][0-9]*.*"))
-				throw new ImportException("Year created does not represent a year: "+r.getDateCreated());
-			// Check if image file exists
-			String filePath = source.getUrl() + r.getPath();
-			if (!new File(filePath).canRead())
-				throw new ImportException("Image with filename '"+filePath+"' does not exist.");
-			// Check for duplicate filenames
-			if (allFilenames.contains(r.getPath()))
-				throw new ImportException("Duplicate entry for filename '"+r.getPath()+"'.");
-			allFilenames.add(r.getPath());
-			resources.add(r);
+		} finally {
+			csvReader.close();
 		}
 	}
 	

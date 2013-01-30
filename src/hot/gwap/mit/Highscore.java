@@ -47,23 +47,27 @@ public class Highscore {
 	private List<Bet> bestBets;
 	private List<gwap.model.Highscore> bestUsers;
 
-	public List<Bet> getBestBets(){
-		Query q = entityManager.createNamedQuery("bet.byScore");
-		q.setMaxResults(10);
-		List<Bet> result = q.getResultList();
+	public List<Bet> getBestBets() {
+		if (bestBets == null) {
+			Query q = entityManager.createNamedQuery("bet.byScore");
+			q.setMaxResults(10);
+			bestBets = q.getResultList();
+		}
 			
-		return result;
+		return bestBets;
 		
 	}
 	
-	public List<gwap.model.Highscore> getBestUsers(){
-		Query q = entityManager.createNamedQuery("highscore.mit.byAllPersons");
-		q.setMaxResults(10);
-		q.setParameter("gametype", "mitRecognize");
-		List<gwap.model.Highscore> result  = q.getResultList();
-		HighscoreBean.modifyHighscore(result, entityManager);
+	public List<gwap.model.Highscore> getBestUsers() {
+		if (bestUsers == null) {
+			Query q = entityManager.createNamedQuery("highscore.mit.byAllPersons");
+			q.setMaxResults(10);
+			q.setParameter("gametype", "mitRecognize");
+			bestUsers = q.getResultList();
+			HighscoreBean.modifyHighscore(bestUsers, entityManager);
+		}
 		
-		return result;
+		return bestUsers;
 	}
 	
 

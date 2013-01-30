@@ -80,7 +80,6 @@ public class SolrServerBean implements Serializable {
 	private String solrPassword;
 	private String solrUsername;
 
-	@SuppressWarnings("deprecation")
 	@Factory("solrServer")
 	public void connectToSolrServer() {
 		log.info("Connecting to solr server");

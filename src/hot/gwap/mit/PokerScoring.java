@@ -69,7 +69,6 @@ public class PokerScoring {
 	
 	public static final int CHARACTERIZATION_BONUS_30_PERCENT = 5;
 	public static final int CHARACTERIZATION_BONUS_50_PERCENT = 10;
-	private static final int STATEMENT_CREATED = 10;
 	public static final int ANNOTATION_LIKE_MAJORITY = 10;
 	public static final int ANNOTATION_LIKE_THIRD = 5;
 	private static final int LOCATION_ASSIGNMENT_MAX_SCORE = 10;
@@ -80,8 +79,6 @@ public class PokerScoring {
 	public static final int POKER_CORRECT_DIFFICULT = 20;
 	
 	public static final int MIN_NR_FOR_STATISTICS = 3;
-	
-	private HashMap<Long, List<Location>> hierarchyTrees = new HashMap<Long, List<Location>>();
 	
 	@In		private EntityManager entityManager;
 	@Logger private Log log;
@@ -132,7 +129,7 @@ public class PokerScoring {
 		
 		boolean validCharacterization = false;
 		for (Characterization c : characterizations) {
-			if (characterizationBean.isValueSet(c)) {
+			if (CharacterizationBean.isValueSet(c)) {
 				validCharacterization = true;
 				break;
 			}
@@ -141,7 +138,7 @@ public class PokerScoring {
 		if (validCharacterization) {
 			boolean hasEnoughData = false;
 			for (Characterization c : characterizations) {
-				if (characterizationBean.isValueSet(c) && !characterizationBean.isValueUnknown(c)) {
+				if (CharacterizationBean.isValueSet(c) && !CharacterizationBean.isValueUnknown(c)) {
 					ResultForType result = characterizationBean.getResult(resource.getId(), c.getName());
 					Percentage percentage = new Percentage(0, result.getTotal());
 					// Check if value is there

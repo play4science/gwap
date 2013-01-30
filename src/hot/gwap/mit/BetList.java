@@ -75,7 +75,6 @@ public class BetList implements Serializable {
 
 
 	@DataModel
-	@SuppressWarnings("unchecked")
 	public List<Bet> getBetList() {
 		if (betList == null) {
 			updateBetList();

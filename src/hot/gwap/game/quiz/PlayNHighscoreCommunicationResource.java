@@ -186,7 +186,7 @@ public class PlayNHighscoreCommunicationResource extends AbstractResource {
 
 		int platz = 0;
 		for (QuizHighscore h : highscore) {
-			Map m = new HashMap();
+			Map<String, Object> m = new HashMap<String, Object>();
 			m.put("Name", h.getUsername());
 			m.put("PunkteAnzahl", h.getScore());
 			m.put("Joker", h.getJoker());

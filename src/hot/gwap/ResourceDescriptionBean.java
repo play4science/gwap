@@ -55,7 +55,6 @@ public class ResourceDescriptionBean implements Serializable {
 	@In                      private EntityManager entityManager;
 	@In                      private LocaleSelector localeSelector;
 	@In(create=true) @Out    private ArtResource resource;
-	@SuppressWarnings("unused")
 	@Out(required=false)     private String artResourceImageTeaser;
 	@Out(required=false)     private String artResourceImageTitle;
 

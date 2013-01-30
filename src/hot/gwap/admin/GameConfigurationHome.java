@@ -66,7 +66,7 @@ public class GameConfigurationHome extends EntityHome<GameConfiguration>{
 	private Topic selectedTopic; // +getter +setter
 	private Long selectedTopicId;
 	private List<Topic> selectTopics = null; // +getter
-	private List option; 
+	private List<SelectItem> option; 
 
 	public Topic getSelectedTopic() {
 		return selectedTopic;
@@ -77,7 +77,7 @@ public class GameConfigurationHome extends EntityHome<GameConfiguration>{
 	}	
 	
 	public List<SelectItem> getSelectTopics() {
-		option = new ArrayList();
+		option = new ArrayList<SelectItem>();
 		if (selectTopics == null) {
 			Query q = entityManager.createNamedQuery("topic.all");
 			selectTopics = q.getResultList();

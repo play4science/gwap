@@ -55,7 +55,6 @@ import org.jboss.seam.log.Log;
 public class RatingEvaluator {
 
 	private PerceptionPair[] userPairList;
-	private UserPerceptionRating userPerceptionRating;
 	int VOLLER_BONUS = 1;
 	int HALBER_BONUS = 0;
 	int KEIN_BONUS = -1;
@@ -92,7 +91,6 @@ public class RatingEvaluator {
 			QuizQuestionBean question,
 			UserPerceptionRating userPerceptionRating, int[] avgUserRating) {
 		this.userPairList = userPerceptionRating.getPairs();
-		this.userPerceptionRating = userPerceptionRating;
 
 		if (avgUserRating[0] == -1) {
 			int[] algorithmicRating = calcEstimatedWoelfflinValue(question);

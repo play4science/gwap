@@ -90,7 +90,6 @@ public class QuizSessionBean implements Serializable {
 	private boolean createWoelfflinResource() {
 
 		this.questions = new ArrayList<QuizQuestionBean>(15);
-		ArtResource[] artResources = new ArtResource[15];
 
 		Query query = entityManager.createNamedQuery("artResource.woelfflin");
 		query.setHint("org.hibernate.readOnly", true);

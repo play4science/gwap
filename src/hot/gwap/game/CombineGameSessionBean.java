@@ -56,7 +56,6 @@ public class CombineGameSessionBean extends AbstractGameSessionBean {
 
 	@In				    		private ArtResource resource;
 	@In                         private ResourceBean resourceBean;
-	@SuppressWarnings("unused")
 	@In(create=true) @Out		private CombineOpponentBean combineOpponentBean;
 	@Out						protected List<Tag> unselectedTags = new ArrayList<Tag>();
 	

@@ -29,8 +29,6 @@ import gwap.wrapper.MatchingTag;
 
 import java.util.Date;
 
-import javax.faces.context.FacesContext;
-
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -61,8 +59,6 @@ public class SentimentTaggingBean extends AbstractTaggingBean<MetaTagging> {
 		if (findOrCreateTag != null) {			
 			matchingTag = new MatchingTag(recommendedTag.getName());
 			recommendedTags.add(matchingTag);
-			
-			String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
 
 			metaTagging.setCreated(new Date());
 			metaTagging.setPerson(person);

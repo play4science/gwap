@@ -52,16 +52,6 @@ import java.util.ArrayList;
  * </p>
  */
 public class QuizGermanStemmer {
-	/**
-	 * Buffer for the terms while stemming them.
-	 */
-	private StringBuilder sb = new StringBuilder();
-
-	/**
-	 * Amount of characters that are removed with <tt>substitute()</tt> while
-	 * stemming.
-	 */
-	private int substCount = 0;
 
 	/**
 	 * Stemms the given term to an unique <tt>discriminator</tt>.

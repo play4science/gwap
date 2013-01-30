@@ -163,7 +163,7 @@ public abstract class SharedGame<P extends Player<P>> implements Serializable {
 			}
 			catch (Exception e)
 			{
-				String m=e.getMessage();
+				// do nothing
 			}
 		}
 		
@@ -257,7 +257,7 @@ public abstract class SharedGame<P extends Player<P>> implements Serializable {
 		
 		if (isTerminated())
 		{
-			for (Player p : players) {
+			for (Player<P> p : players) {
 				p.signal("endGame");		
 			}
 		}
@@ -275,7 +275,7 @@ public abstract class SharedGame<P extends Player<P>> implements Serializable {
 	{				
 		if (isTerminated())
 		{
-			for (Player p : players) {
+			for (Player<P> p : players) {
 				p.signal("endGame");		
 			}
 			return;
@@ -299,13 +299,13 @@ public abstract class SharedGame<P extends Player<P>> implements Serializable {
 		{
 			startNewRound();
 			
-			for (Player p : players) {
+			for (Player<P> p : players) {
 				p.signal("newRound");		
 			}
 		}	
 		else
 		{
-			for (Player p : players) {
+			for (Player<P> p : players) {
 				p.signal("endGame");		
 			}			
 		}

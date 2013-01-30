@@ -144,7 +144,7 @@ public class Profile implements Serializable {
 	
 	public void updateEmail() {
 		// Test if email already exists
-		List sameEmail = entityManager.createNamedQuery("person.byEmail").setParameter("email", email).getResultList();
+		List<Person> sameEmail = entityManager.createNamedQuery("person.byEmail").setParameter("email", email).getResultList();
 		if (!sameEmail.isEmpty()) {
 			facesMessages.addFromResourceBundle(Severity.ERROR, "profile.changeEmail.alreadyRegistered");
 			return;

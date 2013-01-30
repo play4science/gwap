@@ -70,18 +70,16 @@ public class TermImporter {
 	private List<ImportedTerm> terms;
 	private boolean termsEnabled = true;
 	
-	public void upload() {
+	public void upload() throws Exception {
 		if (data == null) {
 			return;
 		}
 		log.info("Uploaded term csv file #0 of size #1", name, size);
 		Reader inFile = new InputStreamReader(new ByteArrayInputStream(data));
-		CSVReader csvReader = new CSVReader(inFile, ',', '"', 1); // reader, separator, delimiter, skip #files
+		CSVReader csvReader = new CSVReader(inFile, ',', '"', 1); // reader, separator, delimiter, skip #lines
 		String[] line;
 		terms = new ArrayList<ImportedTerm>();
 		try {
-			if (ignoreFirstLine)
-				csvReader.readNext();
 			while ((line = csvReader.readNext()) != null) {
 				// "topic", "rating", "term", "associations"
 				//    0         1       2          3
@@ -103,6 +101,8 @@ public class TermImporter {
 			terms = null;
 			log.error("Error parsing csv file #0", e, name);
 			facesMessages.add("Error parsing csv file: #0", e);
+		} finally {
+			csvReader.close();
 		}
 	}
 	

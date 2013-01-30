@@ -44,6 +44,7 @@ public class PokerScoringTest extends SeamTest{
 	public void testScoringFuzzyMatching() throws Exception {
 		
 		new ComponentTest() {
+			@SuppressWarnings("unused")
 			@Override
 			protected void testComponents() throws Exception {
 				EntityManager em = (EntityManager) Component.getInstance("entityManager");

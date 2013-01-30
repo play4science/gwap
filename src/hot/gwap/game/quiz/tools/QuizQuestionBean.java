@@ -121,17 +121,15 @@ public class QuizQuestionBean {
 	/*
 	 * create a new JSON Object from scratch
 	 */
+	@SuppressWarnings("unchecked")
 	public JSONObject generateJSONObject() {
-
-		QuizGermanStemmer g = new QuizGermanStemmer();
-
 		jsonObject = new JSONObject();
-		jsonObject.put("Title", g.stemText(artResource.getDefaultTitle()));
+		jsonObject.put("Title", QuizGermanStemmer.stemText(artResource.getDefaultTitle()));
 
-		jsonObject.put("Teaser", g.stemText(getTeaser(artResource)));
+		jsonObject.put("Teaser", QuizGermanStemmer.stemText(getTeaser(artResource)));
 
 		if (artResource.getLocation() != null) {
-			jsonObject.put("Location", g.stemText(artResource.getLocation()));
+			jsonObject.put("Location", QuizGermanStemmer.stemText(artResource.getLocation()));
 		} else {
 			jsonObject.put("Location", "");
 		}
@@ -144,7 +142,7 @@ public class QuizQuestionBean {
 
 		if (artResource.getInstitution() != null) {
 			jsonObject.put("Institution",
-					g.stemText(artResource.getInstitution()));
+					QuizGermanStemmer.stemText(artResource.getInstitution()));
 		} else {
 			jsonObject.put("Institution", "");
 		}
@@ -156,18 +154,18 @@ public class QuizQuestionBean {
 		int ii = 0;
 		for (Entry<String, Integer> s : taggings.entrySet()) {
 			if (s.getValue() > 1) {
-				jsonObject.put("Tag" + ii, g.stemText(s.getKey()));
+				jsonObject.put("Tag" + ii, QuizGermanStemmer.stemText(s.getKey()));
 				jsonObject.put("TagNum" + ii, s.getValue());
 			}
 
 			ii++;
 		}
 
-		jsonObject.put("A", g.stem(answerA));
-		jsonObject.put("B", g.stem(answerB));
-		jsonObject.put("C", g.stem(answerC));
-		jsonObject.put("D", g.stem(answerD));
-		jsonObject.put("CorrectAnswer", g.stem(correctAnswer));
+		jsonObject.put("A", QuizGermanStemmer.stem(answerA));
+		jsonObject.put("B", QuizGermanStemmer.stem(answerB));
+		jsonObject.put("C", QuizGermanStemmer.stem(answerC));
+		jsonObject.put("D", QuizGermanStemmer.stem(answerD));
+		jsonObject.put("CorrectAnswer", QuizGermanStemmer.stem(correctAnswer));
 
 		if (answerA.getDeath() != null) {
 			jsonObject.put("DA", answerA.getDeath().getYear() + 1900);
