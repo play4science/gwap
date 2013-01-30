@@ -4,25 +4,29 @@
 insert into source (id, url, description) values  (1, '/images', 'Standard');
 
 -- gametypes
-INSERT INTO gametype (id, description, label, name, players, roundduration, rounds, workflow) VALUES (1, 'Google Image Labeler in Seam', 'Image Labeler', 'imageLabeler', 2, 30, 3, 'gameImageLabeler');
+INSERT INTO gametype (id, name, label, description, rounds, players, roundduration, platform, workflow, enabled) VALUES (1, 'imageLabeler', 'Image Labeler', 'Google Image Labeler in Seam', 5, 2, 60, 'artigo', 'gameImageLabeler', true);
+INSERT INTO gametype (id, name, label, description, rounds, players, roundduration, platform, workflow, enabled) VALUES (2, 'gwapGameMemory', 'Memory', 'An image labelling game similar to Memory', 2, 2, 90, 'artigo', '', true);
+INSERT INTO gametype (id, name, label, description, rounds, players, roundduration, platform, workflow, enabled) VALUES (3, 'gwapGameTest', 'Test', 'A simple test scenario', 1, 2, 120, NULL, '', true);
+INSERT INTO gametype (id, name, label, description, rounds, players, roundduration, platform, workflow, enabled) VALUES (4, 'mitAssociate', 'Associate', 'Associate statements to their region', 1, 1, 30, 'metropolitalia', NULL, true);
+INSERT INTO gametype (id, name, label, description, rounds, players, roundduration, platform, workflow, enabled) VALUES (5, 'gwapGameMemoryTurn', 'Memory', 'An image labelling game similar to Memory, turn-based mode', 2, 2, 0, 'artigo', NULL, true);
+INSERT INTO gametype (id, name, label, description, rounds, players, roundduration, platform, workflow, enabled) VALUES (6, 'gwapGameMemoryCluster', 'Memory', 'An image labelling game similar to Memory, clustering mode', 2, 2, 0, NULL, NULL, true);
+INSERT INTO gametype (id, name, label, description, rounds, players, roundduration, platform, workflow, enabled) VALUES (7, 'mitStatementLabeler', 'StatementLabeler', '', 3, 1, 60, 'metropolitalia', NULL, true);
+INSERT INTO gametype (id, name, label, description, rounds, players, roundduration, platform, workflow, enabled) VALUES (9, 'mitAccenti', 'accenti urbani', 'Associate audio resources to their region', 10, 1, NULL, 'accentiurbani', NULL, true);
+INSERT INTO gametype (id, name, label, description, rounds, players, roundduration, platform, workflow, enabled) VALUES (10, 'mitRecognize', 'MetropolItalia Recognize', 'Recognize statements as true or false', 3, 1, NULL, 'metropolitalia', NULL, true);
+INSERT INTO gametype (id, name, label, description, rounds, players, roundduration, platform, workflow, enabled) VALUES (11, 'tabooImageLabeler', 'Taboo Image Labeler', 'Image Labeler with Taboo words', 5, 2, 60, 'artigo', 'tabooImageLabeler', true);
+INSERT INTO gametype (id, name, label, description, rounds, players, roundduration, platform, workflow, enabled) VALUES (13, 'mitRecognizeSingle', 'MetropolItalia Single Round', 'Recognize statements', 1, 1, NULL, 'metropolitalia', 'mitRecognizeSingle', true);
+INSERT INTO gametype (id, name, label, description, rounds, players, roundduration, platform, workflow, enabled) VALUES (14, 'combino', 'Combino', 'An image labelling game to combine image tags', 5, 2, 90, 'artigo', 'combino', NULL);
 
 -- all roles
 INSERT INTO role (id, role, rolename) VALUES (1, 'admin', 'Admin');
 INSERT INTO role (id, role, rolename) VALUES (2, 'player', 'Player');
-INSERT INTO role (id, role, rolename) VALUES (3, 'creator', 'Creator');
+INSERT INTO role (id, role, rolename) VALUES (3, 'artigo.creator', 'Artigo Creator');
+INSERT INTO role (id, role, rolename) VALUES (4, 'metropolitalia.admin', 'Metropolitalia Admin');
+INSERT INTO role (id, role, rolename) VALUES (5, 'metropolitalia.player', 'Metropolitalia Player');
+INSERT INTO role (id, role, rolename) VALUES (6, 'artigo.admin', 'Artigo Admin');
+INSERT INTO role (id, role, rolename) VALUES (7, 'artigo.hiwi', 'Artigo HiWi');
+INSERT INTO role (id, role, rolename) VALUES (8, 'artigo.translator', 'Artigo Translator');
+INSERT INTO role (id, role, rolename) VALUES (9, 'metropolitalia.hiwi', 'Metropolitalia HiWi');
 
--- set next id
-insert into hibernate_sequences (sequence_name, sequence_next_hi_value) values ('AuthenticationToken', ( select max(tokenid)+1 from authenticationtoken ));
-insert into hibernate_sequences (sequence_name, sequence_next_hi_value) values ('GameRound',           ( select max(id)+1 from gameround ));
-insert into hibernate_sequences (sequence_name, sequence_next_hi_value) values ('GameSession',         ( select max(id)+1 from gamesession ));
-insert into hibernate_sequences (sequence_name, sequence_next_hi_value) values ('GameType',            ( select max(id)+1 from gametype ));
-insert into hibernate_sequences (sequence_name, sequence_next_hi_value) values ('Highscore',           ( select max(id)+1 from highscore ));
-insert into hibernate_sequences (sequence_name, sequence_next_hi_value) values ('Person',              ( select max(id)+1 from person ));
-insert into hibernate_sequences (sequence_name, sequence_next_hi_value) values ('Resource',            ( select max(id)+1 from resource ));
-insert into hibernate_sequences (sequence_name, sequence_next_hi_value) values ('ResourceDescription', ( select max(id)+1 from resourcedescription ));
-insert into hibernate_sequences (sequence_name, sequence_next_hi_value) values ('Role',                ( select max(id)+1 from role ));
-insert into hibernate_sequences (sequence_name, sequence_next_hi_value) values ('Source',              ( select max(id)+1 from source ));
-insert into hibernate_sequences (sequence_name, sequence_next_hi_value) values ('Tag',                 ( select max(id)+1 from tag ));
-insert into hibernate_sequences (sequence_name, sequence_next_hi_value) values ('Tagging',             ( select max(id)+1 from tagging ));
-insert into hibernate_sequences (sequence_name, sequence_next_hi_value) values ('TagFrequency',        ( select max(id)+1 from tagfrequency ));
-update hibernate_sequences set sequence_next_hi_value='1' where sequence_next_hi_value is null;
+-- set to highest id of all tables
+select setval('hibernate_sequence', 100);
