@@ -36,6 +36,17 @@ named above. You could have received this code as part of a bundle
 that also contains code by other authors where other license terms
 apply, and it is up to you to verify this is the correct file.
 
+Individual contributors:
+Christoph Wieser
+Fabian Kneißl
+Mislav Boras
+Romy Buchschmid
+Jonas Hölzler
+Katharina Krug
+Elena Levushkina
+André Reichstaller
+Bartholomäus Steinmayr
+Florian Störkle
 
 ------------------------------------------------------------------
                     GNU GENERAL PUBLIC LICENSE
