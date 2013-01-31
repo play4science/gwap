@@ -25,7 +25,7 @@ package gwap.wrapper;
 import gwap.model.resource.Location;
 
 /**
- * @author kneissl
+ * @author Fabian Kneißl
  */
 public class LocationPercentage extends Percentage {
 

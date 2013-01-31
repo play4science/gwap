@@ -35,7 +35,7 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.log.Log;
 
 /**
- * @author steinmayr
+ * @author Bartholomäus Steinmayr
  */
 
 @Name("dbLimiter")

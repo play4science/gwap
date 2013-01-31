@@ -25,7 +25,7 @@ package gwap.tools;
 import gwap.model.resource.ArtResource;
 
 /**
- * @author wieser
+ * @author Christoph Wieser
  */
 public interface ArtResourceCacheBean {
 

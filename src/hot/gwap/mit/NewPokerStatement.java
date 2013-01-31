@@ -31,7 +31,7 @@ import java.util.Date;
 import org.jboss.seam.annotations.Name;
 
 /**
- * @author kneissl
+ * @author Fabian Kneißl
  */
 @Name("mitNewPokerStatement")
 public class NewPokerStatement extends NewStatement {

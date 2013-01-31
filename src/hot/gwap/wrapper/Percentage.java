@@ -25,7 +25,7 @@ package gwap.wrapper;
 import java.io.Serializable;
 
 /**
- * @author kneissl
+ * @author Fabian Kneißl
  */
 public class Percentage implements Serializable {
 

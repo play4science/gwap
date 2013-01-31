@@ -40,7 +40,7 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.log.Log;
 
 /**
- * @author kneissl
+ * @author Fabian Kneißl
  */
 @Name("mitFamiliarity")
 @Scope(ScopeType.PAGE)

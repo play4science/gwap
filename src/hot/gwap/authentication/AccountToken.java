@@ -48,7 +48,7 @@ import org.jboss.seam.security.Identity;
 
 /**
  * Specifies actions that occur when a token has been accessed
- * @author Fabian Kneissl
+ * @author Fabian Kneißl
  */
 @Name("accountToken")
 @Scope(ScopeType.PAGE)

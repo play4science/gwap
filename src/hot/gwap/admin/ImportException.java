@@ -23,7 +23,7 @@
 package gwap.admin;
 
 /**
- * @author kneissl
+ * @author Fabian Kneißl
  */
 public class ImportException extends Exception {
 	public ImportException() {

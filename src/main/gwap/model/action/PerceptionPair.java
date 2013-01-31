@@ -32,7 +32,7 @@ import javax.persistence.NamedQuery;
  * This is general declaration of PerceptionPairs that must not be used in
  * games.
  * 
- * @author Jonas Hoelzler
+ * @author Jonas Hölzler
  */
 
 @NamedQueries({ @NamedQuery(name = "PerceptionPair.all", query = "select t from PerceptionPair t"),

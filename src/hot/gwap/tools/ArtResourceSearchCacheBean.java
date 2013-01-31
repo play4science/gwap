@@ -39,7 +39,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.log.Log;
 
 /**
- * @author kneissl, wieser
+ * @author Fabian Kneißl, Christoph Wieser
  */
 @Name("artResourceSearchCacheBean")
 public class ArtResourceSearchCacheBean implements ArtResourceCacheBean {

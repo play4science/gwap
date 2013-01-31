@@ -34,7 +34,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 /**
- * @author kneissl
+ * @author Fabian Kneißl
  */
 public class LocationTest extends SeamTest {
 

@@ -45,7 +45,7 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.international.LocaleSelector;
 
 /**
- * @author Kathi Krug, Fabian Kneißl
+ * @author Katharina Krug, Fabian Kneißl
  */
 @Name("elearnTermina")
 @Scope(ScopeType.CONVERSATION)

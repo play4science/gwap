@@ -42,7 +42,7 @@ import org.jboss.seam.international.StatusMessage.Severity;
 import org.jboss.seam.log.Log;
 
 /**
- * @author Andre Reichstaller
+ * @author André Reichstaller
  */
 @Name("mitChangeBet")
 @Scope(ScopeType.PAGE)

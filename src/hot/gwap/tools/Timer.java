@@ -25,7 +25,7 @@ package gwap.tools;
 import java.util.Date;
 
 /**
- * @author steinmayr
+ * @author Bartholomäus Steinmayr
  */
 public class Timer {
 	

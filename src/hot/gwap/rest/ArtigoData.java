@@ -43,7 +43,7 @@ import org.jboss.seam.log.Log;
 
 /** Access to Artigo data via an XML REST interface
  * 
- * @author Fabian Kneissl
+ * @author Fabian Kneißl
  */
 @Name("restArtigoData")
 @Scope(ScopeType.APPLICATION)

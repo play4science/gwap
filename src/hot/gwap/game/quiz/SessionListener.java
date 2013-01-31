@@ -31,7 +31,7 @@ import javax.servlet.http.HttpSessionListener;
 
 /**
  * Session Listener for Quiz-Session. Only works in clustered environments
- * @author Jonas
+ * @author Jonas Hölzler
  *
  */
 public class SessionListener implements HttpSessionListener, java.io.Serializable{

@@ -33,7 +33,7 @@ import javax.persistence.ManyToOne;
 /**
  * Saves search queries entered by users
  * 
- * @author Fabian Kneissl
+ * @author Fabian Kneißl
  */
 @Entity
 public class SearchQuery implements Serializable {

@@ -30,7 +30,7 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.core.ResourceBundle;
 
 /**
- * @author kneissl
+ * @author Fabian Kneißl
  */
 @Name("messagesHelper")
 @Scope(ScopeType.STATELESS)

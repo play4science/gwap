@@ -32,7 +32,7 @@ import javax.persistence.NamedQuery;
 /**
  * A PerceptionRating saves which user added a perception pair to "rate" a resource.
  * 
- * @author Jonas Hoelzler
+ * @author Jonas Hölzler
  */
 
 @NamedQueries( { 

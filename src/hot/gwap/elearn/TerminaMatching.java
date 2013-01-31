@@ -28,7 +28,7 @@ import gwap.tools.TagSemantics;
 import java.util.List;
 
 /**
- * @author kneissl
+ * @author Fabian Kneißl
  */
 public class TerminaMatching {
 

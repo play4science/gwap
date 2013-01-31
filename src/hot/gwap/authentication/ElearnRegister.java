@@ -26,7 +26,7 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 
 /**
- * @author kneissl
+ * @author Fabian Kneißl
  */
 @Name("elearnRegister")
 public class ElearnRegister extends Register {

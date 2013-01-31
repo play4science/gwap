@@ -26,7 +26,7 @@ import gwap.model.resource.ArtResource;
 
 
 /**
- * @author  Fabian Kneißl
+ * @author Fabian Kneißl
  */
 public class ImportedArtResource {
 	private String path;

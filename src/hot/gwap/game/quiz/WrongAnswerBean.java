@@ -46,7 +46,7 @@ import org.jboss.seam.log.Log;
 /**
  * Erzeugt falsche Antworten fuers Woelfflin-Quiz
  * 
- * @author Jonas Hoelzler
+ * @author Jonas Hölzler
  * 
  */
 @Name("wrongAnswerBean")

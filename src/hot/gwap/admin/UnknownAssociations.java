@@ -46,7 +46,7 @@ import org.jboss.seam.log.Log;
 
 
 /**
- * @author kneissl
+ * @author Fabian Kneißl
  */
 @Name("unknownAssociations")
 @Scope(ScopeType.PAGE)

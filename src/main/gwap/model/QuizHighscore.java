@@ -37,7 +37,7 @@ import org.jboss.seam.annotations.Name;
 /**
  * Responsible for the Highscore for the Woelfflin-QuizGame
  * 
- * @author Jonas Hoelzler
+ * @author Jonas Hölzler
  */
 
 @NamedQueries({

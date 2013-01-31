@@ -26,7 +26,7 @@ package gwap.wrapper;
 import gwap.model.resource.StatementToken;
 
 /**
- * @author reichstaller
+ * @author André Reichstaller
  */
 public class StatementTokenPercentage extends Percentage {
 

@@ -47,7 +47,7 @@ import org.jboss.seam.log.Log;
  * Gives a recommendation for the answers i.e. Answer A: 50% Answer B: 25% =
  * AnswerC AnswerD=0%
  * 
- * @author Jonas Hoelzler
+ * @author Jonas Hölzler
  */
 
 @Name("ratingEvaluator")

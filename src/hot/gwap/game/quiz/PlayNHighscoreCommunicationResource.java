@@ -64,7 +64,7 @@ import org.json.simple.parser.ParseException;
  * This servlet provides the highscores by returning a HttpServletRespone in
  * JSON-Format
  * 
- * @author Jonas Hoelzler
+ * @author Jonas Hölzler
  * 
  */
 @Startup

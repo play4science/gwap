@@ -24,7 +24,7 @@ package gwap.elearn;
 
 
 /**
- * @author Kathi Krug
+ * @author Katharina Krug
  * 
  */
 

@@ -35,7 +35,7 @@ import org.jboss.seam.log.Log;
  * Connects to an external webpage in order to check whether a username
  * and password combination exists on the remote side.
  * 
- * @author Fabian Kneissl
+ * @author Fabian Kneißl
  */
 @AutoCreate
 @Name("remoteAuthenticator")

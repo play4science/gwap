@@ -42,7 +42,7 @@ import org.jboss.seam.log.Log;
 import org.json.simple.JSONObject;
 
 /**
- * @author Jonas Hoelzler
+ * @author Jonas Hölzler
  */
 public class QuizQuestionBean {
 

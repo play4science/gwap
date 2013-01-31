@@ -30,7 +30,7 @@ import java.util.List;
  * A utility class for displaying associations together with term 
  * and confirmedTags in the GUI.
  * 
- * @author Fabian Kneissl
+ * @author Fabian Kneißl
  */
 public class UnknownAssociation {
 	

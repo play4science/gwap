@@ -40,7 +40,7 @@ import org.jboss.seam.annotations.security.Restrict;
 import org.jboss.seam.log.Log;
 
 /**
- * @author kneissl
+ * @author Fabian Kneißl
  */
 @Name("mitAdminLocationHierarchyCreator")
 @Restrict("#{s:hasRole('admin')}")

@@ -39,7 +39,7 @@ import org.jboss.seam.faces.Redirect;
 import org.jboss.seam.log.Log;
 
 /**
- * @author Christoph Wieser & Fabian Kneißl
+ * @author Christoph Wieser, Fabian Kneißl
  */
 @Name("detailedSearch")
 @Scope(ScopeType.CONVERSATION)

@@ -29,7 +29,7 @@ import gwap.widget.PaginationControl;
 import org.testng.annotations.Test;
 
 /**
- * @author kneissl
+ * @author Fabian Kneißl
  */
 public class PaginationControlTest {
 

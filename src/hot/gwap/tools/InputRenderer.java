@@ -33,7 +33,7 @@ import com.sun.faces.renderkit.html_basic.TextRenderer;
 /**
  * This Renderer passes through the specified attributes to the html output.
  * 
- * @author Fabian Kneissl
+ * @author Fabian Kneißl
  */
 public class InputRenderer extends TextRenderer {
 	

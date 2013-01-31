@@ -40,7 +40,7 @@ import org.jboss.seam.security.permission.PermissionResolver;
 /**
  * This PermissionResolver gives everyone with role 'admin' all permissions.
  * 
- * @author 'Fabian Kneißl'
+ * @author Fabian Kneißl
  */
 @Name("rolePermissionResolver")
 @Scope(APPLICATION)

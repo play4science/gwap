@@ -36,7 +36,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 /**
- * @author kneissl
+ * @author Fabian Kneißl
  */
 @NamedQueries({
 	@NamedQuery(name="statementWithGeoPoint.byStatementsTeaser", query="from StatementWithGeoPoint where statementsTeaser = :statementsTeaser")

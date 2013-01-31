@@ -25,7 +25,7 @@ package gwap.game.memory;
 import gwap.model.Tag;
 
 /**
- * @author steinmayr
+ * @author Bartholomäus Steinmayr
  */
 public class Question {
 	private Tag question;

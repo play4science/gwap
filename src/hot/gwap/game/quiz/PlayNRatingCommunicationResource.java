@@ -63,7 +63,7 @@ import org.json.simple.parser.ParseException;
  * This servlet handles the ratings provided from the PlayN-Interface and
  * provides a feedback by returning a HttpServletRespone in JSON-Format
  * 
- * @author Jonas Hoelzler
+ * @author Jonas Hölzler
  * 
  */
 @Startup

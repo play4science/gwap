@@ -44,7 +44,7 @@ import com.maxmind.geoip.LookupService;
  * Provides methods for looking up the country, region, and city
  * from an IP address.
  * 
- * @author Fabian Kneissl
+ * @author Fabian Kneißl
  */
 @Name("ipBasedLocationBean")
 @Scope(ScopeType.APPLICATION)@AutoCreate

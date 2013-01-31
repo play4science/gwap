@@ -41,7 +41,7 @@ import org.jboss.seam.annotations.Scope;
 /**
  * A bet designated for the poker game
  * 
- * @author Fabian Kneissl
+ * @author Fabian Kneißl
  */
 @Entity
 @Scope(ScopeType.EVENT)

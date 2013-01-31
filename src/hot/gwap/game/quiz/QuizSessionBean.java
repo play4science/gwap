@@ -50,7 +50,7 @@ import org.json.simple.JSONObject;
  * can be executed during a game session. The game session itself is organized
  * in a business process.
  * 
- * @author Jonas Hoelzler
+ * @author Jonas Hölzler
  */
 
 @Name("quizSessionBean")

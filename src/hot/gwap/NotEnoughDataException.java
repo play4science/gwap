@@ -23,7 +23,7 @@
 package gwap;
 
 /**
- * @author kneissl
+ * @author Fabian Kneißl
  */
 public class NotEnoughDataException extends Exception {
 

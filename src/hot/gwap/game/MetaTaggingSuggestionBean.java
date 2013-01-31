@@ -44,7 +44,7 @@ import org.jboss.seam.international.LocaleSelector;
 import org.jboss.seam.log.Log;
 
 /**
- * @author wieser
+ * @author Christoph Wieser
  */
 
 @Name("metaTaggingSuggestionBean")

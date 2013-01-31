@@ -36,7 +36,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.log.Log;
 
 /**
- * @author reichstaller
+ * @author André Reichstaller
  */
 
 @Name("mitHighscore")

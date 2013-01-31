@@ -25,7 +25,7 @@ package gwap.wrapper;
 import java.util.List;
 
 /**
- * @author  Fabian Kneißl
+ * @author Fabian Kneißl
  */
 public class ImportedTerm {
 	private String term;

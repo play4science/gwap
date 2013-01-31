@@ -38,7 +38,7 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 
 /**
- * @author Fabian Kneissl
+ * @author Fabian Kneißl
  */
 @Name("mitSearchBean")
 @Scope(ScopeType.PAGE)

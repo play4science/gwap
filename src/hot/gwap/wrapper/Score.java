@@ -23,7 +23,7 @@
 package gwap.wrapper;
 
 /**
- * @author Fabian Kneissl
+ * @author Fabian Kneißl
  */
 public class Score {
 	

@@ -27,7 +27,7 @@ import gwap.model.Tag;
 /**
  * Represents a tag together with a number count.
  * 
- * @author Fabian Kneissl
+ * @author Fabian Kneißl
  */
 public class TagWithCount {
 	private Tag tag;

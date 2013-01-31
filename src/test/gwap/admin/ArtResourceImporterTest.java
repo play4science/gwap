@@ -35,7 +35,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * @author kneissl
+ * @author Fabian Kneißl
  */
 public class ArtResourceImporterTest {
 

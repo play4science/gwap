@@ -33,7 +33,7 @@ import javax.persistence.NamedQuery;
 /**
  * The location, where an IP address is from
  * 
- * @author Andre Reichstaller
+ * @author André Reichstaller
  */
 @NamedQueries({
 	@NamedQuery(name="byCountryRegionCity", 

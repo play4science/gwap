@@ -56,7 +56,7 @@ import org.json.simple.JSONObject;
  * This servlet provides a new Quiz Game for the PlayN-HTML5-Interface by
  * returning a HttpServletRespone in JSON-Format
  * 
- * @author Jonas Hoelzler
+ * @author Jonas Hölzler
  * 
  */
 @Startup

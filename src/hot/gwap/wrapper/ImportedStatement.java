@@ -26,7 +26,7 @@ import gwap.model.Person;
 import gwap.model.resource.Location;
 
 /**
- * @author  Fabian Kneißl
+ * @author Fabian Kneißl
  */
 public class ImportedStatement {
 	private Location location;

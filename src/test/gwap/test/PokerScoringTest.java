@@ -35,7 +35,7 @@ import org.jboss.seam.mock.SeamTest;
 import org.testng.annotations.Test;
 
 /**
- * @author reichstaller
+ * @author André Reichstaller
  */
 public class PokerScoringTest extends SeamTest{
 	
