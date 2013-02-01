@@ -58,7 +58,7 @@ import au.com.bytecode.opencsv.CSVReader;
 @Scope(ScopeType.PAGE)
 public class ArtResourceImporter {
 
-	private static final String FILENAME_REGEXP = "[A-Za-z0-9_.-]+";
+	private static final String FILENAME_REGEXP = "[A-Za-z0-9_.,-]+";
 	@In						private EntityManager entityManager;
 	@Logger					private Log log;
 	@In						private FacesMessages facesMessages;
@@ -127,17 +127,21 @@ public class ArtResourceImporter {
 				if (!r.getPath().matches(FILENAME_REGEXP))
 					throw new ImportException("Filename must not contain characters other than "+FILENAME_REGEXP+": "+r.getPath());
 				// Check for correct year
-				if (r.getDateCreated() != null && !r.getDateCreated().matches(".*[1-9][0-9]*.*"))
-					throw new ImportException("Year created does not represent a year: "+r.getDateCreated());
-				// Check if image file exists
-				String filePath = source.getUrl() + r.getPath();
-				if (!new File(filePath).canRead())
-					throw new ImportException("Image with filename '"+filePath+"' does not exist.");
+//				if (r.getDateCreated() != null && !r.getDateCreated().matches(".*[1-9][0-9]*.*"))
+//					throw new ImportException("Year created does not represent a year: "+r.getDateCreated());
+				
 				// Check for duplicate filenames
 				if (allFilenames.contains(r.getPath()))
 					throw new ImportException("Duplicate entry for filename '"+r.getPath()+"'.");
 				allFilenames.add(r.getPath());
-				resources.add(r);
+				
+				// Check if image file exists
+				String filePath = source.getUrl() + r.getPath();
+				if (!new File(filePath).canRead()) {
+					log.error("Image with filename '"+filePath+"' does not exist.");
+				} else {
+					resources.add(r);
+				}
 			}
 		} finally {
 			csvReader.close();
