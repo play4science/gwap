@@ -67,6 +67,9 @@ named above. You could have received this code as part of a bundle
 that also contains code by other authors where other license terms
 apply, and it is up to you to verify this is the correct file.
 
+This product includes GeoLite data created by MaxMind, available 
+from http://www.maxmind.com  (file: resources/GeoLiteCity.dat)
+
 ------------------------------------------------------------------
                     GNU AFFERO GENERAL PUBLIC LICENSE
                        Version 3, 19 November 2007
