@@ -8,42 +8,5 @@
     xmlns:rich="http://richfaces.org/rich"
     xmlns:a4j="http://richfaces.org/a4j">
 	
-<!--
-	<div>
 
-		<s:link view="/home.html" propagation="none">
-			<h:graphicImage value="/img/elearnlogo.gif"
-							id="logo"
-		               		alt="Termina"
-		               		height="102"
-		               		width="452"
-		               		/>
-		</s:link>
-
-	    
-	    <br class="clear"/>
-	    
-		<ul id="navMain">
-		
-			<li class="#{menuBean.getCssClass('/termina.xhtml')}">
-	        	<s:link view="/termina.xhtml" value="#{messages['menu.termina']}" propagation="none"/>
-        	</li>
-        	<li class="#{menuBean.getCssClass('/highscore.xhtml')}">
-	        	<s:link view="/highscore.xhtml" value="#{messages['menu.highscore']}" propagation="none"/>
-        	</li>
-
-			<li class="#{menuBean.getCssClass('/tagging.xhtml')}">
-	        	<s:link view="/tagging.xhtml" value="#{messages['menu.tagging']}" propagation="none"/>
-        	</li>
-        	<li class="#{menuBean.getCssClass('/addword.xhtml')}">
-	        	<s:link view="/addword.xhtml" value="#{messages['Terme hinzufuegen']}" propagation="none"/>
-        	</li>
-			<s:fragment rendered="#{s:hasPermission('elearning', 'view-admin-interface')}"> 
-				<li class="#{menuBean.getCssClass('/admin/admin.xhtml')}">
-    			   	<s:link view="/admin/admin.xhtml" value="#{messages['mit.menu.administrator']}" propagation="none"/>
-        		</li>
-			</s:fragment>
-    	</ul>
-    </div>
- -->
     </ui:composition>
