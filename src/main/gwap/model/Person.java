@@ -102,7 +102,7 @@ public class Person implements Serializable {
 	
 	@Enumerated(EnumType.STRING)
 	private Gender gender;
-	@Range(min=1900, max=2011)
+	@Range(min=1900, max=2013)
 	private Integer birthyear;
 	@ManyToOne
 	private Location hometown;
@@ -125,7 +125,7 @@ public class Person implements Serializable {
 	private String passwordResetToken;
 	private String emailVerifyToken;
 	private Date passwordResetDate;
-	
+	private Boolean newsletter;
 
 	public Long getId() {
 		return id;
@@ -354,6 +354,14 @@ public class Person implements Serializable {
 
 	public void setEmailVerifyToken(String emailVerifyToken) {
 		this.emailVerifyToken = emailVerifyToken;
+	}
+
+	public Boolean getNewsletter() {
+		return newsletter;
+	}
+
+	public void setNewsletter(Boolean newsletter) {
+		this.newsletter = newsletter;
 	}
 	
 }
