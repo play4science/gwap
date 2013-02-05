@@ -177,7 +177,7 @@
             </and>
         </condition>
     </target>
-
+	
     <target name="groovy.compile" if="groovy.static">
         <groovyc classpathref="build.classpath"
             destdir="${jar.dir}"
@@ -553,4 +553,26 @@
 		</copy>
 	</target>
 	
+	<target name="release-tar">
+		<tar destfile="${dist.dir}/gwap-src.tar.gz" compression="gzip">
+			<tarfileset dir="${basedir}" prefix="gwap">
+				<include name="**"/>
+				<exclude name="bootstrap/data/**"/>
+				<exclude name="bootstrap/tmp/**"/>
+				<exclude name="build.properties"/>
+				<exclude name="**/.*.xml.jsfdia"/>
+				<exclude name="classes/**"/>
+				<exclude name="dist/**"/>
+				<exclude name="exploded-archives/**"/>
+				<exclude name="resources/WEB-INF/classes/**"/>
+				<exclude name="resources/WEB-INF/lib/**"/>
+				<exclude name="view/*/img/logo*.png"/>
+				<exclude name="view/accentiurbani/sampleaudio/**"/>
+				<exclude name="lib/src/**"/>
+				<exclude name="data/**"/>
+				<exclude name=".settings/**"/>
+			</tarfileset>
+		</tar>
+	</target>
+
 </project>
