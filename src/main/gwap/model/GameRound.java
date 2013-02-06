@@ -104,29 +104,27 @@ import org.jboss.seam.annotations.Scope;
 					"and g.person.externalUsername=:externalUsername " + 
 					"and g.score != null " +
 					"order by g.number"),
-	
 	@NamedQuery(	
 			name = "gameRound.ScoreOverallStudent",
 			query = "select new gwap.wrapper.BackstageResult(avg(g.score)) from GameRound g " +
 					"where g.gameSession.externalSessionId=:externalSessionId " +
 					"and g.person.externalUsername=:externalUsername"),
-					
 	@NamedQuery(	
 			name = "gameRound.stopQuiz",
 			query = "update GameRound set endDate=:date " + 
 					"where gameSession.id = (select id from GameSession where externalSessionId=:externalSessionId) " +
 					"and endDate!=null"),
-
 	@NamedQuery(	
 			name = "gameRound.stopTermina",
 			query = "select g from GameRound g " +
 					"where g.gameSession.externalSessionId=:externalSessionId"),
-		
-					
 	@NamedQuery(	
 			name = "gameRound.testGameRound",
-			query = "select g from GameRound g")
-	
+			query = "select g from GameRound g"),
+	@NamedQuery(
+			name = "gameRound.nrRoundsWithResource",
+			query = "select count(*) from GameRound gr join gr.resources r " +
+					"where gr.gameSession.gameType.name=:gameTypeName and r=:resource and gr.endDate is not null")
 }
 )
 					

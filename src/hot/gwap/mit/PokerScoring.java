@@ -77,6 +77,8 @@ public class PokerScoring {
 	private static final double BET_ND_FACTOR = 0.09;
 	public static final int POKER_CORRECT = 10;
 	public static final int POKER_CORRECT_DIFFICULT = 20;
+	public static final int POKER_OWNER_PER_GUESS = 5;
+	public static final int POKER_OWNER_PER_GUESS_LT_10 = 2;
 	
 	public static final int MIN_NR_FOR_STATISTICS = 3;
 	
@@ -268,12 +270,23 @@ public class PokerScoring {
 		bet.setCurrentMatch(0);
 		if (bet.getPoints() != null) {
 			Percentage percentage = getRawPercentage(bet.getLocation(), bet.getResource());
+			// Need to add rounds where the resource was skipped
+			Query q = entityManager.createNamedQuery("gameRound.nrRoundsWithResource");
+			q.setParameter("gameTypeName", "mitPoker");
+			q.setParameter("resource", bet.getResource());
+			long nrRounds = ((Number)q.getSingleResult()).longValue();
+			percentage = new Percentage(percentage.getSum()-1, nrRounds); // excluding the user's bet
 			if (percentage.getTotal() > 0) {
-				double deviation = Math.abs(percentage.getPercentage() - bet.getPoints());
-				int score = getNormalDistributedScore(deviation, BET_ND_FACTOR, BET_MAX_SCORE);
-				log.info("Score for bet #0 with deviation #1 (bet on #3%, really #4%) is #2", bet, deviation, score, bet.getPoints(), percentage);
+				int score = 0;
+				if (percentage.getTotal() < 10 && percentage.getSum() <= 1)
+					score = percentage.getTotal()*POKER_OWNER_PER_GUESS_LT_10;
+				else if (percentage.getTotal() >= 10 && percentage.getPercentage() <= 10.0)
+					score = percentage.getTotal()*POKER_OWNER_PER_GUESS;
+				else if (percentage.getTotal() >= 10 && percentage.getPercentage() <= 20.0)
+					score = percentage.getTotal()*POKER_OWNER_PER_GUESS_LT_10;
 				bet.setScore(score);
 				bet.setCurrentMatch(percentage.getPercentage().intValue());
+				log.info("Score for poker bet #0 (#1 bet on the same, total #2) is #3", bet, (long)percentage.getSum(), percentage.getTotal(), score);
 			}
 		}
 		entityManager.flush();
