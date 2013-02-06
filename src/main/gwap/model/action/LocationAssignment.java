@@ -69,6 +69,11 @@ public class LocationAssignment extends Action {
 	@ManyToOne	protected Resource resource;
 	@ManyToOne	protected Location location;
 	
+	/** 
+	 * LocationAssignments can have the property notEvaluated set to true in
+	 * order to exclude them from evaluation. This exclusion is for example
+	 * useful in subclasses where the same LocationAssignment is specified.
+	 */
 	private Boolean notEvaluated = false;
 	
 	public Resource getResource() {
