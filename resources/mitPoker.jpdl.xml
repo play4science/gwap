@@ -43,13 +43,25 @@
 	</decision>
 	
 	<decision name="roundToPlay" expression="#{mitPoker.roundsLeft > 0}">
-		<transition name="true" to="game">
-			<action expression="#{mitPoker.startRound()}" />
-		</transition>
+		<transition name="true" to="statementExists"/>
 		<transition name="false" to="scoring">
 			<action expression="#{mitPoker.endGameSession()}" />
 		</transition>
 	</decision>
+	
+	<decision name="statementExists" expression="#{mitStatementBean.existsSensibleForPoker}">
+		<transition name="true" to="game">
+			<action expression="#{mitPoker.startRound()}" />
+		</transition>
+		<transition name="false" to="scoring">
+			<action expression="#{mitPoker.noStatementAvailable()}"/>
+			<action expression="#{mitPoker.endGameSession()}" />
+		</transition>
+	</decision>
+	
+	<exception-handler exception-class="java.lang.Exception">
+		<action class="gwap.mit.NoSuchResourceExceptionHandler"/>
+	</exception-handler>
 	
 	<page name="scoring" view-id="/pokerScoring.xhtml">
 	</page>

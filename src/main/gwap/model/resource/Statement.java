@@ -53,7 +53,7 @@ import org.jboss.seam.annotations.Scope;
 					"group by s.id " +
 					"order by random()"),
 	@NamedQuery(name="statement.nextSensibleForLocationAssignmentByPerson", 
-			query="select s.id from Bet b join b.resource s left outer join s.gameRounds gr where " +
+			query="select s.id from Bet b join b.resource s where " +
 					"s.class = Statement and s.enabled = true and s.creator != :person " +
 					"and not exists (select b2.id from Bet b2 where b2.resource=s and b2.person = :person) " +
 					"and not exists (select la2.id from LocationAssignment la2 where la2.resource=s and la2.person = :person) " +
@@ -61,13 +61,13 @@ import org.jboss.seam.annotations.Scope;
 					"group by s.id " +
 					"order by random()"),
 	@NamedQuery(name="statement.nextSensibleForPoker", 
-			query="select s.id from Bet b join b.resource s where " +
-					"s.class = Statement and s.enabled = true and b.points = 1 " +
+			query="select s.id from PokerBet b join b.resource s where " +
+					"s.class = Statement and s.enabled = true " +
 					"group by s.id " +
 					"order by random()"),
 	@NamedQuery(name="statement.nextSensibleForPokerByPerson", 
-			query="select s.id from Bet b join b.resource s left outer join s.gameRounds gr where " +
-					"s.class = Statement and s.enabled = true and s.creator != :person and b.points = 1 " +
+			query="select s.id from PokerBet b join b.resource s where " +
+					"s.class = Statement and s.enabled = true and s.creator != :person " +
 					"and not exists (select b2.id from Bet b2 where b2.resource=s and b2.person = :person) " +
 					"and not exists (select la2.id from LocationAssignment la2 where la2.resource=s and la2.person = :person) " +
 					"and not exists (select la2.id from LocationAssignment la2 join la2.person p2 where la2.resource=s and p2.personConnected = :person) " +

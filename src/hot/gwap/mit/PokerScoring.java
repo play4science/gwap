@@ -268,26 +268,24 @@ public class PokerScoring {
 		entityManager.refresh(bet);
 		bet.setScore(0);
 		bet.setCurrentMatch(0);
-		if (bet.getPoints() != null) {
-			Percentage percentage = getRawPercentage(bet.getLocation(), bet.getResource());
-			// Need to add rounds where the resource was skipped
-			Query q = entityManager.createNamedQuery("gameRound.nrRoundsWithResource");
-			q.setParameter("gameTypeName", "mitPoker");
-			q.setParameter("resource", bet.getResource());
-			long nrRounds = ((Number)q.getSingleResult()).longValue();
-			percentage = new Percentage(percentage.getSum()-1, nrRounds); // excluding the user's bet
-			if (percentage.getTotal() > 0) {
-				int score = 0;
-				if (percentage.getTotal() < 10 && percentage.getSum() <= 1)
-					score = percentage.getTotal()*POKER_OWNER_PER_GUESS_LT_10;
-				else if (percentage.getTotal() >= 10 && percentage.getPercentage() <= 10.0)
-					score = percentage.getTotal()*POKER_OWNER_PER_GUESS;
-				else if (percentage.getTotal() >= 10 && percentage.getPercentage() <= 20.0)
-					score = percentage.getTotal()*POKER_OWNER_PER_GUESS_LT_10;
-				bet.setScore(score);
-				bet.setCurrentMatch(percentage.getPercentage().intValue());
-				log.info("Score for poker bet #0 (#1 bet on the same, total #2) is #3", bet, (long)percentage.getSum(), percentage.getTotal(), score);
-			}
+		Percentage percentage = getRawPercentage(bet.getLocation(), bet.getResource());
+		// Need to add rounds where the resource was skipped
+		Query q = entityManager.createNamedQuery("gameRound.nrRoundsWithResource");
+		q.setParameter("gameTypeName", "mitPoker");
+		q.setParameter("resource", bet.getResource());
+		long nrRounds = ((Number)q.getSingleResult()).longValue();
+		percentage = new Percentage(percentage.getSum()-1, nrRounds); // excluding the user's bet
+		if (percentage.getTotal() > 0) {
+			int score = 0;
+			if (percentage.getTotal() < 10 && percentage.getSum() <= 1)
+				score = percentage.getTotal()*POKER_OWNER_PER_GUESS_LT_10;
+			else if (percentage.getTotal() >= 10 && percentage.getPercentage() <= 10.0)
+				score = percentage.getTotal()*POKER_OWNER_PER_GUESS;
+			else if (percentage.getTotal() >= 10 && percentage.getPercentage() <= 20.0)
+				score = percentage.getTotal()*POKER_OWNER_PER_GUESS_LT_10;
+			bet.setScore(score);
+			bet.setCurrentMatch(percentage.getPercentage().intValue());
+			log.info("Score for poker bet #0 (#1 bet on the same, total #2) is #3", bet, (long)percentage.getSum(), percentage.getTotal(), score);
 		}
 		entityManager.flush();
 	}

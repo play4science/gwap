@@ -22,6 +22,7 @@
 
 package gwap.mit;
 
+import gwap.ResourceAcquisitionType;
 import gwap.model.Person;
 import gwap.model.action.Bet;
 import gwap.model.resource.Statement;
@@ -64,6 +65,8 @@ public class StatementBean implements Serializable {
 	@In(required=false)	private Person person;
 	
 	@RequestParameter   private Long statementId;
+	
+	private ResourceAcquisitionType acquisitionType;
 	
 	@Factory("statement")
 	public Statement updateStatement() {
@@ -115,6 +118,7 @@ public class StatementBean implements Serializable {
 		query.setMaxResults(1);
 		try {
 			statement = (Statement) query.getSingleResult();
+			acquisitionType = ResourceAcquisitionType.RANDOM;
 			log.info("Statement is #0", statement);
 			logPredefinedStatementLocations();
 		} catch (NoResultException e) {
@@ -138,6 +142,7 @@ public class StatementBean implements Serializable {
 			int rnd = new Random().nextInt(list.size());
 			long statementId = (Long) list.get(rnd);
 			statement = entityManager.find(Statement.class, statementId);
+			acquisitionType = ResourceAcquisitionType.SENSIBLE_FOR_LOCATIONASSIGNMENT;
 			log.info("Statement is #0", statement);
 			logPredefinedStatementLocations();
 		} catch (NoResultException e) {
@@ -161,6 +166,7 @@ public class StatementBean implements Serializable {
 			int rnd = new Random().nextInt(list.size());
 			long statementId = (Long) list.get(rnd);
 			statement = entityManager.find(Statement.class, statementId);
+			acquisitionType = ResourceAcquisitionType.SENSIBLE_FOR_POKER;
 			log.info("Statement is #0", statement);
 			logPredefinedStatementLocations();
 		} catch (NoResultException e) {
@@ -185,12 +191,21 @@ public class StatementBean implements Serializable {
 			int rnd = new Random().nextInt(list.size());
 			long statementId = (Long) list.get(rnd);
 			statement = entityManager.find(Statement.class, statementId);
+			acquisitionType = ResourceAcquisitionType.AT_LEAST;
 			log.info("Statement is #0", statement);
 			logPredefinedStatementLocations();
 		} catch (NoResultException e) {
 			statement = null;
 			log.info("Could not retrieve a statemement");
 		}
+	}
+	
+	private Statement byId(Long id) {
+		statement = entityManager.find(Statement.class, id);
+		acquisitionType = ResourceAcquisitionType.BY_ID;
+		log.info("Update statement by id: #0", statement);
+		logPredefinedStatementLocations();
+		return statement;
 	}
 	
 	private void logPredefinedStatementLocations() {
@@ -206,14 +221,13 @@ public class StatementBean implements Serializable {
 		}
 	}
 	
-	private Statement byId(Long id) {
-		statement = entityManager.find(Statement.class, id);
-		log.info("Update statement by id: #0", statement);
-		logPredefinedStatementLocations();
-		return statement;
+	public boolean getExistsSensibleForPoker() {
+		acquisitionType = ResourceAcquisitionType.NONE;
+		sensibleForPoker();
+		return ResourceAcquisitionType.SENSIBLE_FOR_POKER.equals(acquisitionType);
 	}
 	
-	public boolean isChosenById() {
-		return statementId != null && statement != null && statementId.equals(statement.getId());
+	public ResourceAcquisitionType getAcquisitionType() {
+		return acquisitionType;
 	}
 }

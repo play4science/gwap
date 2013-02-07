@@ -22,6 +22,7 @@
 
 package gwap.mit;
 
+import gwap.ResourceAcquisitionType;
 import gwap.model.action.Bet;
 import gwap.model.action.PokerBet;
 import gwap.model.resource.Location;
@@ -57,6 +58,8 @@ public class Poker extends Recognize {
 	protected void loadNewResource() {
 		statement = mitStatementBean.updateStatement();
 		statement.getStatementStandardTokens().size();
+		if (mitStatementBean.getAcquisitionType() != ResourceAcquisitionType.SENSIBLE_FOR_POKER)
+			throw new NoSuchResourceException();
 	}
 	
 	public boolean assignLocation(Long locationId) {
@@ -102,6 +105,10 @@ public class Poker extends Recognize {
 
 	public boolean getIsCorrect() {
 		return isCorrect;
+	}
+	
+	public void noStatementAvailable() {
+		facesMessages.addFromResourceBundle(Severity.INFO, "game.poker.noResourceLeft");
 	}
 
 }
