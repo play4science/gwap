@@ -220,10 +220,17 @@ public class StatementBean implements Serializable {
 				log.info("Statement #0 is assigned to location #1", bet.getResource(), bet.getLocation());
 		}
 	}
+
+	public boolean getExistsSensibleForPokerForceUpdate() {
+		acquisitionType = null;
+		return getExistsSensibleForPoker();
+	}
 	
 	public boolean getExistsSensibleForPoker() {
-		acquisitionType = ResourceAcquisitionType.NONE;
-		sensibleForPoker();
+		if (acquisitionType == null) {
+			acquisitionType = ResourceAcquisitionType.NONE;
+			sensibleForPoker();
+		}
 		return ResourceAcquisitionType.SENSIBLE_FOR_POKER.equals(acquisitionType);
 	}
 	

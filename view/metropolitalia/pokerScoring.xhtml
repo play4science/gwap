@@ -81,7 +81,7 @@
 			
 			<div style="clear: both; height:20px;"/>
 			<h:form id="endForm">
-				<s:link view="/poker.xhtml" propagation="none" styleClass="button">
+				<s:link view="/poker.xhtml" propagation="none" styleClass="button" rendered="#{mitStatementBean.existsSensibleForPoker}">
 					<span><h:outputText value="#{messages['game.poker.nextRound']}" /></span>
 				</s:link>
 				<br/>

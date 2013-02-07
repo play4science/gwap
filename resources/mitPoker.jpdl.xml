@@ -49,7 +49,7 @@
 		</transition>
 	</decision>
 	
-	<decision name="statementExists" expression="#{mitStatementBean.existsSensibleForPoker}">
+	<decision name="statementExists" expression="#{mitStatementBean.existsSensibleForPokerForceUpdate}">
 		<transition name="true" to="game">
 			<action expression="#{mitPoker.startRound()}" />
 		</transition>

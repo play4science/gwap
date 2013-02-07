@@ -22,48 +22,24 @@
 
 package gwap.mit;
 
-import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.Begin;
-import org.jboss.seam.annotations.In;
-import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.core.Conversation;
 import org.jboss.seam.faces.Redirect;
-import org.jboss.seam.pageflow.Pageflow;
 import org.jbpm.graph.def.ActionHandler;
 import org.jbpm.graph.exe.ExecutionContext;
 
 /**
  * @author Fabian Kneißl
  */
-@Scope(ScopeType.EVENT)
-@Name("mitNoSuchResourceExceptionHandler")
 public class NoSuchResourceExceptionHandler implements ActionHandler {
 
-	@In Poker mitPoker;
-	
+	private static final long serialVersionUID = 6296156020760945106L;
+
 	@Override
-	@Begin(join = true)
 	public void execute(ExecutionContext executionContext) throws Exception {
-		Throwable e = executionContext.getException();
-		if (Conversation.instance().getViewId() != null) {
-//			mitPoker.cancelGame();
-			Pageflow.instance().reposition("scoring");
-			Conversation.instance().setViewId(null);
-		} else {
-			Conversation.instance().endBeforeRedirect();
-			Redirect redirect = Redirect.instance();
-			redirect.setViewId("/pokerSelection.xhtml");
-			redirect.execute();
-		}
+		Conversation.instance().endBeforeRedirect();
+		Redirect redirect = Redirect.instance();
+		redirect.setViewId("/pokerSelection.xhtml");
+		redirect.execute();
 	}
-	
-	/*@Begin(join = true)
-	public String getViewId() throws Exception {
-//		mitPoker.cancelGame();
-		Pageflow.instance().reposition("scoring");
-		Conversation.instance().setViewId(null);
-		return Pageflow.instance().getPageViewId();
-	}*/
 
 }
