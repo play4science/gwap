@@ -122,9 +122,10 @@ import org.jboss.seam.annotations.Scope;
 			name = "gameRound.testGameRound",
 			query = "select g from GameRound g"),
 	@NamedQuery(
-			name = "gameRound.nrRoundsWithResource",
+			name = "gameRound.nrRoundsWithResourceAndNoLocationAssignment",
 			query = "select count(*) from GameRound gr join gr.resources r " +
-					"where gr.gameSession.gameType.name=:gameTypeName and r=:resource and gr.endDate is not null")
+					"where gr.gameSession.gameType.name=:gameTypeName and r=:resource and gr.endDate is not null " +
+					"and not exists (from LocationAssignment la where la.gameRound = gr)")
 }
 )
 					

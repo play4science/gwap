@@ -270,11 +270,11 @@ public class PokerScoring {
 		bet.setCurrentMatch(0);
 		Percentage percentage = getRawPercentage(bet.getLocation(), bet.getResource());
 		// Need to add rounds where the resource was skipped
-		Query q = entityManager.createNamedQuery("gameRound.nrRoundsWithResource");
+		Query q = entityManager.createNamedQuery("gameRound.nrRoundsWithResourceAndNoLocationAssignment");
 		q.setParameter("gameTypeName", "mitPoker");
 		q.setParameter("resource", bet.getResource());
 		long nrRounds = ((Number)q.getSingleResult()).longValue();
-		percentage = new Percentage(percentage.getSum()-1, nrRounds); // excluding the user's bet
+		percentage = new Percentage(percentage.getSum()-1, percentage.getTotal()-1+nrRounds); // excluding the user's bet
 		if (percentage.getTotal() > 0) {
 			int score = 0;
 			if (percentage.getTotal() < 10 && percentage.getSum() <= 1)
