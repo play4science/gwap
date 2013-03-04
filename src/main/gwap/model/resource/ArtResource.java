@@ -148,7 +148,8 @@ import org.jboss.seam.annotations.Scope;
     				  "from ArtResource r left join r.taggings t " + 
     				  "where " +
     				  "  t.id is null and " +
-    				  "  r.enabled=true "
+    				  "  r.enabled=true " +
+    				  "order by r.id desc"
     			),
     @NamedQuery(name="artResource.notTaggedResourceIdCustom",
     			query="select r.id " +
@@ -180,7 +181,7 @@ import org.jboss.seam.annotations.Scope;
 					  "  t.tag.language=:language and" +
 					  "  r.enabled=true " +
 					  "group by r.id " +
-					  "order by count(r.id) asc "
+					  "order by count(r.id) asc, r.id desc "
 					  ),
 	@NamedQuery(name="artResource.leastTaggedResourceIdCustom",
 				query="select r.id " +
