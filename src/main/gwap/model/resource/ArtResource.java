@@ -22,6 +22,7 @@
 
 package gwap.model.resource;
 
+import gwap.model.ArtResourceRating;
 import gwap.model.Person;
 import gwap.model.Source;
 import gwap.tools.ImageAccessBean;
@@ -377,6 +378,7 @@ public class ArtResource extends Resource {
 	@OneToMany(mappedBy="resource",
 		cascade=CascadeType.PERSIST)	private Set<ArtResourceTitle> titles = new HashSet<ArtResourceTitle>();
 	@OneToMany(mappedBy="resource")		private List<ArtResourceTeaser> teasers = new ArrayList<ArtResourceTeaser>();
+	@OneToMany(mappedBy="resource")       private Set<ArtResourceRating> ratings = new HashSet<ArtResourceRating>();
 	
 	private String path;
 	private String dateCreated;
