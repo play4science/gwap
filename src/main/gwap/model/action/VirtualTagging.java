@@ -25,7 +25,11 @@ package gwap.model.action;
 import gwap.model.Tag;
 import gwap.model.resource.Resource;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -61,6 +65,9 @@ public class VirtualTagging extends Action {
 	@ManyToOne
 	private Tag tag;
 	
+	@ManyToMany
+	private Set<VirtualTaggingType> virtualTaggingTypes = new HashSet<VirtualTaggingType>();
+	
 	public Resource getResource() {
 		return resource;
 	}
@@ -76,4 +83,13 @@ public class VirtualTagging extends Action {
 	public void setTag(Tag tag) {
 		this.tag = tag;
 	}
+
+	public Set<VirtualTaggingType> getVirtualTaggingTypes() {
+		return virtualTaggingTypes;
+	}
+
+	public void setVirtualTaggingTypes(Set<VirtualTaggingType> virtualTaggingTypes) {
+		this.virtualTaggingTypes = virtualTaggingTypes;
+	}
+	
 }
