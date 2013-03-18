@@ -755,6 +755,7 @@
        <str name="echoParams">explicit</str>
        <int name="rows">10</int>
        <str name="df">text</str>
+       <str name="mm">100%</str>
      </lst>
     <!-- In addition to defaults, "appends" params can be specified
          to identify values which should be appended to the list of
@@ -1120,6 +1121,7 @@
      <lst name="master">
        <str name="enable">@solr.master.enabled@</str>
        <str name="replicateAfter">commit</str>
+       <str name="replicateAfter">optimize</str>
        <str name="replicateAfter">startup</str>
        <str name="confFiles">schema.xml</str> <!-- files to replicate as a comma-separated list -->
      </lst>
