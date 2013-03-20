@@ -154,6 +154,7 @@ public class GameRound implements Serializable {
 	private Date startDate;
 	private Date endDate;
 	private Integer score;
+	private Boolean successful;
 	
 	public GameRound() {
 		setStartDate(new Date());
@@ -257,6 +258,14 @@ public class GameRound implements Serializable {
 
 	public void setGameConfiguration(GameConfiguration gameConfiguration) {
 		this.gameConfiguration = gameConfiguration;
+	}
+
+	public Boolean getSuccessful() {
+		return successful;
+	}
+
+	public void setSuccessful(Boolean successful) {
+		this.successful = successful;
 	}
 	
 }

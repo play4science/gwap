@@ -92,6 +92,7 @@ public class Person implements Serializable {
 	@OneToMany(mappedBy="person")			private List<GameRound> gameRounds = new ArrayList<GameRound>();
 	@OneToMany(mappedBy="person")			private List<Action> actions = new ArrayList<Action>();
 	@ManyToMany	@UserRoles					private Set<Role> roles = new HashSet<Role>();
+	@ManyToMany								private Set<Badge> badges = new HashSet<Badge>();
 	
 	// private data
 	@UserFirstName
@@ -126,7 +127,8 @@ public class Person implements Serializable {
 	private String emailVerifyToken;
 	private Date passwordResetDate;
 	private Boolean newsletter;
-
+	private String deviceId;  // e.g. mobile applications (IMEI) 
+	
 	public Long getId() {
 		return id;
 	}
@@ -362,6 +364,14 @@ public class Person implements Serializable {
 
 	public void setNewsletter(Boolean newsletter) {
 		this.newsletter = newsletter;
+	}
+
+	public String getDeviceId() {
+		return deviceId;
+	}
+
+	public void setDeviceId(String deviceId) {
+		this.deviceId = deviceId;
 	}
 	
 }

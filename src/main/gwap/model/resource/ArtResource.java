@@ -383,9 +383,7 @@ public class ArtResource extends Resource {
 	private String path;
 	private String dateCreated;
 	private String location;        // Ausstellungsort (ex. Staatliche Kunstsammlung ...)
-	private Double shownLatitude;   // Ort der Abblidung lat    (ex. Marienplatz lat)
-	private Double shownLongitude;  // Ort der Abblidung long   (ex. Marienplatz long)
-	private String shownLocation;   // Ortsname der Abblidung (ex. Marienplatz)
+	private Location shownLocation;   // Ort der Abblidung (ex. Marienplatz)
 	
 	private String institution;  // Einrichtung
 	@Lob
@@ -493,28 +491,12 @@ public class ArtResource extends Resource {
 		this.skip = skip;
 	}
 	
-	public Double getShownLatitude() {
-		return shownLatitude;
-	}
-
-	public void setShownLatitude(Double shownLatitude) {
-		this.shownLatitude = shownLatitude;
-	}
-
-	public Double getShownLongitude() {
-		return shownLongitude;
-	}
-
-	public void setShownLongitude(Double shownLongitude) {
-		this.shownLongitude = shownLongitude;
-	}
-
-	public String getShownLocation() {
-		return shownLocation;
-	}
-
-	public void setShownLocation(String shownLocation) {
+	public void setShownLocation(Location shownLocation) {
 		this.shownLocation = shownLocation;
+	}
+
+	public Location getShownLocation() {
+		return shownLocation;
 	}
 
 	@Override
