@@ -111,7 +111,7 @@ public class Location implements Serializable {
 	@OneToMany(mappedBy="sublocation")
 	private List<LocationHierarchy> hierarchyParents = new ArrayList<LocationHierarchy>();
 	
-	@OneToMany(mappedBy="location", cascade=CascadeType.REMOVE)
+	@OneToMany(mappedBy="location", cascade={CascadeType.REMOVE, CascadeType.PERSIST})
 	@OrderBy
 	private List<LocationGeoPoint> geoRepresentation;
 	
@@ -194,6 +194,19 @@ public class Location implements Serializable {
 		this.extendedName = extendedName;
 	}
 
+	public GeoPoint getSingleGeoPoint() {
+		if (this.getGeoRepresentation().size() > 1) 
+			throw new IllegalAccessError("There are more than one GeoPoints available.");
+		return getGeoRepresentation().get(0).getGeoPoint();
+	}
+
+	public void setSingleGeoPoint(GeoPoint geoPoint) {
+		getGeoRepresentation().clear();
+		LocationGeoPoint locationGeoPoint = new LocationGeoPoint();
+		locationGeoPoint.setGeoPoint(geoPoint);
+		getGeoRepresentation().add(locationGeoPoint);
+	}
+	
 	@Override
 	public String toString() {
 		return id + "#" + name + "(" + type + ")";

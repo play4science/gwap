@@ -27,6 +27,8 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 import org.jboss.seam.annotations.Name;
 
@@ -38,6 +40,10 @@ import org.jboss.seam.annotations.Name;
  * 
  * @author wieser, maders
  */
+
+@NamedQueries({
+	@NamedQuery(name="virtualTaggingType.all", query="select v from VirtualTaggingType v")
+})
 
 @Entity
 @Name("virtualTaggingType")

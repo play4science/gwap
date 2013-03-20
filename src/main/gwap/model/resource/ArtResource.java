@@ -351,8 +351,9 @@ import org.jboss.seam.annotations.Scope;
 		  			"where t.resource.id=:resid and tag.language=:lang and lower(tag.name)=:tagname"),  			  			
  	   @NamedQuery(name="artResource.taggingCount",
  			   	query="select count(t) from Tagging t " +
- 			   			"where t.resource.id=:resid and t.tag.language=:lang")
-  			  		
+ 			   			"where t.resource.id=:resid and t.tag.language=:lang"),
+ 	   @NamedQuery(name="artResource.gameLocations",
+  			  	query="select a from Artresource a.")
   	  
   	})
 

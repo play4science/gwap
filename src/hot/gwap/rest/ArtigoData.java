@@ -56,7 +56,7 @@ public class ArtigoData implements Serializable {
 	
 	@GET
 	@Path("/tags")
-	@Produces("application/xml")
+	@Produces("application/xml") //TODO: MediaType.APPLICATION_XML instead of "application/xml" 
 	@SuppressWarnings("unchecked")
 	public String getTagData(@QueryParam("dataset") String dataset,  @DefaultValue("2") @QueryParam("threshold") Long threshold,
 			@QueryParam("language") String language) {
