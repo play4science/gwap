@@ -22,46 +22,62 @@
 
 package gwap.rest;
 
+import gwap.model.action.VirtualTagging;
 import gwap.model.action.VirtualTaggingType;
 import gwap.model.resource.ArtResource;
 import gwap.model.resource.GeoPoint;
+import gwap.model.resource.Location;
+import gwap.model.resource.Location.LocationType;
+import gwap.model.resource.LocationGeoPoint;
+import gwap.tools.ImageTools;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.log.Log;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /**
  * @author maders, wieser
  */
 
 @Path("/location")
-@Scope(ScopeType.SESSION)
 @Name("locationService")
 public class LocationService implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Logger	private Log log;
-	@In     private EntityManager entityManager;
+	@Logger	          private Log log;
+	@In               private EntityManager entityManager;
+	@In(create=true)  private ImageTools imageTools;
 	
+	JSONParser parser = new JSONParser();
+
 	/**
 	 * A topic denotes the set of pictues that can be used in a game such as "Munich" or "Baroque" 
 	 * 
@@ -114,7 +130,8 @@ public class LocationService implements Serializable {
 		} else {
 			Query locationQuery = entityManager.createNamedQuery("artResource.gameLocations");
 			locationQuery.setParameter("virtualTaggingTypeId", topic);
-			locationQuery.setParameter("userId", userId);
+//			locationQuery.setParameter("userId", userId);
+			locationQuery.setMaxResults(10);
 			List<ArtResource> locations = locationQuery.getResultList(); 
 
 			JSONArray gameLocations = new JSONArray();
@@ -156,7 +173,7 @@ public class LocationService implements Serializable {
 				gameLocationJSON.put("latitude", gameLocation.getShownLocation().getSingleGeoPoint().getLatitude());
 				gameLocationJSON.put("longitude", gameLocation.getShownLocation().getSingleGeoPoint().getLongitude());
 				gameLocationJSON.put("distance", min);
-				gameLocationJSON.put("url", gameLocation.getUrl()); // If null, check Outjection in ReouceBean
+				gameLocationJSON.put("url", gameLocation.getId()); // TODO: Create Url with Access to image
 
 				// Fuege es der Liste aller Gamelocations hinzu
 				gameLocations.add(gameLocationJSON);
@@ -171,6 +188,60 @@ public class LocationService implements Serializable {
 		}
 	}
 	
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+	@Transactional
+	public Response createNewLocation(String stringLocation) {
+		JSONObject jsonLocation = null;
+		try {
+			jsonLocation = (JSONObject) parser.parse(stringLocation);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		Location location = new Location();
+		String name = (String) jsonLocation.get("name");
+		location.setName(name);
+		location.setType(LocationType.APP);
+		
+		GeoPoint geoPoint = new GeoPoint();
+		geoPoint.setLatitude(Float.parseFloat(jsonLocation.get("latitude").toString()));
+		geoPoint.setLongitude(Float.parseFloat(jsonLocation.get("longitude").toString()));
+		entityManager.persist(geoPoint);
+		
+		entityManager.persist(location);
+		entityManager.flush();
+		LocationGeoPoint locationGeoPoint = new LocationGeoPoint();
+		locationGeoPoint.setGeoPoint(geoPoint);
+		locationGeoPoint.setLocation(location);
+		entityManager.persist(locationGeoPoint);
+		location.getGeoRepresentation().add(locationGeoPoint);
+		
+		ArtResource artResource = new ArtResource();
+		Calendar now = GregorianCalendar.getInstance();
+		artResource.setDateCreated(new SimpleDateFormat("dd.MM.yyyy").format(now.getTime()));
+		artResource.setShownLocation(location);
+		entityManager.persist(artResource);
+		
+		artResource.getId();
+		VirtualTagging virtualTagging = new VirtualTagging();
+		virtualTagging.setResource(artResource);
+		
+		VirtualTaggingType virtualTaggingType = entityManager.find(VirtualTaggingType.class, 1L);
+		virtualTagging.getVirtualTaggingTypes().add(virtualTaggingType);
+		entityManager.persist(virtualTagging);
+		entityManager.flush();
+
+		try {
+			imageTools.persistImage(jsonLocation.get("imageData").toString(), "Inspektor X", artResource.getId());
+		} catch (IOException e) {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}
+		
+		log.info("Uploaded new Image from App with id: #0", artResource.getId());
+		return Response.status(Response.Status.CREATED).build();
+	}
 	
 	/**
 	 * Berechnet die Entfernung zwischen position und destination in Metern.

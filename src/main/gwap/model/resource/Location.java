@@ -82,7 +82,7 @@ public class Location implements Serializable {
 	 * @author Fabian Kneißl
 	 */
 	public enum LocationType {
-		MUNICIPALITY(5), PROVINCE(4), REGION(3), AREA(2), COUNTRY(1), DIVISION(3), CANTON(4), MISCELLANEOUS(9), USER_DEFINED(10);
+		MUNICIPALITY(5), PROVINCE(4), REGION(3), AREA(2), COUNTRY(1), DIVISION(3), CANTON(4), MISCELLANEOUS(9), USER_DEFINED(10), APP(0);
 		private int level;
 		private LocationType(int level) {
 			this.level = level;
@@ -113,7 +113,7 @@ public class Location implements Serializable {
 	
 	@OneToMany(mappedBy="location", cascade={CascadeType.REMOVE, CascadeType.PERSIST})
 	@OrderBy
-	private List<LocationGeoPoint> geoRepresentation;
+	private List<LocationGeoPoint> geoRepresentation = new ArrayList<LocationGeoPoint>();
 	
 	@ManyToMany
 	@JoinTable(name="locationneighbor", joinColumns=@JoinColumn(name="location_id"), inverseJoinColumns=@JoinColumn(name="neighbor_id"))
@@ -198,13 +198,6 @@ public class Location implements Serializable {
 		if (this.getGeoRepresentation().size() > 1) 
 			throw new IllegalAccessError("There are more than one GeoPoints available.");
 		return getGeoRepresentation().get(0).getGeoPoint();
-	}
-
-	public void setSingleGeoPoint(GeoPoint geoPoint) {
-		getGeoRepresentation().clear();
-		LocationGeoPoint locationGeoPoint = new LocationGeoPoint();
-		locationGeoPoint.setGeoPoint(geoPoint);
-		getGeoRepresentation().add(locationGeoPoint);
 	}
 	
 	@Override

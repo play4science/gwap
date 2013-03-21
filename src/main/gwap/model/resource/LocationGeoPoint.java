@@ -29,6 +29,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import org.jboss.seam.annotations.Name;
+
 
 /**
  * Persisted Many-To-Many relationship table
@@ -36,6 +38,7 @@ import javax.persistence.ManyToOne;
  * @author Fabian Kneißl
  */
 @Entity
+@Name("locationGeoPoint")
 public class LocationGeoPoint implements Serializable {
 	
 private static final long serialVersionUID = 1L;

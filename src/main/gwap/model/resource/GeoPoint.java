@@ -29,12 +29,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import org.jboss.seam.annotations.Name;
+
 /**
  * GeoPoint is a point consisting of a latitude and a longitude position.
  * 
  * @author Fabian Kneißl
  */
 @Entity
+@Name("geoPoint")
 public class GeoPoint implements Serializable {
 	
 	private static final long serialVersionUID = 1L;

@@ -39,6 +39,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
 import org.jboss.seam.ScopeType;
@@ -353,7 +354,14 @@ import org.jboss.seam.annotations.Scope;
  			   	query="select count(t) from Tagging t " +
  			   			"where t.resource.id=:resid and t.tag.language=:lang"),
  	   @NamedQuery(name="artResource.gameLocations",
-  			  	query="select a from Artresource a.")
+  			  	query="select v.resource " +
+  			  			"from VirtualTagging v join v.virtualTaggingTypes t " +
+  			  			"where t.id = :virtualTaggingTypeId and " +
+  			  			"v.resource.shownLocation is not null ") 
+	/* TODO: and not in (resource, that :userId has visited already) [Uncomment param in LocationService:132 ]
+	 *  	  a resource was visited, id the user took a picture of it (artresource.isVersionOf)
+	 *  Test http://localhost:8080/artigo/seam/resource/rest/location?currentLatitude=1&currentLongitude=2&userid=3&topic=1
+	 */
   	  
   	})
 
@@ -379,12 +387,13 @@ public class ArtResource extends Resource {
 	@OneToMany(mappedBy="resource",
 		cascade=CascadeType.PERSIST)	private Set<ArtResourceTitle> titles = new HashSet<ArtResourceTitle>();
 	@OneToMany(mappedBy="resource")		private List<ArtResourceTeaser> teasers = new ArrayList<ArtResourceTeaser>();
-	@OneToMany(mappedBy="resource")       private Set<ArtResourceRating> ratings = new HashSet<ArtResourceRating>();
+	@OneToMany(mappedBy="resource")     private Set<ArtResourceRating> ratings = new HashSet<ArtResourceRating>();
+	@OneToOne                           private Location shownLocation;   // Ort der Abblidung (ex. Marienplatz)
+	@ManyToOne                          private ArtResource isVersionOf;  // A photo references the original artwork 
 	
 	private String path;
 	private String dateCreated;
 	private String location;        // Ausstellungsort (ex. Staatliche Kunstsammlung ...)
-	private Location shownLocation;   // Ort der Abblidung (ex. Marienplatz)
 	
 	private String institution;  // Einrichtung
 	@Lob
@@ -491,13 +500,18 @@ public class ArtResource extends Resource {
 	public void setSkip(Boolean skip) {
 		this.skip = skip;
 	}
-	
 	public void setShownLocation(Location shownLocation) {
 		this.shownLocation = shownLocation;
 	}
-
 	public Location getShownLocation() {
 		return shownLocation;
+	}
+	public ArtResource getIsVersionOf() {
+		return isVersionOf;
+	}
+
+	public void setIsVersionOf(ArtResource isVersionOf) {
+		this.isVersionOf = isVersionOf;
 	}
 
 	@Override
