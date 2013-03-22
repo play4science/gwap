@@ -17,14 +17,16 @@
 
 		<div id="content">
 			<div style="margin:10em 1em; text-align:center">
-				<rich:messages id="messages" styleClass="messages" errorClass="error" infoClass="info"/>
-				<s:link view="/poker.xhtml" propagation="none" styleClass="button" style="margin-bottom:2em">
+				<s:fragment rendered="#{!mitStatementBean.existsSensibleForPoker}">
+					<div class="messages" style="margin-bottom:2em"><dl><dt class="infomsg"><h:outputText value="#{messages['game.poker.noResourceLeft']}" /></dt></dl></div>
+				</s:fragment>
+				<s:link view="/poker.xhtml" propagation="none" styleClass="button" style="margin-bottom:2em" rendered="#{mitStatementBean.existsSensibleForPoker}">
 					<span><h:outputText value="#{messages['game.poker.menu.play']}" /></span>
 				</s:link>
 				<s:link view="/pokerNewStatement.xhtml" propagation="none" styleClass="button" style="margin-bottom:2em; clear:both">
 					<span><h:outputText value="#{messages['game.poker.menu.newStatement']}" /></span>
 				</s:link>
-				<s:link view="/pokerBets.xhtml" propagation="none" styleClass="button" style="margin-bottom:2em; clear:both">
+				<s:link view="/pokerBets.xhtml" propagation="none" styleClass="button" style="margin-bottom:2em; clear:both" rendered="#{identity.loggedIn}">
 					<span><h:outputText value="#{messages['game.poker.menu.bets']}" /></span>
 				</s:link>
 			</div>

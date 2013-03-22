@@ -33,13 +33,19 @@
 		        	</li>
 	        	</s:fragment>
 	    		<li>
-	    			<s:link view="/newstatement.xhtml" value="#{messages['menu.newstatement']}" propagation="none" rendered="#{mitCoins.canEnterStatement()}" />
+	    			<s:link view="/newstatement.xhtml" value="#{messages['menu.newstatement']}" propagation="none" />
 	    		</li>
-	    		<s:fragment rendered="#{s:hasPermission('metropolitalia', 'poker')}">
+	    		<li style="margin-top:1em;">
+					<s:link view="/poker.xhtml" propagation="none" value="#{messages['menu.poker']}" />
+	    		</li>
+	        	<s:fragment rendered="#{identity.loggedIn}">
 	    		<li>
-	    			<s:link view="/pokerSelection.xhtml" propagation="none" value="#{messages['menu.poker']}"/>
+					<s:link view="/pokerBets.xhtml" propagation="none" value="#{messages['menu.poker.bets']}" />
 	    		</li>
 	    		</s:fragment>
+	    		<li>
+					<s:link view="/pokerNewStatement.xhtml" propagation="none" value="#{messages['menu.poker.newStatement']}" />
+	    		</li>
 	        </ul>
 	    	<ul id="navSub">
 	        	<li>

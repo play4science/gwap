@@ -54,7 +54,7 @@ import org.jboss.seam.annotations.Scope;
 					"order by random()"),
 	@NamedQuery(name="statement.nextSensibleForLocationAssignmentByPerson", 
 			query="select s.id from Bet b join b.resource s where " +
-					"s.class = Statement and s.enabled = true and s.creator != :person " +
+					"s.class = Statement and s.enabled = true and (s.creator is null or s.creator != :person) " +
 					"and not exists (select b2.id from Bet b2 where b2.resource=s and b2.person = :person) " +
 					"and not exists (select la2.id from LocationAssignment la2 where la2.resource=s and la2.person = :person) " +
 					"and not exists (select la2.id from LocationAssignment la2 join la2.person p2 where la2.resource=s and p2.personConnected = :person) " +
@@ -67,10 +67,9 @@ import org.jboss.seam.annotations.Scope;
 					"order by random()"),
 	@NamedQuery(name="statement.nextSensibleForPokerByPerson", 
 			query="select s.id from PokerBet b join b.resource s where " +
-					"s.class = Statement and s.enabled = true and s.creator != :person " +
-					"and not exists (select b2.id from Bet b2 where b2.resource=s and b2.person = :person) " +
-					"and not exists (select la2.id from LocationAssignment la2 where la2.resource=s and la2.person = :person) " +
-					"and not exists (select la2.id from LocationAssignment la2 join la2.person p2 where la2.resource=s and p2.personConnected = :person) " +
+					"s.class = Statement and s.enabled = true and (s.creator is null or s.creator != :person) " +
+					"and not exists (select gr.id from GameRound gr join gr.resources r where r=s and gr.person = :person) " +
+					"and not exists (select gr.id from GameRound gr join gr.resources r join gr.person p2 where r=s and p2.personConnected = :person) " +
 					"group by s.id " +
 					"order by random()"),
 	@NamedQuery(name="statement.atLeastAssigned", 
@@ -81,7 +80,7 @@ import org.jboss.seam.annotations.Scope;
 					"order by random()"),
 	@NamedQuery(name="statement.atLeastAssignedByPerson", 
 			query="select s.id from Bet b join b.resource s join s.locationAssignments la left outer join s.gameRounds gr where " +
-					"s.class = Statement and s.enabled = true and s.creator != :person " +
+					"s.class = Statement and s.enabled = true and (s.creator is null or s.creator != :person) " +
 					"and not exists (select b2.id from Bet b2 where b2.resource=s and b2.person = :person) " +
 					"and not exists (select la2.id from LocationAssignment la2 where la2.resource=s and la2.person = :person) " +
 					"and not exists (select la2.id from LocationAssignment la2 join la2.person p2 where la2.resource=s and p2.personConnected = :person) " +
@@ -90,7 +89,7 @@ import org.jboss.seam.annotations.Scope;
 					"order by random()"),
 	@NamedQuery(name="statement.byCreator", query="select s from Statement s where s.creator=:person and s.enabled=true"),
 	@NamedQuery(name="statement.countByCreator", query="select count(s.id) from Statement s where s.creator=:person and s.enabled=true"),
-	@NamedQuery(name="statement.byCreateDate", query="select s from Statement s where s.createDate != null order by createDate"),
+	@NamedQuery(name="statement.byCreateDate", query="select s from Statement s where s.createDate is not null order by createDate"),
 	@NamedQuery(name="statement.byText", query="from Statement where text = :text")
 })
 

@@ -38,7 +38,7 @@ public class NoSuchResourceExceptionHandler implements ActionHandler {
 	public void execute(ExecutionContext executionContext) throws Exception {
 		Conversation.instance().endBeforeRedirect();
 		Redirect redirect = Redirect.instance();
-		redirect.setViewId("/pokerSelection.xhtml");
+		redirect.setViewId("/pokerNoResourceAvailable.xhtml");
 		redirect.execute();
 	}
 
