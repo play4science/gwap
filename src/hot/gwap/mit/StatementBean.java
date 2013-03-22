@@ -25,6 +25,7 @@ package gwap.mit;
 import gwap.ResourceAcquisitionType;
 import gwap.model.Person;
 import gwap.model.action.Bet;
+import gwap.model.action.PokerBet;
 import gwap.model.resource.Statement;
 
 import java.io.Serializable;
@@ -168,7 +169,7 @@ public class StatementBean implements Serializable {
 			statement = entityManager.find(Statement.class, statementId);
 			acquisitionType = ResourceAcquisitionType.SENSIBLE_FOR_POKER;
 			log.info("Statement is #0", statement);
-			logPredefinedStatementLocations();
+			logPredefinedPokerBetLocations();
 		} catch (NoResultException e) {
 			statement = null;
 			log.info("Could not retrieve a statemement");
@@ -217,6 +218,19 @@ public class StatementBean implements Serializable {
 			if (bets.size() == 0)
 				log.info("Statement #0 is not assigned to a location", statement);
 			for (Bet bet : bets)
+				log.info("Statement #0 is assigned to location #1", bet.getResource(), bet.getLocation());
+		}
+	}
+	
+	private void logPredefinedPokerBetLocations() {
+		if (log.isInfoEnabled() && statement != null) {
+			@SuppressWarnings("unchecked")
+			List<PokerBet> bets = entityManager.createNamedQuery("pokerBet.byResource")
+					.setParameter("resource", statement)
+					.getResultList();
+			if (bets.size() == 0)
+				log.info("Statement #0 is not assigned to a location", statement);
+			for (PokerBet bet : bets)
 				log.info("Statement #0 is assigned to location #1", bet.getResource(), bet.getLocation());
 		}
 	}
