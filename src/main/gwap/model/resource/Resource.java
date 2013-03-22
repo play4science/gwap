@@ -41,7 +41,6 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 /**
  * Base class for all kinds of resources
@@ -73,9 +72,6 @@ public abstract class Resource implements Serializable {
 	@ManyToMany(mappedBy="resources")
 	protected List<Topic> topics = new ArrayList<Topic>();
 
-	@OneToOne
-	protected Resource resource;
-	
 	public Long getId() {
 		return id;
 	}
@@ -130,14 +126,6 @@ public abstract class Resource implements Serializable {
 
 	public void setTopics(List<Topic> topics) {
 		this.topics = topics;
-	}
-
-	public Resource getResource() {
-		return resource;
-	}
-
-	public void setResource(Resource resource) {
-		this.resource = resource;
 	}
 
 }
