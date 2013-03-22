@@ -324,6 +324,10 @@
         description="Deploy the exploded archive">
         <fail unless="jboss.home">jboss.home not set</fail>  
     	<delete file="${deploy.dir}/${project.name}.ear"> </delete>   	
+    	<antcall target="subproject" inheritrefs="true"><param name="target" value="explode"/></antcall>
+        <copy todir="${jar.deploy.dir}">
+            <fileset dir="${jar.dir}"/>
+        </copy>
         <copy todir="${ear.deploy.dir}">
             <fileset dir="${ear.dir}">
                 <include name="**/*"/>
@@ -331,10 +335,6 @@
                 <exclude name="*_war/**"/>
             </fileset>
         </copy>
-        <copy todir="${jar.deploy.dir}">
-            <fileset dir="${jar.dir}"/>
-        </copy>
-    	<antcall target="subproject" inheritrefs="true"><param name="target" value="explode"/></antcall>
     </target>
 
     <target name="unexplode" description="Undeploy the exploded archive">
