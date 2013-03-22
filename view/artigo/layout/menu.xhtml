@@ -65,17 +65,13 @@
 	   		   	<span class="beta">beta</span>
 	   		</li>
 	   		</s:fragment>
-   			<s:fragment> 
-    			<li>
-	   		   		<s:link id="menuTagATagGameId" 
-   			   	        	view="/tagATag.xhtml"
-   			   	        	value="#{messages['game.gwapGameTagATag']}"
-   		   		        	propagation="none"/>
-   		   	    	<s:link view="/about.xhtml" styleClass="helpLink" propagation="none">
-		   		   		<f:param name="selectedTab" value="tagATag"/>
-	   		   		</s:link>
-   				</li>
-   			</s:fragment>
+   			<li>
+   		   		<s:link id="menuTagATagGameId" 
+  			   	        	view="/tagATag.xhtml"
+  			   	        	value="#{messages['game.gwapGameTagATag']}"
+  		   		        	propagation="none"/>
+				<span class="beta">beta</span>
+  			</li>
    			<s:fragment rendered="#{s:hasPermission('sentiment', 'test')}"> 
     			<li>
 	   		   		<s:link id="menuSentimentGameId" 
