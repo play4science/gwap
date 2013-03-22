@@ -96,7 +96,7 @@ public class StatementBean implements Serializable {
 			if (statement == null)
 				sensibleForLocationAssignment();
 		}
-		if (statement == null && viewId.equals("/poker.xhtml")) {
+		if (statement == null && (viewId.equals("/poker.xhtml") || viewId.equals("/pokerRequest.xhtml"))) {
 			sensibleForPoker();
 		}
 		if (statement == null) {
