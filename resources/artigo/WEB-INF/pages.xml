@@ -73,7 +73,6 @@
   <begin-conversation join="true"/>
  </page>
  <page login-required="true" view-id="/tagATag.xhtml">
-  <restrict>#{s:hasPermission('tagatag', 'test')}</restrict>
   <begin-conversation join="true"/>
  </page>
  <page view-id="/combino.xhtml">
