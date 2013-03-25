@@ -347,22 +347,31 @@ import org.jboss.seam.annotations.Scope;
   			  			"left join t.tag tag " +
   			  			"where t.resource.id=:resid and tag.language=:lang"),
 	   @NamedQuery(name="artResource.tagCountForTagname",
-		  	query="select count(distinct tag) from Tagging t " +
-		  			"left join t.tag tag " +
-		  			"where t.resource.id=:resid and tag.language=:lang and lower(tag.name)=:tagname"),  			  			
+			  	query="select count(distinct tag) from Tagging t " +
+			  			"left join t.tag tag " +
+			  			"where t.resource.id=:resid and tag.language=:lang and lower(tag.name)=:tagname"),  			  			
  	   @NamedQuery(name="artResource.taggingCount",
  			   	query="select count(t) from Tagging t " +
  			   			"where t.resource.id=:resid and t.tag.language=:lang"),
  	   @NamedQuery(name="artResource.gameLocations",
   			  	query="select v.resource " +
   			  			"from VirtualTagging v join v.virtualTaggingTypes t " +
-  			  			"where t.id = :virtualTaggingTypeId and " +
-  			  			"v.resource.shownLocation is not null ") 
+  			  			"where t.id = :virtualTaggingTypeId " +
+  			  			"and v.resource.shownLocation is not null " +
+  			  			//TODO not working...
+//  			  		    "and v.resource.id in (select vv.id from ArtResource vv where vv.isVersionOf.artist.id = :userId) " +
+  			  		    ""),
+  	  @NamedQuery(name="artResource.getRandomUserPictures",
+  			  	 query="select v from ArtResource v where v.isVersionOf is not null"), // +
+  	            //       "v.id not in (select vv.id from ArtResource vv where vv.ratings.person.id = :deviceid)"
+	// TODO: nur bilder anzeigen, die der benutzer noch nicht bewertet hat
+
 	/* TODO: and not in (resource, that :userId has visited already) [Uncomment param in LocationService:132 ]
 	 *  	  a resource was visited, id the user took a picture of it (artresource.isVersionOf)
 	 *  Test http://localhost:8080/artigo/seam/resource/rest/location?currentLatitude=1&currentLongitude=2&userid=3&topic=1
 	 */
-  	  
+  	   @NamedQuery(name="artResource.getRandomNewPictures",
+			  	 query="select v from ArtResource v where v.isVersionOf is null and shownLocation is not null"), 
   	})
 
 /**
@@ -387,7 +396,8 @@ public class ArtResource extends Resource {
 	@OneToMany(mappedBy="resource",
 		cascade=CascadeType.PERSIST)	private Set<ArtResourceTitle> titles = new HashSet<ArtResourceTitle>();
 	@OneToMany(mappedBy="resource")		private List<ArtResourceTeaser> teasers = new ArrayList<ArtResourceTeaser>();
-	@OneToMany(mappedBy="resource")     private Set<ArtResourceRating> ratings = new HashSet<ArtResourceRating>();
+	@OneToMany(mappedBy="resource",
+		cascade=CascadeType.PERSIST)    private Set<ArtResourceRating> ratings = new HashSet<ArtResourceRating>();
 	@OneToOne                           private Location shownLocation;   // Ort der Abblidung (ex. Marienplatz)
 	@ManyToOne                          private ArtResource isVersionOf;  // A photo references the original artwork 
 	
@@ -512,6 +522,14 @@ public class ArtResource extends Resource {
 
 	public void setIsVersionOf(ArtResource isVersionOf) {
 		this.isVersionOf = isVersionOf;
+	}
+
+	public Set<ArtResourceRating> getRatings() {
+		return ratings;
+	}
+
+	public void setRatings(Set<ArtResourceRating> ratings) {
+		this.ratings = ratings;
 	}
 
 	@Override

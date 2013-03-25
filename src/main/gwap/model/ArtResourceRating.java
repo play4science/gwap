@@ -36,7 +36,6 @@ import org.jboss.seam.annotations.Scope;
 @Entity
 @Name("artResourceRating")
 @Scope(ScopeType.CONVERSATION)
-
 public class ArtResourceRating extends Rating implements Serializable {
 
 	private static final long serialVersionUID = 1L;
