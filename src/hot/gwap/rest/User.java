@@ -33,6 +33,7 @@ import gwap.wrapper.UserStatistics;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -43,15 +44,19 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.jboss.seam.annotations.In;
+import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
+import org.jboss.seam.log.Log;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -68,6 +73,7 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@In private EntityManager entityManager;
+	@Logger private Log log;
 	
 	private JSONParser parser = new JSONParser();
 	
@@ -78,6 +84,13 @@ public class User implements Serializable {
 		query.setParameter("deviceId", deviceId);
 		Person person = (Person) query.getSingleResult();
 		
+		JSONObject userObject = getUserStatistics(deviceId, person);
+		
+		return Response.ok(userObject.toString(), MediaType.APPLICATION_JSON).build();
+	}
+
+	private JSONObject getUserStatistics(String deviceId, Person person) {
+		Query query;
 		String username = person.getExternalUsername();
 		
 		query = entityManager.createNamedQuery("gameRound.statisticsByPlayer");
@@ -141,8 +154,7 @@ public class User implements Serializable {
 			badgesArray.add(jsonBadge);
 		}
 		userObject.put("badges", badgesArray);
-		
-		return Response.ok(userObject.toString(), MediaType.APPLICATION_JSON).build();
+		return userObject;
 	}
 
 	private GameType getGameType() {
@@ -158,11 +170,12 @@ public class User implements Serializable {
 	@Transactional
 	@Path("/{id:[A-Za-z0-9][A-Za-z0-9]*}")
 	public Response updateUser(@PathParam("id") String deviceId, String payloadString) {
+		log.info("updateUser(#0)", deviceId);
 		JSONObject payload = null;
 		try {
 			payload = (JSONObject) parser.parse(payloadString);
 		} catch (ParseException e) {
-			e.printStackTrace();
+			log.warn("Error parsing payload", e);
 		}
 		Query query = entityManager.createNamedQuery("person.byDeviceId");
 		query.setParameter("deviceId", deviceId);
@@ -212,6 +225,56 @@ public class User implements Serializable {
 			
 		}
 		entityManager.flush();
+		log.info("Sucessfully updated user with deviceId #0", deviceId);
 		return Response.ok().build();
+	}
+	
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+	@Transactional
+	@Path("/{id:[A-Za-z0-9][A-Za-z0-9]*}")
+	public Response createUser(@PathParam("id") String deviceId, String payloadString) {
+		Query query = entityManager.createNamedQuery("person.byDeviceId");
+		query.setParameter("deviceId", deviceId);
+		if (query.getResultList().size() > 0) {
+			log.info("createUser(#0): Person does already exist,  not creating again", deviceId);
+			return Response.status(Response.Status.NOT_FOUND).build();
+		}
+		
+		Person person = new Person();
+		person.setUsername("");
+		person.setDeviceId(deviceId);
+		person.setExternalUsername("Neuling");
+		person.setLastLogin(new Date());
+		entityManager.persist(person);
+		entityManager.flush();
+		
+		JSONObject userObject = getUserStatistics(deviceId, person);
+		log.info("createUser(#0): Person #1 created successfully.", deviceId, person);
+		return Response.ok(userObject.toString(), MediaType.APPLICATION_JSON).build();
+	}
+
+	@GET
+	@Path("/highscore")
+	public Response getHighscore() {
+		Query query = entityManager.createNamedQuery("highscore.all");
+		query.setParameter("gametype", getGameType());
+		query.setMaxResults(10);
+		List<Highscore> highscoreList = query.getResultList();
+		
+		JSONArray highscoreListJSON = new JSONArray();
+		for (int i = 0; i < highscoreList.size(); i++) {
+			Highscore highscore = highscoreList.get(i);
+			JSONObject highscoreJSON = new JSONObject();
+			highscoreJSON.put("rank", i+1);
+			Person person = entityManager.find(Person.class, highscore.getPersonId());
+			highscoreJSON.put("name", person.getExternalUsername());
+			highscoreJSON.put("score", highscore.getScore());
+			highscoreListJSON.add(highscoreJSON);
+		}
+		
+		return Response.ok(highscoreListJSON.toString(), MediaType.APPLICATION_JSON).build();
 	}
 }
