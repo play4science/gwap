@@ -23,6 +23,7 @@
 package gwap.rest;
 
 import gwap.model.Person;
+import gwap.model.resource.ArtResource;
 import gwap.wrapper.UserStatistics;
 
 import java.io.Serializable;
@@ -65,6 +66,17 @@ public class User implements Serializable {
 		query = entityManager.createNamedQuery("gameRound.gamesWonByPlayer");
 		query.setParameter("deviceId", deviceId);
 		Long gamesWonByPlayer = ((Number)query.getSingleResult()).longValue();
+		
+		query = entityManager.createNamedQuery("artResource.byOriginAndDeviceId");
+		query.setParameter("origin", ArtResource.ORIGIN_APP_USER);
+		query.setParameter("deviceId", deviceId);
+		Long photosTaken = ((Number)query.getSingleResult()).longValue();
+		
+		query = entityManager.createNamedQuery("artResource.byOriginAndDeviceId");
+		query.setParameter("origin", ArtResource.ORIGIN_APP_CRIMESCENE);
+		query.setParameter("deviceId", deviceId);
+		Long crimescenesTaken = ((Number)query.getSingleResult()).longValue();
+		
 		
 		return Response.status(Response.Status.OK).build();
 	}

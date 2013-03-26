@@ -64,6 +64,8 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 /**
+ * For pictures that are added by users on their own.
+ * 
  * @author maders, wieser
  */
  @Path("/newpicture")
@@ -102,6 +104,9 @@ public class NewPicture implements Serializable {
 		Calendar now = GregorianCalendar.getInstance();
 		artResource.setDateCreated(new SimpleDateFormat("dd.MM.yyyy").format(now.getTime()));
 		
+		artResource.setOrigin(ArtResource.ORIGIN_APP_USER);
+		artResource.setSkip(true); // should not show up for artigo tagging
+
 		Location location = new Location();
 		location.setType(LocationType.APP);
 		location.setName(jsonObject.get("name").toString());

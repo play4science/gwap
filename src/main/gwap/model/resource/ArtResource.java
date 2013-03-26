@@ -361,8 +361,8 @@ import org.jboss.seam.annotations.Scope;
   			  			//TODO not working...
 //  			  		    "and v.resource.id in (select vv.id from ArtResource vv where vv.isVersionOf.artist.id = :userId) " +
   			  		    ""),
-  	  @NamedQuery(name="artResource.getRandomUserPictures",
-  			  	 query="select v from ArtResource v where v.isVersionOf is not null"), // +
+  	   @NamedQuery(name="artResource.getRandomUserPictures",
+  			  	query="select v from ArtResource v where v.isVersionOf is not null"), // +
   	            //       "v.id not in (select vv.id from ArtResource vv where vv.ratings.person.id = :deviceid)"
 	// TODO: nur bilder anzeigen, die der benutzer noch nicht bewertet hat
 
@@ -371,7 +371,9 @@ import org.jboss.seam.annotations.Scope;
 	 *  Test http://localhost:8080/artigo/seam/resource/rest/location?currentLatitude=1&currentLongitude=2&userid=3&topic=1
 	 */
   	   @NamedQuery(name="artResource.getRandomNewPictures",
-			  	 query="select v from ArtResource v where v.isVersionOf is null and shownLocation is not null"), 
+			  	query="select v from ArtResource v where v.isVersionOf is null and shownLocation is not null"),
+	   @NamedQuery(name = "artResource.byOriginAndDeviceId",
+			  	query="select count(*) from ArtResource a where a.origin = :origin and a.artist.deviceId = :deviceId")
   	})
 
 /**
@@ -388,6 +390,9 @@ import org.jboss.seam.annotations.Scope;
 public class ArtResource extends Resource {
 	
 	private static final long serialVersionUID = 1L;
+	
+	public static final String ORIGIN_APP_USER = "vom Nutzer gemacht";
+	public static final String ORIGIN_APP_CRIMESCENE = "Bild aus App-Spiel";
 
 	@ManyToOne
 	private Person artist;

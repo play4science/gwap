@@ -62,6 +62,8 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 /**
+ * For pictures that are added in an app game.
+ * 
  * @author maders, wieser
  */
 
@@ -103,6 +105,9 @@ public class UserPicture implements Serializable {
 		
 		Calendar now = GregorianCalendar.getInstance();
 		artResource.setDateCreated(new SimpleDateFormat("dd.MM.yyyy").format(now.getTime()));
+		
+		artResource.setOrigin(ArtResource.ORIGIN_APP_CRIMESCENE);
+		artResource.setSkip(true); // should not show up for artigo tagging
 		
 		Location location = new Location();
 		location.setType(LocationType.APP);
