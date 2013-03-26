@@ -125,7 +125,11 @@ import org.jboss.seam.annotations.Scope;
 			name = "gameRound.nrRoundsWithResourceAndNoLocationAssignment",
 			query = "select count(*) from GameRound gr join gr.resources r " +
 					"where gr.gameSession.gameType.name=:gameTypeName and r=:resource and gr.endDate is not null " +
-					"and not exists (from LocationAssignment la where la.gameRound = gr)")
+					"and not exists (from LocationAssignment la where la.gameRound = gr)"),
+	@NamedQuery(
+			name = "gameround.statisticsByPlayer",
+			query = "select new gwap.wrapper.UserStatistics(sum(g.score), sum(g.endDate-g.startDate), sum(g.coveredDistance)) " +
+					"from GameRound g where g.person.deviceId = :deviceId ")
 }
 )
 					
@@ -155,6 +159,7 @@ public class GameRound implements Serializable {
 	private Date endDate;
 	private Integer score;
 	private Boolean successful;
+	private Double coveredDistance;
 	
 	public GameRound() {
 		setStartDate(new Date());
@@ -266,6 +271,14 @@ public class GameRound implements Serializable {
 
 	public void setSuccessful(Boolean successful) {
 		this.successful = successful;
+	}
+
+	public Double getCoveredDistance() {
+		return coveredDistance;
+	}
+
+	public void setCoveredDistance(Double coveredDistance) {
+		this.coveredDistance = coveredDistance;
 	}
 	
 }
