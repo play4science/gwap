@@ -35,10 +35,13 @@ import javax.persistence.Query;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  * @author maders, wieser
@@ -86,7 +89,31 @@ public class User implements Serializable {
 		query = entityManager.createNamedQuery("badge.all");
 		List<Badge> allBadges = query.getResultList();
 		
+		JSONObject userObject = new JSONObject();
+		userObject.put("id", deviceId);
+		userObject.put("username", username);
+		userObject.put("score", userStatistics.getScore());
+		userObject.put("playedTime", userStatistics.getSecondsPlayed());
+		userObject.put("gamesPlayed", gamesWonByPlayer);
+		userObject.put("photosTaken", photosTaken);
+		userObject.put("crimescenesTaken", crimescenesTaken);
+		userObject.put("coveredDistance", userStatistics.getCoveredDistance());
 		
-		return Response.status(Response.Status.OK).build();
+		JSONArray badgesArray = new JSONArray();
+		for (Badge badge : allBadges) {
+			JSONObject jsonBadge = new JSONObject();
+			jsonBadge.put("id", badge.getId());
+			jsonBadge.put("name", badge.getName());
+			jsonBadge.put("description", badge.getDescription());
+			jsonBadge.put("worth", badge.getWorth());
+			if (unlockedBadges.contains(badge))
+				jsonBadge.put("unlocked", true);
+			else
+				jsonBadge.put("unlocked", false);
+			badgesArray.add(jsonBadge);
+		}
+		userObject.put("badges", badgesArray);
+		
+		return Response.ok(userObject.toString(), MediaType.APPLICATION_JSON).build();
 	}
 }

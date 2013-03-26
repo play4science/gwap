@@ -28,38 +28,40 @@ package gwap.wrapper;
  */
 public class UserStatistics {
 
-	private Long score;
-	private Long secondsPlayed;
-	private Double coveredDistance;
+	private long score;
+	private long secondsPlayed;
+	private double coveredDistance;
 	
 	public UserStatistics(Long score, Number secondsPlayed, Double coveredDistance) {
-		this.score = score;
+		if (score != null)
+			this.score = score;
 		if (secondsPlayed != null)
 			this.secondsPlayed = secondsPlayed.longValue();
-		this.coveredDistance = coveredDistance;
+		if (coveredDistance != null)
+			this.coveredDistance = coveredDistance;
 	}
 
-	public Long getScore() {
+	public long getScore() {
 		return score;
 	}
 
-	public void setScore(Long score) {
+	public void setScore(long score) {
 		this.score = score;
 	}
 
-	public Long getSecondsPlayed() {
+	public long getSecondsPlayed() {
 		return secondsPlayed;
 	}
 
-	public void setSecondsPlayed(Long secondsPlayed) {
+	public void setSecondsPlayed(long secondsPlayed) {
 		this.secondsPlayed = secondsPlayed;
 	}
 
-	public Double getCoveredDistance() {
+	public double getCoveredDistance() {
 		return coveredDistance;
 	}
 
-	public void setCoveredDistance(Double coveredDistance) {
+	public void setCoveredDistance(double coveredDistance) {
 		this.coveredDistance = coveredDistance;
 	}
 	

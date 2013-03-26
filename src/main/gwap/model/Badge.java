@@ -94,4 +94,12 @@ public class Badge implements Serializable {
 	public void setPersons(Set<Person> persons) {
 		this.persons = persons;
 	}
+	
+	public boolean equals(Object obj) {
+		if (obj instanceof Badge) {
+			Badge other = (Badge) obj;
+			return this.id != null && this.id.equals(other.id);
+		}
+		return false;
+	};
 }
