@@ -31,17 +31,25 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 import org.jboss.seam.annotations.Name;
 
 /**
  * @author maders, wieser
  */
-
+@NamedQueries({
+	@NamedQuery(name="badge.all",
+			query="from Badge"),
+	@NamedQuery(name="badge.byDeviceId",
+			query="select b from Badge b join b.persons p where p.deviceId = :deviceId")
+})
 @Entity
 @Name("badge")
 public class Badge implements Serializable {
 
+	
 	private static final long serialVersionUID = 1L;
 
 	@Id @GeneratedValue
@@ -52,8 +60,8 @@ public class Badge implements Serializable {
 	@Lob
 	private String description;
 	private Integer worth;
-
-	@ManyToMany
+	
+	@ManyToMany(mappedBy="badges")
 	private Set<Person> persons = new HashSet<Person>();
 	
 	public String getName() {
@@ -73,5 +81,17 @@ public class Badge implements Serializable {
 	}
 	public void setWorth(Integer worth) {
 		this.worth = worth;
+	}
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public Set<Person> getPersons() {
+		return persons;
+	}
+	public void setPersons(Set<Person> persons) {
+		this.persons = persons;
 	}
 }

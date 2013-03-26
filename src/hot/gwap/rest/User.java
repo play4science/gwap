@@ -22,11 +22,13 @@
 
 package gwap.rest;
 
+import gwap.model.Badge;
 import gwap.model.Person;
 import gwap.model.resource.ArtResource;
 import gwap.wrapper.UserStatistics;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -76,6 +78,13 @@ public class User implements Serializable {
 		query.setParameter("origin", ArtResource.ORIGIN_APP_CRIMESCENE);
 		query.setParameter("deviceId", deviceId);
 		Long crimescenesTaken = ((Number)query.getSingleResult()).longValue();
+		
+		query = entityManager.createNamedQuery("badge.byDeviceId");
+		query.setParameter("deviceId", deviceId);
+		List<Badge> unlockedBadges = query.getResultList();
+
+		query = entityManager.createNamedQuery("badge.all");
+		List<Badge> allBadges = query.getResultList();
 		
 		
 		return Response.status(Response.Status.OK).build();
