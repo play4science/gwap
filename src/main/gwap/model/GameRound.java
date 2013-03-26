@@ -127,9 +127,12 @@ import org.jboss.seam.annotations.Scope;
 					"where gr.gameSession.gameType.name=:gameTypeName and r=:resource and gr.endDate is not null " +
 					"and not exists (from LocationAssignment la where la.gameRound = gr)"),
 	@NamedQuery(
-			name = "gameround.statisticsByPlayer",
+			name = "gameRound.statisticsByPlayer",
 			query = "select new gwap.wrapper.UserStatistics(sum(g.score), extract(epoch from sum(g.endDate-g.startDate)), sum(g.coveredDistance)) " +
-					"from GameRound g where g.person.deviceId = :deviceId ")
+					"from GameRound g where g.person.deviceId = :deviceId "),
+	@NamedQuery(
+			name = "gameRound.gamesWonByPlayer",
+			query = "select count(*) from GameRound g where g.successful = true and g.person.deviceId = :deviceId")
 }
 )
 					

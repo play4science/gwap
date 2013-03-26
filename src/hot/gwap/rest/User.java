@@ -58,9 +58,13 @@ public class User implements Serializable {
 		
 		String username = person.getExternalUsername();
 		
-		query = entityManager.createNamedQuery("gameround.statisticsByPlayer");
+		query = entityManager.createNamedQuery("gameRound.statisticsByPlayer");
 		query.setParameter("deviceId", deviceId);
 		UserStatistics userStatistics = (UserStatistics) query.getSingleResult();
+		
+		query = entityManager.createNamedQuery("gameRound.gamesWonByPlayer");
+		query.setParameter("deviceId", deviceId);
+		Long gamesWonByPlayer = ((Number)query.getSingleResult()).longValue();
 		
 		return Response.status(Response.Status.OK).build();
 	}
