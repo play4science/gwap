@@ -23,16 +23,27 @@
 package gwap.rest;
 
 import gwap.model.Badge;
+import gwap.model.GameRound;
+import gwap.model.GameSession;
+import gwap.model.GameType;
+import gwap.model.Highscore;
 import gwap.model.Person;
 import gwap.model.resource.ArtResource;
 import gwap.wrapper.UserStatistics;
 
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
@@ -40,8 +51,11 @@ import javax.ws.rs.core.Response;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Transactional;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /**
  * @author maders, wieser
@@ -54,6 +68,8 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@In private EntityManager entityManager;
+	
+	private JSONParser parser = new JSONParser();
 	
 	@GET
 	@Path("/{id:[A-Za-z0-9][A-Za-z0-9]*}")
@@ -89,6 +105,17 @@ public class User implements Serializable {
 		query = entityManager.createNamedQuery("badge.all");
 		List<Badge> allBadges = query.getResultList();
 		
+		query = entityManager.createNamedQuery("highscore.all");
+		query.setParameter("gametype", getGameType());
+		List<Highscore> highscores = query.getResultList();
+		int highscoreRank = 0;
+		for (int i = 0; i < highscores.size(); i++) {
+			if (highscores.get(i).getPersonId().equals(person.getId())) {
+				highscoreRank = i+1;
+				break;
+			}
+		}
+		
 		JSONObject userObject = new JSONObject();
 		userObject.put("id", deviceId);
 		userObject.put("username", username);
@@ -98,6 +125,7 @@ public class User implements Serializable {
 		userObject.put("photosTaken", photosTaken);
 		userObject.put("crimescenesTaken", crimescenesTaken);
 		userObject.put("coveredDistance", userStatistics.getCoveredDistance());
+		userObject.put("rank", highscoreRank);
 		
 		JSONArray badgesArray = new JSONArray();
 		for (Badge badge : allBadges) {
@@ -115,5 +143,75 @@ public class User implements Serializable {
 		userObject.put("badges", badgesArray);
 		
 		return Response.ok(userObject.toString(), MediaType.APPLICATION_JSON).build();
+	}
+
+	private GameType getGameType() {
+		Query query = entityManager.createNamedQuery("gameType.select");
+		query.setParameter("name", "inspectorXApp");
+		GameType gameType = (GameType) query.getSingleResult();
+		return gameType;
+	}
+	
+	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+	@Transactional
+	@Path("/{id:[A-Za-z0-9][A-Za-z0-9]*}")
+	public Response updateUser(@PathParam("id") String deviceId, String payloadString) {
+		JSONObject payload = null;
+		try {
+			payload = (JSONObject) parser.parse(payloadString);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		Query query = entityManager.createNamedQuery("person.byDeviceId");
+		query.setParameter("deviceId", deviceId);
+		Person person = (Person) query.getSingleResult();
+
+		if (payload.containsKey("username")) { // update user
+			person.setExternalUsername(payload.get("username").toString());
+		} else { // create new gamesession+gameround
+			query = entityManager.createNamedQuery("gameSession.byGameType");
+			query.setParameter("gameType", getGameType());
+			GameSession gameSession;
+			try {
+				gameSession = (GameSession) query.getSingleResult();
+			} catch (NoResultException e) {
+				gameSession = new GameSession();
+				gameSession.setGameType(getGameType());
+				entityManager.persist(gameSession);
+			}
+			
+			int score = Integer.parseInt(payload.get("score").toString());
+			int playedTime = Integer.parseInt(payload.get("playedTime").toString());
+			double coveredDistance = Double.parseDouble(payload.get("coveredDistance").toString());
+			boolean successful = Integer.parseInt(payload.get("gamesPlayed").toString()) == 1;
+
+			GameRound gameRound = new GameRound();
+			entityManager.persist(gameRound);
+			gameRound.setGameSession(gameSession);
+			gameRound.setPerson(person);
+			gameRound.setScore(score);
+			Calendar cal = GregorianCalendar.getInstance();
+			gameRound.setEndDate(cal.getTime());
+			cal.add(Calendar.MILLISECOND, -1 * playedTime);
+			gameRound.setStartDate(cal.getTime());
+			gameRound.setCoveredDistance(coveredDistance);
+			gameRound.setSuccessful(successful);
+			
+			// Unlock new badges
+			JSONArray newBadges = (JSONArray) payload.get("badges");
+			for (Object o : newBadges) {
+				JSONObject badge = (JSONObject) o;
+				long badgeId = Long.parseLong(badge.get("id").toString());
+				if (Boolean.parseBoolean(badge.get("unlocked").toString())) {
+					Badge b = entityManager.find(Badge.class, badgeId);
+					person.getBadges().add(b);
+				}
+			}
+			
+		}
+		entityManager.flush();
+		return Response.ok().build();
 	}
 }

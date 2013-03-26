@@ -32,6 +32,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
 import org.jboss.seam.ScopeType;
@@ -43,7 +45,9 @@ import org.jboss.seam.annotations.Scope;
  * 
  * @author Christoph Wieser
  */
-
+@NamedQueries({
+	 @NamedQuery(name="gameSession.byGameType", query="from GameSession where gameType = :gameType")
+})
 @Entity
 @Name("gameSession")
 @Scope(ScopeType.CONVERSATION)
