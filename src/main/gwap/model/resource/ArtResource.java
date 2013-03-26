@@ -361,17 +361,11 @@ import org.jboss.seam.annotations.Scope;
   			  			//TODO not working...
 //  			  		    "and v.resource.id in (select vv.id from ArtResource vv where vv.isVersionOf.artist.id = :userId) " +
   			  		    ""),
-  	   @NamedQuery(name="artResource.getRandomUserPictures",
-  			  	query="select v from ArtResource v where v.isVersionOf is not null"), // +
-  	            //       "v.id not in (select vv.id from ArtResource vv where vv.ratings.person.id = :deviceid)"
-	// TODO: nur bilder anzeigen, die der benutzer noch nicht bewertet hat
-
-	/* TODO: and not in (resource, that :userId has visited already) [Uncomment param in LocationService:132 ]
-	 *  	  a resource was visited, id the user took a picture of it (artresource.isVersionOf)
-	 *  Test http://localhost:8080/artigo/seam/resource/rest/location?currentLatitude=1&currentLongitude=2&userid=3&topic=1
-	 */
-  	   @NamedQuery(name="artResource.getRandomNewPictures",
-			  	query="select v from ArtResource v where v.isVersionOf is null and shownLocation is not null"),
+  	   @NamedQuery(name="artResource.getRandomPictures",
+  			  	query="select a from ArtResource a " +
+  			  			"where a.origin = :origin and " +
+  			  			"not exists (from ArtResourceRating r where r.person.deviceId = :deviceId and r.resource = a) " +
+  			  			"order by random()"),
 	   @NamedQuery(name = "artResource.byOriginAndDeviceId",
 			  	query="select count(*) from ArtResource a where a.origin = :origin and a.artist.deviceId = :deviceId")
   	})

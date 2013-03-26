@@ -137,7 +137,7 @@ public class NewPicture implements Serializable {
 		entityManager.persist(virtualTagging);
 		entityManager.flush();
 		
-		log.info("Created user picture: #0", artResource.getId());
+		log.info("Created new picture: #0", artResource.getId());
 	
 		return Response.status(Response.Status.CREATED).build();
 	}
@@ -181,8 +181,10 @@ public class NewPicture implements Serializable {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getRandomNewPictures(@QueryParam("count") String stringCount, @QueryParam("userid") String stringUserId) {
-		Query query = entityManager.createNamedQuery("artResource.getRandomNewPictures");
+	public Response getRandomNewPictures(@QueryParam("count") String stringCount, @QueryParam("userid") String deviceId) {
+		Query query = entityManager.createNamedQuery("artResource.getRandomPictures");
+		query.setParameter("deviceId", deviceId);
+		query.setParameter("origin", ArtResource.ORIGIN_APP_CRIMESCENE);
 		query.setMaxResults(Integer.parseInt(stringCount));
 		List<ArtResource> artResources = query.getResultList();
 		
@@ -190,8 +192,8 @@ public class NewPicture implements Serializable {
 		for(ArtResource artResource: artResources)  {
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("id", artResource.getId());
-			jsonObject.put("latitude", artResource.getShownLocation().getGeoRepresentation().get(0).getGeoPoint().getLatitude());
-			jsonObject.put("longitude", artResource.getShownLocation().getGeoRepresentation().get(0).getGeoPoint().getLongitude());
+//			jsonObject.put("latitude", artResource.getShownLocation().getGeoRepresentation().get(0).getGeoPoint().getLatitude());
+//			jsonObject.put("longitude", artResource.getShownLocation().getGeoRepresentation().get(0).getGeoPoint().getLongitude());
 			jsonObject.put("name", artResource.getShownLocation().getName());
 			jsonObject.put("likes", 0);
 			jsonObject.put("dislikes", 0);

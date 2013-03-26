@@ -31,7 +31,6 @@ import gwap.model.resource.Location.LocationType;
 import gwap.model.resource.LocationGeoPoint;
 import gwap.tools.ImageTools;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -222,22 +221,19 @@ public class LocationService implements Serializable {
 		Calendar now = GregorianCalendar.getInstance();
 		artResource.setDateCreated(new SimpleDateFormat("dd.MM.yyyy").format(now.getTime()));
 		artResource.setShownLocation(location);
+		artResource.setSkip(true); // should not show up for artigo tagging
 		entityManager.persist(artResource);
 		
 		artResource.getId();
 		VirtualTagging virtualTagging = new VirtualTagging();
 		virtualTagging.setResource(artResource);
 		
-		VirtualTaggingType virtualTaggingType = entityManager.find(VirtualTaggingType.class, 1L);
+		VirtualTaggingType virtualTaggingType = entityManager.find(VirtualTaggingType.class, Long.parseLong(jsonLocation.get("topic").toString()));
 		virtualTagging.getVirtualTaggingTypes().add(virtualTaggingType);
 		entityManager.persist(virtualTagging);
 		entityManager.flush();
 
-		try {
-			imageTools.persistImage(jsonLocation.get("imageData").toString(), "Inspektor X", artResource.getId());
-		} catch (IOException e) {
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-		}
+		//TODO: Save uploaded image
 		
 		log.info("Uploaded new Image from App with id: #0", artResource.getId());
 		return Response.status(Response.Status.CREATED).build();

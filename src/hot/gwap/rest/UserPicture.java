@@ -177,16 +177,18 @@ public class UserPicture implements Serializable {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getRandomUserpictures(@QueryParam("count") String count,  @QueryParam("userid") String userid) {
-		Query query = entityManager.createNamedQuery("artResource.getRandomUserPictures");
+	public Response getRandomUserpictures(@QueryParam("count") String count,  @QueryParam("userid") String deviceId) {
+		Query query = entityManager.createNamedQuery("artResource.getRandomPictures");
+		query.setParameter("deviceId", deviceId);
+		query.setParameter("origin", ArtResource.ORIGIN_APP_USER);
 		query.setMaxResults(Integer.parseInt(count));
 		List<ArtResource> artResources = query.getResultList();
 		JSONArray jsonArray = new JSONArray();
 		for(ArtResource artResource: artResources) {
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("id", artResource.getId());
-			jsonObject.put("latitude", artResource.getShownLocation().getGeoRepresentation().get(0).getGeoPoint().getLatitude());
-			jsonObject.put("longitude", artResource.getShownLocation().getGeoRepresentation().get(0).getGeoPoint().getLongitude());
+//			jsonObject.put("latitude", artResource.getShownLocation().getGeoRepresentation().get(0).getGeoPoint().getLatitude());
+//			jsonObject.put("longitude", artResource.getShownLocation().getGeoRepresentation().get(0).getGeoPoint().getLongitude());
 			jsonObject.put("likes", 0);
 			jsonObject.put("dislikes", 0);
 			jsonObject.put("imageData_user", "3980452309582");
