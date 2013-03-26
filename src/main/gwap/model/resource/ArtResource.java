@@ -354,13 +354,11 @@ import org.jboss.seam.annotations.Scope;
  			   	query="select count(t) from Tagging t " +
  			   			"where t.resource.id=:resid and t.tag.language=:lang"),
  	   @NamedQuery(name="artResource.gameLocations",
-  			  	query="select v.resource " +
-  			  			"from VirtualTagging v join v.virtualTaggingTypes t " +
+  			  	query="select a from ArtResource a " +
+  			  			"join a.virtualTaggings v join v.virtualTaggingTypes t " +
   			  			"where t.id = :virtualTaggingTypeId " +
-  			  			"and v.resource.shownLocation is not null " +
-  			  			//TODO not working...
-//  			  		    "and v.resource.id in (select vv.id from ArtResource vv where vv.isVersionOf.artist.id = :userId) " +
-  			  		    ""),
+  			  			"and a.shownLocation.type = 'APP' " +
+  			  		    "and not exists (from ArtResource a2 where a2.isVersionOf.artist.deviceId = :deviceId and a2 = a)"),
   	   @NamedQuery(name="artResource.getRandomPictures",
   			  	query="select a from ArtResource a " +
   			  			"where a.origin = :origin and " +

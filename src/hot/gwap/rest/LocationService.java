@@ -112,7 +112,7 @@ public class LocationService implements Serializable {
 	 * Locations a user may visit in the App
 	 * @param latitude
 	 * @param longitude
-	 * @param userId
+	 * @param deviceId
 	 * @return
 	 */
 	@GET
@@ -121,7 +121,7 @@ public class LocationService implements Serializable {
 	public Response getGameLocations(
 			@QueryParam("currentLatitude") String latitude,
 			@QueryParam("currentLongitude") String longitude,
-			@QueryParam("userid") String userId, 
+			@QueryParam("userid") String deviceId, 
 			@QueryParam("topic") Long topic) {
 
 		if(latitude == null || longitude == null) {
@@ -129,7 +129,7 @@ public class LocationService implements Serializable {
 		} else {
 			Query locationQuery = entityManager.createNamedQuery("artResource.gameLocations");
 			locationQuery.setParameter("virtualTaggingTypeId", topic);
-//			locationQuery.setParameter("userId", userId);
+			locationQuery.setParameter("deviceId", deviceId);
 			locationQuery.setMaxResults(10);
 			List<ArtResource> locations = locationQuery.getResultList(); 
 
