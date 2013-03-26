@@ -20,49 +20,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package gwap.wrapper;
+package gwap.rest;
 
+import java.io.Serializable;
+
+import org.jboss.seam.annotations.Logger;
+import org.jboss.seam.log.Log;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /**
- * @author maders, wieser
+ * @author Fabian Kneißl
  */
-public class UserStatistics {
+public abstract class RestService implements Serializable {
 
-	private long score;
-	private long secondsPlayed;
-	private double coveredDistance;
+	@Logger
+	protected Log log;
 	
-	public UserStatistics(Long score, Number secondsPlayed, Double coveredDistance) {
-		if (score != null)
-			this.score = score;
-		if (secondsPlayed != null)
-			this.secondsPlayed = secondsPlayed.longValue();
-		if (coveredDistance != null)
-			this.coveredDistance = coveredDistance;
-	}
+	protected JSONParser jsonParser = new JSONParser();
 
-	public long getScore() {
-		return score;
+	protected JSONObject parse(String string) {
+		try {
+			return (JSONObject) jsonParser.parse(string);
+		} catch (ParseException e) {
+			log.warn("Could not parse JSON payload", e);
+			throw new RuntimeException(e.getMessage());
+		}
 	}
-
-	public void setScore(long score) {
-		this.score = score;
-	}
-
-	public long getSecondsPlayed() {
-		return secondsPlayed;
-	}
-
-	public void setSecondsPlayed(long secondsPlayed) {
-		this.secondsPlayed = secondsPlayed;
-	}
-
-	public double getCoveredDistance() {
-		return coveredDistance;
-	}
-
-	public void setCoveredDistance(double coveredDistance) {
-		this.coveredDistance = coveredDistance;
-	}
-	
 }

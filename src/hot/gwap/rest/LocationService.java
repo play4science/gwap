@@ -31,8 +31,6 @@ import gwap.model.resource.Location.LocationType;
 import gwap.model.resource.LocationGeoPoint;
 import gwap.tools.ImageTools;
 
-import java.io.IOException;
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -53,31 +51,23 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.jboss.seam.annotations.In;
-import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
-import org.jboss.seam.log.Log;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 /**
- * @author maders, wieser
+ * @author maders, wieser, kneissl
  */
-
 @Path("/location")
-@Name("locationService")
-public class LocationService implements Serializable {
+@Name("restLocationService")
+public class LocationService extends RestService {
 
 	private static final long serialVersionUID = 1L;
 
-	@Logger	          private Log log;
 	@In               private EntityManager entityManager;
 	@In(create=true)  private ImageTools imageTools;
 	
-	JSONParser parser = new JSONParser();
-
 	/**
 	 * A topic denotes the set of pictues that can be used in a game such as "Munich" or "Baroque" 
 	 * 
@@ -113,7 +103,7 @@ public class LocationService implements Serializable {
 	 * Locations a user may visit in the App
 	 * @param latitude
 	 * @param longitude
-	 * @param userId
+	 * @param deviceId
 	 * @return
 	 */
 	@GET
@@ -122,7 +112,7 @@ public class LocationService implements Serializable {
 	public Response getGameLocations(
 			@QueryParam("currentLatitude") String latitude,
 			@QueryParam("currentLongitude") String longitude,
-			@QueryParam("userid") String userId, 
+			@QueryParam("userid") String deviceId, 
 			@QueryParam("topic") Long topic) {
 
 		if(latitude == null || longitude == null) {
@@ -130,7 +120,7 @@ public class LocationService implements Serializable {
 		} else {
 			Query locationQuery = entityManager.createNamedQuery("artResource.gameLocations");
 			locationQuery.setParameter("virtualTaggingTypeId", topic);
-//			locationQuery.setParameter("userId", userId);
+			locationQuery.setParameter("deviceId", deviceId);
 			locationQuery.setMaxResults(10);
 			List<ArtResource> locations = locationQuery.getResultList(); 
 
@@ -192,22 +182,17 @@ public class LocationService implements Serializable {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	@Transactional
-	public Response createNewLocation(String stringLocation) {
-		JSONObject jsonLocation = null;
-		try {
-			jsonLocation = (JSONObject) parser.parse(stringLocation);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+	public Response createNewLocation(String payloadString) {
+		JSONObject payload = parse(payloadString);
 
 		Location location = new Location();
-		String name = (String) jsonLocation.get("name");
+		String name = (String) payload.get("name");
 		location.setName(name);
 		location.setType(LocationType.APP);
 		
 		GeoPoint geoPoint = new GeoPoint();
-		geoPoint.setLatitude(Float.parseFloat(jsonLocation.get("latitude").toString()));
-		geoPoint.setLongitude(Float.parseFloat(jsonLocation.get("longitude").toString()));
+		geoPoint.setLatitude(Float.parseFloat(payload.get("latitude").toString()));
+		geoPoint.setLongitude(Float.parseFloat(payload.get("longitude").toString()));
 		entityManager.persist(geoPoint);
 		
 		entityManager.persist(location);
@@ -222,22 +207,19 @@ public class LocationService implements Serializable {
 		Calendar now = GregorianCalendar.getInstance();
 		artResource.setDateCreated(new SimpleDateFormat("dd.MM.yyyy").format(now.getTime()));
 		artResource.setShownLocation(location);
+		artResource.setSkip(true); // should not show up for artigo tagging
 		entityManager.persist(artResource);
 		
 		artResource.getId();
 		VirtualTagging virtualTagging = new VirtualTagging();
 		virtualTagging.setResource(artResource);
 		
-		VirtualTaggingType virtualTaggingType = entityManager.find(VirtualTaggingType.class, 1L);
+		VirtualTaggingType virtualTaggingType = entityManager.find(VirtualTaggingType.class, Long.parseLong(payload.get("topic").toString()));
 		virtualTagging.getVirtualTaggingTypes().add(virtualTaggingType);
 		entityManager.persist(virtualTagging);
 		entityManager.flush();
 
-		try {
-			imageTools.persistImage(jsonLocation.get("imageData").toString(), "Inspektor X", artResource.getId());
-		} catch (IOException e) {
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-		}
+		//TODO: Save uploaded image
 		
 		log.info("Uploaded new Image from App with id: #0", artResource.getId());
 		return Response.status(Response.Status.CREATED).build();

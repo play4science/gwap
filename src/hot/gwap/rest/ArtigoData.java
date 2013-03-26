@@ -41,7 +41,8 @@ import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.security.Restrict;
 import org.jboss.seam.log.Log;
 
-/** Access to Artigo data via an XML REST interface
+/** 
+ * Access to Artigo data via an XML REST interface
  * 
  * @author Fabian Kneißl
  */
