@@ -31,7 +31,6 @@ import gwap.model.Person;
 import gwap.model.resource.ArtResource;
 import gwap.wrapper.UserStatistics;
 
-import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -53,29 +52,23 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.jboss.seam.annotations.In;
-import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
-import org.jboss.seam.log.Log;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 /**
- * @author maders, wieser
+ * Methods for accessing and modifying user data.
+ * 
+ * @author maders, wieser, kneissl
  */
-
 @Path("/user")
-@Name("user")
-public class User implements Serializable {
+@Name("restUser")
+public class User extends RestService {
 
 	private static final long serialVersionUID = 1L;
 
 	@In private EntityManager entityManager;
-	@Logger private Log log;
-	
-	private JSONParser parser = new JSONParser();
 	
 	@GET
 	@Path("/{id:[A-Za-z0-9][A-Za-z0-9]*}")
@@ -171,12 +164,7 @@ public class User implements Serializable {
 	@Path("/{id:[A-Za-z0-9][A-Za-z0-9]*}")
 	public Response updateUser(@PathParam("id") String deviceId, String payloadString) {
 		log.info("updateUser(#0)", deviceId);
-		JSONObject payload = null;
-		try {
-			payload = (JSONObject) parser.parse(payloadString);
-		} catch (ParseException e) {
-			log.warn("Error parsing payload", e);
-		}
+		JSONObject payload = parse(payloadString);
 		Query query = entityManager.createNamedQuery("person.byDeviceId");
 		query.setParameter("deviceId", deviceId);
 		Person person = (Person) query.getSingleResult();

@@ -30,7 +30,6 @@ import gwap.model.resource.Location;
 import gwap.model.resource.Location.LocationType;
 import gwap.model.resource.LocationGeoPoint;
 
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -58,26 +57,21 @@ import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.log.Log;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 /**
- * For pictures that are added in an app game.
+ * For pictures that are added in a mobile app game.
  * 
- * @author maders, wieser
+ * @author maders, wieser, kneissl
  */
-
 @Path("/userpicture")
-@Name("userPicture")
-public class UserPicture implements Serializable {
+@Name("restUserPicture")
+public class UserPicture extends RestService {
 	
 	@Logger
-	private Log log;
+	protected Log log;
 	
 	@In
-	private EntityManager entityManager;
-	
-	private JSONParser parser = new JSONParser();
+	protected EntityManager entityManager;
 	
 	private static final long serialVersionUID = 1L;
 
@@ -86,35 +80,38 @@ public class UserPicture implements Serializable {
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	@Transactional
 	public Response createUserPicture(String string) {
-		JSONObject jsonObject = null;
-		try {
-			jsonObject = (JSONObject) parser.parse(string);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-
+		JSONObject payload = parse(string);
+		ArtResource artResource = createPicture(payload);
+		
+		artResource.setOrigin(ArtResource.ORIGIN_APP_CRIMESCENE);
+		ArtResource isVersionOf = entityManager.find(ArtResource.class, Long.parseLong(payload.get("artigoid").toString()));
+		artResource.setIsVersionOf(isVersionOf);
+		
+		//TODO Bild anlegen
+		
+		log.info("Created picture: #0", artResource.getId());
+		return Response.status(Response.Status.CREATED).build();
+	}
+	
+	protected ArtResource createPicture(JSONObject payload) {
 		ArtResource artResource = new ArtResource();
 		
 		Query query = entityManager.createNamedQuery("person.byDeviceId");
-		query.setParameter("deviceId", jsonObject.get("userid").toString());
+		query.setParameter("deviceId", payload.get("userid").toString());
 		Person person = (Person) query.getSingleResult();
 		artResource.setArtist(person);
-		
-		ArtResource isVersionOf = entityManager.find(ArtResource.class, Long.parseLong(jsonObject.get("artigoid").toString()));
-		artResource.setIsVersionOf(isVersionOf);
 		
 		Calendar now = GregorianCalendar.getInstance();
 		artResource.setDateCreated(new SimpleDateFormat("dd.MM.yyyy").format(now.getTime()));
 		
-		artResource.setOrigin(ArtResource.ORIGIN_APP_CRIMESCENE);
 		artResource.setSkip(true); // should not show up for artigo tagging
-		
+
 		Location location = new Location();
 		location.setType(LocationType.APP);
 		
 		GeoPoint geoPoint = new GeoPoint();
-		geoPoint.setLatitude(Float.parseFloat(jsonObject.get("latitude").toString()));
-		geoPoint.setLongitude(Float.parseFloat(jsonObject.get("longitude").toString()));
+		geoPoint.setLatitude(Float.parseFloat(payload.get("latitude").toString()));
+		geoPoint.setLongitude(Float.parseFloat(payload.get("longitude").toString()));
 		entityManager.persist(geoPoint);
 		
 		entityManager.persist(location);
@@ -128,12 +125,9 @@ public class UserPicture implements Serializable {
 		
 		artResource.setShownLocation(location);
 		entityManager.persist(artResource);
+		
 		entityManager.flush();
-		//TODO Bild anlegen
-		
-		log.info("Created user picture: #0", artResource.getId());
-		
-		return Response.status(Response.Status.CREATED).build();
+		return artResource;
 	}
 	
 	@PUT
@@ -142,14 +136,7 @@ public class UserPicture implements Serializable {
 	@Transactional
 	@Path("/{id:[0-9][0-9]*}")
 	public Response ratePicture(@PathParam("id") String idString, String payloadString) {
-		Long id = Long.parseLong(idString);
-		
-		JSONObject jsonObject = null;
-		try {
-			jsonObject = (JSONObject) parser.parse(payloadString);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+		JSONObject jsonObject = parse(payloadString);
 		
 		Query query = entityManager.createNamedQuery("person.byDeviceId");
 		query.setParameter("deviceId", jsonObject.get("userid").toString());
@@ -157,32 +144,27 @@ public class UserPicture implements Serializable {
 		
 		ArtResourceRating artResourceRating = new ArtResourceRating();
 		artResourceRating.setPerson(person);
-		entityManager.persist(artResourceRating);
-		entityManager.flush();
-		log.info("Added ArtResourceRating #0", artResourceRating.getId());
 		
 		if (jsonObject.containsKey("likes")) 
 			artResourceRating.setRating(1L);
-		
 		else
 			artResourceRating.setRating(-1L);
-		
-		ArtResource artResource = entityManager.find(ArtResource.class, id);
+
+		entityManager.persist(artResourceRating);
+		ArtResource artResource = entityManager.find(ArtResource.class, Long.parseLong(idString));
 		artResource.getRatings().add(artResourceRating);
 		artResourceRating.setResource(artResource);
-		
+		entityManager.flush();
+		log.info("Added ArtResourceRating #0", artResourceRating.getId());
+
 		log.info("Updated UserPicture #0", artResource.getId());
 		return Response.ok().build();
 	}
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getRandomUserpictures(@QueryParam("count") String count,  @QueryParam("userid") String deviceId) {
-		Query query = entityManager.createNamedQuery("artResource.getRandomPictures");
-		query.setParameter("deviceId", deviceId);
-		query.setParameter("origin", ArtResource.ORIGIN_APP_USER);
-		query.setMaxResults(Integer.parseInt(count));
-		List<ArtResource> artResources = query.getResultList();
+	public Response getRandomUserpictures(@QueryParam("count") String count, @QueryParam("userid") String deviceId) {
+		List<ArtResource> artResources = getRandomPictures(count, deviceId, ArtResource.ORIGIN_APP_USER);
 		JSONArray jsonArray = new JSONArray();
 		for(ArtResource artResource: artResources) {
 			JSONObject jsonObject = new JSONObject();
@@ -198,5 +180,13 @@ public class UserPicture implements Serializable {
 		return Response.ok(jsonArray.toString(), MediaType.APPLICATION_JSON).build();
 	}
 
+	protected List<ArtResource> getRandomPictures(String count, String deviceId, String origin) {
+		Query query = entityManager.createNamedQuery("artResource.getRandomPictures");
+		query.setParameter("deviceId", deviceId);
+		query.setParameter("origin", origin);
+		query.setMaxResults(Integer.parseInt(count));
+		List<ArtResource> artResources = query.getResultList();
+		return artResources;
+	}
 
 }
