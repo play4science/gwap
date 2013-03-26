@@ -51,10 +51,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.jboss.seam.annotations.In;
-import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Transactional;
-import org.jboss.seam.log.Log;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -66,9 +64,6 @@ import org.json.simple.JSONObject;
 @Path("/userpicture")
 @Name("restUserPicture")
 public class UserPicture extends RestService {
-	
-	@Logger
-	protected Log log;
 	
 	@In
 	protected EntityManager entityManager;
