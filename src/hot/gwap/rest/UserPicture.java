@@ -83,6 +83,7 @@ public class UserPicture extends RestService {
 		artResource.setIsVersionOf(isVersionOf);
 		
 		//TODO Bild anlegen
+		entityManager.flush();
 		
 		log.info("Created picture: #0", artResource.getId());
 		return Response.status(Response.Status.CREATED).build();
@@ -103,6 +104,8 @@ public class UserPicture extends RestService {
 
 		Location location = new Location();
 		location.setType(LocationType.APP);
+		if (payload.containsKey("name"))
+			location.setName(payload.get("name").toString());
 		
 		GeoPoint geoPoint = new GeoPoint();
 		geoPoint.setLatitude(Float.parseFloat(payload.get("latitude").toString()));

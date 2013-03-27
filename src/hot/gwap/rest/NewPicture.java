@@ -66,7 +66,6 @@ public class NewPicture extends UserPicture {
 		ArtResource artResource = createPicture(payload);
 
 		artResource.setOrigin(ArtResource.ORIGIN_APP_USER);
-		artResource.getShownLocation().setName(payload.get("name").toString());
 		
 		VirtualTagging virtualTagging = new VirtualTagging();
 		virtualTagging.setResource(artResource);
