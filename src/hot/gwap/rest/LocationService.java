@@ -135,7 +135,7 @@ public class LocationService extends RestService {
 			// Berechnet die Orte, die im Laufe des Spiels vom Spieler besucht werden
 			// Dabei wird immer der geographisch nahste Ort zum Spieler, bzw. zum Tatort
 			// zuvor berechnet
-			for(int i = 0; i < 6; i++) {
+			for(int i = 0; i < 4; i++) {
 				// Das erste Minimum ist der Abstand vom Spieler zur ersten Location
 				gameLocation = locations.get(0);
 				GeoPoint geoPoint = gameLocation.getShownLocation().getSingleGeoPoint();

@@ -61,8 +61,8 @@ import org.json.simple.JSONObject;
  * 
  * @author maders, wieser, kneissl
  */
-@Path("/userpicture")
 @Name("restUserPicture")
+@Path("/")
 public class UserPicture extends RestService {
 	
 	@In
@@ -71,6 +71,7 @@ public class UserPicture extends RestService {
 	private static final long serialVersionUID = 1L;
 
 	@POST
+	@Path("/userpicture")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	@Transactional
@@ -128,12 +129,7 @@ public class UserPicture extends RestService {
 		return artResource;
 	}
 	
-	@PUT
-	@Consumes(MediaType.APPLICATION_JSON)
-	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	@Transactional
-	@Path("/{id:[0-9][0-9]*}")
-	public Response ratePicture(@PathParam("id") String idString, String payloadString) {
+	protected void persistPicturerating(String idString, String payloadString) {
 		JSONObject jsonObject = parse(payloadString);
 		
 		Query query = entityManager.createNamedQuery("person.byDeviceId");
@@ -156,13 +152,23 @@ public class UserPicture extends RestService {
 		log.info("Added ArtResourceRating #0", artResourceRating.getId());
 
 		log.info("Updated UserPicture #0", artResource.getId());
+	}
+	
+	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+	@Transactional
+	@Path("/userpicture/{id:[0-9][0-9]*}")
+	public Response ratePicture(@PathParam("id") String idString, String payloadString) {
+		persistPicturerating(idString, payloadString);
 		return Response.ok().build();
 	}
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/userpicture")
 	public Response getRandomUserpictures(@QueryParam("count") String count, @QueryParam("userid") String deviceId) {
-		List<ArtResource> artResources = getRandomPictures(count, deviceId, ArtResource.ORIGIN_APP_USER);
+		List<ArtResource> artResources = getRandomPictures(count, deviceId, ArtResource.ORIGIN_APP_CRIMESCENE);
 		JSONArray jsonArray = new JSONArray();
 		for(ArtResource artResource: artResources) {
 			JSONObject jsonObject = new JSONObject();
