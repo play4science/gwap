@@ -22,6 +22,7 @@
 
 package gwap.admin;
 
+import gwap.model.Source;
 import gwap.model.Tag;
 import gwap.model.resource.Term;
 import gwap.wrapper.BackstageAnswer;
@@ -56,6 +57,7 @@ public class TermHome extends EntityHome<Term> {
 	@In                     private FacesMessages facesMessages;
 	@In                     private EntityManager entityManager;
 	@In                     private LocaleSelector localeSelector;
+	@In(required=false)		private Source customSource;
 	@Logger                 private Log log;
 	
 	private String newConfirmedTag;
@@ -71,6 +73,7 @@ public class TermHome extends EntityHome<Term> {
 			getInstance().setTag(new Tag());
 			getInstance().setRating(1);
 			getInstance().setEnabled(true);
+			getInstance().setSource(customSource);
 		}
 	}
 	

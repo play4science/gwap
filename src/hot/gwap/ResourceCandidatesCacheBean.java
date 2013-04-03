@@ -52,7 +52,7 @@ public class ResourceCandidatesCacheBean implements Serializable {
 	
 	@Create                  public void init()    { log.info("Creating");  loadAtLeastTaggedResources(); }
 	@Logger                  private Log log;
-	@In(create=true)         private CustomSourceBean customSourceBean;
+	@In                      private CustomSourceBean customSourceBean;
 	
 	
 	private List<Long> atLeastTaggedResourcesCandidates;

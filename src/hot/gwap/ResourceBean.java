@@ -61,7 +61,7 @@ public class ResourceBean implements Serializable {
 	@Logger                  private Log log;
 	@In                      private FacesMessages facesMessages;
 	@In                      private EntityManager entityManager;
-	@In(create=true)         private CustomSourceBean customSourceBean;
+	@In                      private CustomSourceBean customSourceBean;
 	@In(create=true)         private ArtResourceCacheBean artResourceSearchCacheBean;
 	@In(create=true)         private ArtResourceCacheBean artResourceDatabaseCacheBean;
 	@In(required=false)

@@ -25,6 +25,7 @@ package gwap.admin;
 import gwap.model.Tag;
 import gwap.model.Topic;
 import gwap.model.resource.Term;
+import gwap.tools.CustomSourceBean;
 import gwap.wrapper.ImportedTerm;
 
 import java.io.ByteArrayInputStream;
@@ -61,6 +62,7 @@ public class TermImporter {
 	@Logger					private Log log;
 	@In						private FacesMessages facesMessages;
 	@In                     private LocaleSelector localeSelector;
+	@In						private CustomSourceBean customSourceBean;
 	
 	private byte[] data;
 	private String name;
@@ -112,6 +114,8 @@ public class TermImporter {
 			term.setEnabled(termsEnabled);
 			term.setRating(t.getRating());
 			term.setTag(findOrCreateTag(t.getTerm()));
+			if (customSourceBean.getCustomized())
+				term.setSource(customSourceBean.getCustomSource());
 			entityManager.persist(term);
 
 			List<Tag> confirmedTags = term.getConfirmedTags();
@@ -128,7 +132,7 @@ public class TermImporter {
 	}
 	
 	private Topic findOrCreateTopic(String name) {
-		Query q = entityManager.createNamedQuery("topic.byName");
+		Query q = customSourceBean.query("topic.byName");
 		q.setParameter("name", name);
 		Topic topic;
 		try {
@@ -137,6 +141,8 @@ public class TermImporter {
 			topic = new Topic();
 			topic.setName(name);
 			topic.setEnabled(termsEnabled);
+			if (customSourceBean.getCustomized())
+				topic.setSource(customSourceBean.getCustomSource());
 			entityManager.persist(topic);
 		}
 		return topic;

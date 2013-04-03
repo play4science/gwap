@@ -25,6 +25,7 @@ package gwap.admin;
 import gwap.model.Topic;
 import gwap.model.resource.Resource;
 import gwap.model.resource.Term;
+import gwap.tools.CustomSourceBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +67,9 @@ public class TopicHome extends EntityHome<Topic> {
 	private List<Resource> selectedResources = null;
 	private List<String> list = new ArrayList<String>();
 
+	@In
+	private CustomSourceBean customSourceBean;
+
 
 	public List<Resource> getSelectedResources() {
 		return selectedResources;
@@ -99,6 +103,7 @@ public class TopicHome extends EntityHome<Topic> {
 	@Begin(join = true)
 	public void create() {
 		super.create();
+		getInstance().setSource(customSourceBean.getCustomSource());
 	}
 
 	@Override
@@ -134,7 +139,7 @@ public class TopicHome extends EntityHome<Topic> {
 	
 	public List<Resource> getAllResources() {  
 		if (allResources == null) {
-			Query q = entityManager.createNamedQuery("term.allTerms");
+			Query q = customSourceBean.query("term.allTerms");
 			List<Term> allTerms = q.getResultList();
 			allResources = new ArrayList<Resource>();
 			for (Term term : allTerms) {

@@ -23,16 +23,35 @@
 package gwap.admin;
 
 import gwap.model.resource.Term;
+import gwap.tools.CustomSourceBean;
 
+import java.util.List;
+
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.framework.EntityQuery;
 
 /**
- * @author Mislav Boras
+ * @author Mislav Boras, Fabian Kneißl
  */
 @Name("topicList")
 public class TopicList extends EntityQuery<Term>{
+	
+	@In private CustomSourceBean customSourceBean;
+	
 	public TopicList() {
-		setEjbql("select t from Topic t order by t.name");
+		setEjbql("select t from Topic t");
+		setOrder("t.name");
+	}
+	
+	@Override
+	@Transactional
+	public List<Term> getResultList() {
+		if (customSourceBean != null && customSourceBean.getCustomized() && getRestrictions().size() == 0) {
+			getRestrictions().add(createValueExpression("source.id = #{customSource.id}"));
+			refresh();
+		}
+		return super.getResultList();
 	}
 }

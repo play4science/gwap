@@ -22,6 +22,7 @@
 
 package gwap.model.resource;
 
+import gwap.model.Source;
 import gwap.model.Tag;
 
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
@@ -43,12 +45,23 @@ import org.jboss.seam.annotations.Scope;
 @NamedQueries({
 	@NamedQuery(name="term.randomByLevel", 
 				query="select p from Term p where p.enabled = true and p.rating = :level and p.tag.language = :language order by random()"),
+	@NamedQuery(name="term.randomByLevelCustom", 
+				query="select p from Term p where p.enabled = true and p.rating = :level and p.tag.language = :language and p.source = :source order by random()"),
 	@NamedQuery(name="term.randomByLevelNotInGameSession", 
 				query="select p from Term p where p.enabled = true and p.rating = :level and p.tag.language = :language " +
 						"and p.id not in (select r2.id from GameRound r join r.resources r2 where r.gameSession=:gameSession) " +
 						"order by random()"),
+	@NamedQuery(name="term.randomByLevelNotInGameSessionCustom", 
+				query="select p from Term p where p.enabled = true and p.rating = :level and p.tag.language = :language and p.source = :source " +
+						"and p.id not in (select r2.id from GameRound r join r.resources r2 where r.gameSession=:gameSession) " +
+						"order by random()"),
 	@NamedQuery(name="term.sensibleRandomForGame", 
 				query="select p from Term p where p.enabled = true and p.rating = :level and p.tag.language = :language " +
+						"and p.id not in (select r2.id from GameRound r join r.resources r2 where r.gameSession=:gameSession) " +
+						"and (select count(*) from p.confirmedTags) >= :minConfirmedTags " +
+						"order by random()"),
+	@NamedQuery(name="term.sensibleRandomForGameCustom", 
+				query="select p from Term p where p.enabled = true and p.rating = :level and p.tag.language = :language and p.source = :source " +
 						"and p.id not in (select r2.id from GameRound r join r.resources r2 where r.gameSession=:gameSession) " +
 						"and (select count(*) from p.confirmedTags) >= :minConfirmedTags " +
 						"order by random()"),
@@ -57,21 +70,33 @@ import org.jboss.seam.annotations.Scope;
 						"and p.id not in (select r2.id from GameRound r join r.resources r2 where r.gameSession=:gameSession) " +
 						"and (select count(*) from p.confirmedTags) >= :minConfirmedTags " +
 						"order by random()"),
+	@NamedQuery(name="term.sensibleRandomForGameWithTopicCustom", 
+				query="select p from Term p join p.topics t where p.enabled = true and t = :topic and p.rating = :level and p.tag.language = :language and p.source = :source " +
+						"and p.id not in (select r2.id from GameRound r join r.resources r2 where r.gameSession=:gameSession) " +
+						"and (select count(*) from p.confirmedTags) >= :minConfirmedTags " +
+						"order by random()"),
 	@NamedQuery(name="term.sensibleRandomForGameWithoutConfig", 
 				query="select p from Term p where p.enabled = true and p.tag.language = :language " +
 						"and p.id not in (select r2.id from GameRound r join r.resources r2 where r.gameSession=:gameSession) " +
 						"order by random()"),
-	@NamedQuery(name="term.randomByTopic", 
-				query="select p from Term p join p.topics t where p.enabled = true and t = :topic and p.tag.language = :language order by random()"),
-	@NamedQuery(name="term.randomByTopicNotInGameSession", 
-				query="select p from Term p join p.topics t where p.enabled = true and t = :topic and p.tag.language = :language " +
+	@NamedQuery(name="term.sensibleRandomForGameWithoutConfigCustom", 
+				query="select p from Term p where p.enabled = true and p.tag.language = :language and p.source = :source " +
 						"and p.id not in (select r2.id from GameRound r join r.resources r2 where r.gameSession=:gameSession) " +
 						"order by random()"),
+	@NamedQuery(name="term.randomByTopic", 
+				query="select p from Term p join p.topics t where p.enabled = true and t = :topic and p.tag.language = :language order by random()"),
+	@NamedQuery(name="term.randomByTopicCustom", 
+				query="select p from Term p join p.topics t where p.enabled = true and t = :topic and p.tag.language = :language and p.source = :source order by random()"),
 	@NamedQuery(name="term.randomTagsNotRelated", 
 				query="select t from Term p join p.confirmedTags t where p.enabled = true and p != :term and t.language = :language " +
 						"order by random()"),					
+	@NamedQuery(name="term.randomTagsNotRelatedCustom", 
+				query="select t from Term p join p.confirmedTags t where p.enabled = true and p != :term and t.language = :language and p.source = :source " +
+						"order by random()"),					
 	@NamedQuery(name = "term.allTerms",
 				query = "select t from Term t join t.tag g order by g.name"),			
+	@NamedQuery(name = "term.allTermsCustom",
+				query = "select t from Term t join t.tag g where t.source = :source order by g.name"),			
 	@NamedQuery(name="term.byExternalSessionId", 
 				query="select t from Term t join t.gameRounds r join r.gameSession s " +
 						"where s.externalSessionId=:externalSessionId " +
@@ -98,6 +123,9 @@ public class Term extends Resource {
 	@JoinTable(name="term_rejectedtag")
 	@OrderBy("name")
 	private List<Tag> rejectedTags = new ArrayList<Tag>();
+	
+	@ManyToOne
+	private Source source;
 
 	public Term() {
 	}
@@ -134,6 +162,14 @@ public class Term extends Resource {
 		this.rating = rating;
 	}
 	
+	public Source getSource() {
+		return source;
+	}
+
+	public void setSource(Source source) {
+		this.source = source;
+	}
+
 	public String toString() {
 		return "Term#" + tag.getId() + "[name=" + tag.getName() + "]";
 	}

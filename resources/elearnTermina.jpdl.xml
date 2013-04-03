@@ -8,7 +8,7 @@
  
   
 	<start-page name="startpage" view-id="/termina.xhtml">
-		<transition name="continueGame" to="game">
+		<transition name="continueGame" to="roundToPlay">
 			<action expression="#{elearnTermina.startGameSession()}" />
 		</transition>
 	</start-page>

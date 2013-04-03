@@ -25,6 +25,7 @@ package gwap.tools;
 import gwap.model.Source;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
@@ -33,6 +34,7 @@ import javax.persistence.Query;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
@@ -48,6 +50,7 @@ import org.jboss.seam.log.Log;
  * @author Fabian Kneißl
  */
 @Name("customSourceBean")
+@AutoCreate
 @Scope(ScopeType.SESSION)
 public class CustomSourceBean implements Serializable {
 	
@@ -55,6 +58,9 @@ public class CustomSourceBean implements Serializable {
 
 	@In
 	EntityManager entityManager;
+	
+	@In(create=true)
+	String platform;
 	
 	@Logger
 	Log log;
@@ -65,6 +71,8 @@ public class CustomSourceBean implements Serializable {
 	SolrQuery customSearch;
 	
 	public void setSource(String sourceName) {
+		if (customSource != null && customSource.getName().equals(sourceName))
+			return;
 		Query query = entityManager.createNamedQuery("source.byName");
 		query.setParameter("name", sourceName);
 		try {
@@ -74,7 +82,13 @@ public class CustomSourceBean implements Serializable {
 			customSource = null;
 			log.info("Custom source could not be set to #0", sourceName);
 		}
-		log.info("custom source:" + sourceName);
+	}
+	
+	public String getSource() {
+		if (getCustomized())
+			return customSource.getName();
+		else
+			return null;
 	}
 	
 	public void reset() {
@@ -108,6 +122,25 @@ public class CustomSourceBean implements Serializable {
 
 	public Source getCustomSource() {
 		return customSource;
+	}
+	
+	public List<Source> getAvailableSources() {
+		Query q = entityManager.createNamedQuery("source.byPlatform");
+		q.setParameter("platform", platform);
+		return q.getResultList();
+	}
+	
+	public void change() {
+	}
+	
+	public void setDefaultCustomSourceIfUnset() {
+		if (!getCustomized()) {
+			Query q = entityManager.createNamedQuery("source.latestByPlatform");
+			q.setParameter("platform", platform);
+			q.setMaxResults(1);
+			customSource = (Source) q.getSingleResult();
+			log.info("Custom source is now #0 (#1), set by default", customSource.getId(), customSource.getName());
+		}
 	}
 	
 	/**

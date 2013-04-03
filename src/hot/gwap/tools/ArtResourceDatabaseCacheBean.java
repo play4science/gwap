@@ -47,7 +47,7 @@ import org.jboss.seam.log.Log;
 public class ArtResourceDatabaseCacheBean  implements ArtResourceCacheBean {
 
 	@In	              EntityManager entityManager;
-	@In (create=true) CustomSourceBean customSourceBean;
+	@In               CustomSourceBean customSourceBean;
 	@In               private LocaleSelector localeSelector;
 	@Logger           Log log;
 	

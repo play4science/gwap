@@ -24,6 +24,7 @@ package gwap.elearn;
 
 import gwap.model.GameConfiguration;
 import gwap.model.Topic;
+import gwap.tools.CustomSourceBean;
 
 import java.io.Serializable;
 import java.util.List;
@@ -59,6 +60,8 @@ public class GameConfigurationBean implements Serializable {
 
 	private List<Topic> availableTopics;
 	
+	@In private CustomSourceBean customSourceBean;
+	
 	/**
 	 * Creates a new GameConfiguration with some default values
 	 */
@@ -78,7 +81,7 @@ public class GameConfigurationBean implements Serializable {
 	@SuppressWarnings("unchecked")
 	public List<Topic> getAvailableTopics() {
 		if (availableTopics == null) {
-			Query q = entityManager.createNamedQuery("topic.enabled");
+			Query q = customSourceBean.query("topic.enabled");
 			availableTopics = q.getResultList();
 		}
 		return availableTopics;

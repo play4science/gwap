@@ -652,6 +652,20 @@ input[type="button"].swapTerm {
 input[type="button"].swapTerm:hover {
 	background: url('../img/button_swapterm_active.svg');
 }
+input[type="submit"].chooseCustomSource {
+	width: 25px;
+	height: 25px;
+	margin-left: 10px;
+	padding: .3em;
+	background: url('../img/button_forward_inactive.svg');
+	border: none;
+	cursor: pointer;
+	vertical-align: middle;
+}
+
+input[type="submit"].chooseCustomSource:hover {
+	background: url('../img/button_forward_active.svg');
+}
 
 /*-------------------------------------------------------------------------- */
 /*--------------------------------- TABLES --------------------------------- */

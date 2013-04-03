@@ -24,6 +24,7 @@ package gwap.admin;
 
 import gwap.model.GameConfiguration;
 import gwap.model.Topic;
+import gwap.tools.CustomSourceBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +63,8 @@ public class GameConfigurationHome extends EntityHome<GameConfiguration>{
 	private LocaleSelector localeSelector;
 	@Logger
 	private Log log;
+	@In
+	private CustomSourceBean customSourceBean;
 
 	private Topic selectedTopic; // +getter +setter
 	private Long selectedTopicId;
@@ -79,7 +82,7 @@ public class GameConfigurationHome extends EntityHome<GameConfiguration>{
 	public List<SelectItem> getSelectTopics() {
 		option = new ArrayList<SelectItem>();
 		if (selectTopics == null) {
-			Query q = entityManager.createNamedQuery("topic.all");
+			Query q = customSourceBean.query("topic.all");
 			selectTopics = q.getResultList();
 		}
 		for (Topic t : selectTopics){

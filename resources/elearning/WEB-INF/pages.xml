@@ -6,6 +6,7 @@
  
  <page view-id="*">
   <action execute="#{authenticator.tryLogin()}"/>
+  <action execute="#{customSourceBean.setDefaultCustomSourceIfUnset}"/>
   <navigation>
    <rule if-outcome="home">
     <redirect view-id="/home.xhtml"/>
@@ -23,6 +24,7 @@
     <redirect view-id="/show.xhtml"/>
    </rule>
   </navigation>
+  <param name="vl" value="#{customSourceBean.source}"/>
  </page>
  <page view-id="/admin/*" login-required="true">
   <restrict>#{s:hasPermission('elearning', 'view-admin-interface')}</restrict>

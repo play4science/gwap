@@ -32,6 +32,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
@@ -42,10 +43,16 @@ import org.jboss.seam.annotations.Scope;
 @NamedQueries({
 	@NamedQuery(name="topic.all", 
 				query="from Topic order by name"),
+	@NamedQuery(name="topic.allCustom", 
+				query="from Topic where source = :source order by name"),
 	@NamedQuery(name="topic.enabled",
 				query="from Topic where enabled=true order by name"),
+	@NamedQuery(name="topic.enabledCustom",
+				query="from Topic where enabled=true and source = :source order by name"),
 	@NamedQuery(name="topic.byName",
-				query="from Topic where name = :name")
+				query="from Topic where name = :name"),
+	@NamedQuery(name="topic.byNameCustom",
+				query="from Topic where name = :name and source = :source")
 })
 /**
  * A topic is a combination of resources and can be used to group
@@ -67,6 +74,9 @@ public class Topic implements Serializable {
 	private String name;
 	
 	private Boolean enabled;
+	
+	@ManyToOne
+	private Source source;
 
 	@ManyToMany
 	private List<Resource> resources = new ArrayList<Resource>();
@@ -101,6 +111,14 @@ public class Topic implements Serializable {
 
 	public void setResources(List<Resource> resources) {
 		this.resources = resources;
+	}
+
+	public Source getSource() {
+		return source;
+	}
+
+	public void setSource(Source source) {
+		this.source = source;
 	}
 
 }

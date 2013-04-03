@@ -74,7 +74,7 @@ public class SolrSearchBean implements Serializable {
 	@In(required=false)      protected Person person;
 	@Out(required=false)     protected ArtResource resource;
 	@In(create=true)         protected String platform;
-	@In(create=true)         protected CustomSourceBean customSourceBean;
+	@In                      protected CustomSourceBean customSourceBean;
 	
 	@In(create=true)         protected SolrServer solrServer;
 	

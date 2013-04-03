@@ -48,26 +48,40 @@ public class Results implements Serializable {
 	@In  protected EntityManager entityManager;
 	
 	public List<BackstageAnswer> getTopCorrectAnswers(GameRound gameRound) {
-		Query q = entityManager.createNamedQuery("tagging.topCorrectAnswersGeneral");
-		q.setParameter("resourceId", gameRound.getResources().get(0).getId());
-		q.setMaxResults(5);
-		List<BackstageAnswer> list = q.getResultList();
-		return list;
+		if (isGameRoundValid(gameRound)) {
+			Query q = entityManager.createNamedQuery("tagging.topCorrectAnswersGeneral");
+			q.setParameter("resourceId", gameRound.getResources().get(0).getId());
+			q.setMaxResults(5);
+			List<BackstageAnswer> list = q.getResultList();
+			return list;
+		} else
+			return null;
 	}
 	
 	public List<BackstageAnswer> getTopUnknownAnswers(GameRound gameRound) {
-		Query q = entityManager.createNamedQuery("tagging.topUnknownAnswersGeneral");
-		q.setParameter("resourceId", gameRound.getResources().get(0).getId());
-		q.setMaxResults(5);
-		List<BackstageAnswer> list = q.getResultList();
-		return list;
+		if (isGameRoundValid(gameRound)) {
+			Query q = entityManager.createNamedQuery("tagging.topUnknownAnswersGeneral");
+			q.setParameter("resourceId", gameRound.getResources().get(0).getId());
+			q.setMaxResults(5);
+			List<BackstageAnswer> list = q.getResultList();
+			return list;
+		} else
+			return null;
 	}
 	
 	public List<BackstageAnswer> getTopWrongAnswers(GameRound gameRound) {
-		Query q = entityManager.createNamedQuery("tagging.topWrongAnswersGeneral");
-		q.setParameter("resourceId", gameRound.getResources().get(0).getId());
-		q.setMaxResults(5);
-		List<BackstageAnswer> list = q.getResultList();
-		return list;
+		if (isGameRoundValid(gameRound)) {
+			Query q = entityManager.createNamedQuery("tagging.topWrongAnswersGeneral");
+			q.setParameter("resourceId", gameRound.getResources().get(0).getId());
+			q.setMaxResults(5);
+			List<BackstageAnswer> list = q.getResultList();
+			return list;
+		} else
+			return null;
 	}
+	
+	private boolean isGameRoundValid(GameRound gameRound) {
+		return gameRound.getResources().size() > 0 && gameRound.getResources().get(0) != null;
+	}
+
 }

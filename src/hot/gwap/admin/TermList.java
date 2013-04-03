@@ -23,8 +23,13 @@
 package gwap.admin;
 
 import gwap.model.resource.Term;
+import gwap.tools.CustomSourceBean;
 
+import java.util.List;
+
+import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Transactional;
 import org.jboss.seam.framework.EntityQuery;
 
 /**
@@ -33,7 +38,20 @@ import org.jboss.seam.framework.EntityQuery;
 @Name("termList")
 public class TermList extends EntityQuery<Term> {
 
+	@In private CustomSourceBean customSourceBean;
+	
 	public TermList() {
-		setEjbql("select t from Term t order by t.tag.name");
+		setEjbql("select t from Term t");
+		setOrder("t.tag.name");
+	}
+	
+	@Override
+	@Transactional
+	public List<Term> getResultList() {
+		if (customSourceBean != null && customSourceBean.getCustomized() && getRestrictions().size() == 0) {
+			getRestrictions().add(createValueExpression("source.id = #{customSource.id}"));
+			refresh();
+		}
+		return super.getResultList();
 	}
 }

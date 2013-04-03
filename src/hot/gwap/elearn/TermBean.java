@@ -26,11 +26,11 @@ import gwap.model.GameConfiguration;
 import gwap.model.GameSession;
 import gwap.model.Tag;
 import gwap.model.resource.Term;
+import gwap.tools.CustomSourceBean;
 
 import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.jboss.seam.ScopeType;
@@ -56,11 +56,11 @@ public class TermBean implements Serializable {
 	
 	@Logger                  private Log log;
 	@In                      private FacesMessages facesMessages;
-	@In                      private EntityManager entityManager;
 	@In(required=false)      private GameConfiguration gameConfiguration;
 	@Out(required=false)     private Term term;
 	@In						 private LocaleSelector localeSelector;
 	@In(required=false)      private GameSession gameSession;
+	@In                      private CustomSourceBean customSourceBean;
 	
 	@Factory("term")
 	public Term updateTerm() {
@@ -81,10 +81,10 @@ public class TermBean implements Serializable {
 		try {
 			Query query = null;
 			if (gameConfiguration != null && gameConfiguration.getTopic() != null) {
-				query = entityManager.createNamedQuery("term.randomByTopic");
+				query = customSourceBean.query("term.randomByTopic");
 				query.setParameter("topic", gameConfiguration.getTopic());
 			} else {
-				query = entityManager.createNamedQuery("term.randomByLevel");
+				query = customSourceBean.query("term.randomByLevel");
 				if (gameConfiguration != null && gameConfiguration.getLevel() != null)
 					query.setParameter("level", gameConfiguration.getLevel());
 				else
@@ -108,15 +108,15 @@ public class TermBean implements Serializable {
 			Query query = null;
 			if (gameConfiguration != null) {
 				if (gameConfiguration.getTopic() != null) {
-					query = entityManager.createNamedQuery("term.sensibleRandomForGameWithTopic");
+					query = customSourceBean.query("term.sensibleRandomForGameWithTopic");
 					query.setParameter("topic", gameConfiguration.getTopic());
 				} else {
-					query = entityManager.createNamedQuery("term.sensibleRandomForGame");
+					query = customSourceBean.query("term.sensibleRandomForGame");
 				}
 				query.setParameter("level", gameConfiguration.getLevel());
 				query.setParameter("minConfirmedTags", gameConfiguration.getBid().longValue());
 			} else {
-				query = entityManager.createNamedQuery("term.sensibleRandomForGameWithoutConfig");
+				query = customSourceBean.query("term.sensibleRandomForGameWithoutConfig");
 			}
 			query.setParameter("gameSession", gameSession);
 			query.setParameter("language", localeSelector.getLanguage());
@@ -137,7 +137,7 @@ public class TermBean implements Serializable {
 		
 		try {
 			Query query = null;
-			query = entityManager.createNamedQuery("term.randomByLevelNotInGameSession");
+			query = customSourceBean.query("term.randomByLevelNotInGameSession");
 			query.setParameter("level", level);
 			query.setParameter("gameSession", gameSession);
 			query.setParameter("language", localeSelector.getLanguage());
@@ -158,7 +158,7 @@ public class TermBean implements Serializable {
 		
 		List<Tag> terms;
 		try {
-			Query query = entityManager.createNamedQuery("term.randomTagsNotRelated");
+			Query query = customSourceBean.query("term.randomTagsNotRelated");
 			query.setParameter("language", localeSelector.getLanguage());
 			query.setParameter("term", relatedTerm);
 			query.setMaxResults(maxNrResults);
