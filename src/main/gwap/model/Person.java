@@ -374,5 +374,13 @@ public class Person implements Serializable {
 	public void setDeviceId(String deviceId) {
 		this.deviceId = deviceId;
 	}
+
+	public Set<Badge> getBadges() {
+		return badges;
+	}
+
+	public void setBadges(Set<Badge> badges) {
+		this.badges = badges;
+	}
 	
 }

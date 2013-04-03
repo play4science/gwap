@@ -354,24 +354,18 @@ import org.jboss.seam.annotations.Scope;
  			   	query="select count(t) from Tagging t " +
  			   			"where t.resource.id=:resid and t.tag.language=:lang"),
  	   @NamedQuery(name="artResource.gameLocations",
-  			  	query="select v.resource " +
-  			  			"from VirtualTagging v join v.virtualTaggingTypes t " +
+  			  	query="select a from ArtResource a " +
+  			  			"join a.virtualTaggings v join v.virtualTaggingTypes t " +
   			  			"where t.id = :virtualTaggingTypeId " +
-  			  			"and v.resource.shownLocation is not null " +
-  			  			//TODO not working...
-//  			  		    "and v.resource.id in (select vv.id from ArtResource vv where vv.isVersionOf.artist.id = :userId) " +
-  			  		    ""),
-  	  @NamedQuery(name="artResource.getRandomUserPictures",
-  			  	 query="select v from ArtResource v where v.isVersionOf is not null"), // +
-  	            //       "v.id not in (select vv.id from ArtResource vv where vv.ratings.person.id = :deviceid)"
-	// TODO: nur bilder anzeigen, die der benutzer noch nicht bewertet hat
-
-	/* TODO: and not in (resource, that :userId has visited already) [Uncomment param in LocationService:132 ]
-	 *  	  a resource was visited, id the user took a picture of it (artresource.isVersionOf)
-	 *  Test http://localhost:8080/artigo/seam/resource/rest/location?currentLatitude=1&currentLongitude=2&userid=3&topic=1
-	 */
-  	   @NamedQuery(name="artResource.getRandomNewPictures",
-			  	 query="select v from ArtResource v where v.isVersionOf is null and shownLocation is not null"), 
+  			  			"and a.shownLocation.type = 'APP' " +
+  			  		    "and not exists (from ArtResource a2 where a2.isVersionOf.artist.deviceId = :deviceId and a2 = a)"),
+  	   @NamedQuery(name="artResource.getRandomPictures",
+  			  	query="select a from ArtResource a " +
+  			  			"where a.origin = :origin and " +
+  			  			"not exists (from ArtResourceRating r where r.person.deviceId = :deviceId and r.resource = a) " +
+  			  			"order by random()"),
+	   @NamedQuery(name = "artResource.byOriginAndDeviceId",
+			  	query="select count(*) from ArtResource a where a.origin = :origin and a.artist.deviceId = :deviceId")
   	})
 
 /**
@@ -388,6 +382,9 @@ import org.jboss.seam.annotations.Scope;
 public class ArtResource extends Resource {
 	
 	private static final long serialVersionUID = 1L;
+	
+	public static final String ORIGIN_APP_USER = "vom Nutzer gemacht";
+	public static final String ORIGIN_APP_CRIMESCENE = "Bild aus App-Spiel";
 
 	@ManyToOne
 	private Person artist;

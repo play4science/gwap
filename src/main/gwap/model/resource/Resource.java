@@ -26,6 +26,7 @@ import gwap.model.GameRound;
 import gwap.model.Topic;
 import gwap.model.action.LocationAssignment;
 import gwap.model.action.Tagging;
+import gwap.model.action.VirtualTagging;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -65,6 +66,8 @@ public abstract class Resource implements Serializable {
 	@ManyToMany(mappedBy="resources")	protected List<GameRound> gameRounds = new ArrayList<GameRound>();
 	
 	@OneToMany(mappedBy="resource")	    private Set<Tagging> taggings = new HashSet<Tagging>();
+	
+	@OneToMany(mappedBy="resource")	    private Set<VirtualTagging> virtualTaggings = new HashSet<VirtualTagging>();
 	
 	@OneToMany(mappedBy="resource", cascade=CascadeType.REMOVE)
 	private List<LocationAssignment> locationAssignments = new ArrayList<LocationAssignment>();
@@ -126,6 +129,14 @@ public abstract class Resource implements Serializable {
 
 	public void setTopics(List<Topic> topics) {
 		this.topics = topics;
+	}
+
+	public Set<VirtualTagging> getVirtualTaggings() {
+		return virtualTaggings;
+	}
+
+	public void setVirtualTaggings(Set<VirtualTagging> virtualTaggings) {
+		this.virtualTaggings = virtualTaggings;
 	}
 
 }
