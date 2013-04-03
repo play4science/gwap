@@ -31,10 +31,10 @@
 				</td>
 				<s:fragment rendered="#{s:hasPermission('elearning', 'view-admin-interface')}">
 				<td rowspan="2">
-					<s:link view="/admin/home.xhtml" styleClass="menuLink #{menuBean.getCssClass('/admin/home.xhtml')}" value="#{messages['menu.admin']}" /><br/>
-					<s:link view="/admin/unknownAssociations.xhtml" styleClass="menuLink #{menuBean.getCssClass('/admin/unknownAssociations.xhtml')}" value="#{messages['menu.admin.unknownAssociations']}" /><br/>
-					<s:link view="/admin/termList.xhtml" styleClass="menuLink #{menuBean.getCssClass('/admin/term.xhtml')}" value="#{messages['menu.admin.termList']}" /><br />
-					<s:link view="/admin/topicList.xhtml" styleClass="menuLink #{menuBean.getCssClass('/admin/topic.xhtml')}" value="#{messages['menu.admin.topicList']}" /><br />
+					<s:link view="/admin/home.xhtml" styleClass="menuLink #{menuBean.getCssClass('/admin/home.xhtml')}" value="#{messages['menu.admin']}" propagation="none" /><br/>
+					<s:link view="/admin/unknownAssociations.xhtml" styleClass="menuLink #{menuBean.getCssClass('/admin/unknownAssociations.xhtml')}" value="#{messages['menu.admin.unknownAssociations']}" propagation="none" /><br/>
+					<s:link view="/admin/termList.xhtml" styleClass="menuLink #{menuBean.getCssClass('/admin/term.xhtml')}" value="#{messages['menu.admin.termList']}" propagation="none" /><br />
+					<s:link view="/admin/topicList.xhtml" styleClass="menuLink #{menuBean.getCssClass('/admin/topic.xhtml')}" value="#{messages['menu.admin.topicList']}" propagation="none" /><br />
 				</td>
 				</s:fragment>
 			</tr>
