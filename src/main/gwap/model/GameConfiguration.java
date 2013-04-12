@@ -41,8 +41,8 @@ import org.jboss.seam.annotations.Scope;
 @NamedQueries({
 	@NamedQuery(name="gameConfiguration.byAll", 
 			query = "select gc from GameConfiguration gc where topic=:topic and roundDuration=:roundDuration and level=:level and bid=:bid"),
-	@NamedQuery(name="gameConfiguration.byAllButTopic", 
-			query = "select gc from GameConfiguration gc where roundDuration=:roundDuration and level=:level and bid=:bid"), 
+	@NamedQuery(name="gameConfiguration.byAllWithoutTopic", 
+			query = "select gc from GameConfiguration gc where roundDuration=:roundDuration and level=:level and bid=:bid and topic is null"), 
 	@NamedQuery(name="gameConfiguration.all", 
 			query = "select gc from GameConfiguration gc join gc.topic t where t.id is not null order by gc.id"),
 	@NamedQuery(name="gameConfiguration.getById",

@@ -108,7 +108,7 @@ public class Termina extends AbstractGameSessionBean {
 		try {
 			Query q;
 			if (gameConfiguration.getTopic() == null) {
-				q = entityManager.createNamedQuery("gameConfiguration.byAllButTopic");
+				q = entityManager.createNamedQuery("gameConfiguration.byAllWithoutTopic");
 			} else {
 				q = entityManager.createNamedQuery("gameConfiguration.byAll");
 				q.setParameter("topic", gameConfiguration.getTopic());

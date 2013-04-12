@@ -120,5 +120,15 @@ public class Topic implements Serializable {
 	public void setSource(Source source) {
 		this.source = source;
 	}
+	
+	public String toString() {
+		if (getId() != null) {
+			String val = "Topic#"+getId();
+			if (getName() != null)
+				val += ":"+getName();
+			return val;
+		}
+		return super.toString();
+	}
 
 }
