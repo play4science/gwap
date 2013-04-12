@@ -25,7 +25,7 @@ package gwap.widget;
 import gwap.model.GameType;
 import gwap.model.Highscore;
 import gwap.model.Person;
-import gwap.model.Source;
+import gwap.tools.CustomSourceBean;
 import gwap.wrapper.HighscoreSet;
 
 import java.io.Serializable;
@@ -64,7 +64,7 @@ public class HighscoreBean implements Serializable {
 	@Logger                  private Log log;
 	@In                      private EntityManager entityManager;
 	@In(required=false)		 private Person person;
-	@In(required=false)      private Source customSource;
+	@In                      private CustomSourceBean customSourceBean;
 	
 	@DataModel               private List<HighscoreSet> highscores=null;
 
@@ -111,7 +111,7 @@ public class HighscoreBean implements Serializable {
 	public List<Highscore> updateHighscorePerGameSession(GameType gameType) {
 		log.info("Updating Highscore per GameSession");
 
-		Query query = entityManager.createNamedQuery("highscore.mit.byGameSession");
+		Query query = customSourceBean.query("highscore.byGameSession");
 		query.setMaxResults(20);
 		query.setParameter("gametype", gameType);
 		List<Highscore> res = query.getResultList();
@@ -171,12 +171,7 @@ public class HighscoreBean implements Serializable {
 		log.info("Updating Highscore");
 
 		Query query;
-		if (customSource == null) {
-			query = entityManager.createNamedQuery("highscore.byInterval");
-		} else {
-			query = entityManager.createNamedQuery("highscore.byIntervalAndSource");
-			query.setParameter("source", customSource);
-		}
+		query = customSourceBean.query("highscore.byInterval");
 		
 		query.setParameter("gametype", gameType);
 		
