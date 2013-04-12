@@ -24,6 +24,7 @@ package gwap.admin;
 
 import gwap.model.Tag;
 import gwap.model.resource.Term;
+import gwap.tools.CustomSourceBean;
 import gwap.wrapper.TagWithCount;
 import gwap.wrapper.UnknownAssociation;
 
@@ -57,6 +58,7 @@ public class UnknownAssociations implements Serializable {
 	@Logger                  private Log log;
 	@In                      private FacesMessages facesMessages;
 	@In                      private EntityManager entityManager;
+	@In                      private CustomSourceBean customSourceBean;
 	
 	@RequestParameter        private Long termId;
 	@RequestParameter        private Long tagId;
@@ -93,7 +95,7 @@ public class UnknownAssociations implements Serializable {
 
 	private void createList() {
 		log.info("Loading unknown associations list");
-		Query q = entityManager.createNamedQuery("tagging.unknownAnswers");
+		Query q = customSourceBean.query("tagging.unknownAnswers");
 		@SuppressWarnings("unchecked")
 		List<Object[]> termTagCount = q.getResultList();
 		resultList = new ArrayList<UnknownAssociation>();
@@ -115,7 +117,7 @@ public class UnknownAssociations implements Serializable {
 	}
 	
 	public boolean hasEntries() {
-		Query q = entityManager.createNamedQuery("tagging.unknownAnswersCount");
+		Query q = customSourceBean.query("tagging.unknownAnswersCount");
 		if (((Number)q.getSingleResult()).longValue() > 0)
 			return true;
 		else

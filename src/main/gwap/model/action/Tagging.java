@@ -139,14 +139,25 @@ import org.jboss.seam.annotations.Scope;
 			name = "tagging.taggingsByTagNameResourceAndGameround",
 			query = "select t from Tagging t where lower(t.tag.name)=lower(:tagName) and t.resource=:resource and t.gameRound = :gameRound"),
 	@NamedQuery(
-			name="tagging.unknownAnswers",
-			query="select r.id, t.id, count(*) from Term r join r.taggings tg join tg.tag t " +
-					"where t.id not in (select t2.id from r.confirmedTags t2) and t.id not in (select t2.id from r.rejectedTags t2) " + 
+			name = "tagging.unknownAnswers",
+			query = "select r.id, t.id, count(*) from Term r join r.taggings tg join tg.tag t " +
+					"where not exists (from r.confirmedTags t2 where t2=t) and not exists (from r.rejectedTags t2 where t2=t) " + 
 					"group by r.id, t.id order by r.id, count(*) desc"),
 	@NamedQuery(
-			name="tagging.unknownAnswersCount",
-			query="select count(*) from Term r join r.taggings tg join tg.tag t " +
-					"where t.id not in (select t2.id from r.confirmedTags t2) and t.id not in (select t2.id from r.rejectedTags t2)")
+			name = "tagging.unknownAnswersCustom",
+			query = "select r.id, t.id, count(*) from Term r join r.taggings tg join tg.tag t " +
+					"where not exists (from r.confirmedTags t2 where t2=t) and not exists (from r.rejectedTags t2 where t2=t) " +
+					"and r.source = :source " + 
+					"group by r.id, t.id order by r.id, count(*) desc"),
+	@NamedQuery(
+			name = "tagging.unknownAnswersCount",
+			query = "select count(*) from Term r join r.taggings tg join tg.tag t " +
+					"where not exists (from r.confirmedTags t2 where t2=t) and not exists (from r.rejectedTags t2 where t2=t) "),
+	@NamedQuery(
+			name = "tagging.unknownAnswersCountCustom",
+			query = "select count(*) from Term r join r.taggings tg join tg.tag t " +
+					"where not exists (from r.confirmedTags t2 where t2=t) and not exists (from r.rejectedTags t2 where t2=t) " +
+					"and r.source = :source ")
 })
 
 @Entity
