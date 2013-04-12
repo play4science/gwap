@@ -49,39 +49,39 @@ import org.jboss.seam.annotations.Scope;
 				query="select p from Term p where p.enabled = true and p.rating = :level and p.tag.language = :language and p.source = :source order by random()"),
 	@NamedQuery(name="term.randomByLevelNotInGameSession", 
 				query="select p from Term p where p.enabled = true and p.rating = :level and p.tag.language = :language " +
-						"and not exists (from GameRound r join r.resources r2 where r.gameSession=:gameSession and r2=p) " +
+						"and not exists (from Term r2 join r2.gameRounds r where r.gameSession=:gameSession and r2=p) " +
 						"order by random()"),
 	@NamedQuery(name="term.randomByLevelNotInGameSessionCustom", 
 				query="select p from Term p where p.enabled = true and p.rating = :level and p.tag.language = :language and p.source = :source " +
-						"and not exists (from GameRound r join r.resources r2 where r.gameSession=:gameSession and r2=p) " +
+						"and not exists (from Term r2 join r2.gameRounds r where r.gameSession=:gameSession and r2=p) " +
 						"order by random()"),
 	@NamedQuery(name="term.sensibleRandomForGame", 
 				query="select p from Term p where p.enabled = true and p.rating = :level and p.tag.language = :language " +
-						"and not exists (from GameRound r join r.resources r2 where r.gameSession=:gameSession and r2=p) " +
+						"and not exists (from Term r2 join r2.gameRounds r where r.gameSession=:gameSession and r2=p) " +
 						"and (select count(*) from p.confirmedTags) >= :minConfirmedTags " +
 						"order by random()"),
 	@NamedQuery(name="term.sensibleRandomForGameCustom", 
 				query="select p from Term p where p.enabled = true and p.rating = :level and p.tag.language = :language and p.source = :source " +
-						"and not exists (from GameRound r join r.resources r2 where r.gameSession=:gameSession and r2=p) " +
+						"and not exists (from Term r2 join r2.gameRounds r where r.gameSession=:gameSession and r2=p) " +
 						"and (select count(*) from p.confirmedTags) >= :minConfirmedTags " +
 						"order by random()"),
 	@NamedQuery(name="term.sensibleRandomForGameWithTopic", 
 				query="select p from Term p join p.topics t where p.enabled = true and t = :topic and p.rating = :level and p.tag.language = :language " +
-						"and not exists (from GameRound r join r.resources r2 where r.gameSession=:gameSession and r2=p) " +
+						"and not exists (from Term r2 join r2.gameRounds r where r.gameSession=:gameSession and r2=p) " +
 						"and (select count(*) from p.confirmedTags) >= :minConfirmedTags " +
 						"order by random()"),
 	@NamedQuery(name="term.sensibleRandomForGameWithTopicCustom", 
 				query="select p from Term p join p.topics t where p.enabled = true and t = :topic and p.rating = :level and p.tag.language = :language and p.source = :source " +
-						"and not exists (from GameRound r join r.resources r2 where r.gameSession=:gameSession and r2=p) " +
+						"and not exists (from Term r2 join r2.gameRounds r where r.gameSession=:gameSession and r2=p) " +
 						"and (select count(*) from p.confirmedTags) >= :minConfirmedTags " +
 						"order by random()"),
 	@NamedQuery(name="term.sensibleRandomForGameWithoutConfig", 
 				query="select p from Term p where p.enabled = true and p.tag.language = :language " +
-						"and not exists (from GameRound r join r.resources r2 where r.gameSession=:gameSession and r2=p) " +
+						"and not exists (from Term r2 join r2.gameRounds r where r.gameSession=:gameSession and r2=p) " +
 						"order by random()"),
 	@NamedQuery(name="term.sensibleRandomForGameWithoutConfigCustom", 
 				query="select p from Term p where p.enabled = true and p.tag.language = :language and p.source = :source " +
-						"and not exists (from GameRound r join r.resources r2 where r.gameSession=:gameSession and r2=p) " +
+						"and not exists (from Term r2 join r2.gameRounds r where r.gameSession=:gameSession and r2=p) " +
 						"order by random()"),
 	@NamedQuery(name="term.randomByTopic", 
 				query="select p from Term p join p.topics t where p.enabled = true and t = :topic and p.tag.language = :language order by random()"),
