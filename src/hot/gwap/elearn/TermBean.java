@@ -108,14 +108,17 @@ public class TermBean implements Serializable {
 			Query query = null;
 			if (gameConfiguration != null) {
 				if (gameConfiguration.getTopic() != null) {
+					log.info("term.sensibleRandomForGameWithTopic level=#0, minConfirmedTags=#1, topic=#2", gameConfiguration.getLevel(), gameConfiguration.getBid().longValue(), gameConfiguration.getTopic());
 					query = customSourceBean.query("term.sensibleRandomForGameWithTopic");
 					query.setParameter("topic", gameConfiguration.getTopic());
 				} else {
+					log.info("term.sensibleRandomForGame level=#0, minConfirmedTags=#1", gameConfiguration.getLevel(), gameConfiguration.getBid().longValue());
 					query = customSourceBean.query("term.sensibleRandomForGame");
 				}
 				query.setParameter("level", gameConfiguration.getLevel());
 				query.setParameter("minConfirmedTags", gameConfiguration.getBid().longValue());
 			} else {
+				log.info("term.sensibleRandomForGameWithoutConfig");
 				query = customSourceBean.query("term.sensibleRandomForGameWithoutConfig");
 			}
 			query.setParameter("gameSession", gameSession);
