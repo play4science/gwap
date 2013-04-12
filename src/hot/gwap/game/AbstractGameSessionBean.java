@@ -105,6 +105,10 @@ public abstract class AbstractGameSessionBean implements Serializable {
 	}
 
 	public void startRound() {
+		if (gameRound != null && gameRound.getNumber() != null && gameRound.getNumber().equals(roundNr)) {
+			log.info("Omit starting game round #0 again, because it is already started", roundNr);
+			return;
+		}
 		log.info("Starting game round #0 (#1 left)", roundNr, roundsLeft);
 		currentRoundScore = 0;
 		gameRound = new GameRound();
