@@ -58,7 +58,7 @@ a:hover                                 { color: #0090FF; };
 #navAdmin li			            	{ font-size:0.9em; margin-left: 10px; line-height:1.2em; padding:0; background:url(../img/arrowBig.gif) no-repeat 0 0; margin-bottom:.25em }
 #navAdmin li a           				{ color:#000; line-height:22px; text-decoration:none; padding-left:30px; margin:0; }
 
-#navSub, #navMain, .navSub              { width:260px; margin:20px 0 25px 0 }
+#navSub, #navMain, .navSub              { width:300px; margin:20px 0 25px 0 }
 #navSub li, #navMain li, .navSub li    { font-size:0.9em; line-height:1.2em; padding:0; background:url(../img/arrowBig.gif) no-repeat 0 0; margin-bottom:.25em }
 #navSub a, #navMain a, .navSub a        { color:#000; line-height:1.2em; text-decoration:none; padding-left:30px; margin:0; text-transform:uppercase; font-weight:bold }
 #related h1                             { font-size:1.1em; color:#000; line-height:1.2em; text-decoration:none; margin:10px 0 3px 0; text-transform:uppercase; font-weight:bold }
