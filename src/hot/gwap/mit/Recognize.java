@@ -86,8 +86,9 @@ public class Recognize extends AbstractGameSessionBean {
 	}
 	
 	@Override
-	public void startRound() {
-		super.startRound();
+	public boolean startRound() {
+		if (!super.startRound())
+			return false;
 		gameRound.getResources().add(statement);
 		locationId = null;
 		breadcrumbLocations.clear();
@@ -97,6 +98,7 @@ public class Recognize extends AbstractGameSessionBean {
 		points = null;
 		selectedTokens.clear();
 		skipCharacterizationResult = false;
+		return true;
 	}
 	
 	@Override

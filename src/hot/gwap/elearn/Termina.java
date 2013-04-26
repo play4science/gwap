@@ -77,8 +77,9 @@ public class Termina extends AbstractGameSessionBean {
 	}
 	
 	@Override
-	public void startRound() {
-		super.startRound();
+	public boolean startRound() {
+		if (!super.startRound())
+			return false;
 		
 		previousTaggings = new ArrayList<Tag>();
 		foundAssociations = 0;
@@ -89,6 +90,7 @@ public class Termina extends AbstractGameSessionBean {
 		term = elearnTermBean.updateTerm(gameConfiguration);
 			
 		gameRound.getResources().add(term);
+		return true;
 	}
 	
 	protected void adjustGameConfiguration() {

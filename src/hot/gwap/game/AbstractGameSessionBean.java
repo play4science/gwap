@@ -104,10 +104,10 @@ public abstract class AbstractGameSessionBean implements Serializable {
 		entityManager.merge(gameSession);
 	}
 
-	public void startRound() {
+	public boolean startRound() {
 		if (gameRound != null && gameRound.getNumber() != null && gameRound.getNumber().equals(roundNr)) {
 			log.info("Omit starting game round #0 again, because it is already started", roundNr);
-			return;
+			return false;
 		}
 		log.info("Starting game round #0 (#1 left)", roundNr, roundsLeft);
 		currentRoundScore = 0;
@@ -120,6 +120,7 @@ public abstract class AbstractGameSessionBean implements Serializable {
 		gameSession.getGameRounds().add(gameRound);
 		entityManager.persist(gameRound);
 		loadNewResource();
+		return true;
 	}
 
 	/**

@@ -69,9 +69,11 @@ public class CombineGameSessionBean extends AbstractGameSessionBean {
 	}
 	
 	@Override
-	public void startRound() {
-		super.startRound();
+	public boolean startRound() {
+		if (!super.startRound())
+			return false;
 		forceExpired = false;
+		return true;
 	}
 	
 	@Override

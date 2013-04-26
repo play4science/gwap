@@ -61,10 +61,12 @@ public class StatementLabelerBean extends AbstractGameSessionBean {
 	}
 	
 	@Override
-	public void startRound() {
-		super.startRound();
+	public boolean startRound() {
+		if (!super.startRound())
+			return false;
 		gameRound.getResources().add(statement);
 		locationId = null;
+		return true;
 	}
 	
 	@Override

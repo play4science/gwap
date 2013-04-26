@@ -48,9 +48,11 @@ public class Poker extends Recognize {
 	}
 	
 	@Override
-	public void startRound() {
-		super.startRound();
+	public boolean startRound() {
+		if (!super.startRound())
+			return false;
 		isCorrect = false;
+		return true;
 	}
 	
 	@Override

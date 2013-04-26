@@ -70,8 +70,9 @@ public class Accenti extends AbstractGameSessionBean {
 	}
 	
 	@Override
-	public void startRound() {
-		super.startRound();
+	public boolean startRound() {
+		if (!super.startRound())
+			return false;
 		gameRound.getResources().add(audioResource);
 		locationId = null;
 		guessedCorrectly = null;
@@ -84,6 +85,7 @@ public class Accenti extends AbstractGameSessionBean {
 			redirect.setViewId("/accentiNoResourceLeft.xhtml");
 			redirect.execute();
 		}
+		return true;
 	}
 	
 	@Override
