@@ -11,20 +11,42 @@
 	<a4j:form id="bereich3">
 		<h:messages class="standout2"/>
 		<s:validateAll>
+		<script type="text/javascript" src="processing.js"></script>
+		<script type="text/javascript">
+			function newEntry(id){
+				var pjs = Processing.getInstanceById(id);
+				var text = document.getElementById('inputtext').value;
+				pjs.newVertex(text, 100, 20);
+			}
+		</script>
 		
 			<table>
 				<tr>
+					<canvas id="TerminaGraph" data-processing-sources="TerminaGraph.pde Vertex.pde"> </canvas> 
+				</tr>
+				<tr>
 					<td class="terminaTableCell"><h:outputText class="gamequestion" value="#{messages['termina.frage.satz']}" /></td>
 					<td class="terminaTableCell"><h:inputText id="inputassoc" value="#{elearnTermina.association}" autocomplete="off" required="false" /></td>
-					<td class="terminaTableCell"><a4j:commandButton id="sendButton" action="#{elearnTermina.choose()}" styleClass="sendAssociation" title="Sende Assoziation" reRender="bereich1,bereich3,focusbereich"><s:defaultAction /></a4j:commandButton></td>
+					<td class="terminaTableCell"><a4j:commandButton id="sendButton" action="#{elearnTermina.choose()} newEntry('TerminaGraph')" styleClass="sendAssociation" title="Sende Assoziation" reRender="bereich1,bereich3,focusbereich"><s:defaultAction /></a4j:commandButton></td>
 				</tr>
 				<tr>
 					<td  colspan="3"><h:outputText styleClass="foundAssocText" value="#{messages['termina.foundAssoc']}"/>
-					<h:outputText styleClass="foundAssocNum" value="#{elearnTermina.foundAssociations}"/>
 					<h:outputText styleClass="requestedAssoc" value="#{messages['termina.outof']} #{gameConfiguration.bid}"/></td>
-					
 				</tr>
 			</table>
+
+ <!-- 			<div id="related"> 
+				<div class="ongoingGameStatsCaption">
+					<h:outputText value="#{messages['tagging.enteredTags']}" />
+				</div>
+					
+	 			<a4j:outputPanel id="recommendedTags" styleClass="ongoingGameStatsContent">
+						<a4j:repeat value="#{elearnTermina.getPreviousTaggings()}" var="assoc"> 
+						<h:outputText value="#{assoc.name}" />
+ 					</a4j:repeat> 
+				</a4j:outputPanel>								
+			</div><br /> -->	 
+
 		</s:validateAll>
 	</a4j:form>
 
