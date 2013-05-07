@@ -28,6 +28,7 @@ import gwap.model.Tag;
 import gwap.model.action.Tagging;
 import gwap.model.resource.Term;
 import gwap.tools.TagSemantics;
+import gwap.wrapper.MatchingTag;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -67,7 +68,12 @@ public class Termina extends AbstractGameSessionBean {
 	protected List<Tag> tags;
 	protected List<String> answers;
 	protected List<Tag> previousTaggings;
-	
+
+	protected MatchingTag lastAssociation;
+
+	public List<Tag> getPreviousTaggings() {
+		return previousTaggings;
+	}
 
 	@Override
 	public void startGameSession() {
@@ -80,6 +86,8 @@ public class Termina extends AbstractGameSessionBean {
 	public boolean startRound() {
 		if (!super.startRound())
 			return false;
+		
+		lastAssociation = null;
 		
 		previousTaggings = new ArrayList<Tag>();
 		foundAssociations = 0;
@@ -186,6 +194,8 @@ public class Termina extends AbstractGameSessionBean {
 		tagging.setResource(term);
 		
 		Tag tag = TerminaMatching.checkAssociationInList(association, term.getConfirmedTags());
+
+		lastAssociation = new MatchingTag(association);
 		
 		if (tag != null) {
 			log.info("Association '#0' is correct for term '#1'", association, term);
@@ -194,6 +204,8 @@ public class Termina extends AbstractGameSessionBean {
 			foundAssociations++;
 			tagging.setScore(scoreMultiplicator());
 			currentRoundScore += scoreMultiplicator();
+			lastAssociation.setDirectMatch(true);
+			lastAssociation.setScore(tagging.getScore());
 		} else {
 			tag = TerminaMatching.checkAssociationInList(association, term.getRejectedTags());
 			if (tag != null) {
@@ -202,10 +214,12 @@ public class Termina extends AbstractGameSessionBean {
 				tagging.setTag(tag);
 				tagging.setScore(WRONG_ASSOCIATION_SCORE);
 				currentRoundScore += WRONG_ASSOCIATION_SCORE;
+				lastAssociation.setScore(tagging.getScore());
 			} else {
 				log.info("Association '#0' is unknown for term '#1'", association, term);
 				facesMessages.addFromResourceBundle("termina.term.unknown");
 				tagging.setTag(findOrCreateTag(association));
+				lastAssociation.setIndirectMatch(true);
 			}
 		}
 		previousTaggings.add(tagging.getTag());
@@ -360,5 +374,14 @@ public class Termina extends AbstractGameSessionBean {
         } else
         	return null;
 	}
+
+	public MatchingTag getLastAssociation() {
+		return lastAssociation;
+	}
+
+	public void setLastAssociation(MatchingTag lastAssociation) {
+		this.lastAssociation = lastAssociation;
+	}
+	
 	
 }
