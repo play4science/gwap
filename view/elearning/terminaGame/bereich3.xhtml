@@ -11,11 +11,23 @@
 	
 	<script type="text/javascript" src="terminaGame/processing.js"></script>
 	<script type="text/javascript">
+		var intervall=setInterval(function(){
+			if('#{term.tag.name}' != ''){
+				setTerm('TerminaGraph','#{term.tag.name}');
+				clearIntervall(intervall);
+			}  
+		},10);
+	
 		function newEntry(id, association, score ){
 			var pjs = Processing.getInstanceById(id);
-			var size = 20 + 10 * score;
+			var size = 20 + 8 * score;
 			
 			pjs.newVertex(association, 100, size);
+		}
+		
+		function setTerm(id, term){
+			var pjs = Processing.getInstanceById(id);
+			pjs.setTerm(term);
 		}
 	</script>
 
@@ -25,11 +37,17 @@
 		<h:messages class="standout2"/>
 		<s:validateAll>
 		
- <script type="text/javascript"> 
-    if ('#{elearnTermina.lastAssociation}' != '')
- 	newEntry('TerminaGraph', '#{elearnTermina.lastAssociation.tag}', '#{elearnTermina.lastAssociation.score}');
- </script> 
+	<script type="text/javascript"> 
+		if ('#{elearnTermina.lastAssociation}' != '' &amp;&amp; '#{elearnTermina.lastAssociation.tag}' != 'duplicate' ){
+			var tag = '#{elearnTermina.lastAssociation.tag}';
 		
+			tag = tag.replace(/ +(?= )/g,''); //replace multiple whitespaces 
+			tag = tag.replace(/ /g,"\n"); //replace whitespaces with linebrak
+
+			newEntry('TerminaGraph', tag, '#{elearnTermina.lastAssociation.score}');
+	    }
+	</script>
+
 			<table>
 				<tr>
 					<td class="terminaTableCell"><h:outputText class="gamequestion" value="#{messages['termina.frage.satz']}" /></td>
@@ -54,8 +72,9 @@
  					</a4j:repeat> 
 				</a4j:outputPanel>								
 			</div><br /> -->	 
-
 		</s:validateAll>
+
+	
 	</a4j:form>
 
 </ui:composition>

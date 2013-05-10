@@ -9,64 +9,68 @@ class Vertex {
   float newAngle;
   float tw;
   float th;
+  float h;
   float a;
   float b;
-  boolean inMove;
-  
+
   Vertex(int x, int y, int size, String s, float distance) {
     this.x = x;
     this.y = y;
     this.size = size;
 
     this.s = s;
+
     this.distance = distance;
-    this.angle = PConstants.PI;
-    this.newAngle = PConstants.PI;
-    
+    this.angle = PI;
+    this.newAngle = PI;
+
     textSize(size);
-    tw = textWidth(s);
-    th = textAscent() +  textDescent();
-
-
+    String[] words = s.split("\n");
+    int n = words.length;
+    int[] lengths = new int[n];
+    for (int i = 0; i < n; i++) {
+      lengths[i] = (int) textWidth(words[i]);
+    }
+    tw = max(lengths);
+    println(tw);
+    h = textAscent() + textDescent();
+    th = n * h;
+    println(th);
     b = sqrt(2) * th;
     a = sqrt( sq(tw) / (1 -  sq(th/b)));
   }  
 
-  //draw Node
   void display() {
-    stroke(255);
-    fill(0);
+    stroke(STROKE);
+    fill(RED);
 
-    rectMode(CENTER);
-    rect(x,y,tw,th);
 
-//    ellipseMode(CENTER);
-//    ellipse(x, y, a, b);
-    fill(255);
+    ellipseMode(CENTER);
+    ellipse(x, y, a, b);
+
+    //    rectMode(CENTER);
+    //    rect(x,y,tw,th);
+
+    fill(TEXT);
     textSize(size);
+    textLeading(h);
     textAlign(CENTER, CENTER);
-    text(s, x, y ); 
+    text(s, x, y);
   }
 
-  void setMovement(int from, int to, int off) {
+  void setMovement(int to, int off) {
     //     println("setting movement from "  + from + " to "+  to + " off " + off  );
-    this.angle = 2 * PConstants.PI * from / off + PConstants.PI;
+    //this.angle = 2 * PConstants.PI * from / off + PI;
     //     println("old angle " + angle);
-    this.newAngle = 2 * PConstants.PI * to / off + PConstants.PI;
+    this.newAngle = 2 * PConstants.PI * to / off + PI;
     //     println("new angle " + newAngle);
   }
 
   void move() {
-    if (abs(newAngle - angle) > 0.01){
-      inMove = true;
+    if (abs(newAngle - angle) > 0.01) {
       angle += (newAngle - angle)/2;
       x = cx + (int)( distance *  sin(angle));
       y = cy + (int)( distance *  cos(angle));
-    //    v.y = cy + v.distance * cos(rad + PI);
-    } else {
-      inMove = false;
-    }  
-    println("Vertex inMove: "+ inMove );
+    } 
   }
 }
-

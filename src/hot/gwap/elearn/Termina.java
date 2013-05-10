@@ -185,6 +185,7 @@ public class Termina extends AbstractGameSessionBean {
 		}
 		if (TagSemantics.containsNotNormalized(previousTaggings, association) != null) {
 			facesMessages.addFromResourceBundle("termina.term.duplicate");
+			lastAssociation = new MatchingTag("duplicate");
 			log.info("Association #0 has already been said for term #1", association, term);
 			return;
 		}
@@ -339,6 +340,10 @@ public class Termina extends AbstractGameSessionBean {
 
 	public void setAnswers(List<String> answers) {
 		this.answers = answers;
+	}
+	
+	public Term getTerm(){
+		return this.term;
 	}
 
 	/**
