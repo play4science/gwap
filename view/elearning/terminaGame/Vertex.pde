@@ -12,14 +12,17 @@ class Vertex {
   float h;
   float a;
   float b;
+  float radi;
 
   Vertex(int x, int y, int size, String s, float distance) {
+    this.radi = 4;
+    
     this.x = x;
     this.y = y;
     this.size = size;
 
     this.s = s;
-
+    
     this.distance = distance;
     this.angle = PI;
     this.newAngle = PI;
@@ -31,13 +34,13 @@ class Vertex {
     for (int i = 0; i < n; i++) {
       lengths[i] = (int) textWidth(words[i]);
     }
-    tw = max(lengths);
-    println(tw);
+    tw = max(lengths) + radi;
+    //println(tw);
     h = textAscent() + textDescent();
-    th = n * h;
-    println(th);
-    b = sqrt(2) * th;
-    a = sqrt( sq(tw) / (1 -  sq(th/b)));
+    th = n * h + radi;
+    //println(th);
+    //b = sqrt(2) * th;
+    //a = sqrt( sq(tw) / (1 -  sq(th/b)));
   }  
 
   void display() {
@@ -45,11 +48,11 @@ class Vertex {
     fill(RED);
 
 
-    ellipseMode(CENTER);
-    ellipse(x, y, a, b);
+    //ellipseMode(CENTER);
+    //ellipse(x, y, a, b);
 
-    //    rectMode(CENTER);
-    //    rect(x,y,tw,th);
+    rectMode(CENTER);
+    rect(x,y,tw,th,radi);
 
     fill(TEXT);
     textSize(size);

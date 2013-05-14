@@ -42,7 +42,7 @@
 			var tag = '#{elearnTermina.lastAssociation.tag}';
 		
 			tag = tag.replace(/ +(?= )/g,''); //replace multiple whitespaces 
-			tag = tag.replace(/ /g,"\n"); //replace whitespaces with linebrak
+			tag = tag.replace(/ /g,"\n"); //replace whitespaces with linebreak
 
 			newEntry('TerminaGraph', tag, '#{elearnTermina.lastAssociation.score}');
 	    }
