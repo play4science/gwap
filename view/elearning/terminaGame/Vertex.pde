@@ -13,9 +13,14 @@ class Vertex {
   float a;
   float b;
   float radi;
-
-  Vertex(int x, int y, int size, String s, float distance) {
+  color c;
+  
+  Vertex(int x, int y, int size, String s, float distance, color c) {
+	
+	println(s + hex(c));
     this.radi = 4;
+    
+    this.c = c;
     
     this.x = x;
     this.y = y;
@@ -45,7 +50,7 @@ class Vertex {
 
   void display() {
     stroke(STROKE);
-    fill(RED);
+    fill(c);
 
 
     //ellipseMode(CENTER);

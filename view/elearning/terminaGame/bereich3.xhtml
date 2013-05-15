@@ -10,19 +10,38 @@
 	
 	
 	<script type="text/javascript" src="terminaGame/processing.js"></script>
-	<script type="text/javascript">
-		var intervall=setInterval(function(){
-			if('#{term.tag.name}' != ''){
-				setTerm('TerminaGraph','#{term.tag.name}');
-				clearIntervall(intervall);
-			}  
+	<script type="text/javascript">		
+		setInterval(function(){
+			setTerm('TerminaGraph','#{term.tag.name}');
+			clearIntervall(this);
 		},10);
-	
-		function newEntry(id, association, score ){
+
+		addLoadEvent(function(){
+			setDisplayWidth('TerminaGraph', document.getElementById('gameheaderLine').offsetWidth);}
+		)
+
+		function addLoadEvent(func) {
+			  var oldonload = window.onload;
+			  if (typeof window.onload != 'function') {
+			    window.onload = func;
+			  } else {
+			    window.onload = function() {
+			      oldonload();
+			      func();
+			    }
+			}
+		}
+		
+		function setDisplayWidth(id, width){
+			var pjs = Processing.getInstanceById(id);
+			pjs.setDisplayWidth(width);			
+		}
+		
+		function newEntry(id, association, score, matchType){
 			var pjs = Processing.getInstanceById(id);
 			var size = 20 + 8 * score;
 			
-			pjs.newVertex(association, 100, size);
+			pjs.newVertex(association, 100, size, matchType);
 		}
 		
 		function setTerm(id, term){
@@ -30,51 +49,37 @@
 			pjs.setTerm(term);
 		}
 	</script>
-
 	<canvas id="TerminaGraph" data-processing-sources="terminaGame/TerminaGraph.pde terminaGame/Vertex.pde"> </canvas>
 	
 	<a4j:form id="bereich3">
 		<h:messages class="standout2"/>
 		<s:validateAll>
 		
-	<script type="text/javascript"> 
-		if ('#{elearnTermina.lastAssociation}' != '' &amp;&amp; '#{elearnTermina.lastAssociation.tag}' != 'duplicate' ){
-			var tag = '#{elearnTermina.lastAssociation.tag}';
-		
-			tag = tag.replace(/ +(?= )/g,''); //replace multiple whitespaces 
-			tag = tag.replace(/ /g,"\n"); //replace whitespaces with linebreak
-
-			newEntry('TerminaGraph', tag, '#{elearnTermina.lastAssociation.score}');
-	    }
-	</script>
-
-			<table>
-				<tr>
-					<td class="terminaTableCell"><h:outputText class="gamequestion" value="#{messages['termina.frage.satz']}" /></td>
-					<td class="terminaTableCell"><h:inputText id="inputassoc" value="#{elearnTermina.association}" autocomplete="off" required="false" /></td>
-					<td class="terminaTableCell"><a4j:commandButton id="sendButton" action="#{elearnTermina.choose()}" styleClass="sendAssociation" 
-						title="Sende Assoziation" reRender="bereich1,bereich3,focusbereich">1<s:defaultAction /></a4j:commandButton></td>
-				</tr>
- 				<tr>
-					<td  colspan="3"><h:outputText styleClass="foundAssocText" value="#{messages['termina.foundAssoc']}"/>
-					<h:outputText styleClass="requestedAssoc" value="#{messages['termina.outof']} #{gameConfiguration.bid}"/></td>
-				</tr> 
-			</table>
-
- <!-- 			<div id="related"> 
-				<div class="ongoingGameStatsCaption">
-					<h:outputText value="#{messages['tagging.enteredTags']}" />
-				</div>
-					
-	 			<a4j:outputPanel id="recommendedTags" styleClass="ongoingGameStatsContent">
-						<a4j:repeat value="#{elearnTermina.getPreviousTaggings()}" var="assoc"> 
-						<h:outputText value="#{assoc.name}" />
- 					</a4j:repeat> 
-				</a4j:outputPanel>								
-			</div><br /> -->	 
-		</s:validateAll>
-
+		<script type="text/javascript"> 
+			if ('#{elearnTermina.lastAssociation}' != '' &amp;&amp; '#{elearnTermina.lastAssociation.tag}' != 'duplicate' ){
+				var tag = '#{elearnTermina.lastAssociation.tag}';
+			
+				tag = tag.replace(/ +(?= )/g,''); //replace multiple whitespaces 
+				tag = tag.replace(/ /g,"\n"); //replace whitespaces with linebreak
 	
+				newEntry('TerminaGraph', tag, '#{elearnTermina.lastAssociation.score}','#{elearnTermina.lastAssociation.getMatchType()}' );
+		    }    
+		</script>
+			
+		<table>
+			<tr>
+				<td class="terminaTableCell"><h:outputText class="gamequestion" value="#{messages['termina.frage.satz']}" /></td>
+				<td class="terminaTableCell"><h:inputText id="inputassoc" value="#{elearnTermina.association}" autocomplete="off" required="false" /></td>
+				<td class="terminaTableCell"><a4j:commandButton id="sendButton" action="#{elearnTermina.choose()}" styleClass="sendAssociation" 
+					title="Sende Assoziation" reRender="bereich1,bereich3,focusbereich">1<s:defaultAction /></a4j:commandButton></td>
+			</tr>
+				<tr>
+				<td  colspan="3"><h:outputText styleClass="foundAssocText" value="#{messages['termina.foundAssoc']}"/>
+				<h:outputText styleClass="requestedAssoc" value="#{messages['termina.outof']} #{gameConfiguration.bid}"/></td>
+			</tr> 
+		</table>
+			
+		</s:validateAll>
 	</a4j:form>
 
 </ui:composition>

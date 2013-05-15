@@ -25,8 +25,9 @@
 					<h:outputText value="#{messages['termina.scoring.description']}" escape="false"/>
 				</div>
 				<br />
-				<ui:include src="/widget/gameSessionResults.xhtml" />
-			
+					<ui:include src="/widget/gameSessionResultsGraph.xhtml" />
+				<br />
+					<ui:include src="/widget/gameSessionResults.xhtml" />
 				<br />
 				<s:button view="/termina.xhtml" styleClass="repeat" propagation="none" title="#{messages['buttonTitle.repeat']}" value=""/>
 			</div>
