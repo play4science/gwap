@@ -14,11 +14,17 @@
 			<div class="contentWrapper">
 			
 				<h1>#{messages['pagetitle.admin.home']}</h1>
-				<hr class="pageTitle" /><br />		
+				<hr class="pageTitle" /><br />
 				
 				<ui:include src="/widget/unknownAssociationsAvailable.xhtml" />
 					
-				<h:outputText value="#{messages['home.admin.welcome']}" escape="false" />
+				<h:outputText value="#{messages['home.admin.welcome']}" />
+				<ul>
+					<li><s:link view="/admin/termList.xhtml" value="#{messages['menu.admin.termList']}" propagation="none" /></li>
+					<li><s:link view="/admin/topicList.xhtml" value="#{messages['menu.admin.topicList']}" propagation="none" /></li>
+					<li><s:link view="/admin/newsItemList.xhtml" value="#{messages['menu.admin.newsItemList']}"/></li>
+					
+				</ul>
 
 			</div>
 		</div>
