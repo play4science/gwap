@@ -385,6 +385,15 @@ img.errors {
 	margin: 0 0 5px 0;
 }
 
+.newsItem {
+    background-color: #ff9;
+	border: 1px solid #f90;
+	padding: 2px;
+	margin: 0 0 5px 0;
+}
+.newsItem .date {
+  padding-right:.5em;
+}
 .ongoingGameStatsCaption {
 	font-weight: bold;
 	align: left;
