@@ -1,0 +1,72 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j">
+    
+    <script type="text/javascript">
+//	__addLoadEvent(setAllTerms());
+
+	function setAllTerms(){
+		var n = "#{gameSession.getGameRounds().size()}"
+		for(var i = 0; i &lt; n; i++){
+			var term = "#{gameSession.getGameRounds().get(i).resources.get(0).tag.name}";
+	   		var pjs = Processing.getInstanceById(i+1);
+			if(typeof pjs != 'undefined'){
+				pjs.setTerm(term);
+				alert(i);
+			}
+		}
+		
+	}
+
+	function setUpGraph(id, term){
+		var waiting = setInterval(function(){
+			var pjs = Processing.getInstanceById(id)
+			if(typeof pjs != 'undefined'){
+				//actual setup
+				pjs.setTerm(term);
+
+				clearInterval(waiting)
+			}			
+		},10)
+	}
+    
+    function setTerm(id, term){
+       	var pjs = Processing.getInstanceById(id);
+  	    pjs.setTerm(term);
+    }
+
+    function addLoadEvent(func) {
+    	var oldonload = window.onload;
+    	if (typeof window.onload != 'function') {
+    		window.onload = func;
+    	} else {
+    		window.onload = function() {
+    			oldonload();
+    			func();
+    		};
+    	}
+    }
+        
+    </script>
+    
+    <a4j:loadScript src="/terminaGame/processing.js"/>			
+    
+    
+   	<table>
+    <ui:repeat var="_gameround" value="#{gameSession.getGameRounds()}">
+    	<tr><td>Runde: <h:outputText value="#{_gameround.number}" />
+    		<canvas id="#{_gameround.number}" data-processing-sources="terminaGame/TerminaGraph.pde terminaGame/Vertex.pde"> </canvas>
+    		<script type="text/javascript">setUpGraph("#{_gameround.number}", 
+    	    										"#{_gameround.resources.get(0).tag.name}")</script>
+    	</td></tr>
+    </ui:repeat>
+   	</table>
+	
+	
+</ui:composition>

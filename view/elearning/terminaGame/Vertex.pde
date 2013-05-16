@@ -17,7 +17,6 @@ class Vertex {
   
   Vertex(int x, int y, int size, String s, float distance, color c) {
 	
-	println(s + hex(c));
     this.radi = 4;
     
     this.c = c;
