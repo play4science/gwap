@@ -1,0 +1,73 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    template="../layout/adminTemplate.xhtml">
+
+    <ui:define name="body">
+		<div id="content">
+			<div class="contentWrapper">
+			
+				<h1>#{messages['pagetitle.admin.newsItemList']}</h1>
+				<hr class="pageTitle" /><br />
+				
+				<h:outputText value="#{messages['newsItem.explanation']}" escape="false" />
+				<!--  
+				<s:link view="/admin/gameConfigurationList.xhtml" value="#{messages['admin.linkConfiguration']}" />
+				<h:outputText value="#{messages['admin.newsItemExplanation']}" />--><br /><br />
+				
+				<h:outputText value="#{messages['newsItem.noResourceFound']}" rendered="#{empty adminNewsItemList.resultList}" />
+			
+				<rich:dataTable id="newsItemList" value="#{adminNewsItemList.resultList}" var="_resource">
+				
+			   		<rich:column width="10px">
+			    		<s:button view="/admin/newsItem.xhtml" propagation="none" value="" styleClass="buttonEdit" title="#{messages['buttonTitle.newsItemEdit']}">
+			    			<f:param name="newsItemId" value="#{_resource.id}"/>
+			    		</s:button> 
+			    	</rich:column>
+			    	
+			    	<rich:column width="10px">
+			    		<s:button styleClass="buttonDelete" action="#{adminNewsItemHome.remove}" value="" title="#{messages['buttonTitle.newsItemDelete']}">
+			    			<f:param name="newsItemId" value="#{_resource.id}"/>
+			    		</s:button>
+			    	</rich:column> 
+			    	
+			    	<rich:column width="50px">
+			        	<f:facet name="header" ><h:outputText value="#{messages['newsItem.id']}"/></f:facet>
+			        	<h:outputText value="#{_resource.id}"/>
+			    	</rich:column>
+			    	
+			    	<rich:column>
+			        	<f:facet name="header" ><h:outputText value="#{messages['newsItem.datePublished']}"/></f:facet>
+			        	<h:outputText value="#{_resource.datePublished}"/>
+			    	</rich:column>
+			    	
+			    	<rich:column>
+			        	<f:facet name="header" ><h:outputText value="#{messages['newsItem.dateExpired']}"/></f:facet>
+			        	<h:outputText value="#{_resource.dateExpired}"/>
+			    	</rich:column>
+			    	
+			    	<rich:column>
+			        	<f:facet name="header" ><h:outputText value="#{messages['newsItem.language']}"/></f:facet>
+			        	<h:outputText value="#{_resource.language}"/>
+			    	</rich:column>
+
+			    	<rich:column>
+			        	<f:facet name="header" ><h:outputText value="#{messages['newsItem.text']}"/></f:facet>
+			        	<h:outputText value="#{_resource.text}"/>
+			    	</rich:column>
+			    	
+				</rich:dataTable>
+				
+				<s:button view="/admin/newsItem.xhtml" styleClass="buttonNew" propagation="none" value="" title="#{messages['buttonTitle.newsItemAdd']}"/>
+			</div>
+		</div>
+		
+        <br class="clear" />
+    </ui:define>
+</ui:composition>
