@@ -9,38 +9,71 @@
     xmlns:a4j="http://richfaces.org/a4j">
     
     <script type="text/javascript">
-//	__addLoadEvent(setAllTerms());
-
-	function setAllTerms(){
-		var n = "#{gameSession.getGameRounds().size()}"
-		for(var i = 0; i &lt; n; i++){
-			var term = "#{gameSession.getGameRounds().get(i).resources.get(0).tag.name}";
-	   		var pjs = Processing.getInstanceById(i+1);
-			if(typeof pjs != 'undefined'){
-				pjs.setTerm(term);
-				alert(i);
-			}
-		}
-		
+ 	processingInstances = new Array();
+ 	numberOfRounds = "#{gameSession.getGameRounds().size()}";
+ 	numberOfRounds = parseInt(numberOfRounds);
+ 	console.log("number of rounds: " +numberOfRounds);
+  	userTags =  new Array(numberOfRounds);
+	scores = new Array(numberOfRounds);	
+	for (var i = 0; i &lt; numberOfRounds; i++){
+		console.log("creating terms array");
+		userTags[i] = new Array();
+		scores[i] = new Array();
 	}
 
-	function setUpGraph(id, term){
-		var waiting = setInterval(function(){
-			var pjs = Processing.getInstanceById(id)
-			if(typeof pjs != 'undefined'){
-				//actual setup
-				pjs.setTerm(term);
+ 	terms = new Array();
+	
+	function newUserTag(round, tag,score){
+		console.log("new user tag. round: " + round + ", tag: " + tag + ", score: " + score);
+		userTags[round - 1].push(tag);
+		scores[round -1].push(score);
+	}
 
-				clearInterval(waiting)
+	function newProcessingInstance(id){
+		var waiting = setInterval(function(){
+			var pjs = Processing.getInstanceById(id);
+			if(typeof pjs != 'undefined'){
+				clearInterval(waiting);
+				//add Instance
+				processingInstances.push(pjs);
+				console.log("number of processing instances: " + processingInstances.length);
+				if(processingInstances.length == numberOfRounds)
+					setUpGraphs();
 			}			
 		},10)
 	}
-    
-    function setTerm(id, term){
-       	var pjs = Processing.getInstanceById(id);
-  	    pjs.setTerm(term);
-    }
+	
+	function newTerm(term){
+		console.log("new term: " + term);
+		terms.push(term);
+	}
+	
+	function setUpGraphs(){
+		console.log("setUpGraphs called");
+		for(var i = 0; i &lt; numberOfRounds; i++){
+			var pjs = processingInstances[i];
+			term = terms[i];
+			console.log("term in round " + i + " : " + term  );
+			
+			pjs.setTerm(term);
+			for(var j = 0; j &lt; userTags[i].length; j++){
+				score = scores[i,j];
+				type = score2matchType(score);
+				pjs.newVertex(userTags[i][j], 100, 20, type);
+			}
+		}
+	}
 
+	function score2matchType(score){
+		type = "";
+		if(parseInt(score) > 0){
+			type = "directMatch";
+		} else if(score == ""){
+			type = "indirectMatch";
+		} 
+		return type;
+	}
+    
     function addLoadEvent(func) {
     	var oldonload = window.onload;
     	if (typeof window.onload != 'function') {
@@ -60,10 +93,18 @@
     
    	<table>
     <ui:repeat var="_gameround" value="#{gameSession.getGameRounds()}">
+ 	  	<ui:repeat var="_givenTag" value="#{_gameround.actions}">
+    		<script type="text/javascript">
+    			console.log("repeating over gameround actions " + "#{_gameround.number}" + "#{_givenTag.tag.name}")
+    			newUserTag("#{_gameround.number}", "#{_givenTag.tag.name}", "#{_givenTag.score}");
+    		</script>
+    	</ui:repeat> 
     	<tr><td>Runde: <h:outputText value="#{_gameround.number}" />
     		<canvas id="#{_gameround.number}" data-processing-sources="terminaGame/TerminaGraph.pde terminaGame/Vertex.pde"> </canvas>
-    		<script type="text/javascript">setUpGraph("#{_gameround.number}", 
-    	    										"#{_gameround.resources.get(0).tag.name}")</script>
+    		<script type="text/javascript">
+   				newProcessingInstance("#{_gameround.number}");
+   	    		newTerm("#{_gameround.resources.get(0).tag.name}");
+    	    </script>
     	</td></tr>
     </ui:repeat>
    	</table>
