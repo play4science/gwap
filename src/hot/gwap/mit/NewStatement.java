@@ -66,7 +66,7 @@ public class NewStatement implements Serializable {
 	protected List<Location> breadcrumbLocations = new ArrayList<Location>();
 	protected String text;
 	protected String standardText;
-	protected Integer points;
+	protected Integer points = 100;  // initialize with being a perfect match
 	protected Statement statement;
 
 	public String createStatement() {
