@@ -1,29 +1,37 @@
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:s="http://jboss.com/products/seam/taglib"
-    xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:rich="http://richfaces.org/rich"
-    xmlns:a4j="http://richfaces.org/a4j">
-    
-    <script type="text/javascript">
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+	<script type="text/javascript">
  	processingInstances = new Array();
  	numberOfRounds = "#{gameSession.getGameRounds().size()}";
  	numberOfRounds = parseInt(numberOfRounds);
  	console.log("number of rounds: " +numberOfRounds);
-  	userTags =  new Array(numberOfRounds);
+  	userTags = new Array(numberOfRounds);
 	scores = new Array(numberOfRounds);	
+	foreignTags = new Array(numberOfRounds);
+	appearences = new Array(numberOfRounds);	
+	
 	for (var i = 0; i &lt; numberOfRounds; i++){
-		console.log("creating terms array");
+		console.log("creating arrays");
 		userTags[i] = new Array();
 		scores[i] = new Array();
+		foreignTags[i] = new Array();
+		appearences[i] = new Array();
 	}
 
- 	terms = new Array();
+	terms = new Array();
 	
 	function newUserTag(round, tag,score){
+		tag = tag.trim();
+		tag = tag.replace(/ +(?= )/g,''); //replace multiple whitespaces 
+		tag = tag.replace(/ /g,"\n"); //replace whitespaces with linebreak
 		console.log("new user tag. round: " + round + ", tag: " + tag + ", score: " + score);
 		userTags[round - 1].push(tag);
 		scores[round -1].push(score);
@@ -47,6 +55,14 @@
 		console.log("new term: " + term);
 		terms.push(term);
 	}
+
+	function newForeignTag(round, tag, appearence){
+		tag = tag.trim();
+		tag = tag.replace(/ +(?= )/g,''); //replace multiple whitespaces 
+		tag = tag.replace(/ /g,"\n"); //replace whitespaces with linebreak
+		foreignTags[round - 1].push(tag);
+		appearences[round - 1].push(appearence);
+	}
 	
 	function setUpGraphs(){
 		console.log("setUpGraphs called");
@@ -57,57 +73,67 @@
 			
 			pjs.setTerm(term);
 			for(var j = 0; j &lt; userTags[i].length; j++){
-				score = scores[i,j];
-				type = score2matchType(score);
-				pjs.newVertex(userTags[i][j], 100, 20, type);
+				pjs.addOwnTag(userTags[i][j], 100, 20, score2matchType(scores[i][j]));
+			}
+
+			for(var j = 0; j &lt; foreignTags[i].length; j++){
+				pjs.addForeignTag(foreignTags[i][j], 100, getScale(i, appearences[i][j]), "directMatch");
 			}
 		}
 	}
 
 	function score2matchType(score){
 		type = "";
-		if(parseInt(score) > 0){
-			type = "directMatch";
-		} else if(score == ""){
+		if(score == ""){
 			type = "indirectMatch";
-		} 
+		} else if(parseInt(score) > 0){
+			type = "directMatch";
+		}
 		return type;
 	}
+
+	function getScale(round, appearence){
+		var max = Math.max.apply(Math, appearences[round]);
+		var min = Math.min.apply(Math, appearences[round]);
+		var scale = 1;
+		if(appearence > min){
+			scale = 15 * (appearence - min)/(max - min);
+		}
+		return 10 + scale;
+	}
     
-    function addLoadEvent(func) {
-    	var oldonload = window.onload;
-    	if (typeof window.onload != 'function') {
-    		window.onload = func;
-    	} else {
-    		window.onload = function() {
-    			oldonload();
-    			func();
-    		};
-    	}
-    }
+
         
     </script>
-    
-    <a4j:loadScript src="/terminaGame/processing.js"/>			
-    
-    
-   	<table>
-    <ui:repeat var="_gameround" value="#{gameSession.getGameRounds()}">
- 	  	<ui:repeat var="_givenTag" value="#{_gameround.actions}">
-    		<script type="text/javascript">
+
+	<a4j:loadScript src="/terminaGame/processing.js" />
+
+
+	<table>
+		<ui:repeat var="_gameround" value="#{gameSession.getGameRounds()}">
+			<ui:repeat var="_givenTag" value="#{_gameround.actions}">
+				<script type="text/javascript">
     			console.log("repeating over gameround actions " + "#{_gameround.number}" + "#{_givenTag.tag.name}")
     			newUserTag("#{_gameround.number}", "#{_givenTag.tag.name}", "#{_givenTag.score}");
     		</script>
-    	</ui:repeat> 
-    	<tr><td>Runde: <h:outputText value="#{_gameround.number}" />
-    		<canvas id="#{_gameround.number}" data-processing-sources="terminaGame/TerminaGraph.pde terminaGame/Vertex.pde"> </canvas>
-    		<script type="text/javascript">
+			</ui:repeat>
+			<ui:repeat var="_tag"
+				value="#{elearnResults.getTopCorrectAnswers(_gameround)}">
+				<script type="text/javascript">
+    			newForeignTag("#{_gameround.number}", "#{_tag.term}", "#{_tag.appearence}")
+    		</script>
+			</ui:repeat>
+			<tr>
+				<td>Runde: <h:outputText value="#{_gameround.number}" /> <canvas
+						id="#{_gameround.number}"
+						data-processing-sources="terminaGame/TerminaGraph.pde terminaGame/Vertex.pde">
+					</canvas> <script type="text/javascript">
    				newProcessingInstance("#{_gameround.number}");
    	    		newTerm("#{_gameround.resources.get(0).tag.name}");
     	    </script>
-    	</td></tr>
-    </ui:repeat>
-   	</table>
-	
-	
+				</td>
+			</tr>
+		</ui:repeat>
+	</table>
+
 </ui:composition>
