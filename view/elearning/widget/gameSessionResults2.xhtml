@@ -16,14 +16,14 @@
   	userTags = new Array(numberOfRounds);
 	scores = new Array(numberOfRounds);	
 	foreignTags = new Array(numberOfRounds);
-	appearences = new Array(numberOfRounds);	
+	foreignAppearences = new Array(numberOfRounds);	
 	
 	for (var i = 0; i &lt; numberOfRounds; i++){
 		console.log("creating arrays");
 		userTags[i] = new Array();
 		scores[i] = new Array();
 		foreignTags[i] = new Array();
-		appearences[i] = new Array();
+		foreignAppearences[i] = new Array();
 	}
 
 	terms = new Array();
@@ -61,7 +61,7 @@
 		tag = tag.replace(/ +(?= )/g,''); //replace multiple whitespaces 
 		tag = tag.replace(/ /g,"\n"); //replace whitespaces with linebreak
 		foreignTags[round - 1].push(tag);
-		appearences[round - 1].push(appearence);
+		foreignAppearences[round - 1].push(appearence);
 	}
 	
 	function setUpGraphs(){
@@ -73,12 +73,14 @@
 			
 			pjs.setTerm(term);
 			for(var j = 0; j &lt; userTags[i].length; j++){
-				pjs.addOwnTag(userTags[i][j], 100, 20, score2matchType(scores[i][j]));
+				pjs.addOwnTag(userTags[i][j], 100, 20, type = score2matchType(scores[i][j]));
 			}
 
 			for(var j = 0; j &lt; foreignTags[i].length; j++){
-				pjs.addForeignTag(foreignTags[i][j], 100, getScale(i, appearences[i][j]), "directMatch");
+				pjs.addForeignTag(foreignTags[i][j], 100, getScale(i, foreignAppearences[i][j]), "directMatch");
 			}
+			pjs.seperateTags();
+			pjs.highlightOwnTags();
 		}
 	}
 
@@ -93,8 +95,8 @@
 	}
 
 	function getScale(round, appearence){
-		var max = Math.max.apply(Math, appearences[round]);
-		var min = Math.min.apply(Math, appearences[round]);
+		var max = Math.max.apply(Math, foreignAppearences[round]);
+		var min = Math.min.apply(Math, foreignAppearences[round]);
 		var scale = 1;
 		if(appearence > min){
 			scale = 15 * (appearence - min)/(max - min);
@@ -114,19 +116,29 @@
 			<ui:repeat var="_givenTag" value="#{_gameround.actions}">
 				<script type="text/javascript">
     			console.log("repeating over gameround actions " + "#{_gameround.number}" + "#{_givenTag.tag.name}")
+    			
     			newUserTag("#{_gameround.number}", "#{_givenTag.tag.name}", "#{_givenTag.score}");
+//     			if("#{_givenTag.score}" > 0){
+// 					//TODO
+// 					var appearence = "#{elearnResults.getAppearence(_gameround, _givenTag)}";
+// 	    			newUserTag("#{_gameround.number}", "#{_givenTag.tag.name}", "#{_givenTag.score}", appearence);					
+//             	} else { 
+//         			newUserTag("#{_gameround.number}", "#{_givenTag.tag.name}", "#{_givenTag.score}", 0);
+//             	}
     		</script>
 			</ui:repeat>
 			<ui:repeat var="_tag"
 				value="#{elearnResults.getTopCorrectAnswers(_gameround)}">
 				<script type="text/javascript">
-    			newForeignTag("#{_gameround.number}", "#{_tag.term}", "#{_tag.appearence}")
+    			newForeignTag("#{_gameround.number}", "#{_tag.term}", "#{_tag.appearence}");
     		</script>
 			</ui:repeat>
+			<!-- <h:outputText value="# {elearnResults.processingResults(_gameround.number)}" escape="false" />-->
 			<tr>
-				<td>Runde: <h:outputText value="#{_gameround.number}" /> <canvas
+				<td>Runde: <h:outputText value="#{_gameround.number}" /> 
+					<canvas
 						id="#{_gameround.number}"
-						data-processing-sources="terminaGame/TerminaGraph.pde terminaGame/Vertex.pde">
+						data-processing-sources="terminaGame/TerminaGraph.pde terminaGame/Vertex.pde terminaGame/RoundedArc.pde">
 					</canvas> <script type="text/javascript">
    				newProcessingInstance("#{_gameround.number}");
    	    		newTerm("#{_gameround.resources.get(0).tag.name}");

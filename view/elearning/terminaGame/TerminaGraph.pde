@@ -9,13 +9,16 @@ ArrayList<Vertex> foreignTags;
 String newTerm;
 boolean doneMoving;
 
+boolean high;
+RoundedArc arcDeTriomphe; 
+
 color BACKGROUND = color(255);  
 color STROKE = color(0);
 color BLUE = color(14, 30, 191);
 color YELLOW = color(255, 216, 59);
 color RED = color(255, 55, 55);
 color TEXT = color(0);
-color GREY = color(50);
+color GREY = color(220);
 
 color CORRECT = #00FF00;
 color WRONG = #FF0000;
@@ -28,10 +31,13 @@ void setup() {
   cx = (int) width/2;
   cy = (int) height/2;
 
+  high = false;
+  arcDeTriomphe = new RoundedArc(0, 1, 100, 20);
+  
   background(BACKGROUND);
   term = "term";
   newTerm = "";
-  centerVertex = new Vertex(cx, cy, 20, term, 0, CORRECT);
+  centerVertex = new Vertex(cx, cy, 20, term, 0, GREY);
   centerVertex.display();
   vertices = new ArrayList(0);
   ownTags = new ArrayList(0);
@@ -44,17 +50,44 @@ void setup() {
 
 void draw() {
   background(BACKGROUND);
-
   collide();
+  for(Vertex v : vertices)
+     v.move();
+     
+  if (high){
+    float rs = 0;
+    for(Vertex v : ownTags){
+      d_l_up = dist(v.x - v.tw /2, v.y - v.th / 2, cx ,cy);
+      d_l_down = dist(v.x - v.tw /2, v.y + v.th / 2, cx ,cy);
+      d_r_up = dist(v.x + v.tw /2, v.y - v.th / 2, cx ,cy);
+      d_r_down = dist(v.x + v.tw /2, v.y + v.th / 2, cx ,cy);
+      arr = {d_l_up, d_l_down, d_r_up, d_r_down};
+      m = max(arr);
+      if (m > rs)
+        rs = m;
+    }
+    arcDeTriomphe.rs = rs - arcDeTriomphe.r ;
+    
+    float start = - ownTags.get(0).angle + HALF_PI;
+    float stop = - ownTags.get(ownTags.size() - 1).angle + HALF_PI;
+    if(start < stop){
+      arcDeTriomphe.start = start;
+      arcDeTriomphe.stop =  stop;
+    } else {
+      arcDeTriomphe.start = stop;
+      arcDeTriomphe.stop =  start;       
+    }
+    arcDeTriomphe.display();    
+  }
 
-  for (Vertex v : vertices) {
-    v.move();
-    fill(STROKE);
+ fill(STROKE);
+ stroke(STROKE);
+
+  for (int i = vertices.size() - 1; i >= 0; i--) {
+    v = vertices.get(i);
     line(cx, cy, v.x, v.y);
     v.display();
   }
-
-
   centerVertex.display();
 }
 
@@ -92,29 +125,16 @@ void collide() {
 }
 
 
-
-void keyPressed() {
-  if (key == ENTER && !newTerm.equals("")) {
-    if (newTerm.trim().equals("mix")) {  
-      //println("mix!");
-      for(int i = 0; i < vertices.size(); i++){
-        int j = (int)random(0, vertices.size());
-        Vertex v = vertices.get(i);
-        Vertex w = vertices.get(j);
-        vertices.set(j,v);
-        vertices.set(i,w);
-        v.setMovement(j,vertices.size());
-        w.setMovement(i,vertices.size());
-      }  
-    } 
-    else {
-      newVertex(newTerm, 100, 20, "");
-    }
-    newTerm = "";
-  } 
-  else {
-    newTerm = newTerm + key;
-  }
+void mix(){
+  for(int i = 0; i < vertices.size(); i++){
+    int j = (int)random(0, vertices.size());
+    Vertex v = vertices.get(i);
+    Vertex w = vertices.get(j);
+    vertices.set(j,v);
+    vertices.set(i,w);
+    v.setMovement(j,vertices.size());
+    w.setMovement(i,vertices.size());
+  }  
 }
 
 Vertex newVertex(String s, int distance, int size, String matchType) {
@@ -169,7 +189,7 @@ void addOwnTag(String s, int distance, int size, String matchType){
 void seperateTags(){
   _vertices = new ArrayList();
   for(Vertex v : ownTags)
-    _vertices.add(v);
+  _vertices.add(v);
     
   for(Vertex v : foreignTags)
     _vertices.add(v);
@@ -177,14 +197,15 @@ void seperateTags(){
   vertices = _vertices; 
 
   int n = vertices.size();
-  int owns = ownTags.size;
+  int owns = ownTags.size();
   int foreigns = 0;
   for(int i = 0; i < n; i++){
     Vertex vert = vertices.get(i);
+
     if (i < owns){
-       vert.setMovement(i, n + 2);      
+       vert.setMovement(i, n + 2);
     } else {
-       vert.setMovement(i+1, n +2);
+       vert.setMovement(i + 1, n + 2);
     }
 
   }  
@@ -215,3 +236,11 @@ String getForeignTags(){
  }
  return s;
 } 
+
+void highlightOwnTags(){
+ high = true; 
+}
+
+void downlightOwnTags(){
+ high = false;   
+}
