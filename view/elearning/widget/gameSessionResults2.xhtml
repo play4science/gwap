@@ -17,6 +17,7 @@
 	scores = new Array(numberOfRounds);	
 	foreignTags = new Array(numberOfRounds);
 	foreignAppearences = new Array(numberOfRounds);	
+	userTagAppearences = new Array(numberOfRounds);
 	
 	for (var i = 0; i &lt; numberOfRounds; i++){
 		console.log("creating arrays");
@@ -24,17 +25,19 @@
 		scores[i] = new Array();
 		foreignTags[i] = new Array();
 		foreignAppearences[i] = new Array();
+		userTagAppearences[i] = new Array();
 	}
 
 	terms = new Array();
 	
-	function newUserTag(round, tag,score){
+	function newUserTag(round, tag,score, appearence){
 		tag = tag.trim();
 		tag = tag.replace(/ +(?= )/g,''); //replace multiple whitespaces 
 		tag = tag.replace(/ /g,"\n"); //replace whitespaces with linebreak
 		console.log("new user tag. round: " + round + ", tag: " + tag + ", score: " + score);
 		userTags[round - 1].push(tag);
-		scores[round -1].push(score);
+		scores[round - 1].push(score);
+		userTagAppearences[round - 1].push(parseInt(appearence))
 	}
 
 	function newProcessingInstance(id){
@@ -73,11 +76,13 @@
 			
 			pjs.setTerm(term);
 			for(var j = 0; j &lt; userTags[i].length; j++){
-				pjs.addOwnTag(userTags[i][j], 100, 20, type = score2matchType(scores[i][j]));
+				pjs.addOwnTag(userTags[i][j], 100, getScale(i, userTagAppearences[i][j]), type = score2matchType(scores[i][j]));
 			}
 
 			for(var j = 0; j &lt; foreignTags[i].length; j++){
-				pjs.addForeignTag(foreignTags[i][j], 100, getScale(i, foreignAppearences[i][j]), "directMatch");
+				ft = foreignTags[i][j];
+				if(! containsIgnoreCase(userTags[i], ft))
+					pjs.addForeignTag(ft, 100, getScale(i, foreignAppearences[i][j]), "directMatch");
 			}
 			pjs.seperateTags();
 			pjs.highlightOwnTags();
@@ -103,8 +108,16 @@
 		}
 		return 10 + scale;
 	}
-    
 
+	function containsIgnoreCase(arr, tag){
+		var b = false;
+        var u = tag.toUpperCase();
+		for(var i = 0; i &lt; arr.length; i++){
+			var a = arr[i].toUpperCase();
+			b = b || a == u;
+		}
+		return b; 
+	}
         
     </script>
 
@@ -117,14 +130,10 @@
 				<script type="text/javascript">
     			console.log("repeating over gameround actions " + "#{_gameround.number}" + "#{_givenTag.tag.name}")
     			
-    			newUserTag("#{_gameround.number}", "#{_givenTag.tag.name}", "#{_givenTag.score}");
-//     			if("#{_givenTag.score}" > 0){
-// 					//TODO
-// 					var appearence = "#{elearnResults.getAppearence(_gameround, _givenTag)}";
-// 	    			newUserTag("#{_gameround.number}", "#{_givenTag.tag.name}", "#{_givenTag.score}", appearence);					
-//             	} else { 
-//         			newUserTag("#{_gameround.number}", "#{_givenTag.tag.name}", "#{_givenTag.score}", 0);
-//             	}
+    			//newUserTag("#{_gameround.number}", "#{_givenTag.tag.name}", "#{_givenTag.score}");
+				var appearence = "#{elearnResults.getAppearence(_gameround, _givenTag)}";
+				console.log("#{_givenTag.tag.name}" + " has appearence:" + appearence);
+	    		newUserTag("#{_gameround.number}", "#{_givenTag.tag.name}", "#{_givenTag.score}", appearence);					
     		</script>
 			</ui:repeat>
 			<ui:repeat var="_tag"
@@ -135,14 +144,15 @@
 			</ui:repeat>
 			<!-- <h:outputText value="# {elearnResults.processingResults(_gameround.number)}" escape="false" />-->
 			<tr>
-				<td>Runde: <h:outputText value="#{_gameround.number}" /> 
+				<td>
 					<canvas
 						id="#{_gameround.number}"
 						data-processing-sources="terminaGame/TerminaGraph.pde terminaGame/Vertex.pde terminaGame/RoundedArc.pde">
-					</canvas> <script type="text/javascript">
-   				newProcessingInstance("#{_gameround.number}");
-   	    		newTerm("#{_gameround.resources.get(0).tag.name}");
-    	    </script>
+					</canvas> 
+					<script type="text/javascript">
+   						newProcessingInstance("#{_gameround.number}");
+   	    				newTerm("#{_gameround.resources.get(0).tag.name}");
+    	    		</script>
 				</td>
 			</tr>
 		</ui:repeat>

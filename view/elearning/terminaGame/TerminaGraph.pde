@@ -33,7 +33,7 @@ void setup() {
 
   high = false;
   arcDeTriomphe = new RoundedArc(0, 1, 100, 20);
-  
+
   background(BACKGROUND);
   term = "term";
   newTerm = "";
@@ -52,9 +52,31 @@ void draw() {
   background(BACKGROUND);
   collide();
   for(Vertex v : vertices)
-     v.move();
-     
-  if (high){
+    v.move();
+
+  if (high && ownTags.size() > 0){
+    updateArc();
+    arcDeTriomphe.rs *= 1.1;
+    arcDeTriomphe.display();    
+  }
+
+  fill(STROKE);
+  stroke(STROKE);
+
+  for (int i = vertices.size() - 1; i >= 0; i--) {
+    v = vertices.get(i);
+    line(cx, cy, v.x, v.y);
+    v.display();
+  }
+  centerVertex.display();
+}
+
+void setTerm(String term) {
+  this.term = term;    
+  centerVertex = new Vertex(cx, cy, 20, term, 0, GREY);
+}
+
+void updateArc(){
     float rs = 0;
     for(Vertex v : ownTags){
       d_l_up = dist(v.x - v.tw /2, v.y - v.th / 2, cx ,cy);
@@ -67,9 +89,10 @@ void draw() {
         rs = m;
     }
     arcDeTriomphe.rs = rs - arcDeTriomphe.r ;
-    
+
     float start = - ownTags.get(0).angle + HALF_PI;
     float stop = - ownTags.get(ownTags.size() - 1).angle + HALF_PI;
+    
     if(start < stop){
       arcDeTriomphe.start = start;
       arcDeTriomphe.stop =  stop;
@@ -77,25 +100,33 @@ void draw() {
       arcDeTriomphe.start = stop;
       arcDeTriomphe.stop =  start;       
     }
-    arcDeTriomphe.display();    
-  }
+    noStroke();
+    float pStart_x = cx + arcDeTriomphe.r * cos(arcDeTriomphe.start);
+    float pStart_y = cy + arcDeTriomphe.r * sin(arcDeTriomphe.start);
+  
+    float pStop_x = cx + arcDeTriomphe.r * cos(arcDeTriomphe.stop);
+    float pStop_y = cy + arcDeTriomphe.r * sin(arcDeTriomphe.stop);
+    
+    Vertex v = ownTags.get(0);
+    
+    float p1x = v.x + v.tw / 2;
+    float p1y = v.y + v.th / 2;
+    float p2x = v.x - v.tw / 2;
+    float p2y = v.y + v.th / 2;
+//    println(p1x + " " + p1y + " " + pStart_x + " " +pStop_x  + " " + arcDeTriomphe.rs +  " " +  dist(p1x,p1y, pStart_x, pStart_y) );
+    if(dist(p1x,p1y, pStart_x, pStart_y) > arcDeTriomphe.rs){
+       float alpha = acos((p1x - cx)/arcDeTriomphe.r);
+       float beta = 2 * asin(arcDeTriomphe.rs / (2* arcDeTriomphe.r));
+//       println("debording " + v.s);
+       arcDeTriomphe.stop = - alpha - beta;
+    } else if(dist(p2x,p2y,pStop_x, pStop_y) > arcDeTriomphe.rs){
+       float alpha = acos((p2x - cx)/arcDeTriomphe.r);
+       float beta = 2 * asin(arcDeTriomphe.rs / (2* arcDeTriomphe.r));
+       println("debording " + v.s);
+       arcDeTriomphe.start = - alpha + beta;
 
- fill(STROKE);
- stroke(STROKE);
-
-  for (int i = vertices.size() - 1; i >= 0; i--) {
-    v = vertices.get(i);
-    line(cx, cy, v.x, v.y);
-    v.display();
-  }
-  centerVertex.display();
+   }   
 }
-
-void setTerm(String term) {
-  this.term = term;    
-  centerVertex = new Vertex(cx, cy, 20, term, 0, CORRECT);
-}
-
 
 void collide() {
   if (vertices.size() > 1) {
@@ -145,7 +176,7 @@ Vertex newVertex(String s, int distance, int size, String matchType) {
   if(matchType == "indirectMatch"){
     c = UNKNOWN;
   }
-    
+
   Vertex vert = new Vertex(cx, cy - distance, size, s, distance, c);
   return vert;
 }
@@ -172,11 +203,16 @@ void updatePositions(){
   }
 }
 
-void setDisplayWidth(int width){
-  this.width = width;
+void setDisplayWidth(int newWidth){
+  this.width = newWidth;
 //  externals.canvas.width = width;
-  size(width, height);
-  cx = (int) width / 2;
+  size(newWidth, height);
+  cx = (int) newWidth / 2;
+  centerVertex.x = cx;
+  for(Vertex v : vertices)
+    v.move();
+  
+  draw();
 }
 
 void addOwnTag(String s, int distance, int size, String matchType){
@@ -189,11 +225,11 @@ void addOwnTag(String s, int distance, int size, String matchType){
 void seperateTags(){
   _vertices = new ArrayList();
   for(Vertex v : ownTags)
-  _vertices.add(v);
-    
+    _vertices.add(v);
+
   for(Vertex v : foreignTags)
     _vertices.add(v);
-    
+
   vertices = _vertices; 
 
   int n = vertices.size();
@@ -203,9 +239,9 @@ void seperateTags(){
     Vertex vert = vertices.get(i);
 
     if (i < owns){
-       vert.setMovement(i, n + 2);
+      vert.setMovement(i, n + 2);
     } else {
-       vert.setMovement(i + 1, n + 2);
+      vert.setMovement(i + 1, n + 2);
     }
 
   }  
@@ -214,33 +250,33 @@ void seperateTags(){
 
 void addForeignTag(String s, int distance, int size, String matchType){
   Vertex vert = newVertex(s, distance, size, matchType);
-  
+
   vertices.add(0,vert);
   updatePositions();
-  
+
   foreignTags.add(0, vert);
 }
 
 String getOwnTags(){
- String s = "";
- for (Vertex vert : ownTags){
-   s = s + " " + vert.s;
- }
- return s;
+  String s = "";
+  for (Vertex vert : ownTags){
+    s = s + " " + vert.s;
+  }
+  return s;
 }
 
 String getForeignTags(){
- String s = "";
- for (Vertex vert : foreignTags){
-   s = s + " " + vert.s;
- }
- return s;
+  String s = "";
+  for (Vertex vert : foreignTags){
+    s = s + " " + vert.s;
+  }
+  return s;
 } 
 
 void highlightOwnTags(){
- high = true; 
+  high = true; 
 }
 
 void downlightOwnTags(){
- high = false;   
+  high = false;   
 }

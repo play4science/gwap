@@ -23,6 +23,8 @@
 package gwap.elearn;
 
 import gwap.model.GameRound;
+import gwap.model.action.Action;
+import gwap.model.action.Tagging;
 import gwap.wrapper.BackstageAnswer;
 
 import java.io.Serializable;
@@ -56,6 +58,18 @@ public class Results implements Serializable {
 			return list;
 		} else
 			return null;
+	}
+	
+	public Integer getAppearence(GameRound gameRound, Action a){
+		if(isGameRoundValid(gameRound)){
+			Tagging t = (Tagging) a;
+			Query q = entityManager.createNamedQuery("tagging.getAnswerFromTag");
+			q.setParameter("resourceId", gameRound.getResources().get(0).getId());
+			q.setParameter("tagId", t.getTag().getId());
+			Number n = (Number) q.getSingleResult();
+			return n.intValue();
+		}
+		else return null;
 	}
 	
 	public List<BackstageAnswer> getTopUnknownAnswers(GameRound gameRound) {

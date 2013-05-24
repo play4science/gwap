@@ -74,10 +74,10 @@ class Vertex {
   }
 
   void move() {
-    if (abs(newAngle - angle) > 0.01) {
+//    if (abs(newAngle - angle) > 0.01) {
       angle += (newAngle - angle)/2;
       x = cx + (int)( distance *  sin(angle));
       y = cy + (int)( distance *  cos(angle));
-    } 
+//    } 
   }
 }

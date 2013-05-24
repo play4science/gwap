@@ -11,14 +11,22 @@
 	
 	<script type="text/javascript" src="terminaGame/processing.js"></script>
 	<script type="text/javascript">		
-		setInterval(function(){
-			setTerm('TerminaGraph','#{term.tag.name}');
-			clearInterval(this);
+		var waiting = setInterval(function(){
+			var pjs = Processing.getInstanceById('TerminaGraph');
+			if(typeof pjs != 'undefined'){
+				console.log("processing instance ready");
+				pjs.setTerm('#{term.tag.name}');
+				var width = document.getElementById('gameheaderLine').offsetWidth;
+				console.log("setting width to: " + width);
+				pjs.setDisplayWidth(width);
+				clearInterval(waiting);
+			}
+				
 		},10);
 
-		addLoadEvent(function(){
-			setDisplayWidth('TerminaGraph', document.getElementById('gameheaderLine').offsetWidth);}
-		)
+// 		addLoadEvent(function(){
+// 			setDisplayWidth('TerminaGraph', document.getElementById('gameheaderLine').offsetWidth);}
+// 		)
 
 		function addLoadEvent(func) {
 			  var oldonload = window.onload;
@@ -32,22 +40,22 @@
 			}
 		}
 		
-		function setDisplayWidth(id, width){
-			var pjs = Processing.getInstanceById(id);
-			pjs.setDisplayWidth(width);			
-		}
+// 		function setDisplayWidth(id, width){
+// 			var pjs = Processing.getInstanceById(id);
+// 			pjs.setDisplayWidth(width);			
+// 		}
 		
 		function newEntry(id, association, score, matchType){
 			var pjs = Processing.getInstanceById(id);
-			var size = 20 + 8 * score;
+			var size = 20;
 			
 			pjs.addOwnTag(association, 100, size, matchType);
 		}
 		
-		function setTerm(id, term){
-			var pjs = Processing.getInstanceById(id);
-			pjs.setTerm(term);
-		}
+// 		function setTerm(id, term){
+// 			var pjs = Processing.getInstanceById(id);
+// 			pjs.setTerm(term);
+// 		}
 	</script>
 	<canvas id="TerminaGraph" data-processing-sources="terminaGame/TerminaGraph.pde terminaGame/Vertex.pde terminaGame/RoundedArc.pde"> </canvas>
 	

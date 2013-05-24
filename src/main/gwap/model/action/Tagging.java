@@ -157,7 +157,12 @@ import org.jboss.seam.annotations.Scope;
 			name = "tagging.unknownAnswersCountCustom",
 			query = "select count(*) from Term r join r.taggings tg join tg.tag t " +
 					"where not exists (from r.confirmedTags t2 where t2=t) and not exists (from r.rejectedTags t2 where t2=t) " +
-					"and r.source = :source ")
+					"and r.source = :source "),
+	@NamedQuery(
+			name = "tagging.getAnswerFromTag",
+			query = "select count(*) from Tagging tg " +
+					"where tg.resource.id =:resourceId " +
+					"and tg.tag.id=:tagId ")
 })
 
 @Entity
