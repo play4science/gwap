@@ -44,15 +44,15 @@
 							</tr>
 							<tr>
 								<td><h:outputText value="#{messages['termina.ansage.anzahl']}"/></td>
-								<td><h:commandButton styleClass="buttonDecrease" action="#{elearnGameConfigurationBean.lowerBid()}" value="" title="#{messages['buttonTitle.decrease']}"/></td>
+								<td><h:commandButton styleClass="buttonDecrease" action="#{elearnGameConfigurationBean.lowerBid()}" value="" title="#{messages['buttonTitle.decreaseLessDifficult']}"/></td>
 								<td><h:outputText value="#{gameConfiguration.bid}"/></td>
-								<td><h:commandButton styleClass="buttonIncrease" action="#{elearnGameConfigurationBean.riseBid()}" value="" title="#{messages['buttonTitle.increase']}"/></td>
+								<td><h:commandButton styleClass="buttonIncrease" action="#{elearnGameConfigurationBean.riseBid()}" value="" title="#{messages['buttonTitle.increaseMoreDifficult']}"/></td>
 							</tr>
 							<tr>
 								<td><h:outputText value="#{messages['termina.zeit.anzahl']}" /></td>
-								<td><h:commandButton styleClass="buttonDecrease" action="#{elearnGameConfigurationBean.lowerRoundDuration()}" value="" title="#{messages['buttonTitle.decrease']}"/></td>
+								<td><h:commandButton styleClass="buttonDecrease" action="#{elearnGameConfigurationBean.lowerRoundDuration()}" value="" title="#{messages['buttonTitle.decreaseMoreDifficult']}"/></td>
 								<td><h:outputText value="#{gameConfiguration.roundDuration}"/></td>
-								<td><h:commandButton styleClass="buttonIncrease" action="#{elearnGameConfigurationBean.riseRoundDuration()}" value="" title="#{messages['buttonTitle.increase']}"/></td>
+								<td><h:commandButton styleClass="buttonIncrease" action="#{elearnGameConfigurationBean.riseRoundDuration()}" value="" title="#{messages['buttonTitle.increaseLessDifficult']}"/></td>
 							</tr>
 						</table>
 						<br /><br />

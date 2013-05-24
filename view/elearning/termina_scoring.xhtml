@@ -20,6 +20,7 @@
 				<img class="gameIcon" src="#{internalBasePath}img/game_points.svg" />
 				
 				<h:outputText styleClass="score" value="#{messages['termina.scoring.totalScore']}: #{gameSessionScore}" /><br />
+				<h:outputText value="#{elearnTermina.getScoringText()}" escape="false" /><br />
 				
 				<div id="scoringDescription">
 					<h:outputText value="#{messages['termina.scoring.description']}" escape="false"/>

@@ -24,19 +24,23 @@ package gwap.elearn;
 
 import gwap.game.AbstractGameSessionBean;
 import gwap.model.GameConfiguration;
+import gwap.model.Highscore;
 import gwap.model.Tag;
 import gwap.model.action.Tagging;
 import gwap.model.resource.Term;
 import gwap.tools.TagSemantics;
+import gwap.widget.HighscoreBean;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
@@ -59,6 +63,7 @@ public class Termina extends AbstractGameSessionBean {
 	@In(create=true)							protected TermBean elearnTermBean;
 	@In(required=false) @Out(required=false)	protected Term term;
 	@In											protected LocaleSelector localeSelector;
+	@In(create=true)							protected Map<String, String> messages;
 	
 	protected GameConfiguration nextGameConfiguration;
 	protected String association;
@@ -74,6 +79,11 @@ public class Termina extends AbstractGameSessionBean {
 		if (gameConfiguration != null)
 			nextGameConfiguration = gameConfiguration;
 		startGameSession("elearnTermina");
+	}
+	
+	public void endGameByUser() {
+		super.endRound();
+		endGameSession();
 	}
 	
 	@Override
@@ -273,6 +283,28 @@ public class Termina extends AbstractGameSessionBean {
 			return 1;
 		else
 			return 0;
+	}
+	
+	/**
+	 * @return returns an appropriate messages that shows players how good they were
+	 */
+	public String getScoringText() {
+		if (getScore() <= 0 || (getRoundsLeft() > 0 && getScore() < roundNr)) {
+			return messages.get("scoring.notGood");
+		} else {
+			// calculcate highscore
+			HighscoreBean highscoreBean = (HighscoreBean) Component.getInstance(HighscoreBean.class);
+			List<Highscore> highscoreAll = highscoreBean.getHighscores().get(0).getHighscoreAll();
+			if (highscoreAll.get(0).getPersonId().equals(person.getId())
+				|| (person.getPersonConnected() != null && highscoreAll.get(0).getPersonId().equals(person.getPersonConnected().getId()))) {
+				return messages.get("scoring.goodHighscore");
+			}
+			// check if player chose maximum difficulty
+			if (gameConfiguration.getBid() < 5 || gameConfiguration.getRoundDuration() > 15)
+				return messages.get("scoring.goodNotDifficult");
+			else
+				return messages.get("scoring.goodDifficult");
+		}
 	}
 
 	public void riseBid() {
