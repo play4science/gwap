@@ -119,13 +119,22 @@ public class Termina extends AbstractGameSessionBean {
 		// find GameConfiguration if it exists, otherwise create it
 		try {
 			Query q;
-			if (gameConfiguration.getTopic() == null) {
-				q = entityManager.createNamedQuery("gameConfiguration.byAllWithoutTopic");
+			if (gameConfiguration.getLevel() != null) {
+				if (gameConfiguration.getTopic() == null) {
+					q = entityManager.createNamedQuery("gameConfiguration.byAllWithoutTopic");
+				} else {
+					q = entityManager.createNamedQuery("gameConfiguration.byAll");
+					q.setParameter("topic", gameConfiguration.getTopic());
+				}
+				q.setParameter("level", gameConfiguration.getLevel());
 			} else {
-				q = entityManager.createNamedQuery("gameConfiguration.byAll");
-				q.setParameter("topic", gameConfiguration.getTopic());
+				if (gameConfiguration.getTopic() == null) {
+					q = entityManager.createNamedQuery("gameConfiguration.byBidAndRoundDuration");
+				} else {
+					q = entityManager.createNamedQuery("gameConfiguration.byTopicBidAndRoundDuration");
+					q.setParameter("topic", gameConfiguration.getTopic());
+				}
 			}
-			q.setParameter("level", gameConfiguration.getLevel());
 			q.setParameter("bid", gameConfiguration.getBid());
 			q.setParameter("roundDuration", gameConfiguration.getRoundDuration());
 			q.setMaxResults(1);
