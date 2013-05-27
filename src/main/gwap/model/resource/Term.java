@@ -43,6 +43,10 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 
 @NamedQueries({
+	@NamedQuery(name="term.random", 
+			query="select p from Term p where p.enabled = true and p.tag.language = :language order by random()"),
+	@NamedQuery(name="term.randomCustom", 
+			query="select p from Term p where p.enabled = true and p.tag.language = :language and p.source = :source order by random()"),
 	@NamedQuery(name="term.randomByLevel", 
 				query="select p from Term p where p.enabled = true and p.rating = :level and p.tag.language = :language order by random()"),
 	@NamedQuery(name="term.randomByLevelCustom", 
@@ -55,6 +59,14 @@ import org.jboss.seam.annotations.Scope;
 				query="select p from Term p where p.enabled = true and p.rating = :level and p.tag.language = :language and p.source = :source " +
 						"and not exists (from Term r2 join r2.gameRounds r where r.gameSession=:gameSession and r2=p) " +
 						"order by random()"),
+	@NamedQuery(name="term.randomNotInGameSession", 
+				query="select p from Term p where p.enabled = true and p.tag.language = :language " +
+						"and not exists (from Term r2 join r2.gameRounds r where r.gameSession=:gameSession and r2=p) " +
+						"order by random()"),
+	@NamedQuery(name="term.randomNotInGameSessionCustom", 
+				query="select p from Term p where p.enabled = true and p.tag.language = :language and p.source = :source " +
+						"and not exists (from Term r2 join r2.gameRounds r where r.gameSession=:gameSession and r2=p) " +
+							"order by random()"),
 	@NamedQuery(name="term.sensibleRandomForGame", 
 				query="select p from Term p where p.enabled = true and p.rating = :level and p.tag.language = :language " +
 						"and not exists (from Term r2 join r2.gameRounds r where r.gameSession=:gameSession and r2=p) " +
@@ -65,6 +77,16 @@ import org.jboss.seam.annotations.Scope;
 						"and not exists (from Term r2 join r2.gameRounds r where r.gameSession=:gameSession and r2=p) " +
 						"and (select count(*) from p.confirmedTags) >= :minConfirmedTags " +
 						"order by random()"),
+	@NamedQuery(name="term.sensibleRandomForGameAnyLevel", 
+				query="select p from Term p where p.enabled = true and p.tag.language = :language " +
+						"and not exists (from Term r2 join r2.gameRounds r where r.gameSession=:gameSession and r2=p) " +
+						"and (select count(*) from p.confirmedTags) >= :minConfirmedTags " +
+						"order by random()"),
+	@NamedQuery(name="term.sensibleRandomForGameAnyLevelCustom", 
+				query="select p from Term p where p.enabled = true and p.tag.language = :language and p.source = :source " +
+						"and not exists (from Term r2 join r2.gameRounds r where r.gameSession=:gameSession and r2=p) " +
+						"and (select count(*) from p.confirmedTags) >= :minConfirmedTags " +
+						"order by random()"),
 	@NamedQuery(name="term.sensibleRandomForGameWithTopic", 
 				query="select p from Term p join p.topics t where p.enabled = true and t = :topic and p.rating = :level and p.tag.language = :language " +
 						"and not exists (from Term r2 join r2.gameRounds r where r.gameSession=:gameSession and r2=p) " +
@@ -72,6 +94,16 @@ import org.jboss.seam.annotations.Scope;
 						"order by random()"),
 	@NamedQuery(name="term.sensibleRandomForGameWithTopicCustom", 
 				query="select p from Term p join p.topics t where p.enabled = true and t = :topic and p.rating = :level and p.tag.language = :language and p.source = :source " +
+						"and not exists (from Term r2 join r2.gameRounds r where r.gameSession=:gameSession and r2=p) " +
+						"and (select count(*) from p.confirmedTags) >= :minConfirmedTags " +
+						"order by random()"),
+	@NamedQuery(name="term.sensibleRandomForGameWithTopicAnyLevel", 
+				query="select p from Term p join p.topics t where p.enabled = true and t = :topic and p.tag.language = :language " +
+						"and not exists (from Term r2 join r2.gameRounds r where r.gameSession=:gameSession and r2=p) " +
+						"and (select count(*) from p.confirmedTags) >= :minConfirmedTags " +
+						"order by random()"),
+	@NamedQuery(name="term.sensibleRandomForGameWithTopicAnyLevelCustom", 
+				query="select p from Term p join p.topics t where p.enabled = true and t = :topic and p.tag.language = :language and p.source = :source " +
 						"and not exists (from Term r2 join r2.gameRounds r where r.gameSession=:gameSession and r2=p) " +
 						"and (select count(*) from p.confirmedTags) >= :minConfirmedTags " +
 						"order by random()"),

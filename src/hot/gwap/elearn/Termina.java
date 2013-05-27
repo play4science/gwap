@@ -108,7 +108,7 @@ public class Termina extends AbstractGameSessionBean {
 			gameConfiguration = nextGameConfiguration;
 		} else if (gameConfiguration == null) {
 			gameConfiguration = new GameConfiguration();
-			gameConfiguration.setLevel(1);
+//			gameConfiguration.setLevel(1);
 			gameConfiguration.setBid(2);
 			gameConfiguration.setRoundDuration(60);
 		}
@@ -229,10 +229,10 @@ public class Termina extends AbstractGameSessionBean {
 		currentRoundScore -= scoreMultiplicator() * (gameConfiguration.getBid() - foundAssociations);
 		super.endRound();
 		entityManager.flush();
-		if (getRoundsLeft().equals(0)) {
-			nextGameConfiguration.setLevel(gameConfiguration.getLevel()+1);
-			log.info("Next level: #0", nextGameConfiguration.getLevel());
-		}
+//		if (getRoundsLeft().equals(0)) {
+//			nextGameConfiguration.setLevel(gameConfiguration.getLevel()+1);
+//			log.info("Next level: #0", nextGameConfiguration.getLevel());
+//		}
 	}
 	
 	public String choosePalette() {
@@ -274,7 +274,7 @@ public class Termina extends AbstractGameSessionBean {
 			zeitbonus = 2;
 		}
 		
-		return zeitbonus * gameConfiguration.getLevel();
+		return zeitbonus * term.getRating();
 	}
 	
 	@Override

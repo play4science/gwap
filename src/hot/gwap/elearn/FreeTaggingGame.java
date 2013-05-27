@@ -59,8 +59,6 @@ public class FreeTaggingGame extends AbstractGameSessionBean {
 	
 	private Map<Integer, List<MatchingTag>> recommendedTags = new HashMap<Integer, List<MatchingTag>>();
 
-	private Integer level = 1;
-	
 	@Override
 	public void startGameSession() {
 		startGameSession("elearnFreeTaggingGame");
@@ -92,15 +90,12 @@ public class FreeTaggingGame extends AbstractGameSessionBean {
 		gameRound.getResources().add(term);
 		super.endRound();
 		entityManager.flush();
-		term = elearnTermBean.updateSensibleTermForFreeTagging(level);
-		if (term == null) {
-			level++;
-		}
+		term = elearnTermBean.updateSensibleTermForFreeTagging();
 	}
 	
 	@Override
 	public Integer getRoundsLeft() {
-		if (elearnTermBean.updateSensibleTermForFreeTagging(level) != null)
+		if (elearnTermBean.updateSensibleTermForFreeTagging() != null)
 			return 1;
 		else
 			return 0;
