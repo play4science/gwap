@@ -8,10 +8,7 @@
     xmlns:rich="http://richfaces.org/rich"
     xmlns:a4j="http://richfaces.org/a4j">
 
-	<h:form>
-		<h:selectOneMenu value="#{customSourceBean.source}" onchange="submit();">
-			<s:selectItems value="#{customSourceBean.availableSources}" var="s" label="#{s.description}" itemValue="#{s.name}"></s:selectItems>
-		</h:selectOneMenu>
-	</h:form>
-
+	<ui:repeat var="_newsItem" value="#{newsItemBean.currentNewsItems()}">
+		<div class="newsItem"><span class="date"><h:outputText value="#{_newsItem.datePublished}"/>:</span><h:outputText value="#{_newsItem.text}" /></div>
+	</ui:repeat>
 </ui:composition>

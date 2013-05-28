@@ -18,7 +18,7 @@
  			<action expression="#{elearnTermina.endRound()}" />
  		</transition>
  		<transition name="beenden" to="gameoverpage">
- 			<action expression="#{elearnTermina.endRound()}" />
+ 			<action expression="#{elearnTermina.endGameByUser()}" />
  		</transition>
 	</page>
 	

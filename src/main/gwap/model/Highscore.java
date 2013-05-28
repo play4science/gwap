@@ -85,6 +85,25 @@ import javax.persistence.OneToOne;
 				"having sum(g.score)>0 " +
 		"order by sum(g.score) desc"),
 	@NamedQuery(
+		name = "highscore.byGameSessionAndInterval",
+		query = "select new Highscore(coalesce(p.personConnected.id, p.id), sum(g.score)) " +
+		        "from GameRound g join g.person p " +
+		        "where g.gameSession.gameType=:gametype " +
+				"and g.endDate >= :dateLowerBound and g.endDate <= :dateUpperBound " +
+		        "group by coalesce(p.personConnected.id, p.id), g.gameSession.id " +
+		        "having sum(g.score)>0 " +
+				"order by sum(g.score) desc"),
+	@NamedQuery(
+			name = "highscore.byGameSessionAndIntervalCustom",
+		query = "select new Highscore(coalesce(p.personConnected.id, p.id), sum(g.score)) " +
+				"from GameRound g join g.person p join g.resources resource " +
+				"where g.gameSession.gameType=:gametype " +
+				"and g.endDate >= :dateLowerBound and g.endDate <= :dateUpperBound " +
+				"and resource.source=:source " +
+				"group by coalesce(p.personConnected.id, p.id), g.gameSession.id " +
+				"having sum(g.score)>0 " +
+		"order by sum(g.score) desc"),
+	@NamedQuery(
 		name = "highscore.mit.byPerson",
 		query = "select new Highscore(coalesce(p.personConnected.id, p.id), sum(g.score)) " +
 				"from GameRound g join g.person p " +

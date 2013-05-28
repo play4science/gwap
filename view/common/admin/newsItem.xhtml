@@ -1,0 +1,74 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    template="/layout/adminTemplate.xhtml">
+
+    <ui:define name="body">
+		<div id="content">
+		<div class="contentWrapper">
+			<h1><h:outputText value="#{messages['pagetitle.admin.newsItemEdit']}" rendered="#{adminNewsItemHome.managed}" /></h1>
+			<h1><h:outputText value="#{messages['pagetitle.admin.newsItemAdd']}" rendered="#{!adminNewsItemHome.managed}" /></h1>
+			<hr class="pageTitle" /><br />
+			
+      		<f:view>
+				<div class="dialog">
+         		<h:form>
+
+            		<s:validateAll>
+            			<h:panelGrid columns="1">
+	            			<s:decorate id="newsItemLanguageField" template="/layout/edit.xhtml">
+			            		<ui:define name="label">
+			            			<h:outputText styleClass="adminForm" value="#{messages['newsItem.language']}:" />
+			                	</ui:define>
+			                	<h:selectOneMenu id="newsItemLanguage" styleClass="adminInput" value="#{adminNewsItemHome.instance.language}">
+			                		<f:selectItems value="#{localeSelector.getSupportedLocales()}"/>
+			                	</h:selectOneMenu>
+							</s:decorate>
+	            			<s:decorate id="newsItemDatePublishedField" template="/layout/edit.xhtml">
+			            		<ui:define name="label">
+			            			<h:outputText styleClass="adminForm" value="#{messages['newsItem.datePublished']}:" />
+			                	</ui:define>
+								<rich:calendar id="newsItemDatePublished" inputClass="adminInput" value="#{adminNewsItemHome.instance.datePublished}"/>
+							</s:decorate>
+	            			<s:decorate id="newsItemDateExpiredField" template="/layout/edit.xhtml">
+			            		<ui:define name="label">
+			            			<h:outputText styleClass="adminForm" value="#{messages['newsItem.dateExpired']}:" />
+			                	</ui:define>
+			                	<rich:calendar id="newsItemDateExpired" inputClass="adminInput" value="#{adminNewsItemHome.instance.dateExpired}"/>
+							</s:decorate>
+	            			<s:decorate id="newsItemTextField" template="/layout/edit.xhtml">
+			            		<ui:define name="label">
+			            			<h:outputText styleClass="adminForm" value="#{messages['newsItem.text']}:" />
+			                	</ui:define>
+								<h:inputTextarea id="newsItemText" styleClass="adminInput" cols="35" rows="4" value="#{adminNewsItemHome.instance.text}" />
+							</s:decorate>
+	               			
+               			<h:panelGrid columns="2">
+               				<s:button styleClass="buttonBack" value="" view="/admin/newsItemList.xhtml" title="#{messages['buttonTitle.back']}"/>
+               				<h:commandButton value=""  styleClass="buttonSave" action="#{adminNewsItemHome.persist()}" rendered="#{!adminNewsItemHome.managed}" title="#{messages['buttonTitle.newsItemAdd']}" />
+							<h:commandButton value="" styleClass="buttonSave" action="#{adminNewsItemHome.update()}" rendered="#{adminNewsItemHome.managed}" title="#{messages['buttonTitle.newsItemSave']}"/>
+               			</h:panelGrid>
+               			</h:panelGrid>
+
+            		</s:validateAll>
+
+            		<h:messages globalOnly="true"/>
+
+         		</h:form>
+         		</div>
+         		<br /><br />
+         		<h:outputText value="#{messages['newsItem.explanation']}" escape="false" />
+
+      		</f:view>
+		</div>
+		</div>
+		
+        <br class="clear" />
+    </ui:define>
+</ui:composition>

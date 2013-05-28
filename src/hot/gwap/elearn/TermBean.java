@@ -83,12 +83,11 @@ public class TermBean implements Serializable {
 			if (gameConfiguration != null && gameConfiguration.getTopic() != null) {
 				query = customSourceBean.query("term.randomByTopic");
 				query.setParameter("topic", gameConfiguration.getTopic());
-			} else {
+			} else if (gameConfiguration != null && gameConfiguration.getLevel() != null) {
 				query = customSourceBean.query("term.randomByLevel");
-				if (gameConfiguration != null && gameConfiguration.getLevel() != null)
-					query.setParameter("level", gameConfiguration.getLevel());
-				else
-					query.setParameter("level", 1);
+				query.setParameter("level", gameConfiguration.getLevel());
+			} else {
+				query = customSourceBean.query("term.random");
 			}
 			query.setParameter("language", localeSelector.getLanguage());
 			query.setMaxResults(1);
@@ -107,15 +106,26 @@ public class TermBean implements Serializable {
 		try {
 			Query query = null;
 			if (gameConfiguration != null) {
-				if (gameConfiguration.getTopic() != null) {
-					log.info("term.sensibleRandomForGameWithTopic level=#0, minConfirmedTags=#1, topic=#2", gameConfiguration.getLevel(), gameConfiguration.getBid().longValue(), gameConfiguration.getTopic());
-					query = customSourceBean.query("term.sensibleRandomForGameWithTopic");
-					query.setParameter("topic", gameConfiguration.getTopic());
+				if (gameConfiguration.getLevel() != null) {
+					if (gameConfiguration.getTopic() != null) {
+						log.info("term.sensibleRandomForGameWithTopic level=#0, minConfirmedTags=#1, topic=#2", gameConfiguration.getLevel(), gameConfiguration.getBid().longValue(), gameConfiguration.getTopic());
+						query = customSourceBean.query("term.sensibleRandomForGameWithTopic");
+						query.setParameter("topic", gameConfiguration.getTopic());
+					} else {
+						log.info("term.sensibleRandomForGame level=#0, minConfirmedTags=#1", gameConfiguration.getLevel(), gameConfiguration.getBid().longValue());
+						query = customSourceBean.query("term.sensibleRandomForGame");
+					}
+					query.setParameter("level", gameConfiguration.getLevel());
 				} else {
-					log.info("term.sensibleRandomForGame level=#0, minConfirmedTags=#1", gameConfiguration.getLevel(), gameConfiguration.getBid().longValue());
-					query = customSourceBean.query("term.sensibleRandomForGame");
+					if (gameConfiguration.getTopic() != null) {
+						log.info("term.sensibleRandomForGameWithTopic minConfirmedTags=#0, topic=#1", gameConfiguration.getBid().longValue(), gameConfiguration.getTopic());
+						query = customSourceBean.query("term.sensibleRandomForGameWithTopicAnyLevel");
+						query.setParameter("topic", gameConfiguration.getTopic());
+					} else {
+						log.info("term.sensibleRandomForGame minConfirmedTags=#0", gameConfiguration.getBid().longValue());
+						query = customSourceBean.query("term.sensibleRandomForGameAnyLevel");
+					}
 				}
-				query.setParameter("level", gameConfiguration.getLevel());
 				query.setParameter("minConfirmedTags", gameConfiguration.getBid().longValue());
 			} else {
 				log.info("term.sensibleRandomForGameWithoutConfig");
@@ -134,14 +144,22 @@ public class TermBean implements Serializable {
 			return null;
 		}
 	}
+	
+	public Term updateSensibleTermForFreeTagging() {
+		return updateSensibleTermForFreeTagging(null);
+	}
 
 	public Term updateSensibleTermForFreeTagging(Integer level) {
 		log.info("Updated sensible term for free tagging");
 		
 		try {
 			Query query = null;
-			query = customSourceBean.query("term.randomByLevelNotInGameSession");
-			query.setParameter("level", level);
+			if (level != null) {
+				query = customSourceBean.query("term.randomByLevelNotInGameSession");
+				query.setParameter("level", level);
+			} else {
+				query = customSourceBean.query("term.randomNotInGameSession");
+			}
 			query.setParameter("gameSession", gameSession);
 			query.setParameter("language", localeSelector.getLanguage());
 			query.setMaxResults(1);

@@ -33,7 +33,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -96,8 +98,8 @@ public class HighscoreBean implements Serializable {
 			if ("accentiurbani".equals(platform)) {
 				set.setHighscoreAll(updateHighscorePerGameSession(g));
 			} else if ("elearning".equals(platform)) {
-				set.setHighscoreDaily(updateHighscoreDaily(g));
-				set.setHighscoreAll(updateHighscorePerGameSession(g));
+				set.setHighscoreDaily(updateHighscorePerGameSessionDistinctPersonDaily(g));
+				set.setHighscoreAll(updateHighscorePerGameSessionDistinctPerson(g));
 			} else {
 //				set.setHighscoreAll(updateHighscore(g));
 				set.setHighscoreMonthly(updateHighscoreMonthly(g));
@@ -115,6 +117,52 @@ public class HighscoreBean implements Serializable {
 		query.setMaxResults(20);
 		query.setParameter("gametype", gameType);
 		List<Highscore> res = query.getResultList();
+		modifyHighscore(res, entityManager);
+		
+		return res;
+	}
+
+	public List<Highscore> updateHighscorePerGameSessionDistinctPerson(GameType gameType) {
+		log.info("Updating Highscore per GameSession distinct person");
+
+		Query query = customSourceBean.query("highscore.byGameSession");
+		query.setParameter("gametype", gameType);
+		List<Highscore> temp = query.getResultList();
+		List<Highscore> res = new ArrayList<Highscore>();
+		Set<Long> distinctPersonIds = new HashSet<Long>();
+		for (Highscore highscore : temp) {
+			if (!distinctPersonIds.contains(highscore.getPersonId())) {
+				distinctPersonIds.add(highscore.getPersonId());
+				res.add(highscore);
+				if (res.size() == 20)
+					break;
+			}
+		}
+		modifyHighscore(res, entityManager);
+		
+		return res;
+	}
+
+	public List<Highscore> updateHighscorePerGameSessionDistinctPersonDaily(GameType gameType) {
+		log.info("Updating Highscore per GameSession distinct person");
+
+		Query query = customSourceBean.query("highscore.byGameSessionAndInterval");
+		query.setParameter("gametype", gameType);
+		query.setParameter("dateUpperBound", new Date());
+		Calendar calendar = new GregorianCalendar();
+		calendar.add(Calendar.DAY_OF_YEAR, -1);
+		query.setParameter("dateLowerBound", calendar.getTime());
+		List<Highscore> temp = query.getResultList();
+		List<Highscore> res = new ArrayList<Highscore>();
+		Set<Long> distinctPersonIds = new HashSet<Long>();
+		for (Highscore highscore : temp) {
+			if (!distinctPersonIds.contains(highscore.getPersonId())) {
+				distinctPersonIds.add(highscore.getPersonId());
+				res.add(highscore);
+				if (res.size() == 20)
+					break;
+			}
+		}
 		modifyHighscore(res, entityManager);
 		
 		return res;
