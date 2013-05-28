@@ -18,6 +18,7 @@
 	foreignTags = new Array(numberOfRounds);
 	foreignAppearences = new Array(numberOfRounds);	
 	userTagAppearences = new Array(numberOfRounds);
+	foreignMatchTypes = new Array(numberOfRounds);
 	
 	for (var i = 0; i &lt; numberOfRounds; i++){
 		console.log("creating arrays");
@@ -26,6 +27,7 @@
 		foreignTags[i] = new Array();
 		foreignAppearences[i] = new Array();
 		userTagAppearences[i] = new Array();
+		foreignMatchTypes[i] = new Array();
 	}
 
 	terms = new Array();
@@ -59,12 +61,13 @@
 		terms.push(term);
 	}
 
-	function newForeignTag(round, tag, appearence){
+	function newForeignTag(round, tag, appearence, matchtype){
 		tag = tag.trim();
 		tag = tag.replace(/ +(?= )/g,''); //replace multiple whitespaces 
 		tag = tag.replace(/ /g,"\n"); //replace whitespaces with linebreak
 		foreignTags[round - 1].push(tag);
 		foreignAppearences[round - 1].push(appearence);
+		foreignMatchTypes[round -1].push(matchtype);
 	}
 	
 	function setUpGraphs(){
@@ -76,13 +79,14 @@
 			
 			pjs.setTerm(term);
 			for(var j = 0; j &lt; userTags[i].length; j++){
-				pjs.addOwnTag(userTags[i][j], 100, getScale(i, userTagAppearences[i][j]), type = score2matchType(scores[i][j]));
+				var type = score2matchType(scores[i][j]);
+				pjs.addOwnTag(userTags[i][j], 100, getScale(i, userTagAppearences[i][j]), type);
 			}
 
 			for(var j = 0; j &lt; foreignTags[i].length; j++){
-				ft = foreignTags[i][j];
+				var ft = foreignTags[i][j];
 				if(! containsIgnoreCase(userTags[i], ft))
-					pjs.addForeignTag(ft, 100, getScale(i, foreignAppearences[i][j]), "directMatch");
+					pjs.addForeignTag(ft, 100, getScale(i, foreignAppearences[i][j]), foreignMatchTypes[i][j]);
 			}
 			pjs.separateTags();
 			pjs.highlightOwnTags();
@@ -139,8 +143,20 @@
 			<ui:repeat var="_tag"
 				value="#{elearnResults.getTopCorrectAnswers(_gameround)}">
 				<script type="text/javascript">
-    			newForeignTag("#{_gameround.number}", "#{_tag.term}", "#{_tag.appearence}");
-    		</script>
+    				newForeignTag("#{_gameround.number}", "#{_tag.term}", "#{_tag.appearence}", "directMatch");
+    			</script>
+			</ui:repeat>
+			<ui:repeat var="_tag"
+				value="#{elearnResults.getTopUnknownAnswers(_gameround)}">
+				<script type="text/javascript">
+    				newForeignTag("#{_gameround.number}", "#{_tag.term}", "#{_tag.appearence}", "indirectMatch");
+    			</script>
+			</ui:repeat>
+			<ui:repeat var="_tag"
+				value="#{elearnResults.getTopWrongAnswers(_gameround)}">
+				<script type="text/javascript">
+    				newForeignTag("#{_gameround.number}", "#{_tag.term}", "#{_tag.appearence}", "WRONG");
+    			</script>
 			</ui:repeat>
 			<!-- <h:outputText value="# {elearnResults.processingResults(_gameround.number)}" escape="false" />-->
 			<tr>
