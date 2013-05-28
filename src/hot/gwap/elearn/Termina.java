@@ -70,6 +70,12 @@ public class Termina extends AbstractGameSessionBean {
 	protected List<Tag> previousTaggings;
 
 	protected MatchingTag lastAssociation;
+	
+	protected boolean paletteMode;
+	
+	public boolean isPaletteMode() {
+		return paletteMode;
+	}
 
 	public List<Tag> getPreviousTaggings() {
 		return previousTaggings;
@@ -142,6 +148,8 @@ public class Termina extends AbstractGameSessionBean {
 	
 	public void startRoundPalette() {
 		startRound();
+		
+		this.paletteMode = true;
 		
 		// 1. Create list of shown tags
 		int maxNrResults = gameConfiguration.getBid();
@@ -231,6 +239,7 @@ public class Termina extends AbstractGameSessionBean {
 	
 	@Override
 	public void endRound() {
+		this.paletteMode = false;
 		currentRoundScore -= scoreMultiplicator() * (gameConfiguration.getBid() - foundAssociations);
 		super.endRound();
 		entityManager.flush();

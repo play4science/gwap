@@ -28,7 +28,8 @@
 						};
 		
 						countdown.callbackStop = function() {
-							switchTerm();
+							document.getElementById('bereich3:inputassoc').disabled = "true";
+							setInterval(switchTerm, 1000);
 						};
 	
 						countdown.start(#{gameConfiguration.roundDuration});

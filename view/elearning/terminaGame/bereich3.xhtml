@@ -80,10 +80,11 @@
 				<td class="terminaTableCell"><h:outputText class="gamequestion" value="#{messages['termina.frage.satz']}" /></td>
 				<td class="terminaTableCell"><h:inputText id="inputassoc" value="#{elearnTermina.association}" autocomplete="off" required="false" /></td>
 				<td class="terminaTableCell"><a4j:commandButton id="sendButton" action="#{elearnTermina.choose()}" styleClass="sendAssociation" 
-					title="Sende Assoziation" reRender="bereich1,bereich3,focusbereich">1<s:defaultAction /></a4j:commandButton></td>
+					title="Sende Assoziation" reRender="bereich1,bereich3,focusbereich"><s:defaultAction /></a4j:commandButton></td>
 			</tr>
 				<tr>
 				<td  colspan="3"><h:outputText styleClass="foundAssocText" value="#{messages['termina.foundAssoc']}"/>
+				<h:outputText styleClass="foundAssocNum" value="#{elearnTermina.foundAssociations}"/>
 				<h:outputText styleClass="requestedAssoc" value="#{messages['termina.outof']} #{gameConfiguration.bid}"/></td>
 			</tr> 
 		</table>

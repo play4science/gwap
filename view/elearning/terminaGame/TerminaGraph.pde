@@ -1,6 +1,6 @@
 Vertex centerVertex;
-int cx;
-int cy;
+float cx;
+float cy;
 String term;
 ArrayList<Vertex> vertices;
 ArrayList<Vertex> ownTags;
@@ -26,10 +26,10 @@ color UNKNOWN = #CC8811;
 
 void setup() {
   this.width = 400;
-  this.height = 400;
+  this.height = 300;
   size(width, height);
-  cx = (int) width/2;
-  cy = (int) height/2;
+  cx = width/2;
+  cy = height/2;
 
   high = false;
   arcDeTriomphe = new RoundedArc(0, 1, 100, 20);
@@ -168,7 +168,7 @@ void mix(){
   }  
 }
 
-Vertex newVertex(String s, int distance, int size, String matchType) {
+Vertex newVertex(String s, float distance, int size, String matchType) {
   color c = WRONG;
   if(matchType == "directMatch"){
     c = CORRECT;
@@ -222,7 +222,7 @@ void addOwnTag(String s, int distance, int size, String matchType){
   ownTags.add(0, vert);
 }
 
-void seperateTags(){
+void separateTags(){
   _vertices = new ArrayList();
   for(Vertex v : ownTags)
     _vertices.add(v);
