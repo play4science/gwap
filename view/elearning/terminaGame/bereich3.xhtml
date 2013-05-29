@@ -9,7 +9,8 @@
 	xmlns:a4j="http://richfaces.org/a4j">
 	
 	
-	<script type="text/javascript" src="terminaGame/processing.js"></script>
+	<a4j:loadScript src="/javascript/processing.js"/>
+	
 	<script type="text/javascript">		
 		var waiting = setInterval(function(){
 			var pjs = Processing.getInstanceById('TerminaGraph');
@@ -24,39 +25,14 @@
 				
 		},10);
 
-// 		addLoadEvent(function(){
-// 			setDisplayWidth('TerminaGraph', document.getElementById('gameheaderLine').offsetWidth);}
-// 		)
-
-		function addLoadEvent(func) {
-			  var oldonload = window.onload;
-			  if (typeof window.onload != 'function') {
-			    window.onload = func;
-			  } else {
-			    window.onload = function() {
-			      oldonload();
-			      func();
-			    }
-			}
-		}
-		
-// 		function setDisplayWidth(id, width){
-// 			var pjs = Processing.getInstanceById(id);
-// 			pjs.setDisplayWidth(width);			
-// 		}
-		
 		function newEntry(id, association, score, matchType){
 			var pjs = Processing.getInstanceById(id);
 			var size = 20;
 			
 			pjs.addOwnTag(association, 100, size, matchType);
 		}
-		
-// 		function setTerm(id, term){
-// 			var pjs = Processing.getInstanceById(id);
-// 			pjs.setTerm(term);
-// 		}
 	</script>
+
 	<canvas id="TerminaGraph" data-processing-sources="terminaGame/TerminaGraph.pde terminaGame/Vertex.pde terminaGame/RoundedArc.pde"> </canvas>
 	
 	<a4j:form id="bereich3">

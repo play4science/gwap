@@ -59,8 +59,8 @@ void draw() {
 	background(BACKGROUND);
 	collide();
 
-	if(correctTags.size() > 0 && unknownTags.size() > 0 && wrongTags.size() > 0){
-//		updateVertexDistances();
+	if(correctTags.size() > 0 && wrongTags.size() > 0){
+		updateVertexDistances();
 	}
 
 	for(Vertex v : vertices)
@@ -139,7 +139,6 @@ void updateArc(){
 	} else if(dist(p2x,p2y,pStop_x, pStop_y) > arcDeTriomphe.rs){
 		float alpha = acos((p2x - cx)/arcDeTriomphe.r);
 		float beta = 2 * asin(arcDeTriomphe.rs / (2* arcDeTriomphe.r));
-		println("debording " + v.s);
 		arcDeTriomphe.start = - alpha + beta;
 
 	}
@@ -193,15 +192,12 @@ Vertex newVertex(String s, float distance, int size, String matchType) {
 	if(matchType == "directMatch"){
 		vert.c = CORRECT;
 		correctTags.add(vert);
-		println("new correct tag " + correctTags.size() );
 	} else if(matchType == "indirectMatch"){
 		vert.c = UNKNOWN;
 		unknownTags.add(vert);
-		println("new unknown tag " + unknownTags.size());
 	} else {
 		vert.c = WRONG;
 		wrongTags.add(vert);
-		println("new wrong tag " + wrongTags.size());
 	}
 	return vert;
 }
@@ -308,19 +304,16 @@ void downlightOwnTags(){
 
 void updateVertexDistances(){
 	
-	println("scaling distances!");
 	float currdist = 100; 
 	
 	for(Vertex v : correctTags){
 		v.distance = currdist;
-		println("setting all correct tags to distance " + currdist)
 	}
 	
 	currdist = getBiggestCornerDistance(correctTags);
 
 	for(Vertex v : unknownTags){
 		v.distance = currdist;
-		println("setting unknown tags to distance " + currdist);
 	}
 
 	currdist2 = getBiggestCornerDistance(unknownTags);
@@ -329,6 +322,5 @@ void updateVertexDistances(){
 
 	for(Vertex v : wrongTags){
 		v.distance = currdist;
-		println("setting all wrong tags to distance " + currdist);
 	}
 }
