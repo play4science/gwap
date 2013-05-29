@@ -14,9 +14,11 @@ class Vertex {
 //	float b;
 	float radi;
 	color c;
+	boolean own;
+	
 
 	Vertex(float x, float y, int size, String s, float distance, color c) {
-
+		this.own = true;
 		this.radi = 4;
 
 		this.c = c;
@@ -65,11 +67,11 @@ class Vertex {
 		text(s, x, y);
 	}
 
-	void setMovement(int to, int off) {
+	void setMovement(float to, float off) {
 		//     println("setting movement from "  + from + " to "+  to + " off " + off  );
 		//this.angle = 2 * PConstants.PI * from / off + PI;
 		//     println("old angle " + angle);
-		this.newAngle = 2 * PConstants.PI * to / off + PI;
+		this.newAngle = 2 * PI * to / off + PI;
 		//     println("new angle " + newAngle);
 	}
 

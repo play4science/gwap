@@ -48,20 +48,17 @@
 	    		newUserTag("#{_gameround.number}", "#{_givenTag.tag.name}", "#{_givenTag.score}", appearence);					
     		</script>
 			</ui:repeat>
-			<ui:repeat var="_tag"
-				value="#{elearnResults.getTopCorrectAnswers(_gameround)}">
+			<ui:repeat var="_tag" value="#{elearnResults.getTopCorrectAnswers(_gameround)}">
 				<script type="text/javascript">
     				newForeignTag("#{_gameround.number}", "#{_tag.term}", "#{_tag.appearence}", "directMatch");
     			</script>
 			</ui:repeat>
-			<ui:repeat var="_tag"
-				value="#{elearnResults.getTopUnknownAnswers(_gameround)}">
+			<ui:repeat var="_tag" value="#{elearnResults.getTopUnknownAnswers(_gameround)}">
 				<script type="text/javascript">
     				newForeignTag("#{_gameround.number}", "#{_tag.term}", "#{_tag.appearence}", "indirectMatch");
     			</script>
 			</ui:repeat>
-			<ui:repeat var="_tag"
-				value="#{elearnResults.getTopWrongAnswers(_gameround)}">
+			<ui:repeat var="_tag" value="#{elearnResults.getTopWrongAnswers(_gameround)}">
 				<script type="text/javascript">
     				newForeignTag("#{_gameround.number}", "#{_tag.term}", "#{_tag.appearence}", "WRONG");
     			</script>
