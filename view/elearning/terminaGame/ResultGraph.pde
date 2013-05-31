@@ -5,7 +5,7 @@ class ResultGraph extends TerminaGraph{
 	ArrayList<Vertex> wrongTags;
 	ArrayList<Vertex> foreignTags;
 	ArrayList<Vertex> ownTags;
-	
+
 	boolean high;
 	RoundedArc arcDeTriomphe; 
 
@@ -17,7 +17,7 @@ class ResultGraph extends TerminaGraph{
 		correctTags = new ArrayList(0);
 		wrongTags = new ArrayList(0);
 		unknownTags = new ArrayList(0);  
-		
+
 		high = false;
 		arcDeTriomphe = new RoundedArc(0, 1, 100, 20);
 
@@ -43,16 +43,21 @@ class ResultGraph extends TerminaGraph{
 		float innerRadius = width;
 
 		for(Vertex v : al){
-			d_l_up = dist(v.x - v.tw /2, v.y - v.th / 2, cx ,cy);
-			d_l_down = dist(v.x - v.tw /2, v.y + v.th / 2, cx ,cy);
-			d_r_up = dist(v.x + v.tw /2, v.y - v.th / 2, cx ,cy);
-			d_r_down = dist(v.x + v.tw /2, v.y + v.th / 2, cx ,cy);
-			float[] arr = {d_l_up, d_l_down, d_r_up, d_r_down};
+			float[] arr = getCornerDistances(v);
 			m = min(arr);
 			if (m < innerRadius)
 				innerRadius = m;
 		}
 		return innerRadius;
+	}
+
+	float[] getCornerDistances(Vertex v){
+		d_l_up = dist(v.x - v.tw /2, v.y - v.th / 2, cx ,cy);
+		d_l_down = dist(v.x - v.tw /2, v.y + v.th / 2, cx ,cy);
+		d_r_up = dist(v.x + v.tw /2, v.y - v.th / 2, cx ,cy);
+		d_r_down = dist(v.x + v.tw /2, v.y + v.th / 2, cx ,cy);
+		float[] arr = {d_l_up, d_l_down, d_r_up, d_r_down};
+		return arr;
 	}
 
 	void updateArc(){
@@ -61,12 +66,21 @@ class ResultGraph extends TerminaGraph{
 		arcDeTriomphe.rs = (outerRadius - innerRadius)/2;
 		arcDeTriomphe.r = (outerRadius + innerRadius)/2;
 
-		float start = - ownTags.get(0).angle + HALF_PI;
-		float stop = - ownTags.get(ownTags.size() - 1).angle + HALF_PI;
+		float start = 2 * PI;
+		float stop = 0;
+		for(Vertex v: ownTags){
+			if (v.angle > stop)
+				stop = v.angle;
+			if(v.angle < start)
+				start = v.angle;
+		}
 
+		start = - start + HALF_PI;
+		stop = - stop + HALF_PI;
+		
 		if(start < stop){
-			arcDeTriomphe.start = start;
-			arcDeTriomphe.stop =  stop;
+			arcDeTriomphe.start = - start + HALF_PI;
+			arcDeTriomphe.stop = - stop + HALF_PI;
 		} else {
 			arcDeTriomphe.start = stop;
 			arcDeTriomphe.stop =  start;       
@@ -74,27 +88,27 @@ class ResultGraph extends TerminaGraph{
 //		noStroke();
 //		float pStart_x = cx + arcDeTriomphe.r * cos(arcDeTriomphe.start);
 //		float pStart_y = cy + arcDeTriomphe.r * sin(arcDeTriomphe.start);
-	//
+		//
 //		float pStop_x = cx + arcDeTriomphe.r * cos(arcDeTriomphe.stop);
 //		float pStop_y = cy + arcDeTriomphe.r * sin(arcDeTriomphe.stop);
-	//
+		//
 //		Vertex v = ownTags.get(0);
-	//
+		//
 //		float p1x = v.x + v.tw / 2;
 //		float p1y = v.y + v.th / 2;
 //		float p2x = v.x - v.tw / 2;
 //		float p2y = v.y + v.th / 2;
 ////		println(p1x + " " + p1y + " " + pStart_x + " " +pStop_x  + " " + arcDeTriomphe.rs +  " " +  dist(p1x,p1y, pStart_x, pStart_y) );
 //		if(dist(p1x,p1y, pStart_x, pStart_y) > arcDeTriomphe.rs){
-//			float alpha = acos((p1x - cx)/arcDeTriomphe.r);
-//			float beta = 2 * asin(arcDeTriomphe.rs / (2* arcDeTriomphe.r));
-////			println("debording " + v.s);
-//			arcDeTriomphe.stop = - alpha - beta;
+//		float alpha = acos((p1x - cx)/arcDeTriomphe.r);
+//		float beta = 2 * asin(arcDeTriomphe.rs / (2* arcDeTriomphe.r));
+////		println("debording " + v.s);
+//		arcDeTriomphe.stop = - alpha - beta;
 //		} else if(dist(p2x,p2y,pStop_x, pStop_y) > arcDeTriomphe.rs){
-//			float alpha = acos((p2x - cx)/arcDeTriomphe.r);
-//			float beta = 2 * asin(arcDeTriomphe.rs / (2* arcDeTriomphe.r));
-//			arcDeTriomphe.start = - alpha + beta;
-	//
+//		float alpha = acos((p2x - cx)/arcDeTriomphe.r);
+//		float beta = 2 * asin(arcDeTriomphe.rs / (2* arcDeTriomphe.r));
+//		arcDeTriomphe.start = - alpha + beta;
+		//
 //		}
 		arcDeTriomphe.rs *= 1.1;
 
@@ -165,7 +179,7 @@ class ResultGraph extends TerminaGraph{
 					uf++;
 			}
 		}
-		
+
 		int mf = max(cf,uf,wf);
 		int mo = max(co,uo,wo);
 		int _wf = 0;
@@ -175,7 +189,7 @@ class ResultGraph extends TerminaGraph{
 		int _wo = 0;
 		int _co = 0;
 		int _uo = 0;
-		
+
 		for(int i = 0; i < n; i++){
 			Vertex vert = vertices.get(i);
 			if (i < owns){
@@ -232,9 +246,8 @@ class ResultGraph extends TerminaGraph{
 	void updateVertexDistances() {
 		float currdist = 100; 
 
-		for (Vertex v : vertices) {
-			if (! v.own && v.c == CORRECT)
-				v.distance = currdist;
+		for (Vertex v : correctTags) {
+			v.distance = currdist;
 		}
 
 		currdist = getBiggestCornerDistance(correctTags);
@@ -251,5 +264,7 @@ class ResultGraph extends TerminaGraph{
 			v.distance = currdist;
 		}
 	}
+
+
 
 }

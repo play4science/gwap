@@ -15,7 +15,7 @@ class Vertex {
 	float radi;
 	color c;
 	boolean own;
-	
+
 
 	Vertex(float x, float y, int size, String s, float distance, color c) {
 		this.own = true;
@@ -81,4 +81,34 @@ class Vertex {
 		y = tg.cy + (int)( distance *  cos(angle));
 //		} 
 	}
+
+	void collideWithBorders(){
+		float l = x - tw/2;
+		float r = x + tw/2;
+		float u = y - th/2;
+		float d = y + th/2;
+
+		if(u < 0){
+			m = (y - tg.cy) /(x - tg.cx);
+			distance = dist((th / 2 - tg.cy)/ (m) + tg.cx, th/2, tg.cx, tg.cy);
+			move();
+		} 
+		if(d > height){
+			m = (y - tg.cy) /(x - tg.cx);
+			distance = dist((2 * height - th - 2 * tg.cy)/(2 * m) + tg.cx, height - th / 2 , tg.cx,tg.cy);
+			move();
+		}
+		if(l < 0){
+			println("vertex " + s + " left");
+			m = (y - tg.cy) /(x - tg.cx);
+			distance = dist(tw / 2, m * (tw / 2 - tg.cx) + tg.cy, tg.cx,tg.cy);
+			move();
+		}
+		if(r > width){
+			m = (y - tg.cy) /(x - tg.cx);
+			distance = dist(width - tw /2 , m * (width - tw / 2 - tg.cx) + tg.cy, tg.cx, tg.cy);
+			move();
+		}
+	}
+
 }

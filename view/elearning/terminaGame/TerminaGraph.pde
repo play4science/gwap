@@ -32,25 +32,22 @@ class TerminaGraph {
 
 	void collide() {
 		if (vertices.size() > 1) {
-			for (int i = 0; i < vertices.size(); i++) {
-				Vertex v = vertices.get(i);
-				Vertex w = vertices.get((i + 1) % vertices.size());
-				int w1 = (int)( v.tw / 2);
-				int w2 = (int)( w.tw / 2);
-				int h1 = (int)( v.th / 2);
-				int h2 = (int)( w.th / 2);
-				int dx = abs(v.x - w.x);
-				int dy = abs(v.y - w.y);
-				if ( (w1 + w2) > dx && (h1 + h2) > dy) {
-					if (i == 0) {
-						w.newAngle += 0.02;
-					} 
-					else if (i == vertices.size() - 1) {
-						v.newAngle -= 0.02;
-					} 
-					else {
-						v.newAngle -= 0.02;
-						w.newAngle += 0.02;
+			for(Vertex v : vertices){
+				for(Vertex w : vertices){
+					float w1 = v.tw / 2;
+					float w2 = w.tw / 2;
+					float h1 = v.th / 2;
+					float h2 = w.th / 2;
+					float dx = abs(v.x - w.x);
+					float dy = abs(v.y - w.y);
+					if ( (w1 + w2) > dx && (h1 + h2) > dy) {
+						if(w.angle < v.angle){
+							w.newAngle -= 0.02;
+							v.newAngle += 0.02;
+						} else {
+							w.newAngle += 0.02;
+							v.newAngle -= 0.02;
+						}
 					}
 				}
 			}

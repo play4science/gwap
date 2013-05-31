@@ -33,7 +33,6 @@ void setup() {
 	size(width, height);
 
 	tg = new TerminaGraph();
-	println("this.tg " + tg);
 	frameRate(15);
 }
 
@@ -56,6 +55,7 @@ void draw() {
 	for(Vertex v : tg.vertices)
 		v.move();
 
+	
 	if(tg.type == "ResultGraph"){
 		ResultGraph rg = (ResultGraph)tg;
 		if (rg.high && rg.ownTags.size() > 0){
@@ -67,6 +67,7 @@ void draw() {
 	stroke(STROKE);
 
 	for (Vertex v : tg.vertices) {
+		v.collideWithBorders();
 		line(tg.cx, tg.cy, v.x, v.y);
 		v.display();
 	}
@@ -107,4 +108,8 @@ void highlightOwnTags(){
 
 void setResultGraph(){
 	tg = new ResultGraph();
+}
+
+void mix(){
+	tg.mix();
 }
