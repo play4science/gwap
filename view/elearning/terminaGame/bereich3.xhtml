@@ -15,12 +15,12 @@
 		var waiting = setInterval(function(){
 			var pjs = Processing.getInstanceById('TerminaGraph');
 			if(typeof pjs != 'undefined'){
+				clearInterval(waiting);
 				console.log("processing instance ready");
 				pjs.setTerm('#{term.tag.name}');
 				var width = document.getElementById('gameheaderLine').offsetWidth;
 				console.log("setting width to: " + width);
 				pjs.setDisplayWidth(width);
-				clearInterval(waiting);
 			}
 				
 		},10);
@@ -29,11 +29,11 @@
 			var pjs = Processing.getInstanceById(id);
 			var size = 20;
 			
-			pjs.addOwnTag(association, 100, size, matchType);
+			pjs.addTag(association, 100, size, matchType);
 		}
 	</script>
 
-	<canvas id="TerminaGraph" data-processing-sources="terminaGame/TerminaGraph.pde terminaGame/Vertex.pde terminaGame/RoundedArc.pde"> </canvas>
+	<canvas id="TerminaGraph" data-processing-sources="terminaGame/TerminaMain.pde terminaGame/TerminaGraph.pde terminaGame/Vertex.pde"> </canvas>
 	
 	<a4j:form id="bereich3">
 		<h:messages class="standout2"/>

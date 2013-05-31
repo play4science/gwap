@@ -15,6 +15,7 @@ function newProcessingInstance(id){
 			clearInterval(waiting);
 			//add Instance
 			processingInstances.push(pjs);
+			pjs.setResultGraph();
 			console.log("number of processing instances: " + processingInstances.length);
 			if(processingInstances.length == numberOfRounds)
 				setUpGraphs();

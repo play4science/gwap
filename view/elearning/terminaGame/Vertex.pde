@@ -68,7 +68,6 @@ class Vertex {
 	}
 
 	void setMovement(float to, float off) {
-		//     println("setting movement from "  + from + " to "+  to + " off " + off  );
 		//this.angle = 2 * PConstants.PI * from / off + PI;
 		//     println("old angle " + angle);
 		this.newAngle = 2 * PI * to / off + PI;
@@ -78,8 +77,8 @@ class Vertex {
 	void move() {
 //		if (abs(newAngle - angle) > 0.01) {
 		angle += (newAngle - angle)/2;
-		x = cx + (int)( distance *  sin(angle));
-		y = cy + (int)( distance *  cos(angle));
+		x = tg.cx + (int)( distance *  sin(angle));
+		y = tg.cy + (int)( distance *  cos(angle));
 //		} 
 	}
 }
