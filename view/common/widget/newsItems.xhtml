@@ -9,6 +9,6 @@
     xmlns:a4j="http://richfaces.org/a4j">
 
 	<ui:repeat var="_newsItem" value="#{newsItemBean.currentNewsItems()}">
-		<div class="newsItem"><span class="date"><h:outputText value="#{_newsItem.datePublished}"/>:</span><h:outputText value="#{_newsItem.text}" /></div>
+		<div class="newsItem"><span class="date"><h:outputText value="#{_newsItem.datePublished}"/>:</span><h:outputText value="#{_newsItem.text}" escape="false" /></div>
 	</ui:repeat>
 </ui:composition>
