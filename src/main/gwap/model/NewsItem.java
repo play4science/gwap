@@ -39,7 +39,7 @@ import javax.persistence.NamedQuery;
 	@NamedQuery(name="newsItem.byPlatform", query="from NewsItem where platform = :platform"),
 	@NamedQuery(name="newsItem.current", 
 				query="from NewsItem where platform = :platform and language = :language " +
-						"and (dateExpired is null or dateExpired > NOW())")
+						"and datePublished <= NOW() and (dateExpired is null or dateExpired > NOW())")
 })
 @Entity
 public class NewsItem implements Serializable {

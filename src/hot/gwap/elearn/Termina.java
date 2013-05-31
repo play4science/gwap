@@ -31,6 +31,7 @@ import gwap.model.resource.Term;
 import gwap.tools.TagSemantics;
 import gwap.widget.HighscoreBean;
 import gwap.wrapper.MatchingTag;
+import gwap.wrapper.HighscoreSet;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -327,10 +328,16 @@ public class Termina extends AbstractGameSessionBean {
 		} else {
 			// calculcate highscore
 			HighscoreBean highscoreBean = (HighscoreBean) Component.getInstance(HighscoreBean.class);
-			List<Highscore> highscoreAll = highscoreBean.getHighscores().get(0).getHighscoreAll();
-			if (highscoreAll.get(0).getPersonId().equals(person.getId())
-				|| (person.getPersonConnected() != null && highscoreAll.get(0).getPersonId().equals(person.getPersonConnected().getId()))) {
-				return messages.get("scoring.goodHighscore");
+			List<HighscoreSet> highscores = highscoreBean.getHighscores();
+			for (HighscoreSet highscoreSet : highscores) {
+				if (highscoreSet.getGameType().getName().equals("elearnTermina")) {
+					List<Highscore> highscore = highscoreSet.getHighscoreAll();
+					if (highscore.size() > 0 && (highscore.get(0).getPersonId().equals(person.getId())
+							|| (person.getPersonConnected() != null && highscore.get(0).getPersonId().equals(person.getPersonConnected().getId())))) {
+						return messages.get("scoring.goodHighscore");
+					}
+					break;
+				}
 			}
 			// check if player chose maximum difficulty
 			if (gameConfiguration.getBid() < 5 || gameConfiguration.getRoundDuration() > 15)
