@@ -22,8 +22,8 @@ void setup() {
 	GREY = color(220);
 
 	CORRECT = #00FF00;
-	WRONG = #FF0000;
-	UNKNOWN = #CC8811;
+	WRONG = #FF6666;
+	UNKNOWN = #FFBB00;
 
 	Processing.logger = console;
 

@@ -26,7 +26,15 @@
 					<h:outputText value="#{messages['termina.scoring.description']}" escape="false"/>
 				</div>
 				<br />
+				<rich:tabPanel>
+				<rich:tab label="Concept Map Darstellung BETA">
 				<ui:include src="/widget/gameResultGraphs.xhtml" />
+				</rich:tab>
+				<rich:tab label="Tabellarische Darstellung">
+				<ui:include src="/widget/gameSessionResults.xhtml" />
+				</rich:tab>
+				</rich:tabPanel>
+				
 				<br />
 				<s:button view="/termina.xhtml" styleClass="repeat" propagation="none" title="#{messages['buttonTitle.repeat']}" value=""/>
 			</div>

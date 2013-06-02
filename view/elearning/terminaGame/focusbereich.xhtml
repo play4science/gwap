@@ -29,7 +29,7 @@
 		
 						countdown.callbackStop = function() {
 							document.getElementById('bereich3:inputassoc').disabled = "true";
-							setInterval(switchTerm, 1000);
+							setTimeout(switchTerm, 1000);
 						};
 	
 						countdown.start(#{gameConfiguration.roundDuration});
@@ -67,8 +67,9 @@
 			</table>
 
 			<script type="text/javascript">
-				if(#{gameConfiguration.bid}==#{elearnTermina.foundAssociations})
-					countdown.stop();		
+				if(#{gameConfiguration.bid}==#{elearnTermina.foundAssociations}) {
+					countdown.stop();
+				}
 				</script>	
 			
 		</h:form>

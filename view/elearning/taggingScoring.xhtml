@@ -24,9 +24,16 @@
 					
 				</div>
 				<br />
+				<rich:tabPanel>
+				<rich:tab label="Concept Map Darstellung BETA">
+				<ui:include src="/widget/gameResultGraphs.xhtml" />
+				</rich:tab>
+				<rich:tab label="Tabellarische Darstellung">
 				<ui:include src="/widget/gameSessionResults.xhtml">
 					<ui:param name="hideGameRoundScore" value="true"/>
 				</ui:include>
+				</rich:tab>
+				</rich:tabPanel>
 				<br />
 				<s:button view="/tagging.xhtml" styleClass="repeat" title="#{messages['buttonTitle.tagging.repeat']}" propagation="none" value=""/>
 			</div>

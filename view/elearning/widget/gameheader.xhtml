@@ -8,6 +8,8 @@
     xmlns:rich="http://richfaces.org/rich"
     xmlns:a4j="http://richfaces.org/a4j">
 	
+	<a name="gameheader"></a>
+	<script type="text/javascript">document.location.hash="#gameheader";</script>
 	<table>
 		<tr>
 			<td class="terminaTableCell"><img class="gameIcon" src="#{internalBasePath}img/game_round.svg" /><h:outputText class="gamevariables" value="#{messages['termina.currentRound']} #{gameRound.number}"/></td>
@@ -21,7 +23,6 @@
 		</tr>
 	</table>
 	<hr class="termina" id="gameheaderLine" />
-	<br />
 	<h:outputText styleClass="terminaQuestion" value="#{messages['tagging.frage.satz']}" />
 	
 		
