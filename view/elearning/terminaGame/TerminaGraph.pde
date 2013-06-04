@@ -36,13 +36,7 @@ class TerminaGraph {
 		if (vertices.size() > 1) {
 			for(Vertex v : vertices){
 				for(Vertex w : vertices){
-					float w1 = v.tw / 2;
-					float w2 = w.tw / 2;
-					float h1 = v.th / 2;
-					float h2 = w.th / 2;
-					float dx = abs(v.x - w.x);
-					float dy = abs(v.y - w.y);
-					if ( (w1 + w2) > dx && (h1 + h2) > dy) {
+					if (overlapping(v,w)) {
 						if(w.angle < v.angle){
 							w.newAngle -= 0.02;
 							v.newAngle += 0.02;
@@ -56,6 +50,16 @@ class TerminaGraph {
 		}
 	}
 
+	boolean overlapping(Vertex v, Vertex w){
+		float w1 = v.tw / 2;
+		float w2 = w.tw / 2;
+		float h1 = v.th / 2;
+		float h2 = w.th / 2;
+		float dx = abs(v.x - w.x);
+		float dy = abs(v.y - w.y);
+		
+		return (w1 + w2) > dx && (h1 + h2) > dy;
+	}
 
 	void mix() {
 		for (int i = 0; i < vertices.size(); i++) {
@@ -131,6 +135,21 @@ class TerminaGraph {
 				verticesMoving = verticesMoving || v.moving;
 			}
 		}  
+	}
+	
+	void collideWithCenter(){
+		for(Vertex v : vertices){
+			if(overlapping(v,centerVertex)){
+				if(v.y > cy){
+					v.newAngle += 0.02;
+				} else {
+					v.newAngle -= 0.02;
+				}
+				v.distance ++;
+			}
+			
+		}
+		
 	}
 
 }

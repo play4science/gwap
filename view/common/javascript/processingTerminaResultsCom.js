@@ -44,7 +44,7 @@ function setUpGraphs(){
 		term = terms[i];
 		console.log("term in round " + i + " : " + term  );
 
-		pjs.setTerm(term);
+		pjs.setTerm(setLineBreaks(term));
 		console.log("term set. adding user tags");
 		for(var j = 0; j < userTags[i].length; j++){
 			var type = score2matchType(scores[i][j]);
@@ -92,4 +92,11 @@ function containsIgnoreCase(arr, tag){
 		b = b || a == u;
 	}
 	return b; 
+}
+
+function setLineBreaks(tag){
+	tag = tag.trim();
+	tag = tag.replace(/ +(?= )/g,''); //replace multiple whitespaces 
+	tag = tag.replace(/ /g,"\n"); //replace whitespaces with linebreak
+	return tag;
 }

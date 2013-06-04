@@ -10,6 +10,7 @@
 	
 	
 	<a4j:loadScript src="/javascript/processing.js"/>
+	<a4j:loadScript src="/javascript/processingTerminaGameCom.js"/>
 	
 	<script type="text/javascript">		
 		var waiting = setInterval(function(){
@@ -17,7 +18,7 @@
 			if(typeof pjs != 'undefined'){
 				clearInterval(waiting);
 				console.log("processing instance ready");
-				pjs.setTerm('#{term.tag.name}');
+				pjs.setTerm(setLineBreaks('#{term.tag.name}'));
 				var width = document.getElementById('gameheaderLine').offsetWidth;
 				console.log("setting width to: " + width);
 				pjs.setDisplayWidth(width);
@@ -25,12 +26,7 @@
 				
 		},10);
 
-		function newEntry(id, association, score, matchType){
-			var pjs = Processing.getInstanceById(id);
-			var size = 20;
-			
-			pjs.addTag(association, 100, size, matchType);
-		}
+
 	</script>
 
 	<canvas id="TerminaGraph" data-processing-sources="terminaGame/TerminaMain.pde terminaGame/TerminaGraph.pde terminaGame/Vertex.pde"> </canvas>
@@ -41,12 +37,7 @@
 		
 		<script type="text/javascript"> 
 			if ('#{elearnTermina.lastAssociation}' != '' &amp;&amp; '#{elearnTermina.lastAssociation.tag}' != 'duplicate' ){
-				var tag = '#{elearnTermina.lastAssociation.tag}';
-
-				tag = tag.trim();
-				tag = tag.replace(/ +(?= )/g,''); //replace multiple whitespaces 
-				tag = tag.replace(/ /g,"\n"); //replace whitespaces with linebreak
-	
+				var tag = setLineBreaks('#{elearnTermina.lastAssociation.tag}');
 				newEntry('TerminaGraph', tag, '#{elearnTermina.lastAssociation.score}','#{elearnTermina.lastAssociation.getMatchType()}' );
 		    }    
 		</script>

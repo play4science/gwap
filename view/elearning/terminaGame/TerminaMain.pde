@@ -38,19 +38,13 @@ void setup() {
 void draw() {
 	background(BACKGROUND);
 	tg.collide();
+	tg.collideWithCenter();
+	
 	if(tg.type == "ResultGraph"){
 		ResultGraph rg = (ResultGraph)tg;
-		int n = 0;
-		if(rg.correctTags.size() > 0)
-			n++;
-		if(rg.wrongTags.size() > 0)
-			n++;
-		if(rg.unknownTags.size() > 0)
-			n++;
-		if( n >= 2 ){
-			rg.updateVertexDistances();
-		}
+		rg.updateVertexDistances();
 	}
+	
 	tg.moveVertices();
 
 
@@ -60,6 +54,7 @@ void draw() {
 		if (rg.high && rg.ownTags.size() > 0){
 			rg.arcDeTriomphe.update();
 			rg.arcDeTriomphe.shrinkExpand();
+			//rg.collideWithArc();
 			rg.arcDeTriomphe.display();    
 		}
 	}

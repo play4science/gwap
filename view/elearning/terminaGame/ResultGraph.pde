@@ -190,24 +190,43 @@ class ResultGraph extends TerminaGraph{
 	}
 
 	void updateVertexDistances() {
-		float currdist = 100; 
+		int n = 0;
+		if(correctTags.size() > 0)
+			n++;
+		if(wrongTags.size() > 0)
+			n++;
+		if(unknownTags.size() > 0)
+			n++;
+		if( n >= 2 ){
 
-		for (Vertex v : correctTags) {
-			v.distance = currdist;
+			float currdist = 100; 
+	
+			for (Vertex v : correctTags) {
+				v.distance = currdist;
+			}
+	
+			currdist = getBiggestCornerDistance(correctTags);
+	
+			for (Vertex v : unknownTags) {
+				v.distance = currdist;
+			}
+	
+			currdist2 = getBiggestCornerDistance(unknownTags);
+			if (currdist2 > currdist)
+				currdist = currdist2;
+	
+			for (Vertex v : wrongTags) {
+				v.distance = currdist;
+			}
 		}
-
-		currdist = getBiggestCornerDistance(correctTags);
-
-		for (Vertex v : unknownTags) {
-			v.distance = currdist;
-		}
-
-		currdist2 = getBiggestCornerDistance(unknownTags);
-		if (currdist2 > currdist)
-			currdist = currdist2;
-
-		for (Vertex v : wrongTags) {
-			v.distance = currdist;
+	}
+	
+	void collideWithArc(){
+		
+		for(Vertex v : foreignTags){
+			if(v.angle % TWO_PI > arcDeTriomphe.start % TWO_PI && v.angle % TWO_PI < arcDeTriomphe.stop % TWO_PI){
+				println(v.s +" foreign Tag in arc!");
+			}
 		}
 	}
 
