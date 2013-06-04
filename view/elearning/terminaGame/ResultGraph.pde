@@ -19,7 +19,7 @@ class ResultGraph extends TerminaGraph{
 		unknownTags = new ArrayList(0);  
 
 		high = false;
-		arcDeTriomphe = new RoundedArc(0, 1, 100, 20);
+		arcDeTriomphe = new RoundedArc(0, 1, 100, 20, this);
 
 	}
 
@@ -27,11 +27,7 @@ class ResultGraph extends TerminaGraph{
 		float outerRadius = 0;
 
 		for(Vertex v : al){
-			d_l_up = dist(v.x - v.tw /2, v.y - v.th / 2, cx ,cy);
-			d_l_down = dist(v.x - v.tw /2, v.y + v.th / 2, cx ,cy);
-			d_r_up = dist(v.x + v.tw /2, v.y - v.th / 2, cx ,cy);
-			d_r_down = dist(v.x + v.tw /2, v.y + v.th / 2, cx ,cy);
-			float[] arr = {d_l_up, d_l_down, d_r_up, d_r_down};
+			float[] arr = getCornerDistances(v,cx,cy);
 			m = max(arr);
 			if (m > outerRadius)
 				outerRadius = m;
@@ -43,7 +39,7 @@ class ResultGraph extends TerminaGraph{
 		float innerRadius = width;
 
 		for(Vertex v : al){
-			float[] arr = getCornerDistances(v);
+			float[] arr = getCornerDistances(v,cx,cy);
 			m = min(arr);
 			if (m < innerRadius)
 				innerRadius = m;
@@ -51,56 +47,18 @@ class ResultGraph extends TerminaGraph{
 		return innerRadius;
 	}
 
-	float[] getCornerDistances(Vertex v){
-		d_l_up = dist(v.x - v.tw /2, v.y - v.th / 2, cx ,cy);
-		d_l_down = dist(v.x - v.tw /2, v.y + v.th / 2, cx ,cy);
-		d_r_up = dist(v.x + v.tw /2, v.y - v.th / 2, cx ,cy);
-		d_r_down = dist(v.x + v.tw /2, v.y + v.th / 2, cx ,cy);
+	float[] getCornerDistances(Vertex v, float posx, float posy){
+		float[] corners = v.getCorners();
+		d_l_up = dist(corners[0], corners[1], posx ,posy);
+		d_l_down = dist(corners[2], corners[3], posx ,posy);
+		d_r_up = dist(corners[4], corners[5], posx ,posy);
+		d_r_down = dist(corners[6], corners[7], posx ,posy);
 		float[] arr = {d_l_up, d_l_down, d_r_up, d_r_down};
 		return arr;
 	}
 
-	void updateArc(){
-		outerRadius = getBiggestCornerDistance(ownTags);
-		innerRadius = getSmallestCornerDistance(ownTags);
-		arcDeTriomphe.rs = (outerRadius - innerRadius)/2;
-		arcDeTriomphe.r = (outerRadius + innerRadius)/2;
 
-		float start = 2 * PI;
-		float stop = 0;
-		Vertex first;
-		Vertex last;
-		for(Vertex v: ownTags){
-			if (v.angle > stop){
-				stop = v.angle;
-				last = v;
-			}
 
-			if(v.angle < start){
-				start = v.angle;
-				first = v;
-			}
-		}
-		println("update arc: last = " + last.s);
-		println("update arc: first = " + first.s);
-
-		start = - start + HALF_PI;
-		stop = - stop + HALF_PI;
-		
-		if(start < stop){
-			println("update arc: start < stop" );
-			arcDeTriomphe.start = - start + HALF_PI;
-			arcDeTriomphe.stop = - stop + HALF_PI;
-		} 
-		else {
-			println("update arc: start >= stop");
-			arcDeTriomphe.start = stop;
-			arcDeTriomphe.stop =  start;       
-		}
-
-		arcDeTriomphe.rs *= 1.1;
-
-	}
 
 	Vertex newVertex(String s, float distance, int size, String matchType) {
 		Vertex vert = super.newVertex(s,distance,size,matchType);

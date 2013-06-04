@@ -11,7 +11,7 @@ class TerminaGraph {
 	String type;
 
 	boolean verticesMoving;
-	
+
 	TerminaGraph() {
 		verticesMoving = true;
 		cx = width/2;
@@ -23,7 +23,7 @@ class TerminaGraph {
 		centerVertex = new Vertex(cx, cy, 20, term, 0, GREY);
 		centerVertex.display();
 		vertices = new ArrayList();
-		
+
 	}
 
 	void setTerm(String term) {
@@ -71,6 +71,7 @@ class TerminaGraph {
 
 	Vertex newVertex(String s, float distance, int size, String matchType) {
 		Vertex vert = new Vertex(cx, cy - distance, size, s, distance, new color(0));
+		tg.inmove = true;
 		if (matchType == "directMatch") {
 			vert.c = CORRECT;
 		} 
@@ -85,6 +86,7 @@ class TerminaGraph {
 
 	void addTag(String s, float distance, int size, String matchType){
 		Vertex vert = newVertex(s,distance,size,matchType);
+		this.verticesMoving = true;
 		vertices.add(0, vert);
 		updatePositions();
 	}
@@ -92,11 +94,9 @@ class TerminaGraph {
 	void updatePositions() {
 		int n = vertices.size();
 		if (n < 7) { //small amount
+			int off = 7;
 			for (int i = 1; i < n; i++) {
-
 				int to = i;
-				int off = 7;
-
 				Vertex v = vertices.get(i);
 				v.setMovement(to, off);
 			}
@@ -122,7 +122,7 @@ class TerminaGraph {
 
 		draw();
 	}
-	
+
 	void moveVertices(){
 		if(verticesMoving){
 			verticesMoving = false;
@@ -130,7 +130,7 @@ class TerminaGraph {
 				v.move();
 				verticesMoving = verticesMoving || v.moving;
 			}
-		}	
+		}  
 	}
 
 }

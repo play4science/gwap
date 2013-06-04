@@ -30,8 +30,8 @@ class Vertex {
 		this.s = s;
 
 		this.distance = distance;
-		this.angle = PI;
-		this.newAngle = PI;
+		this.angle = - HALF_PI;
+		this.newAngle = - HALF_PI;
 
 		textSize(size);
 		String[] words = s.split("\n");
@@ -69,11 +69,12 @@ class Vertex {
 
 	void setMovement(float to, float off) {
 		//this.angle = 2 * PConstants.PI * from / off + PI;
-		//     println("old angle " + angle);
-		this.newAngle = 2 * PI * to / off + PI;
-		if(abs(newAngle - angle > 0.0001)){
+		println("set movement called");
+		this.newAngle = - 2 * PI * to / off - HALF_PI;
+		if(abs(newAngle - angle) > 0.0001){
 			this.moving = true;
 			tg.verticesMoving = true;
+			println(s +" moving to " + to + " off " + off );
 		}
 		else
 			moving = false;
@@ -84,8 +85,8 @@ class Vertex {
 			moving = true;
 			tg.verticesMoving = true;
 			angle += (newAngle - angle)/2;
-			x = tg.cx + (int)( distance *  sin(angle));
-			y = tg.cy + (int)( distance *  cos(angle));
+			x = tg.cx + ( distance *  cos(angle));
+			y = tg.cy + ( distance *  sin(angle));
 		} else 
 			moving = false;
 	}
@@ -97,26 +98,33 @@ class Vertex {
 		float d = y + th/2;
 
 		if(u < 0){
+//			println("vertex " + s + " up");
 			m = (y - tg.cy) /(x - tg.cx);
 			distance = dist((th / 2 - tg.cy)/ (m) + tg.cx, th/2, tg.cx, tg.cy);
 			move();
 		} 
 		if(d > height){
+//			println("vertex " + s + " down");
 			m = (y - tg.cy) /(x - tg.cx);
 			distance = dist((2 * height - th - 2 * tg.cy)/(2 * m) + tg.cx, height - th / 2 , tg.cx,tg.cy);
 			move();
 		}
 		if(l < 0){
-			println("vertex " + s + " left");
+//			println("vertex " + s + " left");
 			m = (y - tg.cy) /(x - tg.cx);
 			distance = dist(tw / 2, m * (tw / 2 - tg.cx) + tg.cy, tg.cx,tg.cy);
 			move();
 		}
 		if(r > width){
+//			println("vertex " + s + " right");
 			m = (y - tg.cy) /(x - tg.cx);
 			distance = dist(width - tw /2 , m * (width - tw / 2 - tg.cx) + tg.cy, tg.cx, tg.cy);
 			move();
 		}
 	}
 
+	float[] getCorners(){
+		float[] arr = {x - tw/2 , y - th/2 , x + tw/2, y - th/2 , x - tw/2 , y + th/2 , x + tw/2, y + th/2};
+		return arr;  
+	}
 }
