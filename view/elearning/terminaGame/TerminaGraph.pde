@@ -10,8 +10,10 @@ class TerminaGraph {
 
 	String type;
 
+	boolean verticesMoving;
+	
 	TerminaGraph() {
-
+		verticesMoving = true;
 		cx = width/2;
 		cy = height/2;
 
@@ -120,6 +122,15 @@ class TerminaGraph {
 
 		draw();
 	}
-
+	
+	void moveVertices(){
+		if(verticesMoving){
+			verticesMoving = false;
+			for(Vertex v : tg.vertices){
+				v.move();
+				verticesMoving = verticesMoving || v.moving;
+			}
+		}	
+	}
 
 }

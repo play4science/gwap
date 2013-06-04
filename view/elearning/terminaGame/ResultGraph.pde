@@ -68,48 +68,36 @@ class ResultGraph extends TerminaGraph{
 
 		float start = 2 * PI;
 		float stop = 0;
+		Vertex first;
+		Vertex last;
 		for(Vertex v: ownTags){
-			if (v.angle > stop)
+			if (v.angle > stop){
 				stop = v.angle;
-			if(v.angle < start)
+				last = v;
+			}
+
+			if(v.angle < start){
 				start = v.angle;
+				first = v;
+			}
 		}
+		println("update arc: last = " + last.s);
+		println("update arc: first = " + first.s);
 
 		start = - start + HALF_PI;
 		stop = - stop + HALF_PI;
 		
 		if(start < stop){
+			println("update arc: start < stop" );
 			arcDeTriomphe.start = - start + HALF_PI;
 			arcDeTriomphe.stop = - stop + HALF_PI;
-		} else {
+		} 
+		else {
+			println("update arc: start >= stop");
 			arcDeTriomphe.start = stop;
 			arcDeTriomphe.stop =  start;       
 		}
-//		noStroke();
-//		float pStart_x = cx + arcDeTriomphe.r * cos(arcDeTriomphe.start);
-//		float pStart_y = cy + arcDeTriomphe.r * sin(arcDeTriomphe.start);
-		//
-//		float pStop_x = cx + arcDeTriomphe.r * cos(arcDeTriomphe.stop);
-//		float pStop_y = cy + arcDeTriomphe.r * sin(arcDeTriomphe.stop);
-		//
-//		Vertex v = ownTags.get(0);
-		//
-//		float p1x = v.x + v.tw / 2;
-//		float p1y = v.y + v.th / 2;
-//		float p2x = v.x - v.tw / 2;
-//		float p2y = v.y + v.th / 2;
-////		println(p1x + " " + p1y + " " + pStart_x + " " +pStop_x  + " " + arcDeTriomphe.rs +  " " +  dist(p1x,p1y, pStart_x, pStart_y) );
-//		if(dist(p1x,p1y, pStart_x, pStart_y) > arcDeTriomphe.rs){
-//		float alpha = acos((p1x - cx)/arcDeTriomphe.r);
-//		float beta = 2 * asin(arcDeTriomphe.rs / (2* arcDeTriomphe.r));
-////		println("debording " + v.s);
-//		arcDeTriomphe.stop = - alpha - beta;
-//		} else if(dist(p2x,p2y,pStop_x, pStop_y) > arcDeTriomphe.rs){
-//		float alpha = acos((p2x - cx)/arcDeTriomphe.r);
-//		float beta = 2 * asin(arcDeTriomphe.rs / (2* arcDeTriomphe.r));
-//		arcDeTriomphe.start = - alpha + beta;
-		//
-//		}
+
 		arcDeTriomphe.rs *= 1.1;
 
 	}

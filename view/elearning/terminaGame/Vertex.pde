@@ -15,12 +15,12 @@ class Vertex {
 	float radi;
 	color c;
 	boolean own;
-
+	boolean moving;
 
 	Vertex(float x, float y, int size, String s, float distance, color c) {
 		this.own = true;
 		this.radi = 4;
-
+		this.moving = false;
 		this.c = c;
 
 		this.x = x;
@@ -71,15 +71,23 @@ class Vertex {
 		//this.angle = 2 * PConstants.PI * from / off + PI;
 		//     println("old angle " + angle);
 		this.newAngle = 2 * PI * to / off + PI;
-		//     println("new angle " + newAngle);
+		if(abs(newAngle - angle > 0.0001)){
+			this.moving = true;
+			tg.verticesMoving = true;
+		}
+		else
+			moving = false;
 	}
 
 	void move() {
-//		if (abs(newAngle - angle) > 0.01) {
-		angle += (newAngle - angle)/2;
-		x = tg.cx + (int)( distance *  sin(angle));
-		y = tg.cy + (int)( distance *  cos(angle));
-//		} 
+		if (abs(newAngle - angle) > 0.0001) {
+			moving = true;
+			tg.verticesMoving = true;
+			angle += (newAngle - angle)/2;
+			x = tg.cx + (int)( distance *  sin(angle));
+			y = tg.cy + (int)( distance *  cos(angle));
+		} else 
+			moving = false;
 	}
 
 	void collideWithBorders(){

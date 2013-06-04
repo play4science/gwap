@@ -11,7 +11,6 @@ color CORRECT;
 color WRONG;
 color UNKNOWN;
 
-
 void setup() {
 	BACKGROUND = color(255);  
 	STROKE = color(0);
@@ -26,7 +25,7 @@ void setup() {
 	UNKNOWN = #FFBB00;
 
 	Processing.logger = console;
-
+	verticesMoving = false;
 	this.width = 400;
 	this.height = 300;
 
@@ -52,8 +51,8 @@ void draw() {
 			rg.updateVertexDistances();
 		}
 	}
-	for(Vertex v : tg.vertices)
-		v.move();
+	tg.moveVertices();
+
 
 	
 	if(tg.type == "ResultGraph"){
