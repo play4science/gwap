@@ -68,20 +68,15 @@ class Vertex {
 	}
 
 	void setMovement(float to, float off) {
-		println("setMovement called");
 		float na = (- TWO_PI * to / off - HALF_PI)%TWO_PI;
 		if(na < 0){
 			na += TWO_PI;  
 		}
 
-
 		if(abs(na - angle) > 0.001){
 			this.newAngle = na;
 			this.moving = true;
 			tg.verticesMoving = true;
-			println(s +" moving to " + to + " off " + off );
-			println("current angle " + angle);
-			println("curren new angle " + newAngle);
 		}
 		else
 			newAngle = angle;

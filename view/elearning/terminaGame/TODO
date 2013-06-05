@@ -1,10 +1,9 @@
 --BUGS--
-Collide with center direction change
 
 --STUFF--
 render result graph when moving is done
 caption in result graph
 "success graph"
 practice mode graph
-change separateTags
-
+shrinkExpand uses right most vertex not rightmost corner
+shrinkExpand uses point-point distance instead of line-point

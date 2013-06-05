@@ -58,10 +58,30 @@ void draw() {
 	fill(STROKE);
 	stroke(STROKE);
 
-	for (Vertex v : tg.vertices) {
-		v.collideWithBorders();
-		line(tg.cx, tg.cy, v.x, v.y);
-		v.display();
+	if(tg.type == "ResultGraph"){
+		ResultGraph rg = (ResultGraph)tg;
+		for(Vertex v : rg.wrongTags){
+			v.collideWithBorders();
+			line(tg.cx, tg.cy, v.x, v.y);
+			v.display();			
+		}
+		for(Vertex v : rg.unknownTags){
+			v.collideWithBorders();
+			line(tg.cx, tg.cy, v.x, v.y);
+			v.display();			
+		}
+		for(Vertex v : rg.correctTags){
+			v.collideWithBorders();
+			line(tg.cx, tg.cy, v.x, v.y);
+			v.display();			
+		}
+		
+	} else {
+		for (Vertex v : tg.vertices) {
+			v.collideWithBorders();
+			line(tg.cx, tg.cy, v.x, v.y);
+			v.display();
+		}
 	}
 	tg.centerVertex.display();
 }
@@ -90,7 +110,7 @@ void addForeignTag(String s, float distance, int size, String matchType){
 
 void separateTags(){
 	ResultGraph rg = (ResultGraph)tg;
-	rg.separateTags();
+	rg.separateTags2();
 }
 
 void highlightOwnTags(){
@@ -118,3 +138,8 @@ boolean isRight(float ax, float ay, float bx, float by, float cx, float cy){
 boolean isLeft(float ax, float ay, float bx, float by, float cx, float cy){
 	return !isRight(ax,ay,bx,by,cx,cy); 
 }  
+
+void shrinkExpand(){
+	ResultGraph rg = (ResultGraph)tg;
+	rg.arcDeTriomphe.shrinkExpand();
+}

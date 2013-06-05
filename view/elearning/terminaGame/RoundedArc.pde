@@ -65,7 +65,6 @@ class RoundedArc{
 	}
 
 	void shrinkExpand(){
-
 		float mx = rg.cx + r * cos(start);
 		float my = rg.cy + r * sin(start);
 		float[] corners = first.getCorners();
@@ -80,9 +79,15 @@ class RoundedArc{
 				leftCorners = append(leftCorners, coy);  
 			}
 		}
-
+		
 		float d = 0;
 		for(int i = 0; i < leftCorners.length; i +=2){
+//			float vx = -rg.cy + my;
+//			float vy = rg.cx - mx;
+//			float l = sqrt(sq(vx) + sq(vy));
+//			vx = vx / l;
+//			vy = vy / l;
+//			float _d = (leftCorners[i] - rg.cx)*vx + (leftCorners[i+1]- rg.cy)*vy;
 			float _d = dist(mx,my,leftCorners[i], leftCorners[i+1]);
 			if(d < _d)
 				d = _d;  
@@ -116,7 +121,7 @@ class RoundedArc{
 				d = _d;  
 		}
 		if(d < rs * 0.9){    //last is inside arc
-			stopMargin -= 0.01;  
+			stopMargin -= 0.01;  			
 		} else if (d > rs ){ //last debords
 			stopMargin += 0.01;
 		}

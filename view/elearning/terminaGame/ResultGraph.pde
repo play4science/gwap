@@ -178,25 +178,51 @@ class ResultGraph extends TerminaGraph{
 		int foreigns = foreignTags.size();
 
 		int n = owns + foreigns + 2;
-		//distributeEqualy(own)
+		
+		distributeEqually(filterMatching(ownTags,CORRECT), 0, owns, n);
+		distributeEqually(filterMatching(ownTags,UNKNOWN), 0.5, owns + 0.5, n);
+		distributeEqually(filterMatching(ownTags,WRONG), 1, owns + 1, n);
+		distributeEqually(filterMatching(foreignTags,CORRECT), owns + 1 , n - 1, n);
+		distributeEqually(filterMatching(foreignTags,WRONG), owns + 1.5, n - 0.5, n);
+		distributeEqually(filterMatching(foreignTags,UNKNOWN), owns + 2, n , n);
 
 	}
-
-	ArrayList<Vertex> getOwnTags() {
-		ArrayList<Vertex> owns = new ArrayList(); 
-		for (Vertex v : vertices)
-			if (v.own)
-				owns.add(v);
-		return owns;
+	
+void distributeEqually(ArrayList<Vertex> al, float from, float to, float off){
+	float n = abs(from - to);
+	int s = al.size();
+	int i = 0;
+	for(Vertex v : al){
+		v.setMovement(from + i * n / s, off);
+		i++;
+	}
+}
+	
+	ArrayList<Vertex> filterMatching(ArrayList<Vertex> verts, color c){
+		ArrayList<Vertex> al = new ArrayList<Vertex>();
+		for(Vertex v : verts){
+			if(v.c == c){
+				al.add(v);
+			}
+		}
+		return al;
 	}
 
-	ArrayList<Vertex> getForeignTags() {
-		foreigns = new ArrayList();
-		for (Vertex v : vertices)
-			if (! vert.own)
-				foreigns.add(v);
-		return foreigns;
-	} 
+//	ArrayList<Vertex> getOwnCorrectTags() {
+//		ArrayList<Vertex> owns = new ArrayList(); 
+//		for (Vertex v : vertices)
+//			if (v.own)
+//				owns.add(v);
+//		return owns;
+//	}
+//	
+//	ArrayList<Vertex> getForeignTags() {
+//		foreigns = new ArrayList();
+//		for (Vertex v : vertices)
+//			if (! vert.own)
+//				foreigns.add(v);
+//		return foreigns;
+//	} 
 
 	void highlightOwnTags() {
 		high = true;
