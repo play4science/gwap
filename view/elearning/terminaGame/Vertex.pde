@@ -70,7 +70,7 @@ class Vertex {
 	void setMovement(float to, float off) {
 		//this.angle = 2 * PConstants.PI * from / off + PI;
 		println("set movement called");
-		this.newAngle = - 2 * PI * to / off - HALF_PI;
+		this.newAngle = - TWO_PI * to / off - HALF_PI;
 		if(abs(newAngle - angle) > 0.0001){
 			this.moving = true;
 			tg.verticesMoving = true;
@@ -85,41 +85,55 @@ class Vertex {
 			moving = true;
 			tg.verticesMoving = true;
 			angle += (newAngle - angle)/2;
-			x = tg.cx + ( distance *  cos(angle));
-			y = tg.cy + ( distance *  sin(angle));
+			updatePosition();
 		} else 
 			moving = false;
 	}
 
+	void updatePosition(){
+		if(angle < 0){
+			angle += TWO_PI;
+			newAngle += TWO_PI;
+		}
+		x = tg.cx + ( distance *  cos(angle));
+		y = tg.cy + ( distance *  sin(angle));
+	}
+	
 	void collideWithBorders(){
-		float l = x - tw/2;
-		float r = x + tw/2;
-		float u = y - th/2;
-		float d = y + th/2;
+		boolean l = x - tw/2 < 0;
+		boolean r = x + tw/2 > width;
+		boolean u = y - th/2 < 0;
+		boolean d = y + th/2 > height;
+		if(l || u || r || d){
+			float dx = (x - tg.cx);
+			float dy = (y - tg.cy);
+			boolean vertical = dx < 1;
+			float m;
+			if(!vertical)
+				float m = dy/dx;
+			if(u){
+				if(vertical){
+					distance = tg.cy - th/2;
+				} else {
+					distance = dist((th / 2 - tg.cy)/ (m) + tg.cx, th/2, tg.cx, tg.cy);
+				}
+			} 
+			if(d){
+				if(vertical){
+					distance = height - th/2 - tg.cy;  
+				} else {
+					distance = dist((height - th/2 - tg.cy)/(m) + tg.cx, height - th / 2 , tg.cx,tg.cy);
+				}
+				distance -= 2;
+			}
 
-		if(u < 0){
-//			println("vertex " + s + " up");
-			m = (y - tg.cy) /(x - tg.cx);
-			distance = dist((th / 2 - tg.cy)/ (m) + tg.cx, th/2, tg.cx, tg.cy);
-			move();
-		} 
-		if(d > height){
-//			println("vertex " + s + " down");
-			m = (y - tg.cy) /(x - tg.cx);
-			distance = dist((2 * height - th - 2 * tg.cy)/(2 * m) + tg.cx, height - th / 2 , tg.cx,tg.cy);
-			move();
-		}
-		if(l < 0){
-//			println("vertex " + s + " left");
-			m = (y - tg.cy) /(x - tg.cx);
-			distance = dist(tw / 2, m * (tw / 2 - tg.cx) + tg.cy, tg.cx,tg.cy);
-			move();
-		}
-		if(r > width){
-//			println("vertex " + s + " right");
-			m = (y - tg.cy) /(x - tg.cx);
-			distance = dist(width - tw /2 , m * (width - tw / 2 - tg.cx) + tg.cy, tg.cx, tg.cy);
-			move();
+			if(l){
+				distance = dist(tw / 2, m * (tw / 2 - tg.cx) + tg.cy, tg.cx,tg.cy);
+			}
+			if(r){
+				distance = dist(width - tw /2 , m * (width - tw / 2 - tg.cx) + tg.cy, tg.cx, tg.cy);
+			}
+			updatePosition();
 		}
 	}
 

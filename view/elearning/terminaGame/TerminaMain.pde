@@ -47,14 +47,11 @@ void draw() {
 	
 	tg.moveVertices();
 
-
-
 	if(tg.type == "ResultGraph"){
 		ResultGraph rg = (ResultGraph)tg;
 		if (rg.high && rg.ownTags.size() > 0){
 			rg.arcDeTriomphe.update();
 			rg.arcDeTriomphe.shrinkExpand();
-			//rg.collideWithArc();
 			rg.arcDeTriomphe.display();    
 		}
 	}

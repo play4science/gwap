@@ -1,11 +1,9 @@
 --BUGS--
-palette mode timeout bug
-collide with borders bug
 
 --STUFF--
 render result graph when moving is done
 caption in result graph
 "success graph"
-practice mode - graph
+practice mode graph
 change separateTags
 

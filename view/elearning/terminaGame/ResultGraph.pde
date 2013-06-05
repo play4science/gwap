@@ -220,16 +220,4 @@ class ResultGraph extends TerminaGraph{
 			}
 		}
 	}
-	
-	void collideWithArc(){
-		
-		for(Vertex v : foreignTags){
-			if(v.angle % TWO_PI > arcDeTriomphe.start % TWO_PI && v.angle % TWO_PI < arcDeTriomphe.stop % TWO_PI){
-				println(v.s +" foreign Tag in arc!");
-			}
-		}
-	}
-
-
-
 }

@@ -54,15 +54,17 @@ class RoundedArc{
 				last = v;
 			}
 		}
-//		println("update arc: last = " + last.s);
-//println("update arc: first = " + first.s);
-
 
 		start = first.angle + startMargin;
 		stop = last.angle + stopMargin;
 
 		rs *= 1.1;
-
+		if(start < 0){
+			start += TWO_PI;
+		}
+		if(stop < 0){
+			stop += TWO_PI;
+		}
 	}
 
 	void shrinkExpand(){
