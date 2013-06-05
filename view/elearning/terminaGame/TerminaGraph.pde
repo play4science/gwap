@@ -57,7 +57,7 @@ class TerminaGraph {
 		float h2 = w.th / 2;
 		float dx = abs(v.x - w.x);
 		float dy = abs(v.y - w.y);
-		
+
 		return (w1 + w2) > dx && (h1 + h2) > dy;
 	}
 
@@ -136,20 +136,28 @@ class TerminaGraph {
 			}
 		}  
 	}
-	
+
 	void collideWithCenter(){
 		for(Vertex v : vertices){
 			if(overlapping(v,centerVertex)){
 				if(v.y > cy){
-					v.newAngle += 0.02;
+					if(v.x > cx){
+						v.newAngle += 0.02;
+					} else {
+						v.newAngle -= 0.02;            
+					}
 				} else {
-					v.newAngle -= 0.02;
-				}
+					if(v.x > cx){
+						v.newAngle -= 0.02;
+					} else {
+						v.newAngle += 0.02;
+					}
+				} 
 				v.distance ++;
 			}
-			
+
 		}
-		
+
 	}
 
 }

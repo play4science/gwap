@@ -39,12 +39,12 @@ void draw() {
 	background(BACKGROUND);
 	tg.collide();
 	tg.collideWithCenter();
-	
+
 	if(tg.type == "ResultGraph"){
 		ResultGraph rg = (ResultGraph)tg;
 		rg.updateVertexDistances();
 	}
-	
+
 	tg.moveVertices();
 
 	if(tg.type == "ResultGraph"){
@@ -105,3 +105,16 @@ void setResultGraph(){
 void mix(){
 	tg.mix();
 }
+
+void moveToOff(float to, float off){
+	Vertex v = tg.vertices.get(0);
+	v.setMovement(to,off);
+}  
+
+boolean isRight(float ax, float ay, float bx, float by, float cx, float cy){
+	return ((bx - ax)*(cy - ay) - (by - ay)*(cx - ax)) > 0;
+}
+
+boolean isLeft(float ax, float ay, float bx, float by, float cx, float cy){
+	return !isRight(ax,ay,bx,by,cx,cy); 
+}  

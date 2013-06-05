@@ -41,29 +41,26 @@ class RoundedArc{
 		innerRadius = rg.getSmallestCornerDistance(rg.ownTags);
 		rs = (outerRadius - innerRadius)/2;
 		r = (outerRadius + innerRadius)/2;
-
-
+		
 		first = rg.ownTags.get(0);
 		last = rg.ownTags.get(0);
+		
 		for(Vertex v: rg.ownTags){
-			if (first.angle > v.angle ){
+			if (isLeft(rg.cx,rg.cy,first.x,first.y,v.x,v.y)){
 				first = v;
 			}
-
-			if(last.angle < v.angle){
+	
+			if(isRight(rg.cx,rg.cy,last.x,last.y,v.x,v.y)){
 				last = v;
 			}
 		}
-
+		
 		start = first.angle + startMargin;
 		stop = last.angle + stopMargin;
 
 		rs *= 1.1;
-		if(start < 0){
-			start += TWO_PI;
-		}
-		if(stop < 0){
-			stop += TWO_PI;
+		if(start > stop){
+			start -= TWO_PI;  
 		}
 	}
 
@@ -125,15 +122,4 @@ class RoundedArc{
 		}
 
 	}
-
-	//if c is left of line ab
-	boolean isRight(float ax, float ay, float bx, float by, float cx, float cy){
-		return ((bx - ax)*(cy - ay) - (by - ay)*(cx - ax)) > 0;
-	}
-
-	boolean isLeft(float ax, float ay, float bx, float by, float cx, float cy){
-		return !isRight(ax,ay,bx,by,cx,cy); 
-	}  
-
-
 }

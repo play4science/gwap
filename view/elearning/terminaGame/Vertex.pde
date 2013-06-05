@@ -30,8 +30,8 @@ class Vertex {
 		this.s = s;
 
 		this.distance = distance;
-		this.angle = - HALF_PI;
-		this.newAngle = - HALF_PI;
+		this.angle = TWO_PI - HALF_PI;
+		this.newAngle = TWO_PI - HALF_PI;
 
 		textSize(size);
 		String[] words = s.split("\n");
@@ -68,23 +68,37 @@ class Vertex {
 	}
 
 	void setMovement(float to, float off) {
-		//this.angle = 2 * PConstants.PI * from / off + PI;
-		println("set movement called");
-		this.newAngle = - TWO_PI * to / off - HALF_PI;
-		if(abs(newAngle - angle) > 0.0001){
+		println("setMovement called");
+		float na = (- TWO_PI * to / off - HALF_PI)%TWO_PI;
+		if(na < 0){
+			na += TWO_PI;  
+		}
+
+
+		if(abs(na - angle) > 0.001){
+			this.newAngle = na;
 			this.moving = true;
 			tg.verticesMoving = true;
 			println(s +" moving to " + to + " off " + off );
+			println("current angle " + angle);
+			println("curren new angle " + newAngle);
 		}
 		else
-			moving = false;
+			newAngle = angle;
+		moving = false;
 	}
 
 	void move() {
-		if (abs(newAngle - angle) > 0.0001) {
+		if (abs(newAngle % TWO_PI - angle % TWO_PI) > 0.001) {
 			moving = true;
 			tg.verticesMoving = true;
-			angle += (newAngle - angle)/2;
+
+			if(abs(newAngle - TWO_PI - angle) <  abs(newAngle - angle)){
+				angle += (newAngle - TWO_PI - angle)/2;  
+			} else {
+				angle += (newAngle - angle)/2;  
+			}
+
 			updatePosition();
 		} else 
 			moving = false;
@@ -95,10 +109,14 @@ class Vertex {
 			angle += TWO_PI;
 			newAngle += TWO_PI;
 		}
+		if(angle > TWO_PI){
+			angle -= TWO_PI;
+			newAngle -= TWO_PI;  
+		}
 		x = tg.cx + ( distance *  cos(angle));
 		y = tg.cy + ( distance *  sin(angle));
 	}
-	
+
 	void collideWithBorders(){
 		boolean l = x - tw/2 < 0;
 		boolean r = x + tw/2 > width;

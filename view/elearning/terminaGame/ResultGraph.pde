@@ -164,6 +164,23 @@ class ResultGraph extends TerminaGraph{
 		}  
 	}
 
+	void separateTags2(){
+		_vertices = new ArrayList();
+		for(Vertex v : ownTags)
+			_vertices.add(v);
+
+		for(Vertex v : foreignTags)
+			_vertices.add(v);
+
+		vertices = _vertices; 
+
+		int owns = ownTags.size();
+		int foreigns = foreignTags.size();
+
+		int n = owns + foreigns + 2;
+		//distributeEqualy(own)
+
+	}
 
 	ArrayList<Vertex> getOwnTags() {
 		ArrayList<Vertex> owns = new ArrayList(); 
@@ -200,21 +217,21 @@ class ResultGraph extends TerminaGraph{
 		if( n >= 2 ){
 
 			float currdist = 100; 
-	
+
 			for (Vertex v : correctTags) {
 				v.distance = currdist;
 			}
-	
+
 			currdist = getBiggestCornerDistance(correctTags);
-	
+
 			for (Vertex v : unknownTags) {
 				v.distance = currdist;
 			}
-	
+
 			currdist2 = getBiggestCornerDistance(unknownTags);
 			if (currdist2 > currdist)
 				currdist = currdist2;
-	
+
 			for (Vertex v : wrongTags) {
 				v.distance = currdist;
 			}
