@@ -1,4 +1,4 @@
-TerminaGraph tg;
+ResultGraph tg;
 color BACKGROUND;  
 color STROKE;
 color BLUE;
@@ -31,7 +31,7 @@ void setup() {
 
 	size(width, height);
 
-	tg = new TerminaGraph();
+	tg = new ResultGraph();
 	frameRate(15);
 }
 
@@ -40,16 +40,35 @@ void draw() {
 	tg.collide();
 	tg.collideWithCenter();
 
+	tg.updateVertexDistances();
+
 	tg.moveVertices();
+
+	if (tg.high && tg.ownTags.size() > 0){
+		tg.arcDeTriomphe.update();
+		tg.arcDeTriomphe.shrinkExpand();
+		tg.arcDeTriomphe.display();    
+	}
 
 	fill(STROKE);
 	stroke(STROKE);
 
-	for (Vertex v : tg.vertices) {
+	for(Vertex v : tg.wrongTags){
 		v.collideWithBorders();
 		line(tg.cx, tg.cy, v.x, v.y);
-		v.display();
+		v.display();			
 	}
+	for(Vertex v : tg.unknownTags){
+		v.collideWithBorders();
+		line(tg.cx, tg.cy, v.x, v.y);
+		v.display();			
+	}
+	for(Vertex v : tg.correctTags){
+		v.collideWithBorders();
+		line(tg.cx, tg.cy, v.x, v.y);
+		v.display();			
+	}
+		
 	tg.centerVertex.display();
 }
 
@@ -63,6 +82,22 @@ void setDisplayWidth(int w){
 
 void addTag(String s, float distance, int size, String matchType){
 	tg.addTag(s,distance,size,matchType);
+}
+
+void addOwnTag(String s, float distance, int size, String matchType){
+	tg.addOwnTag(s,distance,size,matchType);
+}
+
+void addForeignTag(String s, float distance, int size, String matchType){
+	tg.addForeignTag(s,distance,size,matchType);
+}
+
+void separateTags(){
+	tg.separateTags2();
+}
+
+void highlightOwnTags(){
+	tg.highlightOwnTags();
 }
 
 void mix(){
@@ -81,3 +116,7 @@ boolean isRight(float ax, float ay, float bx, float by, float cx, float cy){
 boolean isLeft(float ax, float ay, float bx, float by, float cx, float cy){
 	return !isRight(ax,ay,bx,by,cx,cy); 
 }  
+
+void shrinkExpand(){
+	tg.arcDeTriomphe.shrinkExpand();
+}
