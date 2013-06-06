@@ -609,7 +609,7 @@ input[type="submit"].nextRound {
 	height: 50px;
 	color: #5858FA;
 	font-weight: bold;
-	padding: .3em;
+	padding: 0.3em;
 	background: url('../img/button_nextround_inactive.svg');
 	border: none;
 	cursor: pointer;

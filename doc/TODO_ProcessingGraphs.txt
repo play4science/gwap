@@ -2,9 +2,7 @@
 
 --STUFF--
 template für das spiellayout ändern
-zeitbalken nach oben
 "success graph"
-practice mode graph
 roundedarc uses corners instead of lines 
 shrinkExpand uses right most vertex not rightmost corner
 shrinkExpand uses point-point distance instead of line-point
