@@ -1,5 +1,4 @@
 --BUGS--
-berechnungsgenauigkeit höherstellen 
 
 --STUFF--
 template für das spiellayout ändern --

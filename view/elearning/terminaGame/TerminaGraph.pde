@@ -37,12 +37,22 @@ class TerminaGraph {
 			for(Vertex v : vertices){
 				for(Vertex w : vertices){
 					if (overlapping(v,w)) {
-						if(w.angle < v.angle){
-							w.newAngle -= 0.02;
-							v.newAngle += 0.02;
+						if(abs(w.angle - v.angle) > PI){ // v and w are close but their angles differ largely
+							if(w.angle < v.angle){
+								w.newAngle += 0.02;
+								v.newAngle -= 0.02;
+							} else {
+								w.newAngle -= 0.02;
+								v.newAngle += 0.02;
+							}
 						} else {
-							w.newAngle += 0.02;
-							v.newAngle -= 0.02;
+							if(w.angle < v.angle){
+								w.newAngle -= 0.02;
+								v.newAngle += 0.02;
+							} else {
+								w.newAngle += 0.02;
+								v.newAngle -= 0.02;
+							}
 						}
 					}
 				}
