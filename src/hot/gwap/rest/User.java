@@ -108,7 +108,8 @@ public class User extends RestService {
 		query.setParameter("deviceId", deviceId);
 		List<Badge> unlockedBadges = query.getResultList();
 
-		query = entityManager.createNamedQuery("badge.all");
+		query = entityManager.createNamedQuery("badge.byPlatform");
+		query.setParameter("platform", "inspectorXApp");
 		List<Badge> allBadges = query.getResultList();
 		
 		query = entityManager.createNamedQuery("highscore.all");

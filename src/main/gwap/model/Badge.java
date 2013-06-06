@@ -40,8 +40,8 @@ import org.jboss.seam.annotations.Name;
  * @author maders, wieser
  */
 @NamedQueries({
-	@NamedQuery(name="badge.all",
-			query="from Badge"),
+	@NamedQuery(name="badge.byPlatform",
+			query="from Badge where platform = :platform"),
 	@NamedQuery(name="badge.byDeviceId",
 			query="select b from Badge b join b.persons p where p.deviceId = :deviceId")
 })
@@ -60,6 +60,8 @@ public class Badge implements Serializable {
 	@Lob
 	private String description;
 	private Integer worth;
+	
+	private String platform;
 	
 	@ManyToMany(mappedBy="badges")
 	private Set<Person> persons = new HashSet<Person>();
@@ -94,9 +96,14 @@ public class Badge implements Serializable {
 	public void setPersons(Set<Person> persons) {
 		this.persons = persons;
 	}
-	
+	public String getPlatform() {
+		return platform;
+	}
+	public void setPlatform(String platform) {
+		this.platform = platform;
+	}
 	public boolean equals(Object obj) {
-		if (obj instanceof Badge) {
+		if (obj != null && obj instanceof Badge) {
 			Badge other = (Badge) obj;
 			return this.id != null && this.id.equals(other.id);
 		}
