@@ -263,4 +263,8 @@ void distributeEqually(ArrayList<Vertex> al, float from, float to, float off){
 			}
 		}
 	}
+	
+	boolean isArcMoving(){
+		return arcDeTriomphe.shrinking || arcDeTriomphe.moving; 
+	}
 }

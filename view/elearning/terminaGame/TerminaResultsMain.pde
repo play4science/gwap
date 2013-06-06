@@ -10,6 +10,9 @@ color GREY;
 color CORRECT;
 color WRONG;
 color UNKNOWN;
+boolean moving;
+PImage frame;
+boolean frameSet;
 
 void setup() {
 	BACKGROUND = color(255);  
@@ -33,43 +36,54 @@ void setup() {
 
 	tg = new ResultGraph();
 	frameRate(15);
+	frame = get();
+	frameSet = false;
 }
 
 void draw() {
-	background(BACKGROUND);
-	tg.collide();
-	tg.collideWithCenter();
+	moving = tg.verticesMoving || tg.isArcMoving();
+	if(moving){
+		background(BACKGROUND);
+		tg.collide();
+		tg.collideWithCenter();
 
-	tg.updateVertexDistances();
+		tg.updateVertexDistances();
 
-	tg.moveVertices();
+		tg.moveVertices();
 
-	if (tg.high && tg.ownTags.size() > 0){
-		tg.arcDeTriomphe.update();
-		tg.arcDeTriomphe.shrinkExpand();
-		tg.arcDeTriomphe.display();    
+		if (tg.high && tg.ownTags.size() > 0){
+			tg.arcDeTriomphe.update();
+			tg.arcDeTriomphe.shrinkExpand();
+			tg.arcDeTriomphe.display();    
+		}
+
+		fill(STROKE);
+		stroke(STROKE);
+
+		for(Vertex v : tg.wrongTags){
+			v.collideWithBorders();
+			line(tg.cx, tg.cy, v.x, v.y);
+			v.display();			
+		}
+		for(Vertex v : tg.unknownTags){
+			v.collideWithBorders();
+			line(tg.cx, tg.cy, v.x, v.y);
+			v.display();			
+		}
+		for(Vertex v : tg.correctTags){
+			v.collideWithBorders();
+			line(tg.cx, tg.cy, v.x, v.y);
+			v.display();			
+		}
+			
+		tg.centerVertex.display();
+	} else {
+		if(!frameSet){
+			frame = get();
+			frameSet = true;
+		} 
+		image(frame,0,0);
 	}
-
-	fill(STROKE);
-	stroke(STROKE);
-
-	for(Vertex v : tg.wrongTags){
-		v.collideWithBorders();
-		line(tg.cx, tg.cy, v.x, v.y);
-		v.display();			
-	}
-	for(Vertex v : tg.unknownTags){
-		v.collideWithBorders();
-		line(tg.cx, tg.cy, v.x, v.y);
-		v.display();			
-	}
-	for(Vertex v : tg.correctTags){
-		v.collideWithBorders();
-		line(tg.cx, tg.cy, v.x, v.y);
-		v.display();			
-	}
-		
-	tg.centerVertex.display();
 }
 
 void setTerm(String term){

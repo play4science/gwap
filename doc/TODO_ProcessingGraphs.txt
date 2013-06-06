@@ -1,12 +1,11 @@
 --BUGS--
+berechnungsgenauigkeit höherstellen 
 
 --STUFF--
-render result graph when moving is done
-caption in result graph
+template für das spiellayout ändern --
 "success graph"
 practice mode graph
 shrinkExpand uses right most vertex not rightmost corner
 shrinkExpand uses point-point distance instead of line-point
-two different termina mains
 colors, magic numbers,....
-
+Doku

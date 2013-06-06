@@ -8,7 +8,10 @@ class RoundedArc{
 	Vertex last;
 	float startMargin;
 	float stopMargin;
-
+	
+	boolean moving;
+	boolean shrinking;
+	
 	RoundedArc(float start, float stop, float r, float rs, ResultGraph rg){
 		this.first = rg.vertices.get(0);
 		this.last = rg.vertices.get(0);
@@ -18,6 +21,9 @@ class RoundedArc{
 		this.r = r;
 		this.rs = rs;  
 		this.rg = rg;
+		
+		moving = true;
+		shrinking = true;
 	}
 
 	void display(){
@@ -55,16 +61,24 @@ class RoundedArc{
 			}
 		}
 		
-		start = first.angle + startMargin;
-		stop = last.angle + stopMargin;
+		float _start = first.angle + startMargin;
+		float _stop = last.angle + stopMargin;
 
 		rs *= 1.1;
-		if(start > stop){
-			start -= TWO_PI;  
+		if(_start > _stop){
+			_start -= TWO_PI;  
+		}
+		if(_start != start || _stop != stop){
+			moving = true;
+			start = _start;
+			stop = _stop;
+		} else {
+			moving = false;
 		}
 	}
 
 	void shrinkExpand(){
+		shrinking = false;
 		float mx = rg.cx + r * cos(start);
 		float my = rg.cy + r * sin(start);
 		float[] corners = first.getCorners();
@@ -94,10 +108,12 @@ class RoundedArc{
 		}
 
 		if(d < rs * 0.9){    //first is inside arc
-			startMargin += 0.01;  
+			startMargin += 0.01; 
+			shrinking = true;
 		} else if (d > rs){ //first debords
 			startMargin -= 0.01;
-		}
+			shrinking = true;
+		} 
 
 		mx = rg.cx + r * cos(stop);
 		my = rg.cy + r * sin(stop);
@@ -121,9 +137,11 @@ class RoundedArc{
 				d = _d;  
 		}
 		if(d < rs * 0.9){    //last is inside arc
-			stopMargin -= 0.01;  			
+			stopMargin -= 0.01; 
+			shrinking = true;
 		} else if (d > rs ){ //last debords
 			stopMargin += 0.01;
+			shrinking = true;
 		}
 
 	}
