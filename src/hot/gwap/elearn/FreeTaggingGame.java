@@ -108,4 +108,16 @@ public class FreeTaggingGame extends AbstractGameSessionBean {
 		else
 			return null;
 	}
+
+	public MatchingTag getLastTag(){
+		List<MatchingTag> l = recommendedTags.get(gameRound.getNumber());
+		MatchingTag mt = new MatchingTag();
+		if(l != null){
+			if(l.size() > 0){
+				mt = l.get(l.size() - 1);
+			}
+		} 
+		return mt;
+	}
+	
 }

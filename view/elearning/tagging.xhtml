@@ -1,28 +1,46 @@
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:s="http://jboss.com/products/seam/taglib"
-    xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:rich="http://richfaces.org/rich"
-    xmlns:a4j="http://richfaces.org/a4j"
-    template="layout/template.xhtml">
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j" template="layout/template.xhtml">
 
-    <ui:define name="body">
+	<ui:define name="body">
+
+		<a4j:loadScript src="/javascript/processing.js" />
+		<a4j:loadScript src="/javascript/processingTerminaGameCom.js" />
+		<script type="text/javascript">
+		var waiting = setInterval(function(){
+			var pjs = Processing.getInstanceById('TerminaGraph');
+			if(typeof pjs != 'undefined'){
+				clearInterval(waiting);
+				console.log("processing instance ready");
+				pjs.setTerm(setLineBreaks('#{term.tag.name}'));
+				var width = document.getElementById('gameheaderLine').offsetWidth;
+				console.log("setting width to: " + width);
+				pjs.setDisplayWidth(width);
+			}
+				
+		},10);	
+	</script>
 
 		<div id="content">
 			<div class="contentWrapper">
-			<h1>#{messages['pagetitle.tagging']}</h1>
-			<hr class="pageTitle" /><br />
+				<h1>#{messages['pagetitle.tagging']}</h1>
+				<hr class="pageTitle" id="gameheaderLine" />
+				<br />
+
+
+				<ui:include src="widget/resourceTerm.xhtml" id="resourceTerm" />
+
+				<!--<div id="related">
 			
-			<ui:include src="widget/resourceTerm.xhtml" />
-			
-			<div id="related">
-			
-				<div class="ongoingGameStatsCaption">
+ 				<div class="ongoingGameStatsCaption">
 					<h:outputText value="#{messages['tagging.enteredTags']}" />
-				</div>
+				</div> 
 					
 	 			<a4j:outputPanel id="recommendedTags" styleClass="ongoingGameStatsContent">
 					<a4j:repeat value="#{recommendedTags}" var="_recommendedTag">
@@ -30,18 +48,32 @@
 							<h:outputText value="#{_recommendedTag.tag}" />
 						</div>
 					</a4j:repeat>
-				</a4j:outputPanel>	
+				</a4j:outputPanel> 	
 							
-			</div><br />
-			
-				<ui:include src="widget/tagForm.xhtml" />
+				</div><br /> -->
+				<canvas id="TerminaGraph" data-processing-sources="terminaGame/TerminaMain.pde terminaGame/TerminaGraph.pde terminaGame/Vertex.pde"> </canvas>
 				
+				<a4j:form id="recommendedTags">
+					<script type="text/javascript">
+						var tag = "#{elearnFreeTaggingGame.getLastTag().tag}";
+						var score = "#{elearnFreeTaggingGame.getLastTag().score}";
+						var matchType = "#{elearnFreeTaggingGame.getLastTag().matchType}";
+						console.log(tag + " " + score + " " + matchType );
+						newEntry('TerminaGraph', tag, score, matchType);
+						</script>					
+				</a4j:form>
+
+				<ui:include src="widget/tagForm.xhtml" />
+
 				<hr class="form" />
 				<br />
-				<p><h:outputText value="#{messages['tagging.explanation']}" /></p><br />
-				</div>
+				<p>
+					<h:outputText value="#{messages['tagging.explanation']}" />
+				</p>
+				<br />
+			</div>
 		</div>
-		
-        <br class="clear" />
-    </ui:define>
+
+		<br class="clear" />
+	</ui:define>
 </ui:composition>

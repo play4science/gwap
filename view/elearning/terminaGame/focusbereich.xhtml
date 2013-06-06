@@ -28,7 +28,7 @@
 						};
 		
 						countdown.callbackStop = function() {
-							if(!"#{elearnTermina.paletteMode}")
+							if(!#{elearnTermina.paletteMode})
 								document.getElementById('bereich3:inputassoc').disabled = "true";
 							setTimeout(switchTerm, 1000);
 						};
