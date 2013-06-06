@@ -51,12 +51,29 @@ class RoundedArc{
 		first = rg.ownTags.get(0);
 		last = rg.ownTags.get(0);
 		
+		float zero = 0;
+		if(rg.foreignTags.size() != 0){
+			float zero = rg.foreignTags.get(0).angle;
+		}
+		
 		for(Vertex v: rg.ownTags){
-			if (isLeft(rg.cx,rg.cy,first.x,first.y,v.x,v.y)){
+			float alpha = v.angle - zero;
+			float beta = first.angle - zero;
+			float gamma = last.angle - zero; 
+			if(alpha < 0){
+				alpha += TWO_PI;
+			}
+			if(beta < 0){
+				beta += TWO_PI;
+			}
+			if(gamma < 0){
+				gamma += TWO_PI;
+			}
+			if (alpha < beta){
 				first = v;
 			}
 	
-			if(isRight(rg.cx,rg.cy,last.x,last.y,v.x,v.y)){
+			if(alpha > gamma){
 				last = v;
 			}
 		}
