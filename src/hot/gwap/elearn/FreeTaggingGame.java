@@ -22,7 +22,7 @@
 
 package gwap.elearn;
 
-import gwap.action.TaggingBean;
+import gwap.action.TerminaTaggingBean;
 import gwap.game.AbstractGameSessionBean;
 import gwap.model.GameRound;
 import gwap.model.action.Tagging;
@@ -53,7 +53,7 @@ public class FreeTaggingGame extends AbstractGameSessionBean {
 
 	private static final long serialVersionUID = 1L;
 
-	@In(create=true)        				private TaggingBean taggingBean;
+	@In(create=true)        				private TerminaTaggingBean terminaTaggingBean;
 	@In(create=true) @Out(required=false)	private Term term;
 	@In(create=true)						private TermBean elearnTermBean;
 	
@@ -70,18 +70,14 @@ public class FreeTaggingGame extends AbstractGameSessionBean {
 	}
 	
 	public String recommendTag() {
-		Tagging tagging = taggingBean.recommendTag(term, false);
+		Tagging tagging = terminaTaggingBean.recommendTag(term, false);
 		if (tagging.getTag() == null) {
 			log.info("Could not add tag to gameround as it is invalid.");
 		} else {
 			gameRound.getActions().add(tagging);
-			if (TerminaMatching.isAssociationInList(tagging.getTag().getName(), term.getConfirmedTags()))
-				tagging.setScore(1);
-			if (TerminaMatching.isAssociationInList(tagging.getTag().getName(), term.getRejectedTags()))
-				tagging.setScore(-1);
 			log.info("Added #0 to game round", tagging.getTag());
 		}
-		recommendedTags.put(gameRound.getNumber(), taggingBean.getRecommendedTags());
+		recommendedTags.put(gameRound.getNumber(), terminaTaggingBean.getRecommendedTags());
 		return null;
 	}
 	
