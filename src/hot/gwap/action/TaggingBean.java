@@ -48,7 +48,7 @@ public class TaggingBean extends AbstractTaggingBean<Tagging> {
 	private static final long serialVersionUID = 1L;
 
 	@In(create = true)
-	private Tagging tagging;
+	protected Tagging tagging;
 
 	@Observer(value = "checkForMatchingTags", create = false)
 	public void checkForMatchingTags() {
