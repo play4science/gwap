@@ -43,6 +43,7 @@ import javax.persistence.Query;
 
 import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.Create;
 import org.jboss.seam.annotations.Destroy;
 import org.jboss.seam.annotations.Factory;
@@ -56,6 +57,7 @@ import org.jboss.seam.log.Log;
 
 @Name("highscoreBean")
 @Scope(ScopeType.PAGE)
+@AutoCreate
 public class HighscoreBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;

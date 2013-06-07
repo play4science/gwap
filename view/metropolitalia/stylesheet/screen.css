@@ -392,6 +392,19 @@ background-image:url('../img/rich-slider-track.png'); background-position:left t
 .rich-inslider-size{width:100%;}
 .rich-inslider-size-height{height:100%;width:7px;padding:0 3px;}
 
+.badge {
+  padding-top: 5px;
+  text-align: right;
+}
+.nextBadge {
+  display: block;
+  background: #ffb;
+  font-size: smaller;
+}
+.badgeName {
+  font-style: bold;
+}
+
 /* =Bar chart
 -----------------------------------------------------------------------------*/
 .bargraphTitle {

@@ -43,7 +43,9 @@ import org.jboss.seam.annotations.Scope;
 	@NamedQuery(name="bet.allWithPerson",
 			query="select b from Bet b where b.class=Bet and b.person is not null"),
 	@NamedQuery(name="bet.byScore",
-			query="select b from Bet b where b.class=Bet and b.score != null and b.person != null order by b.score desc")
+			query="select b from Bet b where b.class=Bet and b.score != null and b.person != null order by b.score desc"),
+	@NamedQuery(name="bet.countByPersonMinimumScore",
+			query="select count(*) from Bet b where b.person = :person and b.score >= :minScore")
 })
 
 /**

@@ -64,6 +64,7 @@ public class Recognize extends AbstractGameSessionBean {
 	@In(required=false)@Out(required=false) protected Long locationId;
 	@In						protected PokerScoring mitPokerScoring;
 	@In                     protected CharacterizationBean characterizationBean;
+	@In						protected BadgeBean mitBadgeBean;
 	
 	@Out
 	protected List<Location> breadcrumbLocations = new ArrayList<Location>();
@@ -76,7 +77,7 @@ public class Recognize extends AbstractGameSessionBean {
 	protected StatementAnnotation statementAnnotation;
 	protected LocationAssignment locationAssignment;
 	protected Integer points;
-
+	
 	
 	@Override
 	public void startGameSession() {
@@ -154,6 +155,7 @@ public class Recognize extends AbstractGameSessionBean {
 		entityManager.persist(locationAssignment);
 		gameRound.getActions().add(locationAssignment);
 		mitPokerScoring.updateScoreForBets(locationAssignment.getResource());
+		mitBadgeBean.checkAndAward();
 	}
 	
 	public List<Action> getAssignedLocations() {

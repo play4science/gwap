@@ -94,15 +94,18 @@
 	<factory
 		name="internalBasePath"
 		value="#{facesContext.externalContext.request.scheme}://#{facesContext.externalContext.request.serverName}:#{facesContext.externalContext.request.serverPort}#{facesContext.externalContext.request.contextPath}/"
+		auto-create="true"
 	/>
 
 	<factory
 		name="basePath"
 		value="http://www.metropolitalia.org/"
+		auto-create="true"
 	/>
 	<factory
 		name="platform"
 		value="metropolitalia"
+		auto-create="true"
 	/>
 	
 	
