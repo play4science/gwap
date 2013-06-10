@@ -45,10 +45,14 @@ import org.jboss.seam.annotations.Scope;
 @AutoCreate
 public class BadgeBean extends gwap.widget.BadgeBean {
 	
+	private static final long serialVersionUID = 1L;
+	
 	private static final int MIN_POINTS_LOCATION_ASSIGNMENT = 3;
 	private static final int MIN_POINTS_BET = 40;
 	
 	@In private HighscoreBean highscoreBean;
+	
+	private Integer nrLocationAssignmentsForNextBadge, nrBetsForNextBadge;
 	
 	public void checkAndAward() {
 		Badge b = getNextBestBadge();
@@ -77,30 +81,49 @@ public class BadgeBean extends gwap.widget.BadgeBean {
 		}
 	}
 	
+	public String getDescriptionForNextBadge() {
+		getNextBestBadge();
+		if (nextBestBadge != null) {
+			String message = messages.get("badge."+nextBestBadge.getWorth()+".earn");
+			if ((nextBestBadge.getWorth() == 2 || nextBestBadge.getWorth() == 3) &&
+					getNrLocationAssignmentsForNextBadge() == 1
+					|| nextBestBadge.getWorth() == 4 && getNrBetsForNextBadge() == 1)
+				message = messages.get("badge."+nextBestBadge.getWorth()+".earn.singular");
+			return message;
+		} else
+			return "";
+	}
+	
 	public Integer getNrLocationAssignmentsForNextBadge() {
 		Badge b = getNextBestBadge();
 		if (b == null)
 			return null;
-		int minLAsForNextBadge = b.getCondition().intValue();
-		// Get number of successful location assignments
-		Query query = entityManager.createNamedQuery("locationAssignment.countByPersonMinimumScore");
-		query.setParameter("person", person);
-		query.setParameter("minScore", MIN_POINTS_LOCATION_ASSIGNMENT);
-		int nrLAs = ((Number) query.getSingleResult()).intValue();
-		return minLAsForNextBadge - nrLAs;
+		if (nrLocationAssignmentsForNextBadge == null) {
+			int minLAsForNextBadge = b.getCondition().intValue();
+			// Get number of successful location assignments
+			Query query = entityManager.createNamedQuery("locationAssignment.countByPersonMinimumScore");
+			query.setParameter("person", person);
+			query.setParameter("minScore", MIN_POINTS_LOCATION_ASSIGNMENT);
+			int nrLAs = ((Number) query.getSingleResult()).intValue();
+			nrLocationAssignmentsForNextBadge = minLAsForNextBadge - nrLAs;
+		}
+		return nrLocationAssignmentsForNextBadge;
 	}
 	
 	public Integer getNrBetsForNextBadge() {
 		Badge b = getNextBestBadge();
 		if (b == null)
 			return null;
-		int minBetsForNextBadge = b.getCondition().intValue();
-		// Get number of successful location assignments
-		Query query = entityManager.createNamedQuery("bet.countByPersonMinimumScore");
-		query.setParameter("person", person);
-		query.setParameter("minScore", MIN_POINTS_BET);
-		int nrBets = ((Number) query.getSingleResult()).intValue();
-		return minBetsForNextBadge - nrBets;
+		if (nrBetsForNextBadge == null) {
+			int minBetsForNextBadge = b.getCondition().intValue();
+			// Get number of successful location assignments
+			Query query = entityManager.createNamedQuery("bet.countByPersonMinimumScore");
+			query.setParameter("person", person);
+			query.setParameter("minScore", MIN_POINTS_BET);
+			int nrBets = ((Number) query.getSingleResult()).intValue();
+			nrBetsForNextBadge = minBetsForNextBadge - nrBets;
+		}
+		return nrBetsForNextBadge;
 	}
 	
 }
