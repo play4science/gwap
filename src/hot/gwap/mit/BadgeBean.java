@@ -35,7 +35,9 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.security.Identity;
 
 /**
  * @author kneissl
@@ -54,30 +56,46 @@ public class BadgeBean extends gwap.widget.BadgeBean {
 	
 	private Integer nrLocationAssignmentsForNextBadge, nrBetsForNextBadge;
 	
+	@Override
+	protected void resetCache() {
+		super.resetCache();
+		nrLocationAssignmentsForNextBadge = null;
+		nrBetsForNextBadge = null;
+	}
+	
+	@Observer(Identity.EVENT_LOGIN_SUCCESSFUL)
 	public void checkAndAward() {
+		resetCache();
 		Badge b = getNextBestBadge();
-		if (b.getWorth() <= 3) { // for location assignment
-			if (getNrLocationAssignmentsForNextBadge() <= 0) {
-				person = entityManager.find(Person.class, person.getId());
-				person.getBadges().add(b);
-				log.info("#0 reached next badge #1", person, b);
-			}
-		} else if (b.getWorth() == 4) {
-			if (getNrBetsForNextBadge() <= 0) {
-				person = entityManager.find(Person.class, person.getId());
-				person.getBadges().add(b);
-				log.info("#0 reached next badge #1", person, b);
-			}
-		} else if (b.getWorth() == 5) {
-			List<HighscoreSet> highscores = highscoreBean.getHighscores();
-			for (HighscoreSet highscoreSet : highscores) {
-				if (highscoreSet.getGameType().getName().equals("mitRecognize")) {
-					if (highscoreSet.getHighscoreAll().get(0).getPersonId().equals(person.getId())) {
-						person.getBadges().add(b);
-						log.info("#0 reached next badge #1", person, b);
+		Badge lastBadge = null;
+		while (b != lastBadge) {
+			lastBadge = b;
+			if (b.getWorth() <= 3) { // for location assignment
+				if (getNrLocationAssignmentsForNextBadge() <= 0) {
+					person = entityManager.find(Person.class, person.getId());
+					person.getBadges().add(b);
+					log.info("#0 reached next badge #1", person, b);
+				}
+			} else if (b.getWorth() == 4) {
+				if (getNrBetsForNextBadge() <= 0) {
+					person = entityManager.find(Person.class, person.getId());
+					person.getBadges().add(b);
+					log.info("#0 reached next badge #1", person, b);
+				}
+			} else if (b.getWorth() == 5) {
+				List<HighscoreSet> highscores = highscoreBean.getHighscores();
+				for (HighscoreSet highscoreSet : highscores) {
+					if (highscoreSet.getGameType().getName().equals("mitRecognize")) {
+						if (highscoreSet.getHighscoreAll().get(0).getPersonId().equals(person.getId())) {
+							person.getBadges().add(b);
+							log.info("#0 reached next badge #1", person, b);
+						}
 					}
 				}
 			}
+			entityManager.flush();
+			resetCache();
+			b = getNextBestBadge();
 		}
 	}
 	
@@ -85,10 +103,18 @@ public class BadgeBean extends gwap.widget.BadgeBean {
 		getNextBestBadge();
 		if (nextBestBadge != null) {
 			String message = messages.get("badge."+nextBestBadge.getWorth()+".earn");
-			if ((nextBestBadge.getWorth() == 2 || nextBestBadge.getWorth() == 3) &&
-					getNrLocationAssignmentsForNextBadge() == 1
-					|| nextBestBadge.getWorth() == 4 && getNrBetsForNextBadge() == 1)
-				message = messages.get("badge."+nextBestBadge.getWorth()+".earn.singular");
+			if (nextBestBadge.getWorth() == 2 || nextBestBadge.getWorth() == 3) {
+				if (getNrLocationAssignmentsForNextBadge() == 1)
+					message = messages.get("badge."+nextBestBadge.getWorth()+".earn.singular");
+				else if (getNrLocationAssignmentsForNextBadge() < 0)
+					checkAndAward();
+			}
+			if (nextBestBadge.getWorth() == 4) {
+				if (getNrBetsForNextBadge() == 1)
+					message = messages.get("badge."+nextBestBadge.getWorth()+".earn.singular");
+				else if (getNrBetsForNextBadge() < 0)
+					checkAndAward();
+			}
 			return message;
 		} else
 			return "";

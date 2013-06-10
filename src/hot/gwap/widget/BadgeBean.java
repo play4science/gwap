@@ -59,18 +59,26 @@ public class BadgeBean implements Serializable {
 	
 	public Badge getBestOwnedBadge() {
 		if (bestOwnedBadge == null) {
-			List<Badge> badges = getPersonBadges(false);
+			List<Badge> badges = getPersonBadges();
 			if (badges.size() == 0)
 				bestOwnedBadge = initialBadge();
 			else
 				bestOwnedBadge = badges.get(0);
 		}
 		return bestOwnedBadge;
+		
+	}
+	
+	protected void resetCache() {
+		bestOwnedBadge = null;
+		nextBestBadge = null;
+		personBadges = null;
+		nextBestBadgeCalculated = false;
 	}
 	
 	public Badge getNextBestBadge() {
 		if (nextBestBadge == null && !nextBestBadgeCalculated) {
-			if (getPersonBadges(false).size() == 0) {
+			if (getPersonBadges().size() == 0) {
 				Query query = entityManager.createNamedQuery("badge.byPlatform");
 				query.setParameter("platform", platform);
 				query.setMaxResults(2);
@@ -101,7 +109,7 @@ public class BadgeBean implements Serializable {
 			return "";
 	}
 	
-	private List<Badge> getPersonBadges(boolean forceReload) {
+	protected List<Badge> getPersonBadges() {
 		if (personBadges == null) {
 			Query query = entityManager.createNamedQuery("badge.bestForPerson");
 			query.setParameter("person", person);
