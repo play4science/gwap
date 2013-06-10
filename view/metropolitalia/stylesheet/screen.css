@@ -27,12 +27,12 @@ body                                    { padding:0px 24px 220px 24px; backgroun
 #navLanguage                            { float:left }
 #navHeader                              { margin-top: .5em; font-size: .8em; }
 #search                                 { float:left }
-#logo                                   { margin: 12px 0 50px 0; width: 300px; font-weight: bold }
+#logo                                   { margin: -5px 0 50px 0; width: 300px; font-weight: bold }
 #ad                                     { float:right; margin:24px 0 }
 #related                                { float:left; width:300px; margin-right:24px; display:inline }
 #content,                                
 #content-image                          { display:inline }
-#content                                { float:left; margin-top: 40px; width:650px; }
+#content                                { float:left; margin-top: 28px; width:650px; }
 #content ol                             { list-style-type:decimal; padding-left: 20px;}
 h4                                      { margin-top:3px !important;}
 a:active, a:link, a:visited             { color: #0078D0; }

@@ -40,7 +40,7 @@
 				<s:link id="headerLogoutId" view="/home.xhtml" action="#{identity.logout}" value="#{messages['menu.logout']}" rendered="#{identity.loggedIn}" propagation="none"/>
 			</li>
 		</ul>
-		<span class="right">
+		<span class="right" style="text-align:right;">
 			<h:outputText value="#{mitCoins.getCurrentFunds()} #{messages['game.coins']}" styleClass="coins" rendered="#{mitCoins.getCurrentFunds() != null}" id="coins" />
 			<h:outputText value="#{messages['menu.signedInAs']}: " rendered="#{identity.loggedIn}" style="padding-left: 30px"/>
 			<strong>
