@@ -149,6 +149,14 @@ hr.termina {
 	border-bottom-color: #e8e8e8;
 }
 
+#reducedNavHeader {
+	width: 750px;
+	margin-top: 1em;
+	border-bottom-width: 2px;
+	border-bottom-style: solid;
+	border-bottom-color: #e8e8e8;
+}
+
 #related {
 	width: 350px;
 	margin-right: 24px;
@@ -271,6 +279,11 @@ a.menuLink:visited {
 /*-------------------------------------------------------------------------- */
 #logo {
 	width: 400px;
+	height: auto;
+}
+
+#reducedLogo {
+	width: 250px;
 	height: auto;
 }
 

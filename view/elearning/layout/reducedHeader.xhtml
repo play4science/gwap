@@ -1,0 +1,49 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j">
+
+	<script type="text/javascript"></script>
+	<noscript><div class="noscript"><h:outputText value="#{messages['general.javascriptDisabled']}" /></div></noscript>
+
+	<div id="reducedNavHeader">
+	<br />
+	<table id="menuTable">
+		<tr>
+			<td><s:link view="/home.xhtml" propagation="none"><img id="reducedLogo" src="#{internalBasePath}img/termina_logo.svg" /></s:link></td>
+			<td align="right">
+				<span style="float:right;">
+					<h:outputText value="#{messages['menu.signedInAs']}: " rendered="#{identity.loggedIn}"/>
+					<h:outputText value="#{credentials.username}" id="headerWelcomeId" rendered="#{identity.loggedIn}" />
+				</span>
+			</td>
+		</tr>
+<!--			<tr>
+				<td align="right"><s:link styleClass="menuLink #{menuBean.getCssClass('/home.xhtml')}" view="/home.xhtml" value="#{messages['menu.welcome']}" propagation="none"/></td>			
+			</tr> -->
+	</table>
+	
+	</div>
+	
+		<!-- FÜR MELDUNGEN
+   	<a4j:outputPanel id="messages" style="position: absolute; top: 1em; vertical-align: middle;">
+				<rich:messages styleClass="messages"
+                	        errorClass="errormsg" infoClass="infomsg" warnClass="warnmsg"
+                    	    rendered="#{showGlobalMessages != 'false'}"
+                    	    />
+    </a4j:outputPanel> 
+	<a4j:outputPanel id="globalMessages" style="position: absolute; top: 1em; vertical-align: middle;">
+				<rich:messages globalOnly="true" styleClass="messages"
+                	        errorClass="errormsg" infoClass="infomsg" warnClass="warnmsg"
+                    	    rendered="#{showGlobalMessages != 'false'}"
+                    	    />
+	</a4j:outputPanel> -->
+    
+	<br class="clear" />
+
+</ui:composition>
