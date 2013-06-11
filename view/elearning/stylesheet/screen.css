@@ -151,7 +151,8 @@ hr.termina {
 
 #reducedNavHeader {
 	width: 750px;
-	margin-top: 1em;
+	height: auto;
+	margin-top: 5px;
 	border-bottom-width: 2px;
 	border-bottom-style: solid;
 	border-bottom-color: #e8e8e8;

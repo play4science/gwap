@@ -1,7 +1,6 @@
 --BUGS--
 
 --STUFF--
-template für das spiellayout ändern
 "success graph"
 roundedarc uses corners instead of lines 
 shrinkExpand uses right most vertex not rightmost corner
