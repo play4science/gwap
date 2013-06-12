@@ -6,10 +6,6 @@ class TerminaGraph {
 	String term;
 	ArrayList vertices;
 
-	String newTerm;
-
-	String type;
-
 	boolean verticesMoving;
 
 	TerminaGraph() {
@@ -17,9 +13,7 @@ class TerminaGraph {
 		cx = width/2;
 		cy = height/2;
 
-		type = "TerminaGraph";
 		term = "term";
-		newTerm = "";
 		centerVertex = new Vertex(cx, cy, 20, term, 0, GREY);
 		centerVertex.display();
 		vertices = new ArrayList();

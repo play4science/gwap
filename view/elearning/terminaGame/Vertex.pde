@@ -67,8 +67,8 @@ class Vertex {
 		text(s, x, y);
 	}
 
-	void setMovement(float to, float off) {
-		float na = (- TWO_PI * to / off - HALF_PI)%TWO_PI;
+	void setMovement(float to, float of) {
+		float na = (- TWO_PI * to / of - HALF_PI)%TWO_PI;
 		if(na < 0){
 			na += TWO_PI;  
 		}

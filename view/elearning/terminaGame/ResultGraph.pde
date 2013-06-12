@@ -11,7 +11,6 @@ class ResultGraph extends TerminaGraph{
 
 	ResultGraph(){
 		super();
-		this.type = "ResultGraph";
 		ownTags = new ArrayList(0);
 		foreignTags = new ArrayList(0);
 		correctTags = new ArrayList(0);

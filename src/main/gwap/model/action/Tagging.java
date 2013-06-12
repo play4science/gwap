@@ -162,7 +162,12 @@ import org.jboss.seam.annotations.Scope;
 			name = "tagging.getAnswerFromTag",
 			query = "select count(*) from Tagging tg " +
 					"where tg.resource.id =:resourceId " +
-					"and tg.tag.id=:tagId ")
+					"and tg.tag.id=:tagId "),
+	@NamedQuery(
+			name = "tagging.termsTaggedByPerson",
+			query = "from Term t where " +
+					"t.source.name = :source " +
+					"and exists (from t.taggings tg where tg.person = :person)")
 })
 
 @Entity

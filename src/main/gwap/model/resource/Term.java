@@ -132,7 +132,9 @@ import org.jboss.seam.annotations.Scope;
 	@NamedQuery(name="term.byExternalSessionId", 
 				query="select t from Term t join t.gameRounds r join r.gameSession s " +
 						"where s.externalSessionId=:externalSessionId " +
-						"group by t.id, t.externalId, t.enabled, t.tag, t.rating, r.number order by r.number")
+						"group by t.id, t.externalId, t.enabled, t.tag, t.rating, r.number order by r.number"),
+	@NamedQuery(name = "term.byName",
+				query = "from Term t where t.tag.name = :termName")
 })
 @Entity
 @Name("term")

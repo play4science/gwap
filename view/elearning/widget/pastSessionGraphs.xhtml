@@ -1,0 +1,38 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j">
+
+	<script type="text/javascript">
+		function setTermAndTags(oldTerm){
+			console.log("setTermAndTags " + oldTerm);
+			var waiting = setInterval(function(){
+				var term = "#{pastTerminaSession.getTaggingData()}";
+				console.log("" + term);
+				if(term != oldTerm){
+					clearInterval(waiting);
+					console.log("done waiting [" + "#{pastTerminaSession.getTaggingData()}" + "]");
+				}
+
+			}, 10);
+			
+		}
+	</script>
+
+
+	<h:form>
+		<h:selectOneMenu value="#{pastTerminaSession.termName}" onchange="submit();" >
+			<s:selectItems value="#{pastTerminaSession.playedTerms}" var="t" label="#{t.tag.name}" itemValue="#{t.tag.name}"></s:selectItems>
+		</h:selectOneMenu>
+<!--		<canvas
+			id="TerminaGraph"
+			data-processing-sources="terminaGame/pastSessionGraphMain.pde terminaGame/TerminaGraph.pde terminaGame/ResultGraph.pde terminaGame/Vertex.pde terminaGame/RoundedArc.pde">
+		</canvas> -->
+	</h:form>
+
+</ui:composition>

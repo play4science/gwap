@@ -118,7 +118,7 @@ void mix(){
 	tg.mix();
 }
 
-void moveToOff(float to, float off){
+void moveToOff(float to, float of){
 	Vertex v = tg.vertices.get(0);
 	v.setMovement(to,off);
 }  
