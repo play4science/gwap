@@ -134,3 +134,9 @@ boolean isLeft(float ax, float ay, float bx, float by, float cx, float cy){
 void shrinkExpand(){
 	tg.arcDeTriomphe.shrinkExpand();
 }
+
+void reset(){
+	println("reseting");
+	this.tg = new ResultGraph();
+	
+}

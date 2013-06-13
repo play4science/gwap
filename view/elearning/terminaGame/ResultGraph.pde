@@ -80,6 +80,7 @@ class ResultGraph extends TerminaGraph{
 	void addForeignTag(String s, int distance, int size, String matchType) {
 		Vertex vert = newVertex(s, distance, size, matchType);
 		vert.own = false;
+		
 		vertices.add(0, vert);
 		updatePositions();
 		foreignTags.add(0,vert);

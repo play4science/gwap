@@ -8,31 +8,68 @@
     xmlns:rich="http://richfaces.org/rich"
     xmlns:a4j="http://richfaces.org/a4j">
 
+	<a4j:loadScript src="/javascript/processing.js" />
 	<script type="text/javascript">
-		function setTermAndTags(oldTerm){
-			console.log("setTermAndTags " + oldTerm);
-			var waiting = setInterval(function(){
-				var term = "#{pastTerminaSession.getTaggingData()}";
-				console.log("" + term);
-				if(term != oldTerm){
-					clearInterval(waiting);
-					console.log("done waiting [" + "#{pastTerminaSession.getTaggingData()}" + "]");
-				}
-
-			}, 10);
-			
+		function getScale(max, min, appearence){
+			var scale = 1;
+			if(appearence > min){
+				scale = 15 * (appearence - min)/(max - min);
+			}
+			return 10 + scale;
 		}
+	
+		function setTermAndTags(selectionObject){
+			console.log("jquery");
+			jQuery.ajax({
+				url      : "seam/resource/rest/pastTerminaSession/userResults" + "/" + selectionObject.value, 
+				dataType : "json", 
+				success  : setTermAndTagsCallback,
+			});
+		}
+		function setTermAndTagsCallback(data){
+			//data zerlegen
+			console.log("callback");
+			var term = data["term"];
+			//var userTags = data["userTags"];
+			var maxForeignApp = data["maxForeignApp"];
+			var minForeignApp = data["minForeignApp"];
+			var foreignTags = data["foreigns"];
+			var ownTags = data["owns"];
+			pjs = Processing.getInstanceById("TerminaGraph");
+			pjs.setup();
+			pjs.setTerm(term);
+	
+			for(var i = 0; i &lt; foreignTags.length; i++){
+				var tag = foreignTags[i];
+				console.log("foreign " + tag["tag"]);
+				pjs.addForeignTag(tag["tag"], 100, getScale(maxForeignApp, minForeignApp, tag["appearence"]), tag["matchType"]);
+			}
+
+			for(var i = 0; i &lt; ownTags.length; i++){
+				var tag = ownTags[i];
+				console.log("own " + tag["tag"]);
+				pjs.addOwnTag(tag["tag"], 100, getScale(maxForeignApp, minForeignApp, tag["appearence"]), tag["matchType"]);
+			}
+
+			pjs.separateTags();
+			pjs.highlightOwnTags();
+
+		
+		}
+
+		
 	</script>
 
 
 	<h:form>
-		<h:selectOneMenu value="#{pastTerminaSession.termName}" onchange="submit();" >
+		<h:selectOneMenu id="selection" value="#{pastTerminaSession.termName}" onchange="setTermAndTags(this);" >
 			<s:selectItems value="#{pastTerminaSession.playedTerms}" var="t" label="#{t.tag.name}" itemValue="#{t.tag.name}"></s:selectItems>
 		</h:selectOneMenu>
-<!--		<canvas
-			id="TerminaGraph"
-			data-processing-sources="terminaGame/pastSessionGraphMain.pde terminaGame/TerminaGraph.pde terminaGame/ResultGraph.pde terminaGame/Vertex.pde terminaGame/RoundedArc.pde">
-		</canvas> -->
 	</h:form>
+
+	<canvas
+		id="TerminaGraph"
+		data-processing-sources="terminaGame/TerminaResultsMain.pde terminaGame/TerminaGraph.pde terminaGame/ResultGraph.pde terminaGame/Vertex.pde terminaGame/RoundedArc.pde">
+	</canvas> 
 
 </ui:composition>
