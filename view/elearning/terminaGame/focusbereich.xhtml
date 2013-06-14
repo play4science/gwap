@@ -8,35 +8,6 @@
     xmlns:rich="http://richfaces.org/rich"
     xmlns:a4j="http://richfaces.org/a4j">
 
-	<h:form id="countdown">
-		
-		
-		<table>
-			<tr>
-				<td class="gameConfigurationTd">
-					
-
-					<script type="text/javascript">
-						countdown.callbackStep = function() {
-							#{rich:component('progressbar')}.setValue(this.duration - this.seconds + 0.000001);
-							#{rich:component('progressbar')}.setLabel(this.seconds);
-						};
-		
-						countdown.callbackStop = function() {
-							if(!#{elearnTermina.paletteMode})
-								document.getElementById('bereich3:inputassoc').disabled = "true";
-							setTimeout(switchTerm, 1000);
-						};
-	
-						countdown.start(#{gameConfiguration.roundDuration});
-			
-					</script>
-				</td>
-			</tr>
-		</table>
-		
-		</h:form>
-	
 		<hr class="termina" />
 		
 		<h:form id="bereich1" >

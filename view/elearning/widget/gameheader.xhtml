@@ -17,20 +17,40 @@
 			<td class="terminaTableCell">
 				<rich:progressBar id="progressbar" minValue="0" maxValue="#{gameConfiguration.roundDuration}" value="0.000001" label="bar" mode="client" />			
 			</td>
-<!--			<td id="skipRoundTd" class="terminaTableCell"><h:outputText value="#{messages['buttonTitle.skipRound']}:" /></td> -->
+			<h:form id="countdown">			
+				<script type="text/javascript">
+					countdown.callbackStep = function() {
+						#{rich:component('progressbar')}.setValue(this.duration - this.seconds + 0.000001);
+						#{rich:component('progressbar')}.setLabel(this.seconds);
+					};
+	
+					countdown.callbackStop = function() {
+						if(!#{elearnTermina.paletteMode}){
+							document.getElementById('bereich3:inputassoc').disabled = "true";
+						}
+						setTimeout(switchTerm, 1000);
+					};
+	
+					countdown.start(#{gameConfiguration.roundDuration});
+		
+				</script>			
+			</h:form>
+
 			<td id="terminaNormalEndbutton">
 				<table style="float:right;">
-					<td style="padding-right:5px">
-						<h:form id="switchbuttonform" >
-							<h:commandButton id="switchTermButton" styleClass="nextRound" action="next" value="" title="#{messages['buttonTitle.skipRound']}" type="button" />
-							<a4j:jsFunction name="switchTerm" action="next" />
-						</h:form>
-					</td>
-					<td>
-						<h:form id="bereich4">
-							<a4j:commandButton id="beendenButton" styleClass="buttonEnd" action="beenden" value="" title="#{messages['buttonTitle.endGame']}" />
-						</h:form>
-					</td> 
+					<tr>
+						<td style="padding-right:5px">
+							<h:form id="switchbuttonform" >
+								<h:commandButton id="switchTermButton" styleClass="nextRound" action="next" value="" title="#{messages['buttonTitle.skipRound']}" type="button" />
+								<a4j:jsFunction name="switchTerm" action="next" />
+							</h:form>
+						</td>
+						<td>
+							<h:form id="bereich4">
+								<a4j:commandButton id="beendenButton" styleClass="buttonEnd" action="beenden" value="" title="#{messages['buttonTitle.endGame']}" />
+							</h:form>
+						</td> 
+					</tr>
 				</table>
 			</td>
 		</tr>

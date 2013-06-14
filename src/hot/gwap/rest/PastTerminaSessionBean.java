@@ -22,18 +22,21 @@
 
 package gwap.rest;
 import gwap.model.Person;
+import gwap.model.Tag;
+import gwap.model.Topic;
 import gwap.model.resource.Term;
 import gwap.tools.CustomSourceBean;
 import gwap.wrapper.BackstageAnswer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -54,12 +57,19 @@ public class PastTerminaSessionBean {
 	@In private Person person;
 	@In private CustomSourceBean customSourceBean;
 	private Term term;
+	private boolean foreignWrongRequested = true;
+	private boolean ownWrongRequested = true;
+
+	private int maxForeigns;
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("userResults/{termName}")
-	public Response getTaggingData(@PathParam("termName") String termName){
+	@Path("userResults")
+	public Response getTaggingData(@QueryParam("term") String termName, @QueryParam("owr") String owr, @QueryParam("fwr") String fwr){
 		JSONObject jsonObject = new JSONObject();
 		setTermName(termName);
+		
+		setWrongRequests(fwr,owr);
+		
 		if(term!= null){
 			jsonObject.put("term", term.getTag().getName());
 			
@@ -69,102 +79,25 @@ public class PastTerminaSessionBean {
 			t.setParameter("resourceId", term.getId());
 			t.setParameter("person", this.person);
 //			t.setMaxResults(10);
-			List<String> ownTags = t.getResultList();
-			
-//			for(Tag tag : ownTags){
-//				JSONObject ob = new JSONObject();
-//				ob.put("tag", tag.getName());
-//				ob.put("matchType", "directMatch");
-//				ob.put("appearence", 1);
-//				owns.add(ob);
-//			}
-//			jsonObject.put("owns", owns);
+			List<Tag> ownTags = t.getResultList();
+
+			ArrayList<String> ownTagNames = new ArrayList<String>();
+			for(Tag tag : ownTags){
+				ownTagNames.add(tag.getName());
+			}
 			
 			//foreign tags
 			JSONArray foreigns = new JSONArray();
 			
-			//correct
-			Query q = entityManager.createNamedQuery("tagging.topCorrectAnswersGeneral");
-			q.setParameter("resourceId", term.getId());
-			q.setMaxResults(5);
-			List<BackstageAnswer> correctTags = q.getResultList();
-			int maxForeignAppearences = correctTags.get(0).getAppearence();
-			int minForeignAppearences = correctTags.get(0).getAppearence();
-
-			for(BackstageAnswer b : correctTags){
-				JSONObject ob = new JSONObject();
-				ob.put("tag", b.getTerm());
-		
-				int app = b.getAppearence();
-				if(app > maxForeignAppearences)
-					maxForeignAppearences = app;
-				if(app < minForeignAppearences)
-					minForeignAppearences = app;
-				
-				ob.put("appearence", app);
-				ob.put("matchType", "directMatch");
-				
-				if(ownTags.contains(b.getTerm())){
-					owns.add(ob);
-				} else {
-					foreigns.add(ob);
-				}
-			}
+			int[] minMaxAppearences = new int[2];
+			addToJSONArray(owns, foreigns, ownTagNames, minMaxAppearences, "tagging.topCorrectAnswersGeneral", "directMatch");
+			addToJSONArray(owns, foreigns, ownTagNames, minMaxAppearences, "tagging.topUnknownAnswersGeneral", "indirectMatch");
+			addToJSONArray(owns, foreigns, ownTagNames, minMaxAppearences, "tagging.topWrongAnswersGeneral", "WRONG");
 			
-			//unknown
-			Query r = entityManager.createNamedQuery("tagging.topUnknownAnswersGeneral");
-			r.setParameter("resourceId", term.getId());
-			r.setMaxResults(5);
-			List<BackstageAnswer> unknownTags = r.getResultList();
-			for(BackstageAnswer b : unknownTags){
-				JSONObject ob = new JSONObject();
-
-				ob.put("tag", b.getTerm());
-				int app = b.getAppearence();
-				if(app > maxForeignAppearences)
-					maxForeignAppearences = app;
-				if(app < minForeignAppearences)
-					minForeignAppearences = app;
-		
-				ob.put("appearence", app);
-				
-				ob.put("matchType", "indirectMatch");
-				if(ownTags.contains(b.getTerm())){
-					owns.add(ob);
-				} else {
-					foreigns.add(ob);
-				}
-			}
-			
-			//wrong
-			Query s = entityManager.createNamedQuery("tagging.topWrongAnswersGeneral");
-			s.setParameter("resourceId", term.getId());
-			s.setMaxResults(5);
-			List<BackstageAnswer> wrongTags = s.getResultList();
-
-			for(BackstageAnswer b : wrongTags){
-				JSONObject ob = new JSONObject();
-				ob.put("tag", b.getTerm());
-
-				int app = b.getAppearence();
-				if(app > maxForeignAppearences)
-					maxForeignAppearences = app;
-				if(app < minForeignAppearences)
-					minForeignAppearences = app;
-		
-				ob.put("appearence", app);
-				
-				ob.put("matchType", "WRONG");
-				if(ownTags.contains(b.getTerm())){
-					owns.add(ob);
-				} else {
-					foreigns.add(ob);
-				}
-			}
 			jsonObject.put("foreigns", foreigns);
 			jsonObject.put("owns", owns);
-			jsonObject.put("maxForeignApp", maxForeignAppearences);
-			jsonObject.put("minForeignApp", minForeignAppearences);
+			jsonObject.put("maxApp", minMaxAppearences[1]);
+			jsonObject.put("minApp", minMaxAppearences[0]);
 			
 			
 		} else {
@@ -173,9 +106,71 @@ public class PastTerminaSessionBean {
 		return Response.ok(jsonObject.toString(), MediaType.APPLICATION_JSON).build();
 	}
 	
-	private boolean saidByPerson(String term2) {
-		// TODO Auto-generated method stub
-		return false;
+	private void setWrongRequests(String fwr, String owr) {
+		if(fwr.equals("false")){
+			this.foreignWrongRequested = false;
+		} else {
+			this.foreignWrongRequested = true;
+		}
+		if(owr.equals("false")){
+			this.ownWrongRequested = false;
+		} else {
+			this.ownWrongRequested = true;
+		}
+	}
+
+	private void addToJSONArray(JSONArray owns, JSONArray foreigns,
+			ArrayList<String> ownTagNames, int[] minMaxAppearences,
+			String queryName, String matchType) {
+		Query q = entityManager.createNamedQuery(queryName);
+		q.setParameter("resourceId", term.getId());
+	//	q.setMaxResults(5);
+		List<BackstageAnswer> correctTags = q.getResultList();
+
+		for(BackstageAnswer b : correctTags){
+			JSONObject ob = wrapUpJson(b,matchType);
+			
+			minMaxAppearences[0] = Math.min(minMaxAppearences[0], b.getAppearence());
+			minMaxAppearences[1] = Math.max(minMaxAppearences[1], b.getAppearence());
+			boolean own = ownTagNames.contains(b.getTerm());
+			if(filter(b,own,matchType)){
+				if(own){
+					owns.add(ob);
+				} else {
+					foreigns.add(ob);
+				}
+			}
+		}
+	}
+
+	private boolean filter(BackstageAnswer b, boolean own, String matchType) {
+		boolean requested = false;
+		if(matchType.equals("WRONG")){
+			if(own && ownWrongRequested)
+				requested = true;
+			if(!own && foreignWrongRequested)
+				requested = true;
+		} else {
+			requested = true;
+		}
+			
+		boolean moreThanTwo = b.getAppearence() > 2;
+		
+		return moreThanTwo && requested;
+	}
+
+	
+	private JSONObject wrapUpJson(BackstageAnswer b, String string) {
+		JSONObject ob = new JSONObject();
+		
+		ob.put("tag", b.getTerm());
+
+		int app = b.getAppearence();
+		
+		ob.put("appearence", app);
+		ob.put("matchType", string);
+
+		return ob;
 	}
 
 	public List<Term> getPlayedTerms(){
@@ -191,6 +186,10 @@ public class PastTerminaSessionBean {
 		}
 	}
 	
+	public List<Topic> getAvailableTopics(){
+		Query q = customSourceBean.query("topic.enabled");
+		return q.getResultList();
+	}
 
 	public void setTermName(String termName){
 		Query q = entityManager.createNamedQuery("term.byName");
@@ -207,5 +206,23 @@ public class PastTerminaSessionBean {
 			return null;
 		}
 	}
+	
+	public boolean isForeignWrongRequested() {
+		return foreignWrongRequested;
+	}
+
+	public boolean isOwnWrongRequested() {
+		return ownWrongRequested;
+	}
+
+
+	public void setForeignWrongRequested(boolean foreignWrongRequested) {
+		this.foreignWrongRequested = foreignWrongRequested;
+	}
+
+	public void setOwnWrongRequested(boolean ownWrongRequested) {
+		this.ownWrongRequested = ownWrongRequested;
+	}
+
 	
 }

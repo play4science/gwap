@@ -9,7 +9,7 @@
     xmlns:a4j="http://richfaces.org/a4j">
 
 	<a4j:loadScript src="/javascript/processing.js" />
-	<script type="text/javascript">
+	<script type="text/javascript"> 
 		function getScale(max, min, appearence){
 			var scale = 1;
 			if(appearence > min){
@@ -17,54 +17,91 @@
 			}
 			return 10 + scale;
 		}
+
+		function setLineBreaks(tag){
+			tag = tag.trim();
+			tag = tag.replace(/ +(?= )/g,''); //replace multiple whitespaces 
+			tag = tag.replace(/ /g,"\n"); //replace whitespaces with linebreak
+			return tag;
+		}
 	
-		function setTermAndTags(selectionObject){
+		function dataQuery(){
 			console.log("jquery");
+			initializeVariables();
 			jQuery.ajax({
-				url      : "seam/resource/rest/pastTerminaSession/userResults" + "/" + selectionObject.value, 
+				url      : "seam/resource/rest/pastTerminaSession/userResults", 
+ 				data	 : {'term': term, 'owr': ownWrongRequest, 'fwr': foreignWrongRequest},
 				dataType : "json", 
-				success  : setTermAndTagsCallback,
+				success  : dataCallback,
 			});
 		}
-		function setTermAndTagsCallback(data){
+
+		function dataCallback(data){
 			//data zerlegen
 			console.log("callback");
-			var term = data["term"];
+			term = data["term"];
 			//var userTags = data["userTags"];
-			var maxForeignApp = data["maxForeignApp"];
-			var minForeignApp = data["minForeignApp"];
-			var foreignTags = data["foreigns"];
-			var ownTags = data["owns"];
+			maxApp = data["maxApp"];
+			minApp = data["minApp"];
+			foreignTags = data["foreigns"];
+			ownTags = data["owns"];
+
+			displayData();
+		}
+
+		function displayData(){
 			pjs = Processing.getInstanceById("TerminaGraph");
 			pjs.setup();
-			pjs.setTerm(term);
+			pjs.setTerm(setLineBreaks(term));
 	
 			for(var i = 0; i &lt; foreignTags.length; i++){
 				var tag = foreignTags[i];
 				console.log("foreign " + tag["tag"]);
-				pjs.addForeignTag(tag["tag"], 100, getScale(maxForeignApp, minForeignApp, tag["appearence"]), tag["matchType"]);
+				pjs.addForeignTag(setLineBreaks(tag["tag"]), 100, getScale(maxApp, minApp, tag["appearence"]), tag["matchType"]);
 			}
 
 			for(var i = 0; i &lt; ownTags.length; i++){
 				var tag = ownTags[i];
 				console.log("own " + tag["tag"]);
-				pjs.addOwnTag(tag["tag"], 100, getScale(maxForeignApp, minForeignApp, tag["appearence"]), tag["matchType"]);
+				pjs.addOwnTag(setLineBreaks(tag["tag"]), 100, getScale(maxApp, minApp, tag["appearence"]), tag["matchType"]);
 			}
 
 			pjs.separateTags();
 			pjs.highlightOwnTags();
-
+		}
 		
+		function setOwnWrongRequest(){
+			ownWrongRequest = document.getElementById("selectionForm:chk1").checked;
+		}	
+
+		function setForeignWrongRequest(){
+			foreignWrongRequest = document.getElementById("selectionForm:chk2").checked;
 		}
 
+		function setTerm(){
+			term = document.getElementById("selectionForm:termSelection").value;
+		}
+
+		function initializeVariables(){
+			console.log("init");
+			maxApp = 1;
+			minApp = 0;
+			setTerm();
+			setForeignWrongRequest();
+			setOwnWrongRequest();
+		}
 		
 	</script>
 
 
-	<h:form>
-		<h:selectOneMenu id="selection" value="#{pastTerminaSession.termName}" onchange="setTermAndTags(this);" >
+	<h:form id="selectionForm">
+		<h:selectOneMenu id="termSelection" value="#{pastTerminaSession.termName}" onchange="setTerm(); dataQuery();" >
 			<s:selectItems value="#{pastTerminaSession.playedTerms}" var="t" label="#{t.tag.name}" itemValue="#{t.tag.name}"></s:selectItems>
 		</h:selectOneMenu>
+		ownWrong:
+		<h:selectBooleanCheckbox id="chk1" value="#{pastTerminaSession.ownWrongRequested}" onchange="setOwnWrongRequest(); dataQuery();"/>
+		foreignWrong:
+		<h:selectBooleanCheckbox id="chk2" value="#{pastTerminaSession.foreignWrongRequested}" onchange="setForeignWrongRequest(); dataQuery();" />
 	</h:form>
 
 	<canvas
