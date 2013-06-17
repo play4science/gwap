@@ -99,6 +99,11 @@ public class BadgeBean extends gwap.widget.BadgeBean {
 		}
 	}
 	
+	public String getBestOwnedBadgeName() {
+		Integer worth = getBestOwnedBadge().getWorth();
+		return messages.get("badge."+worth);
+	}
+	
 	public String getDescriptionForNextBadge() {
 		getNextBestBadge();
 		if (nextBestBadge != null) {

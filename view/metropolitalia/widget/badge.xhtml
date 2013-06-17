@@ -8,7 +8,8 @@
     xmlns:rich="http://richfaces.org/rich">
 
 	<div class="badge">
-		<h:outputText value="#{messages['badge.current']} #{mitBadgeBean.bestOwnedBadge.name}" />
+		<span class="badgeLabel"><h:outputText value="#{messages['badge.current']} "/></span>
+		<span class="badgeName"><h:outputText value="#{mitBadgeBean.bestOwnedBadgeName}" /></span>
 		<span class="nextBadge">
 			<h:outputText value="#{mitBadgeBean.descriptionForNextBadge}" rendered="#{mitBadgeBean.nextBestBadge != null}" escape="false" />
 		</span>

@@ -396,13 +396,24 @@ background-image:url('../img/rich-slider-track.png'); background-position:left t
   padding-top: 5px;
   text-align: right;
 }
-.nextBadge {
-  display: block;
-  background: #ffb;
-  font-size: smaller;
+.badgeLabel {
+  text-transform: uppercase;
 }
 .badgeName {
-  font-style: bold;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+.nextBadge {
+  display: block;
+  font-size: smaller;
+  border: 2px solid #bbc9e1;
+  padding: 1px;
+  -moz-border-radius:4px;
+  -webkit-border-radius:4px;
+  border-radius:4px;
+}
+.nextBadge .badgeName {
+  text-transform: none;
 }
 
 /* =Bar chart
