@@ -8,7 +8,6 @@
     xmlns:rich="http://richfaces.org/rich"
     xmlns:a4j="http://richfaces.org/a4j">
 	
-	<a name="gameheader"></a>
 	<table>
 		<tr>
 			<td class="terminaTableCell"><img class="gameIcon" src="#{internalBasePath}img/game_round.svg" /><h:outputText class="gamevariables" value="#{messages['termina.currentRound']} #{gameRound.number}"/></td>
@@ -18,20 +17,16 @@
 				<rich:progressBar id="progressbar" minValue="0" maxValue="#{gameConfiguration.roundDuration}" value="0.000001" label="bar" mode="client" />			
 			</td>
 <!--			<td id="skipRoundTd" class="terminaTableCell"><h:outputText value="#{messages['buttonTitle.skipRound']}:" /></td> -->
-			<td id="terminaNormalEndbutton">
-				<table style="float:right;">
-					<td style="padding-right:5px">
-						<h:form id="switchbuttonform" >
-							<h:commandButton id="switchTermButton" styleClass="nextRound" action="next" value="" title="#{messages['buttonTitle.skipRound']}" type="button" />
-							<a4j:jsFunction name="switchTerm" action="next" />
-						</h:form>
-					</td>
-					<td>
-						<h:form id="bereich4">
-							<a4j:commandButton id="beendenButton" styleClass="buttonEnd" action="beenden" value="" title="#{messages['buttonTitle.endGame']}" />
-						</h:form>
-					</td> 
-				</table>
+			<td style="padding-right:5px">
+				<h:form id="switchbuttonform" >
+					<h:commandButton id="switchTermButton" styleClass="nextRound" action="next" value="" title="#{messages['buttonTitle.skipRound']}" type="button" />
+					<a4j:jsFunction name="switchTerm" action="next" />
+				</h:form>
+			</td>
+			<td>
+				<h:form id="bereich4">
+					<a4j:commandButton id="beendenButton" styleClass="buttonEnd" action="beenden" value="" title="#{messages['buttonTitle.endGame']}" />
+				</h:form>
 			</td>
 		</tr>
 	</table>
