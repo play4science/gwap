@@ -37,6 +37,7 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.security.Identity;
 
 /**
@@ -53,6 +54,7 @@ public class BadgeBean extends gwap.widget.BadgeBean {
 	private static final int MIN_POINTS_BET = 40;
 	
 	@In private HighscoreBean highscoreBean;
+	@In private FacesMessages facesMessages;
 	
 	private Integer nrLocationAssignmentsForNextBadge, nrBetsForNextBadge;
 	
@@ -74,12 +76,14 @@ public class BadgeBean extends gwap.widget.BadgeBean {
 				if (getNrLocationAssignmentsForNextBadge() <= 0) {
 					person = entityManager.find(Person.class, person.getId());
 					person.getBadges().add(b);
+					facesMessages.addFromResourceBundle("badge.reached");
 					log.info("#0 reached next badge #1", person, b);
 				}
 			} else if (b.getWorth() == 4) {
 				if (getNrBetsForNextBadge() <= 0) {
 					person = entityManager.find(Person.class, person.getId());
 					person.getBadges().add(b);
+					facesMessages.addFromResourceBundle("badge.reached");
 					log.info("#0 reached next badge #1", person, b);
 				}
 			} else if (b.getWorth() == 5) {
@@ -88,6 +92,7 @@ public class BadgeBean extends gwap.widget.BadgeBean {
 					if (highscoreSet.getGameType().getName().equals("mitRecognize")) {
 						if (highscoreSet.getHighscoreAll().get(0).getPersonId().equals(person.getId())) {
 							person.getBadges().add(b);
+							facesMessages.addFromResourceBundle("badge.reached");
 							log.info("#0 reached next badge #1", person, b);
 						}
 					}
