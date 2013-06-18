@@ -169,6 +169,12 @@ import org.jboss.seam.annotations.Scope;
 					"t.source.name = :source " +
 					"and exists (from t.taggings tg where tg.person = :person)"),
 	@NamedQuery(
+			name = "tagging.termsOfTopicTaggedByPerson",
+			query = "from Term t where " +
+					"t.source.name = :source " +
+					"and exists (from t.topics top where top = :topic) " +
+					"and exists (from t.taggings tg where tg.person = :person)"),
+	@NamedQuery(
 			name = "tagging.answersByPersonAndResource",
 			query = "select distinct tg.tag from Term t join t.taggings tg " +
 					"where t.id = :resourceId " +

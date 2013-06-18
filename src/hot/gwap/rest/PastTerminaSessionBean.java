@@ -45,6 +45,7 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.richfaces.model.TreeNodeImpl;
 
 /**
  * @author beckern
@@ -60,15 +61,26 @@ public class PastTerminaSessionBean {
 	private boolean foreignWrongRequested = true;
 	private boolean ownWrongRequested = true;
 
-	private int maxForeigns;
+	private Integer maxForeigns = 15;
+	private Integer maxOwns = 15;
+
+	private TreeNodeImpl<Item> rootNode;
+	
+	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("userResults")
-	public Response getTaggingData(@QueryParam("term") String termName, @QueryParam("owr") String owr, @QueryParam("fwr") String fwr){
+	public Response getTaggingData(@QueryParam("term") String termName, 
+									@QueryParam("owr") String owr, 
+									@QueryParam("fwr") String fwr,
+									@QueryParam("mon") String mon,
+									@QueryParam("mfn") String mfn){
 		JSONObject jsonObject = new JSONObject();
 		setTermName(termName);
 		
 		setWrongRequests(fwr,owr);
+		
+		setMaxNodes(mfn,mon);
 		
 		if(term!= null){
 			jsonObject.put("term", term.getTag().getName());
@@ -106,6 +118,17 @@ public class PastTerminaSessionBean {
 		return Response.ok(jsonObject.toString(), MediaType.APPLICATION_JSON).build();
 	}
 	
+	private void setMaxNodes(String mfn, String mon) {
+		try {
+			int maxforeign = Integer.parseInt(mfn.trim());
+			this.maxForeigns = maxforeign;
+		} catch(NumberFormatException nfe){	}
+		try {
+			int maxown = Integer.parseInt(mon.trim());
+			this.maxOwns = maxown;
+		} catch(NumberFormatException nfe){}
+	}
+
 	private void setWrongRequests(String fwr, String owr) {
 		if(fwr.equals("false")){
 			this.foreignWrongRequested = false;
@@ -135,9 +158,13 @@ public class PastTerminaSessionBean {
 			boolean own = ownTagNames.contains(b.getTerm());
 			if(filter(b,own,matchType)){
 				if(own){
-					owns.add(ob);
+					if(owns.size() < maxOwns){
+						owns.add(ob);
+					}
 				} else {
-					foreigns.add(ob);
+					if(foreigns.size() < maxForeigns){
+						foreigns.add(ob);
+					}
 				}
 			}
 		}
@@ -154,7 +181,7 @@ public class PastTerminaSessionBean {
 			requested = true;
 		}
 			
-		boolean moreThanTwo = b.getAppearence() > 2;
+		boolean moreThanTwo = b.getAppearence() > 2 || own;
 		
 		return moreThanTwo && requested;
 	}
@@ -224,5 +251,98 @@ public class PastTerminaSessionBean {
 		this.ownWrongRequested = ownWrongRequested;
 	}
 
+
+	public String getMaxForeigns() {
+		if(maxForeigns == null){
+			maxForeigns = new Integer(15);
+		}
+		return "" + maxForeigns;
+	}
+
+	public void setMaxForeigns(String maxForeigns) {
+		try{
+			this.maxForeigns = Integer.parseInt(maxForeigns.trim());
+		} catch(NumberFormatException nfe){
+			
+		}
+	}
+
+	public String getMaxOwns() {
+		if(maxOwns == 0){
+			maxOwns = new Integer(15);
+		}
+		return "" + maxOwns;
+	}
+
+	public void setMaxOwns(String maxOwns) {
+		try{
+			this.maxOwns = Integer.parseInt(maxOwns.trim());
+		} catch (NumberFormatException nfe) {}
+	}
+
 	
+    public TreeNodeImpl<Item> getTreeNode() {
+        if (rootNode == null) {
+            loadTree();
+        }
+        
+        return rootNode;
+    }
+    
+	private void loadTree() {
+		int counter = 0;
+		rootNode = new TreeNodeImpl<Item>();
+		for(Topic  top : this.getAvailableTopics()){
+			TreeNodeImpl<Item> topicNode = new TreeNodeImpl<Item>();
+			topicNode.setData(new Item("topic", top.getName()));
+			for(Term ter : getPlayedTermsOfTopic(top)){
+				TreeNodeImpl<Item> termNode = new TreeNodeImpl<Item>();
+				termNode.setData(new Item("term", ter.getTag().getName()));
+				termNode.setParent(topicNode);
+				topicNode.addChild(new Integer(counter), termNode);
+				counter ++;
+			}
+			rootNode.addChild(new Integer(counter), topicNode);
+			counter ++;
+		}
+	}
+
+	private List<Term> getPlayedTermsOfTopic(Topic topic) {
+		if(person != null && customSourceBean != null ){
+			Query q = entityManager.createNamedQuery("tagging.termsOfTopicTaggedByPerson");
+			q.setParameter("person",person);
+			q.setParameter("source", customSourceBean.getSource());
+			q.setParameter("topic", topic);
+			return q.getResultList();
+			
+		} else {
+			return null;
+		}
+	}
+	
+	
+    public class Item{
+    	String type;
+    	String val;
+    	public Item(String type, String val ){
+    		this.type = type;
+    		this.val = val;
+    	}
+		public String getType() {
+			return type;
+		}
+		public void setType(String type) {
+			this.type = type;
+		}	
+		public String getVal() {
+			return val;
+		}
+		public void setVal(String val) {
+			this.val = val;
+		}
+    	public String toString(){
+    		return val;
+    	}
+    }
+    
 }
