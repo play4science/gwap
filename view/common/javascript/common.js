@@ -27,12 +27,14 @@ Countdown.prototype.start = function(duration, callbackStep, callbackStop) {
 	this.callbackStep();
 };
 
-Countdown.prototype.stop = function() {
+Countdown.prototype.stopOnly = function() {
 	window.clearInterval(this.active);
 	this.active = undefined;
+};
+Countdown.prototype.stop = function() {
+	this.stopOnly();
 	this.callbackStop();
 };
-
 Countdown.prototype.countdown = function() {
 	this.seconds--;
 	this.callbackStep();
@@ -40,8 +42,9 @@ Countdown.prototype.countdown = function() {
 		this.stop();
 };
 
-if (countdown != undefined)
-	countdown.stop();
+if (countdown != undefined) {
+	countdown.stopOnly();
+}
 var countdown = new Countdown();
 
 function setMaxWidthPossible(element, substract, maxwidth) {
