@@ -5,10 +5,12 @@ class TerminaGraph {
 	float cy;
 	String term;
 	ArrayList vertices;
-
+	float defaultDistance;
+	
 	boolean verticesMoving;
 
 	TerminaGraph() {
+		defaultDistance = min(width, height)/3;
 		verticesMoving = true;
 		cx = width/2;
 		cy = height/2;
@@ -77,8 +79,8 @@ class TerminaGraph {
 		}
 	}
 
-	Vertex newVertex(String s, float distance, int size, String matchType) {
-		Vertex vert = new Vertex(cx, cy - distance, size, s, distance, new color(0));
+	Vertex newVertex(String s, int size, String matchType) {
+		Vertex vert = new Vertex(cx, cy - (int)defaultDistance, size, s, defaultDistance, new color(0));
 		tg.inmove = true;
 		if (matchType == "directMatch") {
 			vert.c = CORRECT;
@@ -92,8 +94,9 @@ class TerminaGraph {
 		return vert;
 	}
 
-	void addTag(String s, float distance, int size, String matchType){
-		Vertex vert = newVertex(s,distance,size,matchType);
+	void addTag(String s, int size, String matchType){
+		println("addTag");
+		Vertex vert = newVertex(s,size,matchType);
 		this.verticesMoving = true;
 		vertices.add(0, vert);
 		updatePositions();
@@ -118,23 +121,35 @@ class TerminaGraph {
 			}
 		}
 	}
-
-	void setDisplayWidth(int newWidth) {
+	
+	void setSize(int newWidth, int newHeight){
+		println("setsize! " + newWidth  + " " + newHeight);
 		this.width = newWidth;
-		//  externals.canvas.width = width;
-		size(newWidth, height);
+		this.height = newHeight;
+		size(newWidth, newHeight);
 		cx = (int) newWidth / 2;
+		cy = (int) newHeight / 2;
 		centerVertex.x = cx;
-		for (Vertex v : vertices)
-			v.move();
-
+		centerVertex.y = cy;
+		defaultDistance = min(newWidth, newHeight)/3;
+		updateDistances();
 		draw();
 	}
 
+	void updateDistances(){
+		for(Vertex v : vertices ){
+			v.distance = defaultDistance;
+			v.moving = true;
+			verticesMoving = true;
+			v.updatePosition();
+		}
+		
+	}
+	
 	void moveVertices(){
 		if(verticesMoving){
 			verticesMoving = false;
-			for(Vertex v : tg.vertices){
+			for(Vertex v : vertices){
 				v.move();
 				verticesMoving = verticesMoving || v.moving;
 			}

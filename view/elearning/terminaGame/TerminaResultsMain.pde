@@ -91,19 +91,28 @@ void setTerm(String term){
 }
 
 void setDisplayWidth(int w){
-	tg.setDisplayWidth(w);
+	println("setting width" ); 
+	tg.setSize(w, height);
 }
 
-void addTag(String s, float distance, int size, String matchType){
-	tg.addTag(s,distance,size,matchType);
+void setDisplayHeight(int h){
+	tg.setSize(width,h);
 }
 
-void addOwnTag(String s, float distance, int size, String matchType){
-	tg.addOwnTag(s,distance,size,matchType);
+void setSize(int w, int h){
+	tg.setSize(w,h);
 }
 
-void addForeignTag(String s, float distance, int size, String matchType){
-	tg.addForeignTag(s,distance,size,matchType);
+void addTag(String s, int size, String matchType){
+	tg.addTag(s,size,matchType);
+}
+
+void addOwnTag(String s, int size, String matchType){
+	tg.addOwnTag(s,size,matchType);
+}
+
+void addForeignTag(String s, int size, String matchType){
+	tg.addForeignTag(s,size,matchType);
 }
 
 void separateTags(){

@@ -1532,3 +1532,48 @@ dd {
 .nb {
 	white-space: nowrap
 }
+
+
+/*-------------------------------------------------------------------------- */
+/*-------------------------------- TREES ----------------------------------- */
+/*-------------------------------------------------------------------------- */
+.rich-tree-node{
+	vertical-align:middle;
+	
+}
+.rich-tree-node-handleicon{
+	vertical-align:middle;
+	padding-top:0px;
+	padding-bottom:0px;
+}
+.rich-tree-node-children{
+	vertical-align:middle;
+	padding-top:0px;
+	padding-bottom:0px;
+}
+.rich-tree-node-text{
+	vertical-align:middle;
+	height:15px;
+	padding:0;
+	line-height: 19px;
+}
+.rich-tree-node-icon{
+	vertical-align:middle;
+	padding-top:0px;
+	padding-bottom:0px;
+	height:15px;
+}
+.rich-tree-h-ic-img{
+	vertical-align:middle;
+	padding-top:0px;
+	padding-bottom:0px;
+}
+.rich-tree-node-icon-leaf{
+	vertical-align:middle;
+	padding-top:0px;
+	padding-bottom:0px;
+}
+.treeNode{
+	padding:0;	
+	font-size:13px;
+}

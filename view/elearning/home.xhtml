@@ -30,7 +30,9 @@
 					<ui:include src="/widget/newsItems.xhtml"/>
 				</p>
 				
-				<ui:include src="/widget/pastSessionGraphs.xhtml" />
+				<s:fragment rendered="#{identity.loggedIn}">
+					<ui:include src="/widget/pastSessionGraphs.xhtml" />
+				</s:fragment>
 			</div>
 		</div>
 		

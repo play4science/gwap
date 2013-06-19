@@ -47,13 +47,13 @@ function setUpGraphs(){
 		console.log("term set. adding user tags");
 		for(var j = 0; j < userTags[i].length; j++){
 			var type = score2matchType(scores[i][j]);
-			pjs.addOwnTag(userTags[i][j], 100, getScale(i, userTagAppearences[i][j]), type);
+			pjs.addOwnTag(userTags[i][j], getScale(i, userTagAppearences[i][j]), type);
 		}
 		console.log("user tags added, foreign tags");
 		for(var j = 0; j < foreignTags[i].length; j++){
 			var ft = foreignTags[i][j];
 			if(! containsIgnoreCase(userTags[i], ft))
-				pjs.addForeignTag(ft, 100, getScale(i, foreignAppearences[i][j]), foreignMatchTypes[i][j]);
+				pjs.addForeignTag(ft, getScale(i, foreignAppearences[i][j]), foreignMatchTypes[i][j]);
 		}
 		console.log("foreign tags added, separating.");
 		pjs.separateTags();

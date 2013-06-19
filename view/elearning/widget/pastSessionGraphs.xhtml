@@ -33,8 +33,8 @@
  				data	 : {'term': term, 
  	 						'owr': document.getElementById("selectionForm:chk1").checked, 
  	 						'fwr': document.getElementById("selectionForm:chk2").checked,
- 	 						'mfn': document.getElementById("selectionForm:maxForeignNodes").value,
- 	 						'mon': document.getElementById("selectionForm:maxOwnNodes").value},
+ 	 						'mfn': document.getElementsByName("selectionForm:mfnSpinner")[0].value,
+ 	 						'mon': document.getElementsByName("selectionForm:monSpinner")[0].value},
 				dataType : "json", 
 				success  : dataCallback,
 			});
@@ -61,13 +61,13 @@
 			for(var i = 0; i &lt; foreignTags.length; i++){
 				var tag = foreignTags[i];
 				console.log("foreign " + tag["tag"]);
-				pjs.addForeignTag(setLineBreaks(tag["tag"]), 100, getScale(maxApp, minApp, tag["appearence"]), tag["matchType"]);
+				pjs.addForeignTag(setLineBreaks(tag["tag"]), getScale(maxApp, minApp, tag["appearence"]), tag["matchType"]);
 			}
 
 			for(var i = 0; i &lt; ownTags.length; i++){
 				var tag = ownTags[i];
 				console.log("own " + tag["tag"]);
-				pjs.addOwnTag(setLineBreaks(tag["tag"]), 100, getScale(maxApp, minApp, tag["appearence"]), tag["matchType"]);
+				pjs.addOwnTag(setLineBreaks(tag["tag"]), getScale(maxApp, minApp, tag["appearence"]), tag["matchType"]);
 			}
 
 			pjs.separateTags();
@@ -79,45 +79,34 @@
 			term = val;
 		}
 
-		function enter(){
-			console.log("enter");
-		}
+
 	</script>
+
+		<h2>
+			<h:outputText value="#{messages['termina.pastSession.header']}" />
+		</h2>
+		<hr class="pageTitle" /><br />
 
 	<table>
 		<tr>
-			<th>jovialer text</th>
+			<td colspan="2"> <h:outputText value="#{messages['termina.pastSession.description']}" /> </td>
 		</tr>
 		<tr>
-			<td colspan="2">
-				<h:form id="selectionForm">
-					ownWrong:
-					<h:selectBooleanCheckbox id="chk1" value="ownWrongRequested" onchange="dataQuery();"/>
-					foreignWrong:
-					<h:selectBooleanCheckbox id="chk2" value="foreignWrongRequested" onchange="dataQuery();" />
-					max foreign nodes:
-					<h:inputText id="maxForeignNodes" value="#{pastTerminaSession.maxForeigns}" />n
-					max own nodes: 
-					<h:inputText id="maxOwnNodes" value="#{pastTerminaSession.maxOwns}" />n
- 					<rich:hotKey key="return" handler="dataQuery();"/>
- 					
- 				</h:form>
-			</td>
+			<td colspan="2"><h:outputText value="#{messages['termina.scoring.description']}" escape="false"/></td>
 		</tr>
 		<tr>
 			<td>
-	            <rich:tree id="termSelectionTree" style="width:300px; height:300px; overflow-y:auto; " 
+	            <rich:tree id="termSelectionTree" style="width:200px;  overflow-y:auto; " 
 	            switchType="client" value="#{pastTerminaSession.treeNode}" var="item" nodeFace="#{item.type}">
 	                <rich:treeNode type="term" onclick="selectTerm('#{item.val}'); dataQuery();">
-	                	<h:outputText value="#{item.val}" />
+	                	<h:outputText class="treeNode" value="#{item.val}" />
 	                </rich:treeNode>
 	                <rich:treeNode type="topic">
-	                	<h:outputText value="#{item.val}" />
+	                	<h:outputText class="treeNode" value="#{item.val}" />
 	                </rich:treeNode>
 	            </rich:tree>
 			</td>
 			<td>
-			
 				<canvas id="TerminaGraph" data-processing-sources="terminaGame/TerminaResultsMain.pde terminaGame/TerminaGraph.pde terminaGame/ResultGraph.pde terminaGame/Vertex.pde terminaGame/RoundedArc.pde" />
 				<script type="text/javascript">
 				var waiting = setInterval(function(){
@@ -129,7 +118,31 @@
 				},10);
 				</script>
 			</td>
-		</tr>	
+		</tr>
+		<tr>
+			<td colspan="2">
+				<h:form id="selectionForm">
+					<table>
+						<tr>
+							<td class="terminaTableCell"> <h:outputText value="#{messages['termina.pastSession.maxOwnTags']}" /></td>
+							<td class="terminaTableCell"> <rich:inputNumberSpinner id="monSpinner" minValue="0" maxValue="100" value="#{pastTerminaSession.maxOwns}"/> </td>
+							<td class="terminaTableCell"> <h:outputText value="#{messages['termina.pastSession.ownWrong']}" />  </td>
+							<td class="terminaTableCell"> <h:selectBooleanCheckbox id="chk1" value="ownWrongRequested" onchange="dataQuery();"/></td>
+							<td class="terminaTableCell" rowspan="2"> <a4j:commandButton id="submit" styleClass="sendAssociation" title="Aktualisieren" onclick="dataQuery();"/> </td>
+						</tr>
+						<tr>
+							<td class="terminaTableCell"> <h:outputText value="#{messages['termina.pastSession.maxForeignTags']}" /> </td>
+							<td class="terminaTableCell"> <rich:inputNumberSpinner id="mfnSpinner" minValue="0" maxValue="100" value="#{pastTerminaSession.maxForeigns}"/> </td>
+							<td class="terminaTableCell"> <h:outputText value="#{messages['termina.pastSession.foreignWrong']}" /> </td>
+							<td class="terminaTableCell"> <h:selectBooleanCheckbox id="chk2" value="ownWrongRequested" onchange="dataQuery();"/></td>
+						</tr>
+					
+					</table>
+					<rich:hotKey key="return" handler="dataQuery();"/>
+ 				</h:form>
+			</td>
+		</tr>
+			
 	</table>
 
 

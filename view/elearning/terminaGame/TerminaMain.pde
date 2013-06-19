@@ -58,11 +58,11 @@ void setTerm(String term){
 }
 
 void setDisplayWidth(int w){
-	tg.setDisplayWidth(w);
+	tg.setSize(w, height);
 }
 
-void addTag(String s, float distance, int size, String matchType){
-	tg.addTag(s,distance,size,matchType);
+void addTag(String s, int size, String matchType){
+	tg.addTag(s,size,matchType);
 }
 
 void mix(){

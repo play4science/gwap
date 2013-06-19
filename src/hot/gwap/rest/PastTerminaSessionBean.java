@@ -65,6 +65,7 @@ public class PastTerminaSessionBean {
 	private Integer maxOwns = 15;
 
 	private TreeNodeImpl<Item> rootNode;
+	private String currentSource;
 	
 	
 	@GET
@@ -259,13 +260,13 @@ public class PastTerminaSessionBean {
 		return "" + maxForeigns;
 	}
 
-	public void setMaxForeigns(String maxForeigns) {
-		try{
-			this.maxForeigns = Integer.parseInt(maxForeigns.trim());
-		} catch(NumberFormatException nfe){
-			
-		}
-	}
+//	public void setMaxForeigns(String maxForeigns) {
+//		try{
+//			this.maxForeigns = Integer.parseInt(maxForeigns.trim());
+//		} catch(NumberFormatException nfe){
+//			
+//		}
+//	}
 
 	public String getMaxOwns() {
 		if(maxOwns == 0){
@@ -274,15 +275,15 @@ public class PastTerminaSessionBean {
 		return "" + maxOwns;
 	}
 
-	public void setMaxOwns(String maxOwns) {
-		try{
-			this.maxOwns = Integer.parseInt(maxOwns.trim());
-		} catch (NumberFormatException nfe) {}
-	}
+//	public void setMaxOwns(String maxOwns) {
+//		try{
+//			this.maxOwns = Integer.parseInt(maxOwns.trim());
+//		} catch (NumberFormatException nfe) {}
+//	}
 
 	
     public TreeNodeImpl<Item> getTreeNode() {
-        if (rootNode == null) {
+        if (rootNode == null || ! customSourceBean.getSource().equals(currentSource )) {
             loadTree();
         }
         
@@ -290,6 +291,7 @@ public class PastTerminaSessionBean {
     }
     
 	private void loadTree() {
+		currentSource = customSourceBean.getSource();
 		int counter = 0;
 		rootNode = new TreeNodeImpl<Item>();
 		for(Topic  top : this.getAvailableTopics()){

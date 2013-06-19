@@ -57,10 +57,15 @@ class ResultGraph extends TerminaGraph{
 	}
 
 
+	void setSize(int newWidth, int newHeight){
+		super.setSize(newWidth, newHeight);
+		updateVertexDistances();
+		separateTags2();
+		
+	}
 
-
-	Vertex newVertex(String s, float distance, int size, String matchType) {
-		Vertex vert = super.newVertex(s,distance,size,matchType);
+	Vertex newVertex(String s, int size, String matchType) {
+		Vertex vert = super.newVertex(s,size,matchType);
 		if(matchType == "directMatch")
 			correctTags.add(vert);
 		else if(matchType == "indirectMatch")
@@ -70,17 +75,17 @@ class ResultGraph extends TerminaGraph{
 		return vert;
 	}
 
-	void addOwnTag(String s, int distance, int size, String matchType) {
-		Vertex vert = newVertex(s, distance, size, matchType);
+	void addOwnTag(String s, int size, String matchType) {
+		Vertex vert = newVertex(s, size, matchType);
 		vertices.add(0, vert);
 		updatePositions();
 		ownTags.add(0, vert);
 	}
 
-	void addForeignTag(String s, int distance, int size, String matchType) {
-		Vertex vert = newVertex(s, distance, size, matchType);
+	void addForeignTag(String s, int size, String matchType) {
+		Vertex vert = newVertex(s,size, matchType);
 		vert.own = false;
-		
+
 		vertices.add(0, vert);
 		updatePositions();
 		foreignTags.add(0,vert);
@@ -178,7 +183,7 @@ class ResultGraph extends TerminaGraph{
 		int foreigns = foreignTags.size();
 
 		int n = owns + foreigns + 2;
-		
+
 		distributeEqually(filterMatching(ownTags,CORRECT), 0, owns, n);
 		distributeEqually(filterMatching(ownTags,UNKNOWN), 0.5, owns + 0.5, n);
 		distributeEqually(filterMatching(ownTags,WRONG), 1, owns + 1, n);
@@ -187,17 +192,17 @@ class ResultGraph extends TerminaGraph{
 		distributeEqually(filterMatching(foreignTags,UNKNOWN), owns + 2, n , n);
 
 	}
-	
-void distributeEqually(ArrayList<Vertex> al, float from, float to, float off){
-	float n = abs(from - to);
-	int s = al.size();
-	int i = 0;
-	for(Vertex v : al){
-		v.setMovement(from + i * n / s, off);
-		i++;
+
+	void distributeEqually(ArrayList<Vertex> al, float from, float to, float off){
+		float n = abs(from - to);
+		int s = al.size();
+		int i = 0;
+		for(Vertex v : al){
+			v.setMovement(from + i * n / s, off);
+			i++;
+		}
 	}
-}
-	
+
 	ArrayList<Vertex> filterMatching(ArrayList<Vertex> verts, color c){
 		ArrayList<Vertex> al = new ArrayList<Vertex>();
 		for(Vertex v : verts){
@@ -209,19 +214,19 @@ void distributeEqually(ArrayList<Vertex> al, float from, float to, float off){
 	}
 
 //	ArrayList<Vertex> getOwnCorrectTags() {
-//		ArrayList<Vertex> owns = new ArrayList(); 
-//		for (Vertex v : vertices)
-//			if (v.own)
-//				owns.add(v);
-//		return owns;
+//	ArrayList<Vertex> owns = new ArrayList(); 
+//	for (Vertex v : vertices)
+//	if (v.own)
+//	owns.add(v);
+//	return owns;
 //	}
-//	
+
 //	ArrayList<Vertex> getForeignTags() {
-//		foreigns = new ArrayList();
-//		for (Vertex v : vertices)
-//			if (! vert.own)
-//				foreigns.add(v);
-//		return foreigns;
+//	foreigns = new ArrayList();
+//	for (Vertex v : vertices)
+//	if (! vert.own)
+//	foreigns.add(v);
+//	return foreigns;
 //	} 
 
 	void highlightOwnTags() {
@@ -263,7 +268,7 @@ void distributeEqually(ArrayList<Vertex> al, float from, float to, float off){
 			}
 		}
 	}
-	
+
 	boolean isArcMoving(){
 		return arcDeTriomphe.shrinking || arcDeTriomphe.moving; 
 	}

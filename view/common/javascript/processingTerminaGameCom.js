@@ -2,7 +2,7 @@ function newEntry(id, association, score, matchType){
 	var pjs = Processing.getInstanceById(id);
 	var size = 20;
 	
-	pjs.addTag(association, 100, size, matchType);
+	pjs.addTag(association, size, matchType);
 }
 
 function setLineBreaks(tag){
