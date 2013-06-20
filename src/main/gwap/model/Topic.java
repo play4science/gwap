@@ -52,7 +52,10 @@ import org.jboss.seam.annotations.Scope;
 	@NamedQuery(name="topic.byName",
 				query="from Topic where name = :name"),
 	@NamedQuery(name="topic.byNameCustom",
-				query="from Topic where name = :name and source = :source")
+				query="from Topic where name = :name and source = :source"),
+	@NamedQuery(name="topic.byResourceCustom",
+				query="from Topic top where source = :source and " +
+						"exists (from top.resources res where res = :resource)")
 })
 /**
  * A topic is a combination of resources and can be used to group

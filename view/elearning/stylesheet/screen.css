@@ -1577,3 +1577,9 @@ dd {
 	padding:0;	
 	font-size:13px;
 }
+
+#termSelectionTree{
+	width:300px; 
+	height:500px; 
+	overflow-y:auto;
+}

@@ -68,17 +68,20 @@ class TerminaGraph {
 	}
 
 	void mix() {
-		for (int i = 0; i < vertices.size(); i++) {
-			int j = (int)random(0, vertices.size());
-			Vertex v = vertices.get(i);
-			Vertex w = vertices.get(j);
-			vertices.set(j, v);
-			vertices.set(i, w);
-			v.setMovement(j, vertices.size());
-			w.setMovement(i, vertices.size());
-		}
+		mixList(vertices);
+		updatePositions();
 	}
 
+	void mixList(ArrayList<Vertex> al){
+		for (int i = 0; i < al.size(); i++) {
+			int j = (int)random(0, al.size());
+			Vertex v = al.get(i);
+			Vertex w = al.get(j);
+			al.set(j, v);
+			al.set(i, w);
+		}
+	}
+	
 	Vertex newVertex(String s, int size, String matchType) {
 		Vertex vert = new Vertex(cx, cy - (int)defaultDistance, size, s, defaultDistance, new color(0));
 		tg.inmove = true;
@@ -123,7 +126,6 @@ class TerminaGraph {
 	}
 	
 	void setSize(int newWidth, int newHeight){
-		println("setsize! " + newWidth  + " " + newHeight);
 		this.width = newWidth;
 		this.height = newHeight;
 		size(newWidth, newHeight);
@@ -132,18 +134,17 @@ class TerminaGraph {
 		centerVertex.x = cx;
 		centerVertex.y = cy;
 		defaultDistance = min(newWidth, newHeight)/3;
-		updateDistances();
-		draw();
+		resetVertexDistances();
+		verticesMoving = true;
 	}
 
-	void updateDistances(){
+	void resetVertexDistances(){
 		for(Vertex v : vertices ){
 			v.distance = defaultDistance;
 			v.moving = true;
-			verticesMoving = true;
 			v.updatePosition();
 		}
-		
+
 	}
 	
 	void moveVertices(){
@@ -171,8 +172,10 @@ class TerminaGraph {
 					} else {
 						v.newAngle += 0.02;
 					}
-				} 
+				}
+				println(v.s + " collides with center. distance " + v.distance);
 				v.distance ++;
+				println("new distance " + v.distance);
 			}
 
 		}

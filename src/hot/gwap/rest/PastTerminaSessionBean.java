@@ -107,11 +107,13 @@ public class PastTerminaSessionBean {
 			addToJSONArray(owns, foreigns, ownTagNames, minMaxAppearences, "tagging.topUnknownAnswersGeneral", "indirectMatch");
 			addToJSONArray(owns, foreigns, ownTagNames, minMaxAppearences, "tagging.topWrongAnswersGeneral", "WRONG");
 			
+			JSONArray topics = getTopicOfTerm();
+			
 			jsonObject.put("foreigns", foreigns);
 			jsonObject.put("owns", owns);
 			jsonObject.put("maxApp", minMaxAppearences[1]);
 			jsonObject.put("minApp", minMaxAppearences[0]);
-			
+			jsonObject.put("topics", topics);
 			
 		} else {
 			return Response.status(Status.BAD_REQUEST).build();
@@ -119,6 +121,18 @@ public class PastTerminaSessionBean {
 		return Response.ok(jsonObject.toString(), MediaType.APPLICATION_JSON).build();
 	}
 	
+	private JSONArray getTopicOfTerm() {
+		Query q = customSourceBean.query("topic.byResource");
+		q.setParameter("resource", this.term);
+		List<Topic> tops = q.getResultList();
+		
+		JSONArray arr = new JSONArray();
+		for(Topic t : tops){
+			arr.add(t.getName());
+		}
+		return arr;
+	}
+
 	private void setMaxNodes(String mfn, String mon) {
 		try {
 			int maxforeign = Integer.parseInt(mfn.trim());
@@ -219,6 +233,8 @@ public class PastTerminaSessionBean {
 		return q.getResultList();
 	}
 
+	
+	
 	public void setTermName(String termName){
 		Query q = entityManager.createNamedQuery("term.byName");
 		q.setParameter("termName", termName);
@@ -301,10 +317,10 @@ public class PastTerminaSessionBean {
 				TreeNodeImpl<Item> termNode = new TreeNodeImpl<Item>();
 				termNode.setData(new Item("term", ter.getTag().getName()));
 				termNode.setParent(topicNode);
-				topicNode.addChild(new Integer(counter), termNode);
+				topicNode.addChild(ter.getTag().getName(), termNode);
 				counter ++;
 			}
-			rootNode.addChild(new Integer(counter), topicNode);
+			rootNode.addChild(top.getName(), topicNode);
 			counter ++;
 		}
 	}

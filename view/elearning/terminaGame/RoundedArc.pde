@@ -162,4 +162,10 @@ class RoundedArc{
 		}
 
 	}
+	
+	int[] getOuterBounds(){
+		float add = 2 * atan(rs / (2 * r));
+		int[] bounds = {start - add, stop - add};
+		return bounds;
+	}
 }

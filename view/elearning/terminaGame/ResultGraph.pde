@@ -61,7 +61,8 @@ class ResultGraph extends TerminaGraph{
 		super.setSize(newWidth, newHeight);
 		updateVertexDistances();
 		separateTags2();
-		
+		arcDeTriomphe.moving = true;
+		arcDeTriomphe.shrinking = true;
 	}
 
 	Vertex newVertex(String s, int size, String matchType) {
@@ -247,7 +248,7 @@ class ResultGraph extends TerminaGraph{
 			n++;
 		if( n >= 2 ){
 
-			float currdist = 100; 
+			float currdist = defaultDistance; 
 
 			for (Vertex v : correctTags) {
 				v.distance = currdist;
@@ -271,5 +272,27 @@ class ResultGraph extends TerminaGraph{
 
 	boolean isArcMoving(){
 		return arcDeTriomphe.shrinking || arcDeTriomphe.moving; 
+	}
+	
+	void collideWithArc(){
+		for(Vertex v : foreignTags){
+			int[] bounds = arcDeTriomphe.getOuterBounds();
+			float bonus = 0.15;
+			boolean insideArc = (bounds[0] - bonus  < v.angle && v.angle < bounds[1] + bonus);
+			if( insideArc){
+				float distToStart = abs(v.angle - (bounds[0] - bonus));
+				float distToStop = abs(v.angle - (bounds[1] + bonus));
+				if(distToStop > distToStart){
+					v.newAngle -= distToStart;
+				} else {
+					v.newAngle += distToStop;
+				}
+			}
+		}
+	}
+	
+	void mix(){
+		mixList(ownTags);
+		mixList(foreignTags);
 	}
 }

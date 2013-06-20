@@ -47,6 +47,10 @@ void draw() {
 		tg.collide();
 		tg.collideWithCenter();
 
+		if(tg.high){
+			tg.collideWithArc();
+		}
+		
 		tg.updateVertexDistances();
 
 		tg.moveVertices();
@@ -101,6 +105,7 @@ void setDisplayHeight(int h){
 
 void setSize(int w, int h){
 	tg.setSize(w,h);
+	frameSet = false;
 }
 
 void addTag(String s, int size, String matchType){
@@ -125,6 +130,7 @@ void highlightOwnTags(){
 
 void mix(){
 	tg.mix();
+	frameSet = false;
 }
 
 void moveToOff(float to, float of){
@@ -145,7 +151,9 @@ void shrinkExpand(){
 }
 
 void reset(){
-	println("reseting");
-	this.tg = new ResultGraph();
+	int w = width;
+	int h = height;
+	setup();
+	setSize(w,h);
 	
 }

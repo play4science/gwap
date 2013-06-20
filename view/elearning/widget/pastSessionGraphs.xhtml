@@ -49,13 +49,28 @@
 			minApp = data["minApp"];
 			foreignTags = data["foreigns"];
 			ownTags = data["owns"];
-
+			topics = data["topics"];
+			expandTreeAt(topics,term);
 			displayData();
 		}
 
+		function expandTreeAt(topics, term){
+			for(var i = 0; i &lt; topics.length; i++){
+				var topicId = "termSelectionTree:" + topics[i] + "::topic";
+				console.log(topicId);
+				console.log(document.getElementById(topicId).component);
+				document.getElementById(topicId).component.expand();
+				var termId = "termSelectionTree:" + topics[i] + ":" + term + "::term"; 
+				document.getElementById(termId).component.toggleSelection();
+			}
+
+// 			document.getElementById('termSelectionTree:Kapitel 4::topic').component.expand();
+// 			document.getElementById('termSelectionTree:Kapitel 5:statische Typprüfung::term').component.toggleSelection();
+		}
+		
 		function displayData(){
 			pjs = Processing.getInstanceById("TerminaGraph");
-			pjs.setup();
+			pjs.reset();
 			pjs.setTerm(setLineBreaks(term));
 	
 			for(var i = 0; i &lt; foreignTags.length; i++){
@@ -70,6 +85,7 @@
 				pjs.addOwnTag(setLineBreaks(tag["tag"]), getScale(maxApp, minApp, tag["appearence"]), tag["matchType"]);
 			}
 
+			pjs.mix();
 			pjs.separateTags();
 			pjs.highlightOwnTags();
 		}
@@ -79,6 +95,20 @@
 			term = val;
 		}
 
+		function setNodeToggle(e) {
+			console.log(e);		
+			elt = Event.element(e);
+			console.log(elt);
+			treeItem = Tree.Item.findComponent(elt);
+			if (treeItem.isCollapsed())
+				treeItem.expand();
+			else
+				treeItem.collapse();
+		}
+
+		function append(){
+			console.log("yadayada");
+		}
 
 	</script>
 
@@ -96,13 +126,12 @@
 		</tr>
 		<tr>
 			<td>
-	            <rich:tree id="termSelectionTree" style="width:200px;  overflow-y:auto; " 
-	            switchType="client" value="#{pastTerminaSession.treeNode}" var="item" nodeFace="#{item.type}">
-	                <rich:treeNode type="term" onclick="selectTerm('#{item.val}'); dataQuery();">
+	            <rich:tree id="termSelectionTree" switchType="client" value="#{pastTerminaSession.treeNode}" var="item" nodeFace="#{item.type}">
+	                <rich:treeNode type="term" id="term" onclick="selectTerm('#{item.val}'); dataQuery();">
 	                	<h:outputText class="treeNode" value="#{item.val}" />
 	                </rich:treeNode>
-	                <rich:treeNode type="topic">
-	                	<h:outputText class="treeNode" value="#{item.val}" />
+	                <rich:treeNode type="topic" id="topic">
+	                	<h:outputText class="treeNode" value="#{item.val}" onclick="setNodeToggle(event);"/>
 	                </rich:treeNode>
 	            </rich:tree>
 			</td>
@@ -114,6 +143,7 @@
 					if(typeof pjs != 'undefined'){
 						clearInterval(waiting);
 						pjs.setTerm(setLineBreaks("Wähle einen Term"));
+						pjs.setSize(500,500);
 					}
 				},10);
 				</script>
