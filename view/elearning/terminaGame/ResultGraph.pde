@@ -1,14 +1,52 @@
+/**
+ * Extends TerminaGraph. Contains several lists of vertices to represent different kind of tags. 
+ * Contains an RoundedArc object.
+ */
 class ResultGraph extends TerminaGraph{
+
+	/**
+	 * Represents the tags that were given by the current user.
+	 */
 	ArrayList<Vertex> ownTags;
+
+	/**
+	 * Represents all correct tags.
+	 */
 	ArrayList<Vertex> correctTags;
+
+	/**
+	 * Represents all unknonw tags.
+	 */
 	ArrayList<Vertex> unknownTags;
+
+	/**
+	 * Represents all wrong tags
+	 */
 	ArrayList<Vertex> wrongTags;
+
+	/**
+	 * Represents all tags that were given by other users.
+	 */
 	ArrayList<Vertex> foreignTags;
-	ArrayList<Vertex> ownTags;
 
+	/**
+	 * The actionVertices of this sketch. 
+	 */
+	ArrayList<Vertex> actionVertices;
+
+	/**
+	 *  Whether arcDeTriomphe should be displayed.
+	 */
 	boolean high;
-	RoundedArc arcDeTriomphe; 
 
+	/**
+	 * If displayed, it highlights the tags that were given by the current user.
+	 */
+	RoundedArc arcDeTriomphe; 
+	
+	/**
+	 * Constructor
+	 */
 	ResultGraph(){
 		super();
 		ownTags = new ArrayList(0);
@@ -16,15 +54,17 @@ class ResultGraph extends TerminaGraph{
 		correctTags = new ArrayList(0);
 		wrongTags = new ArrayList(0);
 		unknownTags = new ArrayList(0);  
-
+		actionVertices = new ArrayList(0);
 		high = false;
 		arcDeTriomphe = new RoundedArc(0, 1, 100, 20, this);
-
 	}
 
+	/**
+	 * Returns the biggest distance from the center that the corners of the vertices in al have. 
+	 * Is used to the correct parameters in arcDeTriomphe.
+	 */
 	float getBiggestCornerDistance(ArrayList<Vertex> al){
 		float outerRadius = 0;
-
 		for(Vertex v : al){
 			float[] arr = getCornerDistances(v,cx,cy);
 			m = max(arr);
@@ -34,6 +74,10 @@ class ResultGraph extends TerminaGraph{
 		return outerRadius;
 	}
 
+	/**
+	 * Returns the smallest distance from the center that the corners of the vertices in al have. 
+	 * Is used to set the correct parameters in arcDeTriomphe.
+	 */
 	float getSmallestCornerDistance(ArrayList<Vertex> al){
 		float innerRadius = width;
 
@@ -46,6 +90,9 @@ class ResultGraph extends TerminaGraph{
 		return innerRadius;
 	}
 
+	/**
+	 * Returns the distances the corners of v have from (posx,posy).
+	 */
 	float[] getCornerDistances(Vertex v, float posx, float posy){
 		float[] corners = v.getCorners();
 		d_l_up = dist(corners[0], corners[1], posx ,posy);
@@ -57,6 +104,10 @@ class ResultGraph extends TerminaGraph{
 	}
 
 
+	/**
+	 * Extends the inherited method by adding the new Vertex to 
+	 * wrongTags, correctTags or unknownTags, according to matchType.
+	 */
 	void setSize(int newWidth, int newHeight){
 		super.setSize(newWidth, newHeight);
 		updateVertexDistances();
@@ -65,33 +116,46 @@ class ResultGraph extends TerminaGraph{
 		arcDeTriomphe.shrinking = true;
 	}
 
-	Vertex newVertex(String s, int size, String matchType) {
-		Vertex vert = super.newVertex(s,size,matchType);
-		if(matchType == "directMatch")
-			correctTags.add(vert);
-		else if(matchType == "indirectMatch")
-			unknownTags.add(vert);
-		else
-			wrongTags.add(vert);
-		return vert;
-	}
 
-	void addOwnTag(String s, int size, String matchType) {
+	/**
+	 * Calls the inherited newVertex() method, and adds the new vertex to the given lists.
+	 * @param s the tag
+	 * @param size the text size of this tag
+	 * @param matchType the matchtype of this tag. 
+	 * @param own whether the tag has been given by the current user or a foreign user.
+	 * @param active whether the new Vertex should be active.
+	 * 
+	 */
+	void addTag(String s, int size, String matchType, boolean own, boolean active) {
 		Vertex vert = newVertex(s, size, matchType);
 		vertices.add(0, vert);
 		updatePositions();
-		ownTags.add(0, vert);
+
+		if(active){
+			ActionVertex avert = new ActionVertex(vert.x, vert.y, vert.size, vert.s, vert.distance, vert.c);
+			actionVertices.add(0,avert);
+			vert = avert;
+		}
+		
+		if(matchType == "directMatch"){
+			correctTags.add(0,vert);
+		} else if(matchType == "indirectMatch"){
+			unknownTags.add(0,vert);
+		} else {
+			wrongTags.add(0,vert);
+		}
+		
+		if(own){
+			ownTags.add(0, vert);
+		} else {
+			vert.own = false;
+			foreignTags.add(0,vert);
+		}
 	}
 
-	void addForeignTag(String s, int size, String matchType) {
-		Vertex vert = newVertex(s,size, matchType);
-		vert.own = false;
-
-		vertices.add(0, vert);
-		updatePositions();
-		foreignTags.add(0,vert);
-	}
-
+	/**
+	 * Arranges the vertices to separate ownTags and ForeignTags.
+	 */
 	void separateTags(){
 
 		_vertices = new ArrayList();
@@ -170,6 +234,9 @@ class ResultGraph extends TerminaGraph{
 		}  
 	}
 
+	/**
+	 * Alternatice arrangement to separateTags(). Currently in use.
+	 */
 	void separateTags2(){
 		_vertices = new ArrayList();
 		for(Vertex v : ownTags)
@@ -194,6 +261,11 @@ class ResultGraph extends TerminaGraph{
 
 	}
 
+	/**
+	 * Spreads the vertices in al from position „from“ to position „to“ in a total of „of“ positions. 
+	 * Is used by separateTags2().
+	 * distributeEqually(someVerts, 2,3,4) arranges all vertices in someVerts in the second and third quater around the center. All verties then have equal distances. 
+	 */
 	void distributeEqually(ArrayList<Vertex> al, float from, float to, float off){
 		float n = abs(from - to);
 		int s = al.size();
@@ -204,6 +276,9 @@ class ResultGraph extends TerminaGraph{
 		}
 	}
 
+	/**
+	 * Returns all vertices in verts that have color c.
+	 */
 	ArrayList<Vertex> filterMatching(ArrayList<Vertex> verts, color c){
 		ArrayList<Vertex> al = new ArrayList<Vertex>();
 		for(Vertex v : verts){
@@ -214,30 +289,23 @@ class ResultGraph extends TerminaGraph{
 		return al;
 	}
 
-//	ArrayList<Vertex> getOwnCorrectTags() {
-//	ArrayList<Vertex> owns = new ArrayList(); 
-//	for (Vertex v : vertices)
-//	if (v.own)
-//	owns.add(v);
-//	return owns;
-//	}
-
-//	ArrayList<Vertex> getForeignTags() {
-//	foreigns = new ArrayList();
-//	for (Vertex v : vertices)
-//	if (! vert.own)
-//	foreigns.add(v);
-//	return foreigns;
-//	} 
-
+	/**
+	 * Sets high to true.
+	 */
 	void highlightOwnTags() {
 		high = true;
 	}
 
+	/**
+	 * Sets high to false.
+	 */
 	void downlightOwnTags() {
 		high = false;
 	}
 
+	/**
+	 * Moves the wrongTags further from the center, and the correctTags closer to the center.
+	 */
 	void updateVertexDistances() {
 		int n = 0;
 		if(correctTags.size() > 0)
@@ -270,18 +338,25 @@ class ResultGraph extends TerminaGraph{
 		}
 	}
 
+	/**
+	 * Whether arcDeTriomphe is still moving.
+	 */
 	boolean isArcMoving(){
 		return arcDeTriomphe.shrinking || arcDeTriomphe.moving; 
 	}
 	
+	/**
+	 * Checks if there is a vertex in foreignTags that collides with arcDeTriomphe.
+	 * If so, the colliding vertex is pushed outside of the arc.
+	 */
 	void collideWithArc(){
 		for(Vertex v : foreignTags){
-			int[] bounds = arcDeTriomphe.getOuterBounds();
+			float[] bounds = arcDeTriomphe.getOuterBounds();
 			float bonus = 0.15;
 			boolean insideArc = (bounds[0] - bonus  < v.angle && v.angle < bounds[1] + bonus);
 			if( insideArc){
-				float distToStart = abs(v.angle - (bounds[0] - bonus));
-				float distToStop = abs(v.angle - (bounds[1] + bonus));
+				float distToStart = abs(v.angle - bounds[0]);
+				float distToStop = abs(v.angle - bounds[1]);
 				if(distToStop > distToStart){
 					v.newAngle -= distToStart;
 				} else {
@@ -291,6 +366,9 @@ class ResultGraph extends TerminaGraph{
 		}
 	}
 	
+	/**
+	 * mixes ownTags and foreignTags seperately
+	 */
 	void mix(){
 		mixList(ownTags);
 		mixList(foreignTags);

@@ -1,178 +1,96 @@
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:s="http://jboss.com/products/seam/taglib"
-    xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:rich="http://richfaces.org/rich"
-    xmlns:a4j="http://richfaces.org/a4j"   >
-    
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
 	<a4j:loadScript src="/javascript/processing.js" />
-	<script type="text/javascript"> 
-		function getScale(max, min, appearence){
-			var scale = 1;
-			if(appearence > min){
-				scale = 15 * (appearence - min)/(max - min);
-			}
-			return 10 + scale;
-		}
+	<a4j:loadScript src="/javascript/processingTerminaResultsCom.js" />
+ 	<a4j:loadScript src="/javascript/processingTerminaPastSessionCom.js" />
 
-		function setLineBreaks(tag){
-			tag = tag.trim();
-			tag = tag.replace(/ +(?= )/g,''); //replace multiple whitespaces 
-			tag = tag.replace(/ /g,"\n"); //replace whitespaces with linebreak
-			return tag;
-		}
-	
-		function dataQuery(){
-			console.log("jquery");
-			//initializeVariables();
-			jQuery.ajax({
-				url      : "seam/resource/rest/pastTerminaSession/userResults", 
- 				data	 : {'term': term, 
- 	 						'owr': document.getElementById("selectionForm:chk1").checked, 
- 	 						'fwr': document.getElementById("selectionForm:chk2").checked,
- 	 						'mfn': document.getElementsByName("selectionForm:mfnSpinner")[0].value,
- 	 						'mon': document.getElementsByName("selectionForm:monSpinner")[0].value},
-				dataType : "json", 
-				success  : dataCallback,
-			});
-		}
-
-		function dataCallback(data){
-			//data zerlegen
-			console.log("callback");
-			term = data["term"];
-			//var userTags = data["userTags"];
-			maxApp = data["maxApp"];
-			minApp = data["minApp"];
-			foreignTags = data["foreigns"];
-			ownTags = data["owns"];
-			topics = data["topics"];
-			expandTreeAt(topics,term);
-			displayData();
-		}
-
-		function expandTreeAt(topics, term){
-			for(var i = 0; i &lt; topics.length; i++){
-				var topicId = "termSelectionTree:" + topics[i] + "::topic";
-				console.log(topicId);
-				console.log(document.getElementById(topicId).component);
-				document.getElementById(topicId).component.expand();
-				var termId = "termSelectionTree:" + topics[i] + ":" + term + "::term"; 
-				document.getElementById(termId).component.toggleSelection();
-			}
-
-// 			document.getElementById('termSelectionTree:Kapitel 4::topic').component.expand();
-// 			document.getElementById('termSelectionTree:Kapitel 5:statische Typprüfung::term').component.toggleSelection();
-		}
-		
-		function displayData(){
-			pjs = Processing.getInstanceById("TerminaGraph");
-			pjs.reset();
-			pjs.setTerm(setLineBreaks(term));
-	
-			for(var i = 0; i &lt; foreignTags.length; i++){
-				var tag = foreignTags[i];
-				console.log("foreign " + tag["tag"]);
-				pjs.addForeignTag(setLineBreaks(tag["tag"]), getScale(maxApp, minApp, tag["appearence"]), tag["matchType"]);
-			}
-
-			for(var i = 0; i &lt; ownTags.length; i++){
-				var tag = ownTags[i];
-				console.log("own " + tag["tag"]);
-				pjs.addOwnTag(setLineBreaks(tag["tag"]), getScale(maxApp, minApp, tag["appearence"]), tag["matchType"]);
-			}
-
-			pjs.mix();
-			pjs.separateTags();
-			pjs.highlightOwnTags();
-		}
-		
-		function selectTerm( val ){
-			console.log("clicked " + val);
-			term = val;
-		}
-
-		function setNodeToggle(e) {
-			console.log(e);		
-			elt = Event.element(e);
-			console.log(elt);
-			treeItem = Tree.Item.findComponent(elt);
-			if (treeItem.isCollapsed())
-				treeItem.expand();
-			else
-				treeItem.collapse();
-		}
-
-		function append(){
-			console.log("yadayada");
-		}
-
-	</script>
-
-		<h2>
-			<h:outputText value="#{messages['termina.pastSession.header']}" />
-		</h2>
-		<hr class="pageTitle" /><br />
+	<h2>
+		<h:outputText value="#{messages['termina.pastSession.header']}" />
+	</h2>
+	<hr class="pageTitle" />
+	<br />
 
 	<table>
 		<tr>
-			<td colspan="2"> <h:outputText value="#{messages['termina.pastSession.description']}" /> </td>
+			<td colspan="2"><h:outputText
+					value="#{messages['termina.pastSession.description']}" /></td>
 		</tr>
 		<tr>
-			<td colspan="2"><h:outputText value="#{messages['termina.scoring.description']}" escape="false"/></td>
+			<td colspan="2"><h:outputText
+					value="#{messages['termina.scoring.description']}" escape="false" /></td>
 		</tr>
 		<tr>
-			<td>
-	            <rich:tree id="termSelectionTree" switchType="client" value="#{pastTerminaSession.treeNode}" var="item" nodeFace="#{item.type}">
-	                <rich:treeNode type="term" id="term" onclick="selectTerm('#{item.val}'); dataQuery();">
-	                	<h:outputText class="treeNode" value="#{item.val}" />
-	                </rich:treeNode>
-	                <rich:treeNode type="topic" id="topic">
-	                	<h:outputText class="treeNode" value="#{item.val}" onclick="setNodeToggle(event);"/>
-	                </rich:treeNode>
-	            </rich:tree>
-			</td>
-			<td>
-				<canvas id="TerminaGraph" data-processing-sources="terminaGame/TerminaResultsMain.pde terminaGame/TerminaGraph.pde terminaGame/ResultGraph.pde terminaGame/Vertex.pde terminaGame/RoundedArc.pde" />
+			<td><rich:tree id="termSelectionTree" switchType="client"
+					value="#{pastTerminaSession.treeNode}" var="item"
+					nodeFace="#{item.type}">
+					<rich:treeNode type="term" id="term"
+						onclick="selectTerm('#{item.val}'); setCurrentTopic(event); dataQuery();">
+						<h:outputText class="treeNode" value="#{item.val}" />
+					</rich:treeNode>
+					<rich:treeNode type="topic" id="topic">
+						<h:outputText class="treeNode" value="#{item.val}" />
+					</rich:treeNode>
+				</rich:tree></td>
+			<td> <canvas id="TerminaGraph" width="500" height="500"
+					data-processing-sources="terminaGame/TerminaResultsMain.pde 
+																   terminaGame/TerminaGraph.pde 
+																   terminaGame/ResultGraph.pde 
+																   terminaGame/Vertex.pde 
+																   terminaGame/RoundedArc.pde
+																   terminaGame/ActionVertex.pde" /> 
 				<script type="text/javascript">
 				var waiting = setInterval(function(){
 					var pjs = Processing.getInstanceById('TerminaGraph');
 					if(typeof pjs != 'undefined'){
 						clearInterval(waiting);
-						pjs.setTerm(setLineBreaks("Wähle einen Term"));
+ 						pjs.setTerm(setLineBreaks("Wähle einen Term"));
 						pjs.setSize(500,500);
 					}
 				},10);
-				</script>
-			</td>
+				</script></td>
 		</tr>
 		<tr>
-			<td colspan="2">
-				<h:form id="selectionForm">
+			<td colspan="2"><h:form id="selectionForm">
 					<table>
 						<tr>
-							<td class="terminaTableCell"> <h:outputText value="#{messages['termina.pastSession.maxOwnTags']}" /></td>
-							<td class="terminaTableCell"> <rich:inputNumberSpinner id="monSpinner" minValue="0" maxValue="100" value="#{pastTerminaSession.maxOwns}"/> </td>
-							<td class="terminaTableCell"> <h:outputText value="#{messages['termina.pastSession.ownWrong']}" />  </td>
-							<td class="terminaTableCell"> <h:selectBooleanCheckbox id="chk1" value="ownWrongRequested" onchange="dataQuery();"/></td>
-							<td class="terminaTableCell" rowspan="2"> <a4j:commandButton id="submit" styleClass="sendAssociation" title="Aktualisieren" onclick="dataQuery();"/> </td>
+							<td class="terminaTableCell"><h:outputText
+									value="#{messages['termina.pastSession.maxOwnTags']}" /></td>
+							<td class="terminaTableCell"><rich:inputNumberSpinner
+									id="monSpinner" minValue="0" maxValue="100"
+									value="#{pastTerminaSession.maxOwns}" /></td>
+							<td class="terminaTableCell"><h:outputText
+									value="#{messages['termina.pastSession.ownWrong']}" /></td>
+							<td class="terminaTableCell"><h:selectBooleanCheckbox
+									id="chk1" value="ownWrongRequested" onchange="dataQuery();" /></td>
+							<td class="terminaTableCell" rowspan="2"><a4j:commandButton
+									id="submit" styleClass="sendAssociation" title="Aktualisieren"
+									onclick="dataQuery();" /></td>
 						</tr>
 						<tr>
-							<td class="terminaTableCell"> <h:outputText value="#{messages['termina.pastSession.maxForeignTags']}" /> </td>
-							<td class="terminaTableCell"> <rich:inputNumberSpinner id="mfnSpinner" minValue="0" maxValue="100" value="#{pastTerminaSession.maxForeigns}"/> </td>
-							<td class="terminaTableCell"> <h:outputText value="#{messages['termina.pastSession.foreignWrong']}" /> </td>
-							<td class="terminaTableCell"> <h:selectBooleanCheckbox id="chk2" value="ownWrongRequested" onchange="dataQuery();"/></td>
+							<td class="terminaTableCell"><h:outputText
+									value="#{messages['termina.pastSession.maxForeignTags']}" /></td>
+							<td class="terminaTableCell"><rich:inputNumberSpinner
+									id="mfnSpinner" minValue="0" maxValue="100"
+									value="#{pastTerminaSession.maxForeigns}" /></td>
+							<td class="terminaTableCell"><h:outputText
+									value="#{messages['termina.pastSession.foreignWrong']}" /></td>
+							<td class="terminaTableCell"><h:selectBooleanCheckbox
+									id="chk2" value="ownWrongRequested" onchange="dataQuery();" /></td>
 						</tr>
-					
+
 					</table>
-					<rich:hotKey key="return" handler="dataQuery();"/>
- 				</h:form>
-			</td>
+					<rich:hotKey key="return" handler="dataQuery();" />
+				</h:form></td>
 		</tr>
-			
+
 	</table>
 
 

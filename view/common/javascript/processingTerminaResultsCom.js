@@ -1,3 +1,6 @@
+/**
+ * Stores the given parameters in the according lists.
+ */
 function newUserTag(round, tag,score, appearence){
 	tag = tag.trim();
 	tag = tag.replace(/ +(?= )/g,''); //replace multiple whitespaces 
@@ -8,6 +11,11 @@ function newUserTag(round, tag,score, appearence){
 	userTagAppearences[round - 1].push(parseInt(appearence));
 }
 
+/**
+ * Stores id in the according list. 
+ * If the number of stored ids equals the number of played rounds, setUpGraphs() is called.
+ * @param id
+ */
 function newProcessingInstance(id){
 	var waiting = setInterval(function(){
 		var pjs = Processing.getInstanceById(id);
@@ -22,11 +30,17 @@ function newProcessingInstance(id){
 	},10);
 }
 
+/**
+ * Stores a term in the according list. 
+ */
 function newTerm(term){
 	console.log("new term: " + term);
 	terms.push(term);
 }
 
+/**
+ * Stores the given parameters in the according lists.
+ */
 function newForeignTag(round, tag, appearence, matchtype){
 	tag = tag.trim();
 	tag = tag.replace(/ +(?= )/g,''); //replace multiple whitespaces 
@@ -36,6 +50,10 @@ function newForeignTag(round, tag, appearence, matchtype){
 	foreignMatchTypes[round -1].push(matchtype);
 }
 
+/**
+ * Is called when the number of stored processing ids reaches the number of played rounds. 
+ * Each processing instance is then referenced by its id, and the stored data is passed to it.
+ */
 function setUpGraphs(){
 	console.log("setUpGraphs called");
 	for(var i = 0; i < numberOfRounds; i++){
@@ -47,13 +65,15 @@ function setUpGraphs(){
 		console.log("term set. adding user tags");
 		for(var j = 0; j < userTags[i].length; j++){
 			var type = score2matchType(scores[i][j]);
-			pjs.addOwnTag(userTags[i][j], getScale(i, userTagAppearences[i][j]), type);
+			var max = Math.max.apply(Math, foreignAppearences[i]);
+			var min = Math.min.apply(Math, foreignAppearences[i]);
+			pjs.addOwnTag(userTags[i][j], getScale(max,min, userTagAppearences[i][j]), type, false);
 		}
 		console.log("user tags added, foreign tags");
 		for(var j = 0; j < foreignTags[i].length; j++){
 			var ft = foreignTags[i][j];
 			if(! containsIgnoreCase(userTags[i], ft))
-				pjs.addForeignTag(ft, getScale(i, foreignAppearences[i][j]), foreignMatchTypes[i][j]);
+				pjs.addForeignTag(ft, getScale(i, foreignAppearences[i][j]), foreignMatchTypes[i][j], false);
 		}
 		console.log("foreign tags added, separating.");
 		pjs.separateTags();
@@ -63,6 +83,11 @@ function setUpGraphs(){
 	}
 }
 
+/**
+ * maps scores (+1,0,-1) to Strings („directMatch“, „indirectMatch“,“WRONG“).
+ * @param score the obtained score of this tag. either +1 -1 or 0.
+ * @returns the according matchType to the score
+ */
 function score2matchType(score){
 	type = "";
 	if(score == ""){
@@ -73,9 +98,14 @@ function score2matchType(score){
 	return type;
 }
 
-function getScale(round, appearence){
-	var max = Math.max.apply(Math, foreignAppearences[round]);
-	var min = Math.min.apply(Math, foreignAppearences[round]);
+/**
+ * Maps the appearance of a certain tag to a text size. Appearances are mapped linearly to the interval [10,25]. 
+ * @param max the maximum appearance of any tag played in this round
+ * @param min the minimum appearance of any tag played in this round
+ * @param appearence the appearance of this tag.
+ * @returns {Number} the scaled text size
+ */
+function getScale(max,min, appearence){
 	var scale = 1;
 	if(appearence > min){
 		scale = 15 * (appearence - min)/(max - min);
@@ -83,6 +113,9 @@ function getScale(round, appearence){
 	return 10 + scale;
 }
 
+/**
+ * @return if the array arr contains a string tag by ignoring the cases of the string.
+ */
 function containsIgnoreCase(arr, tag){
 	var b = false;
 	var u = tag.toUpperCase();
@@ -93,6 +126,11 @@ function containsIgnoreCase(arr, tag){
 	return b; 
 }
 
+/**
+ * Replaces sets linebreaks in strings between words.
+ * @param tag the original tag
+ * @returns the tag with linebreaks
+ */
 function setLineBreaks(tag){
 	tag = tag.trim();
 	tag = tag.replace(/ +(?= )/g,''); //replace multiple whitespaces 

@@ -49,6 +49,7 @@ import org.richfaces.model.TreeNodeImpl;
 
 /**
  * @author beckern
+ * Holds information about the terms that were tagged by the user. 
  */
 @Name("pastTerminaSession")
 @Path("pastTerminaSession")
@@ -66,11 +67,21 @@ public class PastTerminaSessionBean {
 
 	private TreeNodeImpl<Item> rootNode;
 	private String currentSource;
+	private List<Term> playedTerms;
 	
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("userResults")
+	/**
+	 * 
+	 * @param termName The name of the term in question.
+	 * @param owr if wrong tags of the player should be appended to the response.
+	 * @param fwr if wrong tags of other players should be appended to the response. 
+	 * @param mon the maximal number of player tags in the response.
+	 * @param mfn the maximal number of tags of other players in the response.
+	 * @return the tags that the current player gave to the current term, the tags of the other players, etc.
+	 */
 	public Response getTaggingData(@QueryParam("term") String termName, 
 									@QueryParam("owr") String owr, 
 									@QueryParam("fwr") String fwr,
@@ -185,6 +196,13 @@ public class PastTerminaSessionBean {
 		}
 	}
 
+	/**
+	 * Method used to determine if a tag should be displayed. e.g. if it was requested.
+	 * @param b the BackstageAnswer that holds the tag
+	 * @param own if the answer has been given by current player.
+	 * @param matchType the matchType of this tag.
+	 * @return
+	 */
 	private boolean filter(BackstageAnswer b, boolean own, String matchType) {
 		boolean requested = false;
 		if(matchType.equals("WRONG")){
@@ -211,16 +229,35 @@ public class PastTerminaSessionBean {
 		
 		ob.put("appearence", app);
 		ob.put("matchType", string);
-
+		ob.put("isPlayedTerm", isPlayedTerm(b.getTerm()));
 		return ob;
 	}
 
+	/**
+	 * @return if tag is also a term that the player has tagged.
+	 */
+	private boolean isPlayedTerm(String tag) {
+		boolean b = false;
+		if(playedTerms == null){
+			playedTerms = getPlayedTerms();
+		}
+		for(Term t : playedTerms){
+			b = b || t.getTag().getName().equals(tag);
+		}
+		
+		return b;
+	}
+
+	/**
+	 * @return the terms that the current player tagged.
+	 */
 	public List<Term> getPlayedTerms(){
+		
 		if(person != null && customSourceBean != null ){
 			Query q = entityManager.createNamedQuery("tagging.termsTaggedByPerson");
 			q.setParameter("person",person);
 			q.setParameter("source", customSourceBean.getSource());
-			
+				
 			return q.getResultList();
 			
 		} else {
@@ -276,13 +313,6 @@ public class PastTerminaSessionBean {
 		return "" + maxForeigns;
 	}
 
-//	public void setMaxForeigns(String maxForeigns) {
-//		try{
-//			this.maxForeigns = Integer.parseInt(maxForeigns.trim());
-//		} catch(NumberFormatException nfe){
-//			
-//		}
-//	}
 
 	public String getMaxOwns() {
 		if(maxOwns == 0){
@@ -291,13 +321,10 @@ public class PastTerminaSessionBean {
 		return "" + maxOwns;
 	}
 
-//	public void setMaxOwns(String maxOwns) {
-//		try{
-//			this.maxOwns = Integer.parseInt(maxOwns.trim());
-//		} catch (NumberFormatException nfe) {}
-//	}
-
-	
+	/**
+	 * Loads a new tree if needed.  
+	 * @return the rootNode for the termSelectionTree in pastSessionGraphs.xhtml
+	 */
     public TreeNodeImpl<Item> getTreeNode() {
         if (rootNode == null || ! customSourceBean.getSource().equals(currentSource )) {
             loadTree();
@@ -306,6 +333,9 @@ public class PastTerminaSessionBean {
         return rootNode;
     }
     
+    /**
+     * sets up the rootNode, for the termSelectionTree in pastSessionGraphs.xhmtl
+     */
 	private void loadTree() {
 		currentSource = customSourceBean.getSource();
 		int counter = 0;
@@ -338,9 +368,20 @@ public class PastTerminaSessionBean {
 		}
 	}
 	
-	
+	/**
+	 * a local class that represents the displayed items in the termSelectionTree.
+	 * @author beckern
+	 *
+	 */
     public class Item{
+    	/**
+    	 * usually "topic" or "term"
+    	 */
     	String type;
+    	
+    	/**
+    	 * the displayed string.
+    	 */
     	String val;
     	public Item(String type, String val ){
     		this.type = type;

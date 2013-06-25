@@ -1,17 +1,66 @@
+/**
+ * An displayable object that is used to highlight the tags that were given by the current user.
+ */
 class RoundedArc{
+
+	/**
+	 * The angle where the highlighting starts.
+	 */
 	float  start;
+
+	/**
+	 * The angle where the highlighting stops.
+	 */
 	float  stop;
+
+	/**
+	 * The middle radius of the middle radius of the arc. r + rs is the outer radius, r – rs is the inner radius.
+	 */
 	float  r;
+
+	/**
+	 * The radius of the circles at start and stop of the arc.
+	 */
 	float  rs;
+
+	/**
+	 * The ResultGraph of this sketch.
+	 */
 	ResultGraph rg;
+
+	/**
+	 * The first Vertex to be highlighted. Usully the Vertex in rg.ownTags with the smallest angle.
+	 */
 	Vertex first;
+
+	/**
+	 * The last Vertex to be highlighted. Usually the vertex in rg.ownTags with the biggest angle.
+	 */
 	Vertex last;
+
+	/**
+	 * Extra value used to include debording vertices. Used in calculation of start.
+	 */
 	float startMargin;
+
+	/**
+	 * Extra value used to include debording vertices. Used in calculation of stop.
+	 */
 	float stopMargin;
 	
+	/**
+	 * Whether start or stop are changing due to moving vertices.
+	 */
 	boolean moving;
+
+	/**
+	 * Whether start or stop are changing due debording vertices.
+	 */
 	boolean shrinking;
 	
+	/**
+	 * Constructor
+	 */
 	RoundedArc(float start, float stop, float r, float rs, ResultGraph rg){
 		this.first = rg.vertices.get(0);
 		this.last = rg.vertices.get(0);
@@ -26,6 +75,9 @@ class RoundedArc{
 		shrinking = true;
 	}
 
+	/**
+	 * Displays this arc. Color GREY is used.
+	 */
 	void display(){
 		noStroke();
 		fill(GREY);
@@ -42,6 +94,9 @@ class RoundedArc{
 	}
 
 
+	/**
+	 * Updates r,rs, start and stop according to changes in rg.ownTags. StartMargin and stopMargin are used.
+	 */
 	void update(){
 		outerRadius = rg.getBiggestCornerDistance(rg.ownTags);
 		innerRadius = rg.getSmallestCornerDistance(rg.ownTags);
@@ -94,7 +149,14 @@ class RoundedArc{
 		}
 	}
 
+	/**
+	 * Updates startMargin and stopMargin. 
+	 * Used to include debording vertices or reduce the arcs length if possible.
+	 */
 	void shrinkExpand(){
+//		println("shrinkexp");
+//		println(first.s);
+//		println(last.s);
 		shrinking = false;
 		float mx = rg.cx + r * cos(start);
 		float my = rg.cy + r * sin(start);
@@ -102,9 +164,8 @@ class RoundedArc{
 		float[] leftCorners = new float[0];
 
 		for(int i = 0; i < corners.length; i += 2){    
-			float cox = corners[i];
 			float coy = corners[i + 1];
-
+			float cox = corners[i];
 			if(isLeft(rg.cx,rg.cy,mx,my,cox,coy)){
 				leftCorners = append(leftCorners, cox);
 				leftCorners = append(leftCorners, coy);  
@@ -163,9 +224,13 @@ class RoundedArc{
 
 	}
 	
-	int[] getOuterBounds(){
+	/**
+	 * Returns the angles of the outer bounds of this arc. 
+	 * The outer bounds are not start and stop because of the circles drawn at the beginning and end of the arc. 
+	 */
+	float[] getOuterBounds(){
 		float add = 2 * atan(rs / (2 * r));
-		int[] bounds = {start - add, stop - add};
+		float[] bounds = {start - add, stop + add};
 		return bounds;
 	}
 }
