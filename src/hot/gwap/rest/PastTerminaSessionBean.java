@@ -55,7 +55,7 @@ import org.richfaces.model.TreeNodeImpl;
 @Path("pastTerminaSession")
 public class PastTerminaSessionBean {
 
-	private static final Integer MIN_MATCH_COUNT = 2;
+	private static final Integer MIN_MATCH_COUNT = 2; // minimum number of taggings for unknown / wrong associations
 	@In EntityManager entityManager;
 	@In private Person person;
 	@In private CustomSourceBean customSourceBean;
@@ -217,7 +217,7 @@ public class PastTerminaSessionBean {
 			
 		boolean moreThanTwo = b.getAppearence() >= MIN_MATCH_COUNT || own;
 		
-		return moreThanTwo && requested;
+		return (matchType.equals("directMatch") || moreThanTwo) && requested;
 	}
 
 	
