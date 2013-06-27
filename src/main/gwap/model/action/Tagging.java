@@ -85,40 +85,40 @@ import org.jboss.seam.annotations.Scope;
 					
 	@NamedQuery(
 			name="tagging.topCorrectAnswers",
-			query="select new gwap.wrapper.BackstageAnswer(t.name, count(*)) from Term r join r.confirmedTags t join r.taggings tg join tg.gameRound gr " +
+			query="select new gwap.wrapper.BackstageAnswer(t.name, count(distinct tg.person.id)) from Term r join r.confirmedTags t join r.taggings tg join tg.gameRound gr " +
 					"where r.id=:resourceId and gr.gameSession.externalSessionId=:externalSessionId " +
 					"and t.id=tg.tag.id " +
-					"group by t.name order by count(*) desc"),
+					"group by t.name order by count(distinct tg.person.id) desc"),
 	@NamedQuery(
 			name="tagging.topUnknownAnswers",
-			query="select new gwap.wrapper.BackstageAnswer(t.name, count(*)) from Term r join r.taggings tg join tg.tag t " +
+			query="select new gwap.wrapper.BackstageAnswer(t.name, count(distinct tg.person.id)) from Term r join r.taggings tg join tg.tag t " +
 					"where r.id=:resourceId and tg.gameRound.gameSession.externalSessionId=:externalSessionId " +
 					"and t.id not in (select t2.id from r.confirmedTags t2) and t.id not in (select t2.id from r.rejectedTags t2) " +
-					"group by t.name order by count(*) desc"),
+					"group by t.name order by count(distinct tg.person.id) desc"),
 	@NamedQuery(
 			name="tagging.topWrongAnswers",
-			query="select new gwap.wrapper.BackstageAnswer(t.name, count(*)) from Term r join r.rejectedTags t join r.taggings tg join tg.gameRound gr " +
+			query="select new gwap.wrapper.BackstageAnswer(t.name, count(distinct tg.person.id)) from Term r join r.rejectedTags t join r.taggings tg join tg.gameRound gr " +
 					"where r.id=:resourceId and gr.gameSession.externalSessionId=:externalSessionId " +
 					"and t.id=tg.tag.id " +
-					"group by t.name order by count(*) desc"),
+					"group by t.name order by count(distinct tg.person.id) desc"),
 	@NamedQuery(
 			name="tagging.topCorrectAnswersGeneral",
-			query="select new gwap.wrapper.BackstageAnswer(t.name, count(*)) from Term r join r.confirmedTags t join r.taggings tg " +
+			query="select new gwap.wrapper.BackstageAnswer(t.name, count(distinct tg.person.id)) from Term r join r.confirmedTags t join r.taggings tg " +
 					"where r.id=:resourceId " +
 					"and t.id=tg.tag.id " +
-					"group by t.name order by count(*) desc"),
+					"group by t.name order by count(distinct tg.person.id) desc"),
 	@NamedQuery(
 			name="tagging.topUnknownAnswersGeneral",
-			query="select new gwap.wrapper.BackstageAnswer(t.name, count(*)) from Term r join r.taggings tg join tg.tag t " +
+			query="select new gwap.wrapper.BackstageAnswer(t.name, count(distinct tg.person.id)) from Term r join r.taggings tg join tg.tag t " +
 					"where r.id=:resourceId " +
 					"and t.id not in (select t2.id from r.confirmedTags t2) and t.id not in (select t2.id from r.rejectedTags t2) " + 
-					"group by t.name order by count(*) desc"),
+					"group by t.name order by count(distinct tg.person.id) desc"),
 	@NamedQuery(
 			name="tagging.topWrongAnswersGeneral",
-			query="select new gwap.wrapper.BackstageAnswer(t.name, count(*)) from Term r join r.rejectedTags t join r.taggings tg " +
+			query="select new gwap.wrapper.BackstageAnswer(t.name, count(distinct tg.person.id)) from Term r join r.rejectedTags t join r.taggings tg " +
 					"where r.id=:resourceId " +
 					"and t.id=tg.tag.id " +
-					"group by t.name order by count(*) desc"),
+					"group by t.name order by count(distinct tg.person.id) desc"),
 	@NamedQuery(
 			name = "tagging.tagFrequencyBySource",
 			query = "select r.externalId, t.tag.name, t.tag.language, count(t.tag.name) " +
@@ -140,15 +140,15 @@ import org.jboss.seam.annotations.Scope;
 			query = "select t from Tagging t where lower(t.tag.name)=lower(:tagName) and t.resource=:resource and t.gameRound = :gameRound"),
 	@NamedQuery(
 			name = "tagging.unknownAnswers",
-			query = "select r.id, t.id, count(*) from Term r join r.taggings tg join tg.tag t " +
+			query = "select r.id, t.id, count(distinct tg.person.id) from Term r join r.taggings tg join tg.tag t " +
 					"where not exists (from r.confirmedTags t2 where t2=t) and not exists (from r.rejectedTags t2 where t2=t) " + 
-					"group by r.id, t.id order by r.id, count(*) desc"),
+					"group by r.id, t.id order by r.id, count(distinct tg.person.id) desc"),
 	@NamedQuery(
 			name = "tagging.unknownAnswersCustom",
-			query = "select r.id, t.id, count(*) from Term r join r.taggings tg join tg.tag t " +
+			query = "select r.id, t.id, count(distinct tg.person.id) from Term r join r.taggings tg join tg.tag t " +
 					"where not exists (from r.confirmedTags t2 where t2=t) and not exists (from r.rejectedTags t2 where t2=t) " +
 					"and r.source = :source " + 
-					"group by r.id, t.id order by r.id, count(*) desc"),
+					"group by r.id, t.id order by r.id, count(distinct tg.person.id) desc"),
 	@NamedQuery(
 			name = "tagging.unknownAnswersCount",
 			query = "select count(*) from Term r join r.taggings tg join tg.tag t " +
@@ -167,18 +167,18 @@ import org.jboss.seam.annotations.Scope;
 			name = "tagging.termsTaggedByPerson",
 			query = "from Term t where " +
 					"t.source.name = :source " +
-					"and exists (from t.taggings tg where tg.person = :person)"),
+					"and exists (from t.taggings tg where tg.person = :person or tg.person.personConnected = :person)"),
 	@NamedQuery(
 			name = "tagging.termsOfTopicTaggedByPerson",
 			query = "from Term t where " +
 					"t.source.name = :source " +
 					"and exists (from t.topics top where top = :topic) " +
-					"and exists (from t.taggings tg where tg.person = :person)"),
+					"and exists (from t.taggings tg where tg.person = :person or tg.person.personConnected = :person)"),
 	@NamedQuery(
 			name = "tagging.answersByPersonAndResource",
 			query = "select distinct tg.tag from Term t join t.taggings tg " +
 					"where t.id = :resourceId " +
-					"and tg.person = :person ") 
+					"and tg.person = :person or tg.person.personConnected = :person ") 
 })
 
 @Entity
