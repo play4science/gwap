@@ -58,7 +58,7 @@ class TerminaGraph {
 	 */
 	void setTerm(String term) {
 		this.term = term;    
-		centerVertex = new Vertex(cx, cy, 20, term, 0, GREY);
+		centerVertex = new Vertex(cx, cy, 20, term, 0, GREY,term);
 	}
 
 
@@ -140,8 +140,8 @@ class TerminaGraph {
 	 * @param matchType: either „directMatch“,“indirectMatch“ or „WRONG“
 	 * @return  a new Vertex
 	 */
-	Vertex newVertex(String s, int size, String matchType) {
-		Vertex vert = new Vertex(cx, cy - (int)defaultDistance, size, s, defaultDistance, new color(0));
+	Vertex newVertex(String s, int size, String matchType, String id) {
+		Vertex vert = new Vertex(cx, cy - (int)defaultDistance, size, s, defaultDistance, new color(0), id);
 		tg.inmove = true;
 		if (matchType == "directMatch") {
 			vert.c = CORRECT;
@@ -158,8 +158,8 @@ class TerminaGraph {
 	/**Calls newVertex(...) with the given parameters, adds it to vertices list and calls updatePositions(). 
 	 * 
 	 */
-	void addTag(String s, int size, String matchType){
-		Vertex vert = newVertex(s,size,matchType);
+	void addTag(String s, int size, String matchType, String id){
+		Vertex vert = newVertex(s,size,matchType, id);
 		this.verticesMoving = true;
 		vertices.add(0, vert);
 		updatePositions();

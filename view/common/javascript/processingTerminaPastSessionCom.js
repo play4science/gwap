@@ -62,12 +62,12 @@ function displayData(){
 
 	for(var i = 0; i < foreignTags.length; i++){
 		var tag = foreignTags[i];
-		pjs.addForeignTag(setLineBreaks(tag["tag"]), getScale(maxApp, minApp, tag["appearence"]), tag["matchType"], tag["isPlayedTerm"]);
+		pjs.addForeignTag(setLineBreaks(tag["tag"]), getScale(maxApp, minApp, tag["appearence"]), tag["matchType"], tag["isPlayedTerm"], tag["tag"]);
 	}
 
 	for(var i = 0; i < ownTags.length; i++){
 		var tag = ownTags[i];
-		pjs.addOwnTag(setLineBreaks(tag["tag"]), getScale(maxApp, minApp, tag["appearence"]), tag["matchType"], tag["isPlayedTerm"]);
+		pjs.addOwnTag(setLineBreaks(tag["tag"]), getScale(maxApp, minApp, tag["appearence"]), tag["matchType"], tag["isPlayedTerm"], tag["tag"]);
 	}
 
 	pjs.mix();
@@ -94,9 +94,9 @@ function setCurrentTopic(e){
 
 /**
  * when an ActionVertex in the TerminaGraph is clicked this function is called. 
- * @param tag the tag of the clicked actionVertex.
+ * @param id the id of the clicked actionVertex.
  */
-function clickEvent(tag){
-	currentTerm = tag;
+function clickEvent(id){
+	currentTerm = id;
 	dataQuery();
 }

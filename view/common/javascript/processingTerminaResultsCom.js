@@ -2,10 +2,6 @@
  * Stores the given parameters in the according lists.
  */
 function newUserTag(round, tag,score, appearence){
-	tag = tag.trim();
-	tag = tag.replace(/ +(?= )/g,''); //replace multiple whitespaces 
-	tag = tag.replace(/ /g,"\n"); //replace whitespaces with linebreak
-	console.log("new user tag. round: " + round + ", tag: " + tag + ", score: " + score);
 	userTags[round - 1].push(tag);
 	scores[round - 1].push(score);
 	userTagAppearences[round - 1].push(parseInt(appearence));
@@ -42,9 +38,6 @@ function newTerm(term){
  * Stores the given parameters in the according lists.
  */
 function newForeignTag(round, tag, appearence, matchtype){
-	tag = tag.trim();
-	tag = tag.replace(/ +(?= )/g,''); //replace multiple whitespaces 
-	tag = tag.replace(/ /g,"\n"); //replace whitespaces with linebreak
 	foreignTags[round - 1].push(tag);
 	foreignAppearences[round - 1].push(appearence);
 	foreignMatchTypes[round -1].push(matchtype);
@@ -67,13 +60,14 @@ function setUpGraphs(){
 			var type = score2matchType(scores[i][j]);
 			var max = Math.max.apply(Math, foreignAppearences[i]);
 			var min = Math.min.apply(Math, foreignAppearences[i]);
-			pjs.addOwnTag(userTags[i][j], getScale(max,min, userTagAppearences[i][j]), type, false);
+			var tag = userTags[i][j];
+			pjs.addOwnTag(setLineBreaks(tag), getScale(max,min, userTagAppearences[i][j]), type, false, tag);
 		}
 		console.log("user tags added, foreign tags");
 		for(var j = 0; j < foreignTags[i].length; j++){
 			var ft = foreignTags[i][j];
 			if(! containsIgnoreCase(userTags[i], ft))
-				pjs.addForeignTag(ft, getScale(i, foreignAppearences[i][j]), foreignMatchTypes[i][j], false);
+				pjs.addForeignTag(setLineBreaks(ft), getScale(i, foreignAppearences[i][j]), foreignMatchTypes[i][j], false, ft);
 		}
 		console.log("foreign tags added, separating.");
 		pjs.separateTags();

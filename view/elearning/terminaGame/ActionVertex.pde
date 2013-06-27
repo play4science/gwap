@@ -22,8 +22,8 @@ class ActionVertex extends Vertex{
 	/**
 	 * Constructor. Calls the super constructor. 
 	 */
-	public ActionVertex(float x, float y, int size, String s, float distance, color c){
-		super(x,  y,  size,  s,  distance,  c);
+	public ActionVertex(float x, float y, int size, String s, float distance, color c, String id){
+		super(x,  y,  size,  s,  distance,  c, id);
 		this.lighter =  lerpColor(c, color(255), 0.7);
 		bonusMargin = 0;
 		over = false;
@@ -61,7 +61,7 @@ class ActionVertex extends Vertex{
 	 * Method that is called when the mouse moves over this vertex. Over is set to true.
 	 */
 	void mouseOver(){
-//		bonusMargin = 15;
+		bonusMargin = 15;
 		this.over = true;
 	}
 	
@@ -76,9 +76,11 @@ class ActionVertex extends Vertex{
 	/**
 	 * The action that is performed on a mouse click. 
 	 * Calls the clickEvent method that has to be implemented in the surrounding javascript.
+	 * Uses the vertex id variable for authentication.
 	 */
 	void action(){
-		clickEvent(this.s);
+		println("action of vertex " + s + " id: "  + id);
+		clickEvent(id);
 	}
 	
 	
@@ -97,5 +99,12 @@ class ActionVertex extends Vertex{
 	float getTw(){
 		return tw + bonusMargin * 2;
 	}
+	
+	void setId(String string){
+		println("action vertex " + s + " setting id " + string);
+		id = string;
+		println("set: " +id);
+	}
+
 	
 }

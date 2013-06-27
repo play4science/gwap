@@ -37,7 +37,7 @@
 		
 		<script type="text/javascript"> 
 			if ('#{elearnTermina.lastAssociation}' != '' &amp;&amp; '#{elearnTermina.lastAssociation.tag}' != 'duplicate' ){
-				var tag = setLineBreaks('#{elearnTermina.lastAssociation.tag}');
+				var tag = '#{elearnTermina.lastAssociation.tag}';
 				newEntry('TerminaGraph', tag, '#{elearnTermina.lastAssociation.score}','#{elearnTermina.lastAssociation.getMatchType()}' );
 		    }    
 		</script>

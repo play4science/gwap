@@ -22,8 +22,8 @@ color STROKE;
  */
 color BLUE;
 
-/**The yellow used in the Termina logo.
- * 
+/**
+ * The yellow used in the Termina logo.
  */
 color YELLOW;
 
@@ -185,20 +185,23 @@ void setSize(int w, int h){
  * @param size the font size of the string
  * @param matchtype the matchtype of the tag
  * @param active if the new vertex should be an active vertex @see ActionVertex.pde
+ * @param id the id of hte new vertex.
  */
-void addOwnTag(String s, int size, String matchType, boolean active){
-	tg.addTag(s,size,matchType, true, active);
+void addOwnTag(String s, int size, String matchType, boolean active, String id){
+	tg.addTag(s,size,matchType, true, active, id);
 }
+
 
 /**
  * calls tg.addTag
  * @param s the tag
  * @param size the font size of the string
  * @param matchtype the matchtype of the tag
- * @param active if the new vertex should be an active vertex @see ActionVertex.pde 
+ * @param active if the new vertex should be an active vertex @see ActionVertex.pde
+ * @param id the id of the new vertex 
  */
-void addForeignTag(String s, int size, String matchType, boolean active){
-	tg.addTag(s,size,matchType, false, active);
+void addForeignTag(String s, int size, String matchType, boolean active, String id){
+	tg.addTag(s,size,matchType, false, active, id);
 }
 
 /**

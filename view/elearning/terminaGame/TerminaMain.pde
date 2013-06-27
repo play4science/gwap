@@ -126,8 +126,8 @@ void setDisplayWidth(int w){
 /**
  * Calls tg.addTag with the given parameters.
  */
-void addTag(String s, int size, String matchType){
-	tg.addTag(s,size,matchType);
+void addTag(String s, int size, String matchType, String id){
+	tg.addTag(s,size,matchType, id);
 }
 
 /**

@@ -83,9 +83,15 @@ class Vertex {
 	int n;
 	
 	/**
+	 * The id of this vertex. While vertices can normally identified by s, 
+	 * it is sometimes usefull for a vertex to have an authentic id. 
+	 */
+	String id;
+	
+	/**
 	 * Constructor
 	 */
-	Vertex(float x, float y, int size, String s, float distance, color c) {
+	Vertex(float x, float y, int size, String s, float distance, color c, String id) {
 		this.own = true;
 		this.radi = 4;
 		this.moving = false;
@@ -96,6 +102,7 @@ class Vertex {
 		this.size = size;
 
 		this.s = s;
+		this.id = id;
 
 		this.distance = distance;
 		this.angle = TWO_PI - HALF_PI;
@@ -267,5 +274,11 @@ class Vertex {
 	 */
 	float getTh(){
 		return th;
+	}
+	
+	void setId(String string){
+//		println("vertex " + s + " setting id " + string);
+//		id = string;
+//		println("set: " +id);
 	}
 }

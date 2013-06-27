@@ -126,17 +126,16 @@ class ResultGraph extends TerminaGraph{
 	 * @param active whether the new Vertex should be active.
 	 * 
 	 */
-	void addTag(String s, int size, String matchType, boolean own, boolean active) {
-		Vertex vert = newVertex(s, size, matchType);
+	void addTag(String s, int size, String matchType, boolean own, boolean active, String id) {
+		Vertex vert = newVertex(s, size, matchType, id);
 		vertices.add(0, vert);
 		updatePositions();
 
 		if(active){
-			ActionVertex avert = new ActionVertex(vert.x, vert.y, vert.size, vert.s, vert.distance, vert.c);
+			ActionVertex avert = new ActionVertex(vert.x, vert.y, vert.size, vert.s, vert.distance, vert.c, vert.id);
 			actionVertices.add(0,avert);
 			vert = avert;
 		}
-		
 		if(matchType == "directMatch"){
 			correctTags.add(0,vert);
 		} else if(matchType == "indirectMatch"){
@@ -151,6 +150,7 @@ class ResultGraph extends TerminaGraph{
 			vert.own = false;
 			foreignTags.add(0,vert);
 		}
+		
 	}
 
 	/**
