@@ -61,7 +61,7 @@ class ActionVertex extends Vertex{
 	 * Method that is called when the mouse moves over this vertex. Over is set to true.
 	 */
 	void mouseOver(){
-		bonusMargin = 15;
+//		bonusMargin = 15;
 		this.over = true;
 	}
 	
@@ -79,7 +79,6 @@ class ActionVertex extends Vertex{
 	 * Uses the vertex id variable for authentication.
 	 */
 	void action(){
-		println("action of vertex " + s + " id: "  + id);
 		clickEvent(id);
 	}
 	
