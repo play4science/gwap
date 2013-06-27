@@ -55,6 +55,7 @@ import org.richfaces.model.TreeNodeImpl;
 @Path("pastTerminaSession")
 public class PastTerminaSessionBean {
 
+	private static final Integer MIN_MATCH_COUNT = 2;
 	@In EntityManager entityManager;
 	@In private Person person;
 	@In private CustomSourceBean customSourceBean;
@@ -214,7 +215,7 @@ public class PastTerminaSessionBean {
 			requested = true;
 		}
 			
-		boolean moreThanTwo = b.getAppearence() > 2 || own;
+		boolean moreThanTwo = b.getAppearence() >= MIN_MATCH_COUNT || own;
 		
 		return moreThanTwo && requested;
 	}
