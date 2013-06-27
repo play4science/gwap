@@ -12,9 +12,9 @@
 	<a4j:loadScript src="/javascript/processingTerminaResultsCom.js" />
  	<a4j:loadScript src="/javascript/processingTerminaPastSessionCom.js" />
 
-	<h2>
+	<h1>
 		<h:outputText value="#{messages['termina.pastSession.header']}" />
-	</h2>
+	</h1>
 	<hr class="pageTitle" />
 	<br />
 
@@ -56,6 +56,11 @@
 					}
 				},10);
 				</script></td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<b><h:outputText value="#{messages['termina.pastSession.displaySettings']}" /></b>
+			</td>
 		</tr>
 		<tr>
 			<td colspan="2"><h:form id="selectionForm">

@@ -42,14 +42,14 @@ function dataCallback(data){
  * @param term the term to be highlighted.
  */
 function expandTreeAt(topics, term){
-	if(topics.indexOf(currentTopic) == -1){
+	try{
 		for(var i = 0; i < topics.length; i++){
 			var topicId = "termSelectionTree:" + topics[i] + "::topic";
 			document.getElementById(topicId).component.expand();
 			var termId = "termSelectionTree:" + topics[i] + ":" + term + "::term"; 
 			document.getElementById(termId).component.toggleSelection();
 		}
-	} 
+	} catch (e) { }
 }
 
 /**

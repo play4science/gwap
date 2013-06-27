@@ -75,6 +75,9 @@
    	    				newTerm("#{_gameround.resources.get(0).tag.name}");
     	    		</script>
 				</td>
+				<td style="vertical-align: middle; padding-left:10px;">
+					<h:outputText value="#{_gameround.score} #{messages['termina.score']}"/>
+				</td>
 			</tr>
 		</ui:repeat>
 	</table>
