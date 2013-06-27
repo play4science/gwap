@@ -63,7 +63,7 @@ public class PastTerminaSessionBean {
 	private boolean foreignWrongRequested = true;
 	private boolean ownWrongRequested = true;
 
-	private Integer maxForeigns = 15;
+	private Integer maxForeigns = 5;
 	private Integer maxOwns = 15;
 
 	private TreeNodeImpl<Item> rootNode;
