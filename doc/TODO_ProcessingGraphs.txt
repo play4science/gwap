@@ -1,9 +1,0 @@
---BUGS--
-
---STUFF--
-"success graph"
-roundedarc uses corners instead of lines 
-shrinkExpand uses right most vertex not rightmost corner
-shrinkExpand uses point-point distance instead of line-point
-colors, magic numbers,....
-Doku
