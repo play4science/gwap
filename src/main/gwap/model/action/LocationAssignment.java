@@ -50,7 +50,9 @@ import org.jboss.seam.annotations.Scope;
 			query="from LocationAssignment la where la.resource = :resource and la.notEvaluated = false and la.person = :person"),
 	@NamedQuery(name="locationAssignment.scoringSumByResourceAndLocation",
 		query="select sum(lh.correlation) from LocationAssignment la join la.location.hierarchies lh " +
-				"where la.resource = :resource and la.notEvaluated = false and lh.name = 'mit.scoring' and lh.sublocation = :location")
+				"where la.resource = :resource and la.notEvaluated = false and lh.name = 'mit.scoring' and lh.sublocation = :location"),
+	@NamedQuery(name="locationAssignment.countByPersonMinimumScore",
+			query="select count(*) from LocationAssignment la where la.person = :person and la.score >= :minScore")
 })
 
 /**

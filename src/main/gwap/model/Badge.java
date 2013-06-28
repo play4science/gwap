@@ -40,16 +40,22 @@ import org.jboss.seam.annotations.Name;
  * @author maders, wieser
  */
 @NamedQueries({
-	@NamedQuery(name="badge.all",
-			query="from Badge"),
+	@NamedQuery(name="badge.byPlatform",
+			query="from Badge where platform = :platform order by worth"),
 	@NamedQuery(name="badge.byDeviceId",
-			query="select b from Badge b join b.persons p where p.deviceId = :deviceId")
+			query="select b from Badge b join b.persons p where p.deviceId = :deviceId"),
+	@NamedQuery(name="badge.nextForPerson",
+			query="select b from Badge b " +
+					"where b.worth > all (select b2.worth from Person p join p.badges b2 where p = :person) " +
+					"and b.platform = :platform " +
+					"order by b.worth"),
+	@NamedQuery(name="badge.bestForPerson",
+			query="select b from Person p join p.badges b where p = :person order by b.worth desc")
 })
 @Entity
 @Name("badge")
 public class Badge implements Serializable {
 
-	
 	private static final long serialVersionUID = 1L;
 
 	@Id @GeneratedValue
@@ -60,6 +66,9 @@ public class Badge implements Serializable {
 	@Lob
 	private String description;
 	private Integer worth;
+	private Integer condition;
+	
+	private String platform;
 	
 	@ManyToMany(mappedBy="badges")
 	private Set<Person> persons = new HashSet<Person>();
@@ -94,12 +103,26 @@ public class Badge implements Serializable {
 	public void setPersons(Set<Person> persons) {
 		this.persons = persons;
 	}
-	
+	public String getPlatform() {
+		return platform;
+	}
+	public void setPlatform(String platform) {
+		this.platform = platform;
+	}
+	public Integer getCondition() {
+		return condition;
+	}
+	public void setCondition(Integer condition) {
+		this.condition = condition;
+	}
 	public boolean equals(Object obj) {
-		if (obj instanceof Badge) {
+		if (obj != null && obj instanceof Badge) {
 			Badge other = (Badge) obj;
 			return this.id != null && this.id.equals(other.id);
 		}
 		return false;
 	};
+	public String toString() {
+		return "Badge#"+getId()+"["+getName()+"]";
+	}
 }
