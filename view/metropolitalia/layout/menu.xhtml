@@ -24,9 +24,6 @@
 	    		<li>
 	    			<s:link view="/recognize.xhtml" value="#{messages['menu.recognize']}" propagation="none" />
 	    		</li>
-				<li>
-	        		<s:link view="/highscore.xhtml" value="#{messages['menu.highscore']}"/>
-	        	</li>
 	        	<s:fragment rendered="#{identity.loggedIn}">
 					<li>
 			        	<s:link view="/bets.xhtml" value="#{messages['menu.bets']}" propagation="none" includePageParams="false"/>
@@ -46,6 +43,9 @@
 	    		<li>
 					<s:link view="/pokerNewStatement.xhtml" propagation="none" value="#{messages['menu.poker.newStatement']}" />
 	    		</li>
+				<li style="margin-top:1em;">
+	        		<s:link view="/highscore.xhtml" value="#{messages['menu.highscore']}"/>
+	        	</li>
 	        </ul>
 	    	<ul id="navSub">
 	        	<li>

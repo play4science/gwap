@@ -55,12 +55,12 @@ a:hover                                 { color: #0090FF; };
 #navAdmin 								{ margin: 10px }
 #navAdmin div a                         { color:#000; text-transform:uppercase; text-decoration:none; font-weight:bold; }
 #navAdmin div a:hover	                { background:#b8c9e1 }
-#navAdmin li			            	{ font-size:0.9em; margin-left: 10px; line-height:1.2em; padding:0; background:url(../img/arrowBig.gif) no-repeat 0 0; margin-bottom:.25em }
+#navAdmin li			            	{ font-size:0.9em; margin-left: 10px; line-height:1.2em; padding:0; background:url(../img/arrowMedium.gif) no-repeat 0 0; margin-bottom:.25em }
 #navAdmin li a           				{ color:#000; line-height:22px; text-decoration:none; padding-left:30px; margin:0; }
 
 #navSub, #navMain, .navSub              { width:300px; margin:20px 0 25px 0 }
-#navSub li, #navMain li, .navSub li    { font-size:0.9em; line-height:1.2em; padding:0; background:url(../img/arrowBig.gif) no-repeat 0 0; margin-bottom:.25em }
-#navSub a, #navMain a, .navSub a        { color:#000; line-height:1.2em; text-decoration:none; padding-left:30px; margin:0; text-transform:uppercase; font-weight:bold }
+#navSub li, #navMain li, .navSub li    { font-size:0.9em; line-height:1.2em; padding:0; background:url(../img/arrowMedium.gif) no-repeat 0 0; margin-bottom:.25em }
+#navSub a, #navMain a, .navSub a        { color:#000; line-height:1.2em; text-decoration:none; padding-left:25px; margin:0; text-transform:uppercase; font-weight:bold }
 #related h1                             { font-size:1.1em; color:#000; line-height:1.2em; text-decoration:none; margin:10px 0 3px 0; text-transform:uppercase; font-weight:bold }
 #related h2                             { font-size:1.1em; margin: .7em 0 .5em 0; font-weight: normal }
 
@@ -414,6 +414,10 @@ background-image:url('../img/rich-slider-track.png'); background-position:left t
 }
 .nextBadge .badgeName {
   text-transform: none;
+}
+.nextBadge a {
+  color: black;
+  text-decoration: none;
 }
 
 /* =Bar chart

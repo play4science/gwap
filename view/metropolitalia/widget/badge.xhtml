@@ -11,7 +11,9 @@
 		<span class="badgeLabel"><h:outputText value="#{messages['badge.current']} "/></span>
 		<span class="badgeName"><h:outputText value="#{mitBadgeBean.bestOwnedBadgeName}" /></span>
 		<span class="nextBadge">
-			<h:outputText value="#{mitBadgeBean.descriptionForNextBadge}" rendered="#{mitBadgeBean.nextBestBadge != null}" escape="false" />
+			<s:link view="/recognize.xhtml" propagation="none" rendered="#{mitBadgeBean.nextBestBadge != null}">
+				<h:outputText value="#{mitBadgeBean.descriptionForNextBadge}" escape="false" />
+			</s:link>
 		</span>
 	</div>
 </ui:composition>
