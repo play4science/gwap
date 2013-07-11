@@ -31,6 +31,7 @@ import java.util.List;
 
 import javax.persistence.Query;
 
+import org.jboss.seam.Component;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.AutoCreate;
 import org.jboss.seam.annotations.In;
@@ -44,7 +45,7 @@ import org.jboss.seam.security.Identity;
  * @author kneissl
  */
 @Name("mitBadgeBean")
-@Scope(ScopeType.PAGE)
+@Scope(ScopeType.SESSION)
 @AutoCreate
 public class BadgeBean extends gwap.widget.BadgeBean {
 	
@@ -53,7 +54,6 @@ public class BadgeBean extends gwap.widget.BadgeBean {
 	private static final int MIN_POINTS_LOCATION_ASSIGNMENT = 3;
 	private static final int MIN_POINTS_BET = 40;
 	
-	@In private HighscoreBean highscoreBean;
 	@In private FacesMessages facesMessages;
 	
 	private Integer nrLocationAssignmentsForNextBadge, nrBetsForNextBadge;
@@ -87,6 +87,7 @@ public class BadgeBean extends gwap.widget.BadgeBean {
 					log.info("#0 reached next badge #1", person, b);
 				}
 			} else if (b.getWorth() == 5) {
+				HighscoreBean highscoreBean = (HighscoreBean) Component.getInstance("highscoreBean", true);
 				List<HighscoreSet> highscores = highscoreBean.getHighscores();
 				for (HighscoreSet highscoreSet : highscores) {
 					if (highscoreSet.getGameType().getName().equals("mitRecognize")) {

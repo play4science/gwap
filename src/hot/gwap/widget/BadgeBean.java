@@ -44,7 +44,7 @@ import org.jboss.seam.log.Log;
  * @author kneissl
  */
 @Name("badgeBean")
-@Scope(ScopeType.PAGE)
+@Scope(ScopeType.SESSION)
 public class BadgeBean implements Serializable {
 	
 	@In(required=false) protected Person person;
