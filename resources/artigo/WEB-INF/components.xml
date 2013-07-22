@@ -97,7 +97,7 @@
 
 	<factory
 		name="basePath"
-		value="http://www.artigo.org/"
+		value="#{facesContext.externalContext.request.scheme}://www.artigo.org/"
 	/>
 	<!-- TODO: set basePath via build.properties
 		value="@basePath@"

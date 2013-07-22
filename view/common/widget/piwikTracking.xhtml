@@ -14,6 +14,6 @@ var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", #{trackerSiteId});
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
 } catch( err ) {}
-</script><noscript><p><img src="http://www.play4science.org/piwik/piwik.php?idsite=#{trackerSiteId}" style="border:0" alt="" /></p></noscript>
+</script><noscript><p><img src="#{facesContext.externalContext.request.scheme}://www.play4science.org/piwik/piwik.php?idsite=#{trackerSiteId}" style="border:0" alt="" /></p></noscript>
 </s:fragment>
 </ui:composition>

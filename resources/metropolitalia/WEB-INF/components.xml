@@ -99,7 +99,7 @@
 
 	<factory
 		name="basePath"
-		value="http://www.metropolitalia.org/"
+		value="#{facesContext.externalContext.request.scheme}://www.metropolitalia.org/"
 		auto-create="true"
 	/>
 	<factory

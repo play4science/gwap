@@ -91,7 +91,7 @@
 
 	<factory
 		name="basePath"
-		value="http://www.play4science.org/accentiurbani"
+		value="#{facesContext.externalContext.request.scheme}://labs.play4science.org/accentiurbani"
 	/>
 	<!-- TODO: set basePath via build.properties
 		value="@basePath@"

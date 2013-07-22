@@ -24,7 +24,7 @@
 		
 		<a:loadScript src="/javascript/common.js"/>
 		<a:loadScript src="/javascript/spamspan.js"/>
-		<script src="http://www.play4science.org/piwik/piwik.js" type="text/javascript"/>
+		<script src="#{facesContext.externalContext.request.scheme}://www.play4science.org/piwik/piwik.js" type="text/javascript"/>
 		<script type="text/javascript">
 		var maxWidthPossible = 900;
 		function resize() {
