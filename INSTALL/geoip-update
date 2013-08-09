@@ -1,0 +1,5 @@
+#!/bin/sh
+cd /root/gwap/resources
+wget -q http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz && \
+gunzip -d -f GeoLiteCity.dat.gz && \
+cp -f GeoLiteCity.dat /opt/jboss/server/default/deploy/GWAP.ear/GWAP.jar/GeoLiteCity.dat
