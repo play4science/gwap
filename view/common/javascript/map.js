@@ -29,8 +29,11 @@ function Map() {
 		center : new google.maps.LatLng(42.5, 12.0),
 		mapTypeId : google.maps.MapTypeId.TERRAIN,
 		mapTypeControl : false,
-		navigationControlOptions : {
-			style : google.maps.NavigationControlStyle.SMALL
+		panControl : false,
+		rotateControl : false,
+		scaleControl : false,
+		zoomControlOptions : {
+			style : google.maps.ZoomControlStyle.SMALL
 		},
 		streetViewControl : false
 	};
