@@ -92,11 +92,13 @@
 	<factory
 		name="internalBasePath"
 		value="#{facesContext.externalContext.request.scheme}://#{facesContext.externalContext.request.serverName}:#{facesContext.externalContext.request.serverPort}#{facesContext.externalContext.request.contextPath}/"
+		auto-create="true"
 	/>
 
-  <factory
+	<factory
 		name="basePath"
 		value="http://termina.pms.ifi.lmu.de/"
+		auto-create="true"
 	/>
 	<!-- TODO: set basePath via build.properties
 		value="@basePath@"
@@ -104,5 +106,6 @@
 	<factory
 		name="platform"
 		value="elearning"
+		auto-create="true"
 	/>
 </components>

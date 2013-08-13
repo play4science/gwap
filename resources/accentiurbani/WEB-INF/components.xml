@@ -87,11 +87,13 @@
 	<factory
 		name="internalBasePath"
 		value="#{facesContext.externalContext.request.scheme}://#{facesContext.externalContext.request.serverName}:#{facesContext.externalContext.request.serverPort}#{facesContext.externalContext.request.contextPath}/"
+		auto-create="true"
 	/>
 
 	<factory
 		name="basePath"
 		value="#{facesContext.externalContext.request.scheme}://labs.play4science.org/accentiurbani"
+		auto-create="true"
 	/>
 	<!-- TODO: set basePath via build.properties
 		value="@basePath@"
@@ -99,5 +101,6 @@
 	<factory
 		name="platform"
 		value="accentiurbani"
+		auto-create="true"
 	/>
 </components>

@@ -93,11 +93,13 @@
 	<factory
 		name="internalBasePath"
 		value="#{facesContext.externalContext.request.scheme}://#{facesContext.externalContext.request.serverName}:#{facesContext.externalContext.request.serverPort}#{facesContext.externalContext.request.contextPath}/"
+		auto-create="true"
 	/>
 
 	<factory
 		name="basePath"
 		value="#{facesContext.externalContext.request.scheme}://www.artigo.org/"
+		auto-create="true"
 	/>
 	<!-- TODO: set basePath via build.properties
 		value="@basePath@"
@@ -105,6 +107,7 @@
 	<factory
 		name="platform"
 		value="artigo"
+		auto-create="true"
 	/>
 
 	<component name="solrServerBean">
