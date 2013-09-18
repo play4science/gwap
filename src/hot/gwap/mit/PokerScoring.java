@@ -72,13 +72,13 @@ public class PokerScoring {
 	public static final int ANNOTATION_LIKE_MAJORITY = 10;
 	public static final int ANNOTATION_LIKE_THIRD = 5;
 	private static final int LOCATION_ASSIGNMENT_MAX_SCORE = 10;
-	private static final double LOCATION_ASSIGNMENT_ND_FACTOR = 0.03;
+	private static final double LOCATION_ASSIGNMENT_ND_FACTOR = 33;
 	private static final int BET_MAX_SCORE = 100;
-	private static final double BET_ND_FACTOR = 0.09;
+	private static final double BET_ND_FACTOR = 11;
 	public static final int POKER_CORRECT = 10;
 	public static final int POKER_CORRECT_DIFFICULT = 20;
 	public static final int POKER_OWNER_PER_GUESS = 5;
-	public static final int POKER_OWNER_PER_GUESS_LT_10 = 2;
+	public static final int POKER_OWNER_PER_GUESS_LT_20 = 2;
 	
 	public static final int MIN_NR_FOR_STATISTICS = 3;
 	
@@ -276,12 +276,10 @@ public class PokerScoring {
 		percentage = new Percentage(percentage.getSum()-1, percentage.getTotal()-1+nrRounds); // excluding the user's bet
 		if (percentage.getTotal() > 0) {
 			int score = 0;
-			if (percentage.getTotal() < 10 && percentage.getSum() <= 1)
-				score = percentage.getTotal()*POKER_OWNER_PER_GUESS_LT_10;
-			else if (percentage.getTotal() >= 10 && percentage.getPercentage() <= 10.0)
+			if (percentage.getPercentage() <= 10.0)
 				score = percentage.getTotal()*POKER_OWNER_PER_GUESS;
-			else if (percentage.getTotal() >= 10 && percentage.getPercentage() <= 20.0)
-				score = percentage.getTotal()*POKER_OWNER_PER_GUESS_LT_10;
+			else if (percentage.getPercentage() <= 20.0)
+				score = percentage.getTotal()*POKER_OWNER_PER_GUESS_LT_20;
 			bet.setScore(score);
 			bet.setCurrentMatch(percentage.getPercentage().intValue());
 			log.info("Score for poker bet #0 (#1 bet on the same, total #2) is #3", bet, (long)percentage.getSum(), percentage.getTotal(), score);
@@ -291,14 +289,14 @@ public class PokerScoring {
 
 	/**
 	 * Probability density function of the normal distribution with one variance-like factor.
-	 * Example: preMultiplicator=0.09 => f(0)=maximumScore, f(36)=1
+	 * Example: sigma=11 => f(0)=maximumScore, f(36)=1
 	 * @param normalScore
-	 * @param preMultiplicator affects the stretch of the function
+	 * @param sigma affects the stretch of the function
 	 * @param maximumScore maximum score to reach
 	 * @return values between maximumScore and 0
 	 */
-	private int getNormalDistributedScore(double normalScore, double preMultiplicator, int maximumScore) {
-		double score = maximumScore * 2.5 * 1.0/Math.sqrt(2*Math.PI) * Math.exp(-0.5*Math.pow(normalScore * preMultiplicator, 2));
+	private int getNormalDistributedScore(double normalScore, double sigma, int maximumScore) {
+		double score = maximumScore * Math.exp(-0.5*Math.pow(normalScore / sigma, 2));
 		return (int) Math.round(score);
 	}
 
