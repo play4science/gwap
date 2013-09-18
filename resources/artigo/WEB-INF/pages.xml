@@ -72,7 +72,7 @@
   <restrict>#{s:hasPermission('sentiment', 'test')}</restrict>
   <begin-conversation join="true"/>
  </page>
- <page login-required="true" view-id="/tagATag.xhtml">
+ <page login-required="false" view-id="/tagATag.xhtml">
   <begin-conversation join="true"/>
  </page>
  <page view-id="/combino.xhtml">
