@@ -62,7 +62,7 @@ public class TabooTagBean implements Serializable {
 	@In(create=true) @Out    private ArtResource resource;
 	@Out                     private List<TagFrequency> tabooTags;
 	
-	private int limit= 10;
+	private int limit= 7;
 	
 	@Factory("tabooTags")
 	public void updateTabooTags() {
