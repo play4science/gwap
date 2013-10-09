@@ -58,7 +58,7 @@ import au.com.bytecode.opencsv.CSVReader;
 @Scope(ScopeType.PAGE)
 public class ArtResourceImporter {
 
-	private static final String FILENAME_REGEXP = "[A-Za-z0-9_.,-]+";
+	private static final String FILENAME_REGEXP = "[A-Za-z0-9_.,()-]+";
 	@In						private EntityManager entityManager;
 	@Logger					private Log log;
 	@In						private FacesMessages facesMessages;
