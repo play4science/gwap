@@ -15,7 +15,7 @@
 			<ui:include src="layout/mainMenuOnly.xhtml" />
 			<ul id="navSub" />
 	 		<a4j:outputPanel id="recommendedTags">
-				<span class="ongoingGameStatsCaption"><h:outputText value="#{messages['game.enteredTags']}" /> (<h:outputText value="#{recommendedTags.rowCount}" />)</span>
+				<span class="ongoingGameStatsCaption"><h:outputText value="#{messages['game.enteredTags']}" /> (<h:outputText value="#{taggingBean.numberOfTaggingsForResource}" />)</span>
 	 			<span class="ongoingGameStatsContent">
 				<a4j:repeat value="#{recommendedTags}" var="_recommendedTag">
 					<div class="#{_recommendedTag.matchType}">

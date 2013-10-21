@@ -82,7 +82,9 @@ import org.jboss.seam.annotations.Scope;
 			name="tagging.byResource",
 			query="select t.tag.name, count(t.id) from Tagging t " +
 					"where t.resource.id=:resourceId group by t.tag.name having count(t.id)>=:minOccurrence"),
-					
+	@NamedQuery(
+			name="tagging.countByResource",
+			query="select count(*) from Tagging t where t.resource = :resource"),
 	@NamedQuery(
 			name="tagging.topCorrectAnswers",
 			query="select new gwap.wrapper.BackstageAnswer(t.name, count(distinct tg.person.id)) from Term r join r.confirmedTags t join r.taggings tg join tg.gameRound gr " +
