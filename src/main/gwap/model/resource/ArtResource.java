@@ -198,6 +198,27 @@ import org.jboss.seam.annotations.Scope;
 					  "group by r.id " +
 					  "order by count(r.id) asc, random() "
 					  ),
+	@NamedQuery(name="artResource.leastTaggedResourceIdMaxCount",
+					query="select r.id " +
+						  "from ArtResource r join r.taggings t " +
+						  "where " +
+						  "  t.tag.language=:language and" +
+						  "  r.enabled=true " +
+						  "group by r.id " +
+						  "having count(r.id) <= :maxCount " +
+						  "order by count(r.id) asc, random() "
+						  ),
+	@NamedQuery(name="artResource.leastTaggedResourceIdMaxCountCustom",
+					query="select r.id " +
+						  "from ArtResource r join r.taggings t " +
+						  "where " +
+						  "  t.tag.language=:language and " +
+						  "  r.enabled=true and " +
+						  "  r.source=:source " +
+						  "group by r.id " +
+						  "having count(r.id) <= :maxCount " +
+						  "order by count(r.id) asc, random() "
+						  ),
 	@NamedQuery(name="artResource.leastTaggedResourceIdWithTeaser",
 				query="select r.id " +
 					  "from ArtResource r join r.taggings t join r.teasers " +
