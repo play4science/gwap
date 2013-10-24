@@ -1,0 +1,8 @@
+#
+# cron-job for restarting jboss if cpu load average is too high (>=1)
+#
+
+MAILTO=root
+
+5 2 * * *	root cut -f3 -d" " /proc/loadavg | grep '[1-9]\.' >/dev/null && /etc/init.d/jboss.sh restart
+
