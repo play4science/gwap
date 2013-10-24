@@ -135,7 +135,7 @@ public class CustomSourceBean implements Serializable {
 	
 	public void setDefaultCustomSourceIfUnset() {
 		if (!getCustomized()) {
-			Query q = entityManager.createNamedQuery("source.latestByPlatform");
+			Query q = entityManager.createNamedQuery("source.byPlatform");
 			q.setParameter("platform", platform);
 			q.setMaxResults(1);
 			customSource = (Source) q.getSingleResult();
