@@ -11,12 +11,12 @@
 
 	<h:form>
 
-		<s:fragment rendered="#{empty(mitBetList)}">
+		<s:fragment rendered="#{empty(mitBetList.betList)}">
 			<h:outputText value="#{messages['bets.none']}" />
 			<br />
 			<s:link view="/newstatement.xhtml" value="#{messages['bets.new']}"></s:link>
 		</s:fragment>
-		<s:fragment rendered="#{!empty(mitBetList)}">
+		<s:fragment rendered="#{!empty(mitBetList.betList)}">
 	    	<h2>
 				<h:outputText value="#{messages['menu.bets']}:" />
 	    	</h2>

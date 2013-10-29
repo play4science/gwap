@@ -10,18 +10,14 @@
     xmlns:p4s="http://play4science.org/facelets">
 	
 	<h:form>	
-		<s:fragment rendered="#{mitPokerBetList.getSelectedBet() == null}">
-			<h:outputText value="#{messages['poker.bets.none']}" />
-			<br />
-			<s:link view="/pokerNewStatement.xhtml" propagation="none" styleClass="button" style="margin-top:40px; clear:both">
-				<span><h:outputText value="#{messages['game.poker.menu.newStatement']}" /></span>
-			</s:link>
+		<s:fragment rendered="#{mitBetOffersList.selectedSale == null}">
+			<h:outputText value="#{messages['bet.trade.offers.none']}" />
 		</s:fragment>
-		<s:fragment rendered="#{mitPokerBetList.getSelectedBet() != null}">
+		<s:fragment rendered="#{mitBetOffersList.selectedSale != null}">
 			<ui:include src="/widget/googlemap.xhtml" />
 			<script type="text/javascript">
 				__addLoadEvent(function() {
-					map.displayPercentagesByBet(#{mitPokerBetList.selectedBet.id});
+					map.displayPercentagesByBet(#{mitBetOffersList.selectedSale.bet.id});
 					maxWidthPossible = 600;
 					map.percentageView = true;
 					resize();
@@ -29,8 +25,8 @@
 			</script>
 			<rich:panel id="betDetails">
 			<script type="text/javascript">
-				map.displayPercentagesByBet(#{mitPokerBetList.selectedBet.id});
-				setItemActive(#{mitPokerBetList.selectedBet.id});
+				map.displayPercentagesByBet(#{mitBetOffersList.selectedSale.bet.id});
+				setItemActive(#{mitBetOffersList.selectedSale.id});
 				resize();
 			</script>
 			<div id="betScoringLegend">
@@ -39,17 +35,30 @@
 				</ui:include>
 			</div>
 			<table style="padding-bottom: 20px">
-			<ui:include src="betScoring.xhtml">
-				<ui:param name="bet" value="#{mitPokerBetList.selectedBet}" />
+			<ui:include src="betScoring.xhtml" rendered="#{mitRecognize.getBetAction(_round) != null}">
+				<ui:param name="bet" value="#{mitBetOffersList.selectedSale.bet}" />
 				<ui:param name="allowSellBet" value="false" />
+				<ui:param name="betHeader" value="#{messages['bet.trade.offers.betHeader']}" />
 			</ui:include>
 			</table>
-			<br></br>
+
+			<div class="clear"/>
+
+			<h:commandLink id="purchaseBetButton" action="#{mitBetOffersList.purchaseBet()}" styleClass="button">
+				<f:param name="resultNumber" value="#{mitBetOffersList.resultNumber}" />
+				<span><span class="checkmark-yes" />
+					<h:outputFormat value="#{messages['bet.trade.purchase']}">
+						<f:param value="#{mitBetOffersList.selectedSale.score}"/>
+					</h:outputFormat>
+				</span>
+			</h:commandLink>
+
+			<div class="clear"/>
 
 			<div id="betPercentages">
 				<h4><h:outputText value="#{messages['search.results']}"/></h4>
 				<ui:include src="/widget/betPercentages.xhtml">
-					<ui:param name="percentages" value="#{mitPokerScoring.getStatementPercentages(mitPokerBetList.selectedBet.resource)}"/>
+					<ui:param name="percentages" value="#{mitPokerScoring.getStatementPercentages(mitBetOffersList.selectedSale.bet.resource)}"/>
 				</ui:include>
 			</div>
 			</rich:panel>

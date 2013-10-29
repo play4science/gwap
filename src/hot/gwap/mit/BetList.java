@@ -26,7 +26,7 @@ import gwap.model.Person;
 import gwap.model.action.Bet;
 import gwap.model.resource.Resource;
 import gwap.model.resource.Statement;
-import gwap.widget.PaginationControl;
+import gwap.tools.AbstractPaginatedList;
 
 import java.io.Serializable;
 import java.util.List;
@@ -42,7 +42,6 @@ import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Observer;
 import org.jboss.seam.annotations.Out;
 import org.jboss.seam.annotations.Scope;
-import org.jboss.seam.annotations.datamodel.DataModel;
 import org.jboss.seam.log.Log;
 
 /**
@@ -50,41 +49,36 @@ import org.jboss.seam.log.Log;
  */
 @Name("mitBetList")
 @Scope(ScopeType.PAGE)
-public class BetList implements Serializable {
+public class BetList extends AbstractPaginatedList implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Logger
-	Log log;
+	protected Log log;
 	@In
-	EntityManager entityManager;
+	protected EntityManager entityManager;
 	@In
-	Person person;
+	protected Person person;
 	@In
-	PokerScoring mitPokerScoring;
-	@In(create=true) @Out    protected PaginationControl paginationControl;
+	protected PokerScoring mitPokerScoring;
 	
 	@Create
 	public void create() { log.info("Creating"); }
 
 	@Out(required=false)
-	private Bet selectedBet;
+	protected Bet selectedBet;
 
-	private List<Bet> betList;
-	private Integer resultNumber = 0;
+	protected List<Bet> betList;
 
-
-	@DataModel
 	public List<Bet> getBetList() {
 		if (betList == null) {
-			updateBetList();
+			updateList();
 		}
-		
 		return betList;
 	}
 
 	@Observer("mit.betList.update")
-	public void updateBetList() {
+	public void updateList() {
 		long start = System.currentTimeMillis();
 		Query q = entityManager.createNamedQuery("bet.byPerson")
 				.setParameter("person", person);
@@ -132,21 +126,6 @@ public class BetList implements Serializable {
 	}
 	
 	
-	public Integer getPageNumber() {
-		return paginationControl.getPageNumber();
-	}
-	public void setPageNumber(Integer pageNumber) {
-		if (pageNumber != paginationControl.getPageNumber()) {
-			paginationControl.setPageNumber(pageNumber);
-			updateBetList();
-		}
-	}
 	
-	public Integer getResultNumber() {
-		return resultNumber;
-	}
-	public void setResultNumber(Integer resultNumber) {
-		this.resultNumber = resultNumber;
-	}
 
 }

@@ -9,28 +9,13 @@
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:p4s="http://play4science.org/facelets">
 
-	<script type="text/javascript">
-	function switchBetChanger(betId){
-		var id = betId;
-		var betChanger = jQuery("#betChanger_" + betId);
-		var button = jQuery("#switchBetChangerButton")
-		if (betChanger.css("display") == 'none') {
-		     button.fadeOut();
-		     betChanger.fadeIn();
-		 } else {
-			 button.fadeIn();
-			 betChanger.fadeOut();
-		    }		    
-	}
-	</script>
-
 	<s:fragment rendered="#{bet != null}">
 		<tr>
 			<td style="vertical-align: top;">
 				<dl>
 					<dt style="padding-bottom: 5px;">
 						<h:outputText
-							value="#{messages['game.recognizeScoring.list.betHeader']}" />
+							value="#{empty(betHeader) ? messages['game.recognizeScoring.list.betHeader'] : betHeader}" />
 					</dt>
 					<dd>
 						<h:outputFormat
@@ -57,34 +42,22 @@
 				</dl>
 			</td>
 			<td style="vertical-align: top;">
-				<p4s:points value="#{bet.score}" />
+				<dl>
+					<dt style="padding-bottom: 5px;">
+						<h:outputText
+							value="#{messages['game.recognizeScoring.list.betScoreHeader']}" />
+					</dt>
+					<dd>
+						<p4s:points value="#{bet.score}" />
+					</dd>
+				</dl>
 			</td>
 		</tr>
 		<tr>
 			<td colspan="3" style="margin-bottom: 10px;">
-				<div id="switchBetChangerButton">
-					<a4j:commandButton onclick="switchBetChanger(#{bet.id})"
-						value="#{messages['bet.change']}" rendered="#{allowChangeBet}"/> 
-				</div>
-				<div id="betChanger_#{bet.id}" style="display:none;">
-					<div>
-						<h:outputText value="#{messages['bet.change.warning']}" style="color:#880000;" />
-					</div>
-					<div id="betSliderDiv">
-						<rich:inputNumberSlider minValue="10" maxValue="100" id="betSlider"
-							value="#{mitChangeBet.points}" showInput="true"
-							showBoundaryValues="false" showToolTip="false" />
-					</div> 
-					<h:commandLink id="changeBetButton" action="#{mitChangeBet.changeBet(bet)}" styleClass="button paddingRight">
-						<f:param name="resultNumber" value="#{mitBetList.resultNumber}" />
-						<span><span class="checkmark-yes" /><h:outputText value="#{messages['game.recognize.bet.create']}" /></span>
-					</h:commandLink> <!-- score,coins --> 
-					<a4j:commandLink
-						styleClass="button" onclick="switchBetChanger(#{bet.id})" >
-						<span><span class="checkmark-no" />
-						<h:outputText value="#{messages['game.recognize.bet.skip']}" /></span>
-					</a4j:commandLink>
-				</div>
+				<s:fragment rendered="#{allowSellBet}">
+					<ui:include src="betSale.xhtml" />
+				</s:fragment>
 			</td>
 		</tr>
 	</s:fragment>

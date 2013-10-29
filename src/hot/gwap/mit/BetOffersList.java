@@ -23,36 +23,37 @@
 package gwap.mit;
 
 import gwap.model.Person;
-import gwap.model.action.Bet;
-import gwap.model.action.PokerBet;
+import gwap.model.action.Purchase;
+import gwap.model.action.Sale;
 import gwap.model.resource.Resource;
 import gwap.model.resource.Statement;
 import gwap.tools.AbstractPaginatedList;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.Create;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Out;
 import org.jboss.seam.annotations.Scope;
+import org.jboss.seam.faces.FacesMessages;
 import org.jboss.seam.log.Log;
 
 /**
  * @author Fabian Kneißl
  */
-@Name("mitPokerBetList")
+@Name("mitBetOffersList")
 @Scope(ScopeType.PAGE)
-public class PokerBetList extends AbstractPaginatedList implements Serializable {
+public class BetOffersList extends AbstractPaginatedList implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
+	
 	@Logger
 	protected Log log;
 	@In
@@ -61,61 +62,82 @@ public class PokerBetList extends AbstractPaginatedList implements Serializable 
 	protected Person person;
 	@In
 	protected PokerScoring mitPokerScoring;
+	@In
+	private FacesMessages facesMessages;
 	
-	@Create
-	public void create() { log.info("Creating"); }
-
+	private List<Sale> sales;
+	
 	@Out(required=false)
-	private PokerBet selectedBet;
-
-	private List<PokerBet> betList;
-
-
-	public List<PokerBet> getBetList() {
-		if (betList == null) {
+	private Sale selectedSale;
+	
+	public List<Sale> getBetOffersList() {
+		if (sales == null) {
 			updateList();
 		}
-		return betList;
+		
+		return sales;
 	}
-
+	
+	public void purchaseBet() {
+		log.info("#0 purchases bet #1 for #2", person, selectedSale.getBet(), selectedSale.getScore());
+		selectedSale = entityManager.find(Sale.class, selectedSale.getId());
+		Purchase purchase = new Purchase();
+		purchase.setBet(selectedSale.getBet());
+		purchase.setCreated(new Date());
+		purchase.setScore(-selectedSale.getScore());
+		purchase.setPerson(person);
+		entityManager.persist(purchase);
+		
+		purchase.setSale(selectedSale);
+		selectedSale.setPurchase(purchase);
+		
+		selectedSale.getBet().setPerson(person);
+		
+		facesMessages.addFromResourceBundle("bet.trade.purchaseSuccessful", selectedSale.getScore());
+		selectedSale = null;
+		updateList();
+	}
+	
 	@Override
 	public void updateList() {
-		long start = System.currentTimeMillis();
-		Query q = entityManager.createNamedQuery("pokerBet.byPerson")
-				.setParameter("person", person);
-		betList = q.getResultList();
-		paginationControl.setNumResults(betList.size());
+		Query q = entityManager.createNamedQuery("sale.offersNotPerson");
+		q.setParameter("person", person);
+		sales = q.getResultList();
+		paginationControl.setNumResults(sales.size());
 		if (paginationControl.getNumPages() > 1) {
 			q.setFirstResult(paginationControl.getFirstResult());
 			q.setMaxResults(paginationControl.getResultsPerPage());
-			betList = q.getResultList();
+			sales = q.getResultList();
 		}
-		for (Bet bet : betList) {
-			Resource resource = bet.getResource();
+		for (Sale sale : sales) {
+			Resource resource = sale.getBet().getResource();
 			if (resource instanceof Statement)
 				((Statement) resource).getStatementTokens().size();
-			if (bet.getCurrentMatch() == null || bet.getScore() == null)
-				mitPokerScoring.updateScoreForPokerBet(bet);
-		}
-		log.info("Created pokerBetList with #0 statements in #1ms",
-				betList.size(), System.currentTimeMillis() - start);
-		if (betList.size() > 0)
-			selectedBet = betList.get(resultNumber);
-	}
-
-	public void showDetail(Long selectedBetId) {
-		List<PokerBet> aux = getBetList();
-		for(int i = 0; i<aux.size(); i++){
-			if(selectedBetId.equals(aux.get(i).getId())){
-				setResultNumber(i);
-				selectedBet = aux.get(i);
+			if (sale.getBet().getCurrentMatch() == null || sale.getBet().getScore() == null)
+				mitPokerScoring.updateScoreForBet(sale.getBet());
+			// Update price of automated sales
+			if (sale.getPerson() == null) {
+				sale.setScore(TradeBet.getDirectPurchasePrice(sale.getBet()));
 			}
 		}
-		log.info("Ausgewählte id in showDetail(): " + selectedBet.getId());
+		log.info("Created betOffersList with #0 sales", sales.size());
+		if (sales.size() > 0)
+			selectedSale = sales.get(resultNumber);
+	}
+	
+	public void showDetail(Long selectedSaleId) {
+		List<Sale> aux = getBetOffersList();
+		for(int i = 0; i<aux.size(); i++){
+			if(selectedSaleId.equals(aux.get(i).getId())){
+				setResultNumber(i);
+				selectedSale = aux.get(i);
+			}
+		}
+		log.info("Ausgewählte id in showDetail(): " + selectedSale.getId());
 	}
 
-	public PokerBet getSelectedBet() {
-		return selectedBet;
+	public Sale getSelectedSale() {
+		return selectedSale;
 	}
-
+	
 }

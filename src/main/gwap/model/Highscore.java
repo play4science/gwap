@@ -104,35 +104,32 @@ import javax.persistence.OneToOne;
 				"having sum(g.score)>0 " +
 		"order by sum(g.score) desc"),
 	@NamedQuery(
-		name = "highscore.mit.byPerson",
-		query = "select new Highscore(coalesce(p.personConnected.id, p.id), sum(g.score)) " +
-				"from GameRound g join g.person p " +
-				"where (p = :person or p.personConnected = :person) " +
-				"and g.gameSession.gameType=:gametype " +
-				"group by coalesce(p.personConnected.id, p.id) "),
-	@NamedQuery(
 			name = "highscore.mit.byAllPersons",
 			query = "select new Highscore(coalesce(p.personConnected.id, p.id), sum(a.score)) " +
 				"from Action a join a.person p where " +
 				"(" +
-				" (a.class = Bet and a.revisedBet is null) or " +
+				"  a.class = Bet and a.revisedBet is null or " +
+				"  a.class = PokerBet and a.revisedBet is null or " +
 				"  a.class = LocationAssignment or " +
-				"  a.class = Characterization or a.class = StatementAnnotation" +
-				") and " +
-				"a.score > 0 " +
-				"and a.gameRound.gameSession.gameType.name=:gametype " +
+				"  a.class = Characterization or a.class = StatementAnnotation or " +
+				"  a.class = Sale and a.purchase is not null or " +
+				"  a.class = Purchase and a.sale is not null " +
+				") and a.score is not null " +
 				"group by coalesce(p.personConnected.id, p.id) order by sum(a.score) desc" ),
 	@NamedQuery(
 			name = "highscore.mit.bySinglePerson",
 			query = "select new Highscore(coalesce(p.personConnected.id, p.id), sum(a.score)) " +
 				"from Action a join a.person p where " +
 				"(" +
-				" (a.class = Bet and a.revisedBet is null) or " +
+				"  a.class = Bet and a.revisedBet is null or " +
+				"  a.class = PokerBet and a.revisedBet is null or " +
 				"  a.class = LocationAssignment or " +
-				"  a.class = Characterization or a.class = StatementAnnotation" +
-				") and " +
-				"(p = :person or p.personConnected = :person) " +
-				"and a.gameRound.gameSession.gameType.name=:gametype " + 
+				"  a.class = Characterization or " +
+				"  a.class = StatementAnnotation or " +
+				"  a.class = Sale and a.purchase is not null or " +
+				"  a.class = Purchase and a.sale is not null " +
+				") and a.score is not null and " +
+				"coalesce(p.personConnected, p.id) = :person " +
 				"group by coalesce(p.personConnected.id, p.id)" )
 })
 

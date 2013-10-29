@@ -31,12 +31,7 @@
    </rule>
   </navigation>
  </page>
- <page view-id="/statements.xhtml">
-  <restrict>#{identity.loggedIn}</restrict>
- </page>
- <page view-id="/bets.xhtml">
-  <restrict>#{identity.loggedIn}</restrict>
- </page>
+ <page view-id="/statements.xhtml" login-required="true"/>
  <page view-id="/admin/*" login-required="true">
   <restrict>#{s:hasPermission('metropolitalia', 'view-admin-interface')}</restrict>
  </page>

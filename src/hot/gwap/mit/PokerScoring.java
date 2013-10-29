@@ -214,7 +214,6 @@ public class PokerScoring {
 			}
 
 			Query q = entityManager.createNamedQuery("highscore.mit.bySinglePerson");
-			q.setParameter("gametype", "mitRecognize");
 			q.setParameter("person", person);
 			int actionScore = numberToInt((Number) ((gwap.model.Highscore)q.getSingleResult()).getScore());
 

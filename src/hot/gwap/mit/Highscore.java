@@ -50,7 +50,7 @@ public class Highscore {
 	public List<Bet> getBestBets() {
 		if (bestBets == null) {
 			Query q = entityManager.createNamedQuery("bet.byScore");
-			q.setMaxResults(10);
+			q.setMaxResults(15);
 			bestBets = q.getResultList();
 		}
 			
@@ -61,8 +61,7 @@ public class Highscore {
 	public List<gwap.model.Highscore> getBestUsers() {
 		if (bestUsers == null) {
 			Query q = entityManager.createNamedQuery("highscore.mit.byAllPersons");
-			q.setMaxResults(10);
-			q.setParameter("gametype", "mitRecognize");
+			q.setMaxResults(15);
 			bestUsers = q.getResultList();
 			HighscoreBean.modifyHighscore(bestUsers, entityManager);
 		}

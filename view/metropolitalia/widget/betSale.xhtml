@@ -1,0 +1,50 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:p4s="http://play4science.org/facelets">
+
+	<div id="betSale_#{bet.id}" style="border:1px solid silver; padding:5px;">
+		<s:fragment rendered="#{mitTradeBet.isOfferedForSale(bet)}">
+			<div style="padding:0 0 3px 0">
+				<h:outputFormat value="#{messages['bet.trade.offeredForSale']}">
+					<f:param value="#{mitTradeBet.getSaleOfferPrice(bet)}"/>
+				</h:outputFormat>
+			</div>
+			<h:commandLink id="cancelSaleOfferBetButton" action="#{mitTradeBet.cancelSaleOffer(bet)}" styleClass="button">
+				<f:param name="resultNumber" value="#{mitBetList.resultNumber}" />
+				<span><span class="checkmark-no" /><h:outputText value="#{messages['bet.trade.cancelOffer']}" /></span>
+			</h:commandLink> <!-- score,coins -->
+		</s:fragment>
+		<s:fragment rendered="#{!mitTradeBet.isOfferedForSale(bet)}">
+			<div style="padding:0 0 3px 0">
+				<h:outputText value="#{messages['bet.trade.sale.info']}" />
+			</div>
+			<div id="betPriceDiv">
+				<rich:inputNumberSpinner minValue="0" id="betPrice" value="#{mitTradeBet.price}" style="float:left" inputSize="2"/>
+				<h:outputText value="#{messages['points']}" style="margin:3px 20px 0 2px; float:left" />
+				<h:commandLink id="sellBetButton" action="#{mitTradeBet.offerForSale(bet)}" styleClass="button">
+					<f:param name="resultNumber" value="#{mitBetList.resultNumber}" />
+					<span><span class="checkmark-yes" /><h:outputText value="#{messages['bet.trade.offerForSale']}" /></span>
+				</h:commandLink>
+			</div>
+			<div style="clear:both; padding:5px 0 3px 0">
+				<h:outputText value="#{messages['bet.trade.sale.info2']}" />
+			</div>
+			<h:commandLink id="directSellBetButton" action="#{mitTradeBet.sellDirectly(bet)}" styleClass="button">
+				<f:param name="resultNumber" value="#{mitBetList.resultNumber}" />
+				<span><span class="checkmark-yes" />
+					<h:outputFormat value="#{messages['bet.trade.sellDirectly']}">
+						<f:param value="#{mitTradeBet.getDirectSalePrice(bet)}"/>
+					</h:outputFormat>
+				</span>
+			</h:commandLink>
+		</s:fragment>
+		<div class="clear"/>
+	</div>
+</ui:composition>

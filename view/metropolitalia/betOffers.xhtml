@@ -1,0 +1,55 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:p4s="http://play4science.org/facelets"
+    template="layout/template.xhtml">
+	
+    <ui:define name="body">
+		<div id="related" style ="float: left; width: 400px;">
+			<ui:include src="/layout/menu.xhtml"/>	
+			<h:form>
+				<s:fragment rendered="#{!empty(mitBetOffersList.betOffersList)}">
+			    	<h2>
+						<h:outputText value="#{messages['bet.trade.offers']}:" />
+			    	</h2>
+					<p4s:pagination viewId="/betOffers.xhtml" style="margin:0 0 10px 0;"/>
+				   	<rich:dataTable value="#{mitBetOffersList.betOffersList}" var="_sale" id="bets" style="width:100%; float: left;" styleClass="statementList">
+					    <rich:column>
+					    	<f:facet name="header">
+					    		<div style="float: right" ><h:outputText value="#{messages['bet.trade.price']}" /></div>
+					    	</f:facet>
+			    			<div style="float: right" >
+			    				<a4j:commandLink action="#{mitBetOffersList.showDetail(_sale.id)}" reRender= "betDetails,paginationPanel">
+			    					<h:outputText value="#{_sale.score} #{messages['points']}" styleClass="coins"/>
+								</a4j:commandLink>
+								
+							</div>
+			    			<div style="width: 70%" id="#{_sale.id}">
+			    				<a4j:commandLink action="#{mitBetOffersList.showDetail(_sale.id)}"  reRender="betDetails,paginationPanel" styleClass="tooltip">
+			    					<h:outputText value="#{_sale.bet.resource.asText()}" />
+			    					<ui:include src="/widget/standardExpression.xhtml"><ui:param name="text" value="#{_sale.bet.resource.standardAsText()}" /></ui:include>
+			    				</a4j:commandLink>
+			    			</div>
+						</rich:column>
+					</rich:dataTable>
+					<p4s:pagination viewId="/betOffers.xhtml" style="margin:10px 0 0 0;"/>	
+					<rich:panel id="paginationPanel">
+					</rich:panel>	
+				</s:fragment>
+			</h:form>
+		</div>
+
+		<div id="content">
+			<ui:include src="widget/betOfferDetail.xhtml" />
+			</div>
+		 
+		<br class="clear" />
+		
+    </ui:define>
+</ui:composition>
