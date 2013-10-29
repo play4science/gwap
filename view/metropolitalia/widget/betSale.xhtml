@@ -26,7 +26,7 @@
 				<h:outputText value="#{messages['bet.trade.sale.info']}" />
 			</div>
 			<div id="betPriceDiv">
-				<rich:inputNumberSpinner minValue="0" id="betPrice" value="#{mitTradeBet.price}" style="float:left" inputSize="2"/>
+				<rich:inputNumberSpinner minValue="0" maxValue="9999" id="betPrice" value="#{mitTradeBet.price}" style="float:left" inputSize="2"/>
 				<h:outputText value="#{messages['points']}" style="margin:3px 20px 0 2px; float:left" />
 				<h:commandLink id="sellBetButton" action="#{mitTradeBet.offerForSale(bet)}" styleClass="button">
 					<f:param name="resultNumber" value="#{mitBetList.resultNumber}" />
