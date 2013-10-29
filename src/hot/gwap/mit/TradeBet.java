@@ -155,7 +155,7 @@ public class TradeBet implements Serializable {
 		saleOffer.setScore(price);
 		entityManager.persist(saleOffer);
 	}
-	
+
 	public void cancelSaleOffer(Bet bet) {
 		Query query = entityManager.createNamedQuery("sale.offerByBetAndPerson");
 		query.setParameter("bet", bet);
@@ -165,6 +165,7 @@ public class TradeBet implements Serializable {
 			log.info("#1 cancels sale offer of #2 for bet #0", bet, bet.getPerson(), sale.getScore());
 			entityManager.remove(sale);
 		}
+		cachedBet = null;
 	}
 	
 	public Integer getPrice() {
