@@ -88,7 +88,7 @@ a:hover                                 { color: #0090FF; };
 #game td                                { vertical-align:top; }
 input[type="button"],
 input[type="submit"]                    { font-weight:bold; padding:.3em; cursor:pointer; /*color:#000; background:#b8c9e1; border:none */ }
-a.button                                { margin: 0; color: #000; height: 25px; font-weight:bold; float: left; cursor:pointer; background:url('../img/button_bg.png') no-repeat top right; text-decoration:none; }
+a.button                                { margin: 0 0 0 5px; color: #000; height: 25px; font-weight:bold; float: left; cursor:pointer; background:url('../img/button_bg.png') no-repeat top right; text-decoration:none; }
 a.button span                           { margin: 0 5px 0 -5px; padding: 4px 8px 5px 12px; line-height: 16px; float:left; background:url('../img/button_bg.png') no-repeat top left; }
 a.button:active                         { background-image:url('../img/button_bg_pressed.png'); }
 a.button:active span                    { background-image:url('../img/button_bg_pressed.png'); }

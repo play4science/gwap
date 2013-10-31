@@ -151,7 +151,7 @@ import org.jboss.seam.annotations.Scope;
     				  "where " +
     				  "  t.id is null and " +
     				  "  r.enabled=true " +
-    				  "order by r.id desc"
+    				  "order by random()"
     			),
     @NamedQuery(name="artResource.notTaggedResourceIdCustom",
     			query="select r.id " +
@@ -159,14 +159,16 @@ import org.jboss.seam.annotations.Scope;
     				  "where " +
     				  "  t.id is null and " +
     				  "  r.enabled=true and " +
-    				  "  r.source=:source "
+    				  "  r.source=:source " +
+    				  "order by random()"
     			),
     @NamedQuery(name="artResource.notTaggedResourceIdWithTeaser",
     			query="select r.id " +
     				  "from ArtResource r left join r.taggings t join r.teasers " + 
     				  "where " +
     				  "  t.id is null and " +
-    				  "  r.enabled=true "
+    				  "  r.enabled=true " +
+    				  "order by random()"
     			),
     @NamedQuery(name="artResource.notTaggedResourceIdWithTeaserCustom",
     			query="select r.id " +
@@ -174,7 +176,8 @@ import org.jboss.seam.annotations.Scope;
     				  "where " +
     				  "  t.id is null and " +
     				  "  r.enabled=true and " +
-    				  "  r.source=:source "
+    				  "  r.source=:source " +
+    				  "order by random()"
     			),
 	@NamedQuery(name="artResource.leastTaggedResourceId",
 				query="select r.id " +
@@ -183,7 +186,7 @@ import org.jboss.seam.annotations.Scope;
 					  "  t.tag.language=:language and" +
 					  "  r.enabled=true " +
 					  "group by r.id " +
-					  "order by count(r.id) asc, r.id desc "
+					  "order by count(r.id) asc, random() "
 					  ),
 	@NamedQuery(name="artResource.leastTaggedResourceIdCustom",
 				query="select r.id " +
@@ -193,8 +196,29 @@ import org.jboss.seam.annotations.Scope;
 					  "  r.enabled=true and " +
 					  "  r.source=:source " +
 					  "group by r.id " +
-					  "order by count(r.id) asc "
+					  "order by count(r.id) asc, random() "
 					  ),
+	@NamedQuery(name="artResource.leastTaggedResourceIdMaxCount",
+					query="select r.id " +
+						  "from ArtResource r join r.taggings t " +
+						  "where " +
+						  "  t.tag.language=:language and" +
+						  "  r.enabled=true " +
+						  "group by r.id " +
+						  "having count(r.id) <= :maxCount " +
+						  "order by count(r.id) asc, random() "
+						  ),
+	@NamedQuery(name="artResource.leastTaggedResourceIdMaxCountCustom",
+					query="select r.id " +
+						  "from ArtResource r join r.taggings t " +
+						  "where " +
+						  "  t.tag.language=:language and " +
+						  "  r.enabled=true and " +
+						  "  r.source=:source " +
+						  "group by r.id " +
+						  "having count(r.id) <= :maxCount " +
+						  "order by count(r.id) asc, random() "
+						  ),
 	@NamedQuery(name="artResource.leastTaggedResourceIdWithTeaser",
 				query="select r.id " +
 					  "from ArtResource r join r.taggings t join r.teasers " +
@@ -202,7 +226,7 @@ import org.jboss.seam.annotations.Scope;
 					  "  t.tag.language=:language and" +
 					  "  r.enabled=true " +
 					  "group by r.id " +
-					  "order by count(r.id) asc "
+					  "order by count(r.id) asc, random() "
 					  ),
 	@NamedQuery(name="artResource.leastTaggedResourceIdWithTeaserCustom",
 				query="select r.id " +
@@ -212,7 +236,7 @@ import org.jboss.seam.annotations.Scope;
 					  "  r.enabled=true and " +
 					  "  r.source=:source " +
 					  "group by r.id " +
-					  "order by count(r.id) asc "
+					  "order by count(r.id) asc, random() "
 					  ),
 	@NamedQuery(name="artResource.leastTaggedResourceIdLimit",
 			query="select r.id " +

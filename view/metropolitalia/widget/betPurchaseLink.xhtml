@@ -7,20 +7,9 @@
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:rich="http://richfaces.org/rich"
     xmlns:a4j="http://richfaces.org/a4j"
-    template="layout/template.xhtml">
+    xmlns:p4s="http://play4science.org/facelets">
 	
-    <ui:define name="body">
-		<div id="related" style ="float: left; width: 400px;">
-			<ui:include src="/layout/menu.xhtml"/>	
-			<ui:include src="widget/betList.xhtml" />
-			<ui:include src="widget/betPurchaseLink.xhtml" />
-		</div>
-
-		<div id="content">
-			<ui:include src="widget/betDetail.xhtml" />
-			</div>
-		 
-		<br class="clear" />
-		
-    </ui:define>
+	<s:link view="/betOffers.xhtml" propagation="none" styleClass="button" style="margin-top:20px;">
+		<span><h:outputText value="#{messages['bet.trade.purchaseBets']}" /></span>
+	</s:link>
 </ui:composition>

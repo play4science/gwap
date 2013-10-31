@@ -54,7 +54,7 @@ public class ArtResourceDatabaseCacheBean  implements ArtResourceCacheBean {
 	private final int POOLSIZE = 100;
 	private final double RELOADTRIGGER = 0.1;
 
-	private final long MINTAGGINGS = 10;
+	private final long MINTAGGINGS = 7;
 	
 	@SuppressWarnings("unchecked")
 	private void updateCandidates(String name) {
@@ -72,10 +72,19 @@ public class ArtResourceDatabaseCacheBean  implements ArtResourceCacheBean {
 			if (name.equals("least")) {
 				log.info("Updating candidate pool of ArtResources with least taggings.");
 				
+				// Check for resources with too few taggings to be played and display them first
+				Query leastTaggedMaxCountArtResources = customSourceBean.query("artResource.leastTaggedResourceIdMaxCount");
+				leastTaggedMaxCountArtResources.setParameter("language", localeSelector.getLanguage());
+				leastTaggedMaxCountArtResources.setMaxResults((int) (POOLSIZE * (1-RELOADTRIGGER)));
+				leastTaggedMaxCountArtResources.setParameter("maxCount", MINTAGGINGS-1);
+				candidateArtResourceIdList = (ArrayList<Long>) leastTaggedMaxCountArtResources.getResultList();
+				
 				// Check for untagged resources
-				Query notTaggedArtResources = customSourceBean.query("artResource.notTaggedResourceId");
-				notTaggedArtResources.setMaxResults((int) (POOLSIZE * (1-RELOADTRIGGER)));
-				candidateArtResourceIdList = (ArrayList<Long>) notTaggedArtResources.getResultList();
+				if (candidateArtResourceIdList.size()==0) {
+					Query notTaggedArtResources = customSourceBean.query("artResource.notTaggedResourceId");
+					notTaggedArtResources.setMaxResults((int) (POOLSIZE * (1-RELOADTRIGGER)));
+					candidateArtResourceIdList = (ArrayList<Long>) notTaggedArtResources.getResultList();
+				}
 				
 				// Check for resources, if no untagged resources exist  
 				if (candidateArtResourceIdList.size()==0) {

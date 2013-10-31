@@ -44,9 +44,7 @@ import org.jboss.seam.annotations.Name;
 	@NamedQuery(name = "source.byName",
 				query = "select s from Source s where s.name = :name"),
 	@NamedQuery(name = "source.byPlatform",
-				query = "from Source where platform = :platform"),
-	@NamedQuery(name = "source.latestByPlatform",
-				query = "from Source where platform = :platform order by id desc"),
+				query = "from Source where platform = :platform order by displayOrder")
 })
 @Entity
 @Name("source")
@@ -62,6 +60,7 @@ public class Source implements Serializable {
 	private String description;
 	private String homepage;
 	private String platform;
+	private Integer displayOrder;
 	
 	public Long getId() {
 		return id;
@@ -98,6 +97,12 @@ public class Source implements Serializable {
 	}
 	public void setPlatform(String platform) {
 		this.platform = platform;
+	}
+	public Integer getDisplayOrder() {
+		return displayOrder;
+	}
+	public void setDisplayOrder(Integer displayOrder) {
+		this.displayOrder = displayOrder;
 	}
 	@Override
 	public String toString() {

@@ -143,5 +143,12 @@ public class TaggingBean extends AbstractTaggingBean<Tagging> {
 			Events.instance().raiseEvent("updateResource");
 		}
 	}
+	
+	public long getNumberOfTaggingsForResource() {
+		Query query = entityManager.createNamedQuery("tagging.countByResourceAndLanguage");
+		query.setParameter("resource", resource);
+		query.setParameter("language", localeSelector.getLanguage());
+		return ((Number)query.getSingleResult()).longValue();
+	}
 
 }
