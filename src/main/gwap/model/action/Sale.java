@@ -39,9 +39,10 @@ import org.jboss.seam.annotations.Scope;
 })
 
 /**
- * A trade can happen between two persons or a person and the system. It
- * involves a Bet and a price. If the buyer or seller is <code>NULL</code>, 
- * it is the system. 
+ * A sale can be created by a person or a system. It involves a Bet 
+ * and a Purchase. If the person is <code>null</code>, it is the system.
+ * If bet is <code>null</code>, it is an open offer, otherwise the trade
+ * has been completed successfully.
  * 
  * @author Fabian Kneißl
  */

@@ -35,9 +35,10 @@ import org.jboss.seam.annotations.Scope;
 })
 
 /**
- * A trade offer can be created by a person or a system. It can be a sale
- * or a purchase offer and it involves a Bet and a price. If the person is 
- * <code>NULL</code>, it is the system. 
+ * A purchase can be created by a person or a system. It involves a Bet 
+ * and a Sale. If the person is <code>null</code>, it is the system.
+ * If purchase is <code>null</code>, it is an open offer, otherwise the 
+ * trade has been completed successfully.
  * 
  * @author Fabian Kneißl
  */
