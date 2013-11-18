@@ -32,6 +32,8 @@ E-mail: p4s@play4science.org
 
 Individual contributors (alphabetical order):
 Matthias Becker
+Niels Becker
+Alexandre Bérard
 Mislav Boras
 Fabian Bross
 François Bry
@@ -47,6 +49,7 @@ Fabian Kneißl
 Hubertus Kohle
 Thomas Krefeld
 Katharina Krug
+Richard Lagrange
 Elena Levushkina
 Stephan Lücke
 Karolin Nirschl
@@ -60,6 +63,10 @@ Klaus Schulz
 Bartholomäus Steinmayr
 Florian Störkle
 Christoph Wieser
+
+Acknowledgements:
+This work has been funded in part by the German Foundation of Research 
+(DFG) within the project Play4Science number 578416.
 
 Disclaimer:
 This license applies only to the software developed by the authors 
