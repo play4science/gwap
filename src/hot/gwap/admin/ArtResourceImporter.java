@@ -83,7 +83,7 @@ public class ArtResourceImporter {
 		try {
 			parse(inFile, source);
 			facesMessages.add("Prepared #0 resources, please review them for correctness and submit if correct.", resources.size());
-			log.info("#0 statements parsed", resources.size());
+			log.info("#0 resources parsed", resources.size());
 		} catch (Exception e) {
 			resources = null;
 			log.error("Error parsing csv file #0", e, name);
@@ -97,6 +97,7 @@ public class ArtResourceImporter {
 		resources = new ArrayList<ImportedArtResource>();
 		HashSet<String> allFilenames = new HashSet<String>();
 		try {
+			int filesNotReadable = 0;
 			while ((line = csvReader.readNext()) != null) {
 				// filename, image id, title, artistForename, artistSurname, year created, location, institution, origin, easement
 				//     0        1        2         3               4              5            6           7          8     9
@@ -138,10 +139,15 @@ public class ArtResourceImporter {
 				// Check if image file exists
 				String filePath = source.getUrl() + r.getPath();
 				if (!new File(filePath).canRead()) {
-					log.error("Image with filename '"+filePath+"' does not exist.");
+					log.error("Image with filename '"+filePath+"' does not exist or cannot be read.");
+					filesNotReadable++;
 				} else {
 					resources.add(r);
 				}
+			}
+			if (filesNotReadable > 0) {
+				facesMessages.add("Could not access #0 files. Please check if all files are on the correct path and have the correct permissions.", filesNotReadable);
+				log.error("Total number of not-accessible files: #0", filesNotReadable);
 			}
 		} finally {
 			csvReader.close();
