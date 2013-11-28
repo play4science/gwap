@@ -22,7 +22,7 @@
 
 package gwap.game;
 
-import gwap.model.resource.ArtResource;
+import gwap.ResourceBean;
 import gwap.wrapper.TagFrequency;
 
 import java.io.Serializable;
@@ -59,7 +59,7 @@ public class TabooTagBean implements Serializable {
 	@Logger                  private Log log;
 	@In                      private EntityManager entityManager;
 	@In                      private LocaleSelector localeSelector;
-	@In(create=true) @Out    private ArtResource resource;
+	@In                      private ResourceBean resourceBean;
 	@Out                     private List<TagFrequency> tabooTags;
 	
 	private int limit= 7;
@@ -68,7 +68,7 @@ public class TabooTagBean implements Serializable {
 	public void updateTabooTags() {
 		Long threshold = 2L;
 		Query query = entityManager.createNamedQuery("tagging.tagFrequencyByResourceAndLanguage");
-		query.setParameter("resource", resource);
+		query.setParameter("resource", resourceBean.getResource());
 		query.setParameter("language", localeSelector.getLanguage());
 		query.setParameter("threshold", threshold);
 		query.setMaxResults(limit);

@@ -197,6 +197,9 @@ public class ResourceBean implements Serializable {
 		}
 	}
 	
+	public ArtResource getResource() {
+		return resource;
+	}
 	public Long getResourceId() {
 		return resourceId;
 	}

@@ -31,9 +31,13 @@ import gwap.model.action.TaggingCorrection;
 import gwap.model.resource.ArtResource;
 import gwap.wrapper.MatchingTag;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.persistence.Query;
 
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.In;
@@ -53,6 +57,8 @@ import org.jboss.seam.annotations.Scope;
 @Scope(ScopeType.CONVERSATION)
 public class GameSessionBean extends AbstractGameSessionBean {
 
+	private static final int MAXIMUM_RETRY_LOAD_NEW_RESOURCE = 5;
+
 	private static final long serialVersionUID = 1L;
 
 	@In(create=true)         private TaggingBean taggingBean;
@@ -70,6 +76,22 @@ public class GameSessionBean extends AbstractGameSessionBean {
 	@Override
 	protected void loadNewResource() {
 		resourceBean.updateResource();
+		
+		// check if person already played with this resource in the last 6 months
+		Query q = entityManager.createNamedQuery("artResource.hasBeenPlayedSince");
+		q.setParameter("person", person);
+		Calendar monthsAgo = GregorianCalendar.getInstance();
+		monthsAgo.add(Calendar.MONTH, -6);
+		q.setParameter("startDate", monthsAgo.getTime());
+		q.setParameter("resource", resourceBean.getResource());
+		
+		int emergencyStop = MAXIMUM_RETRY_LOAD_NEW_RESOURCE;
+		while (((Number)q.getSingleResult()).longValue() > 0 && emergencyStop > 0) {
+			log.info("Load new resource because user already played with #0", resourceBean.getResource());
+			resourceBean.updateResource();
+			q.setParameter("resource", resourceBean.getResource());
+			emergencyStop--;
+		}
 	}
 	
 	public String recommendTag() {

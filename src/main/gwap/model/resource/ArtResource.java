@@ -388,8 +388,13 @@ import org.jboss.seam.annotations.Scope;
   			  			"where a.origin = :origin and " +
   			  			"not exists (from ArtResourceRating r where r.person.deviceId = :deviceId and r.resource = a) " +
   			  			"order by random()"),
-	   @NamedQuery(name = "artResource.byOriginAndDeviceId",
-			  	query="select count(*) from ArtResource a where a.origin = :origin and a.artist.deviceId = :deviceId")
+	   @NamedQuery(name="artResource.byOriginAndDeviceId",
+			  	query="select count(*) from ArtResource a where a.origin = :origin and a.artist.deviceId = :deviceId"),
+	   @NamedQuery(name="artResource.hasBeenPlayedSince",
+			   	query="select count(*) from ArtResource r join r.gameRounds g join g.person p " +
+			   			"where coalesce(p.personConnected, p) = :person " +
+			   			"and g.startDate >= :startDate " +
+						"and r = :resource")
   	})
 
 /**
