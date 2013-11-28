@@ -21,7 +21,7 @@ AGPL, see LICENSE.txt
 
 Installation
 ------------
-See INSTALL.txt
+See INSTALL.txt and doc/Development_Environment.odt
 
 Contributing
 ------------
