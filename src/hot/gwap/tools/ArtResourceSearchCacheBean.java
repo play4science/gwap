@@ -53,9 +53,16 @@ public class ArtResourceSearchCacheBean implements ArtResourceCacheBean {
 	@In                       private EntityManager entityManager;
 
 	private SolrDocumentList results;
+
+	private SolrQuery solrQuery;
 	
 	private void updateCandidates() {
-		SolrQuery solrQuery = customSourceBean.getCustomSearch();
+		solrQuery = customSourceBean.getCustomSearch();
+		solrQuery.setRows(1);
+		getSolrResults();
+	}
+	
+	private void getSolrResults() {
 		try {
 			QueryResponse response = solrServer.query(solrQuery, METHOD.POST);
 			results = response.getResults();
@@ -76,9 +83,13 @@ public class ArtResourceSearchCacheBean implements ArtResourceCacheBean {
 		if (results == null)
 			updateCandidates();
 		
-		int selected = (int) (Math.random()*results.size());
-		log.info("Selected object #0 out of #1", selected, results.size());
-		Long id = Long.parseLong(results.get(selected).getFieldValue("id").toString());
+		int selected = (int) (Math.random()*results.getNumFound());
+		log.info("Selected ArtResource #0 out of #1", selected, results.getNumFound());
+		
+		solrQuery.setStart(selected);
+		getSolrResults();
+		
+		Long id = Long.parseLong(results.get(0).getFieldValue("id").toString());
 		return entityManager.find(ArtResource.class, id);
 	}
 
