@@ -77,6 +77,7 @@ public class ArtResourceSearchCacheBean implements ArtResourceCacheBean {
 			updateCandidates();
 		
 		int selected = (int) (Math.random()*results.size());
+		log.info("Selected object #0 out of #1", selected, results.size());
 		Long id = Long.parseLong(results.get(selected).getFieldValue("id").toString());
 		return entityManager.find(ArtResource.class, id);
 	}
