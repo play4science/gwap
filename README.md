@@ -21,7 +21,8 @@ AGPL, see LICENSE.txt
 
 Installation
 ------------
-See INSTALL.txt and doc/Development_Environment.odt
+See [doc/Index.md](doc/Index.md) and [doc/DevelopmentEnvironment.md](doc/DevelopmentEnvironment.md) for setting up a development environment. For setting up a server environment see INSTALL.txt.
+
 
 Contributing
 ------------
