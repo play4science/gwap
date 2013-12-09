@@ -1,0 +1,87 @@
+<h1 id="sql-queries">SQL Queries</h1>
+<h2 id="artigo">Artigo</h2>
+<ul>
+<li><p>Number of taggings:</p>
+<pre><code>select count(*) from tagging;</code></pre></li>
+<li><p>Number of taggings in a month:</p>
+<pre><code>select count(*) from tagging 
+where created &gt;= DATE(&#39;2012-04-01&#39;) and created &lt; DATE(&#39;2012-05-01&#39;);</code></pre></li>
+<li><p>Number of matched taggings:</p>
+<pre><code>select sum(foo.cnt) from (
+    select 1 as cnt from tagging t 
+    group by t.resource_id, t.tag_id having count(*) &gt; 1) as foo;</code></pre></li>
+<li><p>Number of newly matched taggings in a month (approximately):</p>
+<pre><code>select sum(foo.cnt) from (
+    select 1 as cnt from tagging t 
+    join tagging t2 on t.resource_id=t2.resource_id and t.tag_id 1) as foo;</code></pre></li>
+<li><p>Number of taggings matched only in this month:</p>
+<pre><code>select sum(foo.cnt) from (
+    select 1 as cnt from tagging t where created &gt;= DATE(&#39;2012-04-01&#39;) and created &lt; DATE(&#39;2012-05-01&#39;) 
+    group by t.resource_id, t.tag_id having count(*) &gt; 1) as foo;</code></pre></li>
+<li><p>Taggings per resource:</p>
+<pre><code>select avg(cnt), max(cnt), count(*) from (
+    select count(*) as cnt from (
+        select tag.name, count(tag.name), t.resource_id as resource_id from tagging t 
+        join tag on tag.id=t.tag_id where tag.language=&#39;de&#39; 
+        group by tag.name, t.resource_id having count(tag.name) &gt; 1) as foo 
+    group by resource_id) as bar;</code></pre></li>
+<li><p>Tagging corrections:</p>
+<pre><code>select c.created, a.id as artresource_id, c.accepted as accepted, ot.id originaltag_id, 
+    ot.name originaltag_name, ot.language originaltag_language, ct.id correctedtag_id, 
+    ct.name correctedtag_name, ct.language correctedtag_language 
+from taggingcorrection c join tag ot on c.originaltag_id=ot.id 
+join tag ct on c.correctedtag_id=ct.id join gameround_resource gr on c.gameround_id=gr.gamerounds_id 
+join artresource a on gr.resources_id=a.id order by c.created;</code></pre></li>
+<li><p>Monthly Highscore all non-beta games:</p>
+<pre><code>select
+    p2.username as username,
+    p2.forename || &#39; &#39; || p2.surname as name,
+    p2.email as email,
+    sum(g.score) as score
+from
+    GameRound g
+    join Person p on g.person_id = p.id
+    join GameSession s on g.gamesession_id = s.id
+    join Person p2 on p2.id=coalesce(p.personConnected_id, p.id)
+where
+    g.endDate &gt;= date &#39;2012-09-10&#39;
+    and g.endDate &lt; date&#39;2012-09-17&#39;
+    and s.gametype_id in (1,2,5,6,11)
+group by
+    p2.username,
+    p2.id
+having sum(g.score)&gt;0
+order by sum(g.score) desc
+limit 10;</code></pre></li>
+</ul>
+<h2 id="metropolitalia">Metropolitalia</h2>
+<ul>
+<li><p>Delete own actions:</p>
+<pre><code>delete from locationassignment where person_id in (
+    select id from person where person.personconnected_id in (OWN_IDS) or person.id in (OWN_IDS)); 
+delete from bet where person_id in (
+    select id from person where person.personconnected_id in (OWN_IDS) or person.id in (OWN_IDS)); 
+delete from statementannotation_statementtoken where statementannotation_id in (
+    select id from statementannotation where person_id in (
+        select id from person where person.personconnected_id in (OWN_IDS) or person.id in (OWN_IDS)));
+delete from statementannotation where person_id in (
+    select id from person where person.personconnected_id in (OWN_IDS) or person.id in (OWN_IDS)); 
+delete from statementcharacterization where person_id in (
+    select id from person where person.personconnected_id in (OWN_IDS) or person.id in (OWN_IDS));
+delete from familiarity where person_id in (
+    select id from person where person.personconnected_id in (OWN_IDS) or person.id in (OWN_IDS));</code></pre></li>
+<li><p>All statements:</p>
+<pre><code>select s.id, s.text, 
+    array_to_string(array(
+        select t.value from statementstandardtoken st join token t on st.token_id=t.id 
+        where st.statement_id=s.id order by sequencenumber), &#39; &#39;) as standard, 
+    array_to_string(array(
+        select l.name from bet b join location l on b.location_id=l.id 
+        where b.resource_id=s.id and b.person_id is null), &#39;, &#39;) as original_location, 
+    array_to_string(array(
+        select l.name from locationassignment la join location l on la.location_id=l.id 
+        where la.resource_id=s.id and la.notevaluated=false 
+        union select l.name from bet b join location l on b.location_id=l.id 
+        where b.resource_id=s.id and b.notevaluated=false and b.person_id is not null), &#39;, &#39;) as locations 
+from statement s where enabled=true order by s.text;</code></pre></li>
+</ul>

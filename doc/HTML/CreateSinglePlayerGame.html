@@ -1,0 +1,46 @@
+<h1 id="how-to-create-a-single-player-game">How to create a single-player game</h1>
+<h2 id="controller-bean-for-the-game">1. Controller bean for the game</h2>
+<p>Create a new class extending <em>gwap.game.AbstractGameSessionBean</em>, e.g.:</p>
+<pre><code>@Name(&quot;mitStatementLabelerBean&quot;)
+@Scope(ScopeType.CONVERSATION)
+public class StatementLabelerBean extends AbstractGameSessionBean {
+    @Override
+    public void startGameSession() {
+        startGameSession(&quot;mitStatementLabeler&quot;);
+    }
+}</code></pre>
+<p>Note that the argument for the <em>startGameSession</em> method is the name of the GameType to be created and thus should exist like this in the database table for gametypes.</p>
+<h2 id="page-flow">2. Page flow</h2>
+<p>Clone an existing pageflow which uses such a controller bean, e.g., <code>/resources/imageLabeler.jpdl.xml</code> and edit</p>
+<ul>
+<li>name of the pageflow (top-level xml element)</li>
+<li>view-id's</li>
+<li>action expressions</li>
+<li>pageflow itself (if needed, look at other <code>*.jpdl.xml</code>-files)</li>
+</ul>
+<p>And register pageflow in <code>/resources/[SUBPROJECT-NAME]/WEB-INF/components.xml</code>, e.g.:</p>
+<pre><code>&lt;bpm:jbpm&gt;
+    &lt;!-- ... other definitions ... --&gt;
+    &lt;bpm:pageflow-definitions&gt;
+        &lt;value&gt;[PAGEFLOW-FILE, e.g. imageLabeler.jpdl.xml]&lt;/value&gt;
+    &lt;/bpm:pageflow-definitions&gt;
+&lt;/bpm:jbpm&gt;</code></pre>
+<h2 id="views">3. Views</h2>
+<p>Create the view which is mapped to the <em>start-page</em> element in the pageflow, let's call it <code>imageLabeler.xhtml</code> and edit it according to your needs. Furthermore, create a <code>imageLabeler.page.xml</code> (must be named using the same base name) in the same folder with the content:</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;page xmlns=&quot;http://jboss.com/products/seam/pages&quot;
+      xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+      xsi:schemaLocation=&quot;http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd&quot;&gt;
+
+     &lt;begin-conversation pageflow=&quot;[NAME-OF-PAGEFLOW, e.g. imageLabeler]&quot; join=&quot;true&quot;/&gt;
+
+&lt;/page&gt;</code></pre>
+<p>And you're done. Test it!</p>
+<h2 id="further-examples">4. Further examples</h2>
+<p>If you need further advice, look at the following files:</p>
+<pre><code>/src/hot/gwap/mit/StatementLabelerBean.java
+/resources/mitStatementLabeler.jpdl.xml
+/resources/metropolitalia/WEB-INF/components.xml
+/view/metropolitalia/statementLabeler.xhtml
+/view/metropolitalia/statementLabelerScoring.xhtml</code></pre>
+<p>or ask :)</p>

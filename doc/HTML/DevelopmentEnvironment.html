@@ -1,0 +1,83 @@
+<h1 id="setting-up-the-gwap-development-environment">Setting up the GWAP Development Environment</h1>
+<h2 id="eclipse-jboss">Eclipse &amp; JBoss</h2>
+<ul>
+<li>Download Eclipse Java EE: <a href="http://www.eclipse.org/downloads/">http://www.eclipse.org/downloads/</a></li>
+<li>Unzip Eclipse and run it</li>
+<li>Help -&gt; Eclipse Marketplace
+<ul>
+<li>Search for &quot;JBoss Tools&quot;</li>
+<li>Select and install: Hibernate Tools, JBoss Tools JSF, JBoss Tools RichFaces, JBossAS Tools, Seam Tools</li>
+<li>Restart Eclipse when prompted to do so</li>
+</ul></li>
+<li>Download JBoss 4.2: <a href="http://www.jboss.org/jbossas/downloads/">http://www.jboss.org/jbossas/downloads/</a></li>
+<li>Extract and remember the directory where you extracted it (e.g.<code>/opt/jboss</code> or <code>C:\\jboss</code>)</li>
+<li>File -&gt; Import -&gt; Project from GIT: <code>https://github.com/play4science/gwap.git</code></li>
+<li>Select &quot;Find projects [..]&quot;</li>
+<li>Window -&gt; Show view -&gt; Ant, add (Button on top right of this view) <code>build.xml</code></li>
+<li>Only for OS X:
+<ul>
+<li>In project settings, set <code>Default Encoding</code> to <code>UTF-8</code></li>
+<li>In Preferences, in Java -&gt; Installed JREs -&gt; select used JDK -&gt; Edit -&gt; Default VM Arguments: <code>-Dfile.encoding=UTF-8</code></li>
+</ul></li>
+<li>Ant targets (doubleclick in Ant-View):
+<ul>
+<li><code>local-settings</code> (enter the JBoss directory from above)</li>
+<li><code>prepare-jboss</code></li>
+<li><code>buildtest</code></li>
+</ul></li>
+<li>In the projects view right-click on &quot;gwap&quot; -&gt; refresh (the red exclamation mark is hopefully gone now)</li>
+<li>Run Ant target <code>deploy</code></li>
+<li>In the &quot;Servers&quot;-view:
+<ul>
+<li>Create JBoss 4.2 Runtime Server (Community Version!) and select the JBoss directory</li>
+<li>Do <strong>not</strong> add the gwap-project to the configured projects</li>
+</ul></li>
+<li>Run JBoss in debug-mode</li>
+</ul>
+<h2 id="postgresql-database">PostgreSQL Database</h2>
+<ul>
+<li>Install PostgreSQL (9.1 or later)</li>
+<li><p>Create database (psql command prompt)</p>
+<pre><code>create user gwap password &#39;gwap&#39;;
+create database gwap owner gwap;</code></pre></li>
+<li>Load database schema and data into database
+<ul>
+<li><p>Possibility 1: Load existing dump in PostgreSQL</p>
+<pre><code>psql -h localhost -U gwap gwap &lt; DUMP.sql</code></pre></li>
+<li>Possibility 2: Let JBoss create the tables
+<ul>
+<li><p>edit the file: <code>resources/META-INF/persistence-dev.xml</code>:</p>
+<pre><code>&lt;property name=&quot;hibernate.hbm2ddl.auto&quot; value=&quot;create-drop&quot;/&gt;</code></pre></li>
+<li><code>ant redeploy</code></li>
+<li>start JBoss</li>
+<li>in <code>persistence-dev.xml</code> change to <code>value=&quot;update&quot;</code></li>
+<li><p><code>ant redeploy</code></p></li>
+</ul></li>
+</ul></li>
+<li><p>Update path in table &quot;source&quot;, e.g.:</p>
+<pre><code>UPDATE source SET
+url=&#39;[JBoss-directory]/server/default/deploy/GWAP.ear/artigo.war/&#39;
+WHERE id=1;</code></pre></li>
+</ul>
+<h2 id="solr-search">Solr (Search)</h2>
+<ul>
+<li>Deploy Solr: <code>ant solr-deploy</code></li>
+<li>Open the following to create the search index (default credentials: &quot;solr&quot; / &quot;solr&quot;):
+<ul>
+<li><a href="http://localhost:8080/solr/artigo/dataimport?command=full-import">http://localhost:8080/solr/artigo/dataimport?command=full-import</a></li>
+<li><a href="http://localhost:8080/solr/metropolitalia/dataimport?command=full-import">http://localhost:8080/solr/metropolitalia/dataimport?command=full-import</a></li>
+</ul></li>
+</ul>
+<h2 id="basic-commands-for-deployment">Basic Commands for Deployment</h2>
+<ul>
+<li>Update server with new files (xhtml, js, css): <code>ant deploy</code></li>
+<li>Update server with new Java files: <code>ant redeploy</code></li>
+<li>Change which projects are deployed: <code>build.properties</code></li>
+<li>Default URL for deployment:
+<ul>
+<li><a href="http://localhost:8080/artigo">http://localhost:8080/artigo</a></li>
+<li><a href="http://localhost:8080/metropolitalia">http://localhost:8080/metropolitalia</a></li>
+<li><a href="http://localhost:8080/elearning">http://localhost:8080/elearning</a></li>
+<li>... (by the name of the subproject)</li>
+</ul></li>
+</ul>

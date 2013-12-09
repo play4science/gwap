@@ -1,0 +1,22 @@
+<h1 id="solr-installation">Solr Installation</h1>
+<h2 id="automatic-installation">Automatic installation</h2>
+<ul>
+<li>run the <code>solr-deploy</code> ant target</li>
+<li>try accessing <code>http://localhost:8080/solr/</code></li>
+</ul>
+<h2 id="manual-installation">Manual installation</h2>
+<ul>
+<li>Prerequisites: JBoss 4.2 and Solr 3.3</li>
+<li>Stop JBoss</li>
+<li>Modify libraries bundled in <code>examples/webapps/solr.war</code> (in <code>WEB-INF/lib</code>):
+<ul>
+<li>delete the beta version of velocity-tools-2.0 and add the non-beta version from <a href="http://velocity.apache.org/download.cgi">here</a></li>
+<li>delete log4j-over-slf4j-1.6.1.jar slf4j-jdk14-1.6.1.jar</li>
+<li>add slf4j-log4j12-1.6.1.jar from <a href="http://www.slf4j.org">here</a></li>
+<li>important: the files must stay in solr.war, unpacking the whole stuff into the JBoss directory does not work</li>
+</ul></li>
+<li>Copy solr.war to the JBoss deploy directory</li>
+<li>copy <code>examples/solr</code> to the jboss home directory from where jboss is run, e.g. <code>/opt/jboss/bin</code></li>
+<li>Note: the other methods for setting the solr home directory from <a href="http://wiki.apache.org/solr/SolrJBoss">here</a> did not work, perhaps by using <code>-Dsolr.solr.home=/path/to/solr/home</code> in run.conf/run.sh?</li>
+<li>Start JBoss</li>
+</ul>

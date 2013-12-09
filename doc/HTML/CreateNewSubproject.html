@@ -1,0 +1,11 @@
+<h1 id="how-to-create-a-new-subproject-for-the-play4science-platform">How to create a new subproject for the play4science platform</h1>
+<h2 id="creating-directory-structure">1. Creating directory structure</h2>
+<p>Create the same directory structure as in an existing subproject. The important directories are</p>
+<ul>
+<li><code>resources/artigo -&gt; resources/SUBPROJECT</code> (copy this one)</li>
+<li><code>view/artigo -&gt; view/SUBPROJECT</code> (create a folder and copy some of the necessary files)</li>
+</ul>
+<h2 id="modifying-web-inf-files">2. Modifying WEB-INF files</h2>
+<p>Edit the <code>*.xml</code>-files in the <code>resources/SUBPROJECT/WEB-INF</code> folder so that all occurrences of <em>artigo'' are replaced by ''SUBPROJECT</em> and make further changes that you think are necessary.</p>
+<h2 id="modifying-your-build.properties">3. Modifying your build.properties</h2>
+<p>To deploy your project, define your subproject in build.properties for deployment.</p>

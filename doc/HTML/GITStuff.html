@@ -1,0 +1,28 @@
+<h1 id="git">GIT</h1>
+<p>Location: <code>https://github.com:play4science/gwap.git</code></p>
+<h2 id="layout">Layout</h2>
+<ul>
+<li><code>master</code>: Branch that holds the latest development version</li>
+<li><code>production</code>: Branch where some (in fact only very few) changes important for the production servers are located</li>
+<li><code>...</code>: Other branches based on current needs (for example for students or for testing something</li>
+</ul>
+<h2 id="useful-commands">Useful commands</h2>
+<ul>
+<li><code>git clone [location]</code>: Retrieve the repository from the server to a new local directory</li>
+<li><code>git fetch</code>: Retrieve latest changes from server repository without changing the working directory</li>
+<li><code>git pull</code> (=<code>git fetch</code>+<code>git merge</code>): Retrieve and merge latest changes into current branch</li>
+<li><code>git push</code>: Push changes from current branch to server</li>
+</ul>
+<h2 id="steps-for-updating-production">Steps for updating production</h2>
+<p>Add files for the commit (and also files that are already part of the repository). Before this, make sure you committed everything.</p>
+<p>Then do the following in your local repository:</p>
+<pre><code>git checkout master
+git pull
+git checkout production
+git pull
+git merge master
+git push
+git checkout master</code></pre>
+<p>Then, do the following on the server:</p>
+<pre><code>git pull</code></pre>
+<p>(here you should see that the files are changed)</p>

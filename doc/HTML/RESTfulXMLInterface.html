@@ -1,0 +1,11 @@
+<h1 id="restful-xml-interface">RESTful XML Interface</h1>
+<h2 id="artigo-tag-frequencies">Artigo: Tag frequencies</h2>
+<p><code>http://localhost:8080/artigo/seam/resource/rest/artigodata/tags</code></p>
+<p>Example: <code>http://www.artigo.org/artigo/seam/resource/rest/artigodata/tags?dataset=artemis&amp;language=en&amp;threshold=3</code></p>
+<p>Restricted to users with permission &quot;artigo / rest-data&quot;</p>
+<p>Parameters:</p>
+<ul>
+<li><code>dataset</code>: mandatory, e.g. <code>artemis</code> (source name)</li>
+<li><code>language</code>: optional, e.g. <code>de</code> or <code>en</code>, if none is provided everything is shown</li>
+<li><code>threshold</code>: optional, default is <code>2</code>, must be &gt;= <code>2</code></li>
+</ul>
