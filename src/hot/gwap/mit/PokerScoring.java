@@ -228,8 +228,14 @@ public class PokerScoring {
 	
 	public void calculateAllBetScores() {
 		List<Bet> bets = entityManager.createNamedQuery("bet.allWithPerson").getResultList();
+		log.info("Calculating scores for #0 bets...", bets.size());
 		for (Bet bet : bets)
 			updateScoreForBet(bet);
+		bets = entityManager.createNamedQuery("pokerBet.allWithPerson").getResultList();
+		log.info("Calculating scores for #0 poker bets...", bets.size());
+		for (Bet bet : bets)
+			updateScoreForPokerBet(bet);
+		log.info("Finished calculating scores.");
 	}
 	
 	public void updateScoreForBets(Resource resource) {
@@ -244,7 +250,7 @@ public class PokerScoring {
 		bet.setCurrentMatch(0);
 		if (bet.getPoints() != null) {
 			Percentage percentage = getFuzzyPercentage(bet.getLocation(), bet.getResource());
-			if (percentage.getTotal() > 0) {
+			if (percentage.getTotal() > 1) {  // start when at least one more user gave a characterisation
 				double deviation = Math.abs(percentage.getPercentage() - bet.getPoints());
 				int score = getNormalDistributedScore(deviation, BET_ND_FACTOR, BET_MAX_SCORE);
 				log.info("Score for bet #0 with deviation #1 (bet on #3%, really #4%) is #2", bet, deviation, score, bet.getPoints(), percentage);
@@ -276,10 +282,7 @@ public class PokerScoring {
 		percentage = new Percentage(percentage.getSum()-1, percentage.getTotal()-1+nrRounds); // excluding the user's bet
 		if (percentage.getTotal() > 0) {
 			int score = 0;
-			if (percentage.getPercentage() <= 10.0)
-				score = percentage.getTotal()*POKER_OWNER_PER_GUESS;
-			else if (percentage.getPercentage() <= 20.0)
-				score = percentage.getTotal()*POKER_OWNER_PER_GUESS_LT_20;
+			score = (int) (Math.max(1-percentage.getFraction(), 0) * percentage.getTotal()*POKER_OWNER_PER_GUESS);
 			bet.setScore(score);
 			bet.setCurrentMatch(percentage.getPercentage().intValue());
 			log.info("Score for poker bet #0 (#1 bet on the same, total #2) is #3", bet, (long)percentage.getSum(), percentage.getTotal(), score);

@@ -35,7 +35,9 @@ import org.jboss.seam.annotations.Scope;
 	@NamedQuery(name="pokerBet.byResource", 
 			query="select b from PokerBet b where b.resource = :resource and b.revisedBet is null"), 
 	@NamedQuery(name="pokerBet.byResourceAndLocation",
-			query="select b from PokerBet b where b.resource = :resource and b.revisedBet is null and b.location = :location")
+			query="select b from PokerBet b where b.resource = :resource and b.revisedBet is null and b.location = :location"),
+	@NamedQuery(name="pokerBet.allWithPerson",
+			query="select b from PokerBet b where b.person is not null")
 })
 
 /**
