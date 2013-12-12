@@ -40,6 +40,8 @@ public class TermList extends EntityQuery<Term> {
 
 	@In private CustomSourceBean customSourceBean;
 	
+	private boolean showConfirmedTags = false;
+	
 	public TermList() {
 		setEjbql("select t from Term t");
 		setOrder("t.tag.name");
@@ -54,4 +56,13 @@ public class TermList extends EntityQuery<Term> {
 		}
 		return super.getResultList();
 	}
+
+	public boolean isShowConfirmedTags() {
+		return showConfirmedTags;
+	}
+
+	public void setShowConfirmedTags(boolean showConfirmedTags) {
+		this.showConfirmedTags = showConfirmedTags;
+	}
+	
 }

@@ -19,7 +19,10 @@
 				<h:outputText value="#{messages['terme.explanation']}" escape="false" />
 				<!-- 
 				<s:link view="/admin/topicList.xhtml" value="#{messages['admin.linkTopic']}" />
-				<h:outputText value="#{messages['admin.termeExplanationb']}" />--><br /><br />
+				<h:outputText value="#{messages['admin.termeExplanationb']}" />--><br />
+				<s:link action="#{termList.setShowConfirmedTags(true)}" value="#{messages['admin.termList.showConfirmedTags']}" rendered="#{!termList.showConfirmedTags}" />
+				<s:link action="#{termList.setShowConfirmedTags(false)}" value="#{messages['admin.termList.hideConfirmedTags']}" rendered="#{termList.showConfirmedTags}" />
+				<br />
 					
 				<h:outputText value="#{messages['terme.annotations.noResourceFound']}" rendered="#{empty termList.resultList}" />
 				<rich:dataTable id="termList" value="#{termList.resultList}" var="_resource">
@@ -52,7 +55,7 @@
 			        	<h:outputText value="#{_resource.rating}"/>
 			    	</rich:column>
 			    	
-			    	<rich:column width="500px">
+			    	<rich:column width="500px" rendered="#{termList.showConfirmedTags}">
 			        	<f:facet name="header"><h:outputText value="#{messages['terme.confirmedTags']}"/></f:facet>
 			        	<ui:repeat value="#{_resource.confirmedTags}" var="_tag" varStatus="_status">
 			        		<h:outputText value="#{_tag.name}"/><br/>
