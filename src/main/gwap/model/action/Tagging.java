@@ -144,22 +144,13 @@ import org.jboss.seam.annotations.Scope;
 			name = "tagging.unknownAnswers",
 			query = "select r.id, t.id, count(distinct tg.person.id) from Term r join r.taggings tg join tg.tag t " +
 					"where not exists (from r.confirmedTags t2 where t2=t) and not exists (from r.rejectedTags t2 where t2=t) " + 
-					"group by r.id, t.id order by r.id, count(distinct tg.person.id) desc"),
+					"group by r.id, t.id having count(distinct tg.person.id) >= :minCount order by r.id, count(distinct tg.person.id) desc"),
 	@NamedQuery(
 			name = "tagging.unknownAnswersCustom",
 			query = "select r.id, t.id, count(distinct tg.person.id) from Term r join r.taggings tg join tg.tag t " +
 					"where not exists (from r.confirmedTags t2 where t2=t) and not exists (from r.rejectedTags t2 where t2=t) " +
 					"and r.source = :source " + 
-					"group by r.id, t.id order by r.id, count(distinct tg.person.id) desc"),
-	@NamedQuery(
-			name = "tagging.unknownAnswersCount",
-			query = "select count(*) from Term r join r.taggings tg join tg.tag t " +
-					"where not exists (from r.confirmedTags t2 where t2=t) and not exists (from r.rejectedTags t2 where t2=t) "),
-	@NamedQuery(
-			name = "tagging.unknownAnswersCountCustom",
-			query = "select count(*) from Term r join r.taggings tg join tg.tag t " +
-					"where not exists (from r.confirmedTags t2 where t2=t) and not exists (from r.rejectedTags t2 where t2=t) " +
-					"and r.source = :source "),
+					"group by r.id, t.id having count(distinct tg.person.id) >= :minCount order by r.id, count(distinct tg.person.id) desc"),
 	@NamedQuery(
 			name = "tagging.getAnswerFromTag",
 			query = "select count(*) from Tagging tg " +

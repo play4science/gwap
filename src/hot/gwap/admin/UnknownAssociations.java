@@ -62,6 +62,7 @@ public class UnknownAssociations implements Serializable {
 	
 	@RequestParameter        private Long termId;
 	@RequestParameter        private Long tagId;
+	private long minPersonsForAnswer = 2;
 
 	private List<UnknownAssociation> resultList;
 	
@@ -96,6 +97,7 @@ public class UnknownAssociations implements Serializable {
 	private void createList() {
 		log.info("Loading unknown associations list");
 		Query q = customSourceBean.query("tagging.unknownAnswers");
+		q.setParameter("minCount", minPersonsForAnswer);
 		@SuppressWarnings("unchecked")
 		List<Object[]> termTagCount = q.getResultList();
 		resultList = new ArrayList<UnknownAssociation>();
@@ -117,10 +119,17 @@ public class UnknownAssociations implements Serializable {
 	}
 	
 	public boolean hasEntries() {
-		Query q = customSourceBean.query("tagging.unknownAnswersCount");
-		if (((Number)q.getSingleResult()).longValue() > 0)
+		Query q = customSourceBean.query("tagging.unknownAnswers");
+		q.setParameter("minCount", minPersonsForAnswer);
+		q.setMaxResults(1);
+		if (q.getResultList().size() > 0)
 			return true;
 		else
 			return false;
+	}
+	
+	public void showAllAnswers() {
+		minPersonsForAnswer = 1;
+		createList();
 	}
 }
