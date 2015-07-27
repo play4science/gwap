@@ -17,11 +17,11 @@ New platforms can be created by reusing existing components.
 
 Licence
 -------
-AGPL, see LICENSE.txt
+AGPL, see [the licence](LICENSE.txt).
 
 Installation
 ------------
-See [doc/Index.md](doc/Index.md) and [doc/DevelopmentEnvironment.md](doc/DevelopmentEnvironment.md) for setting up a development environment. For setting up a server environment see INSTALL.txt.
+See [doc/Index.md](doc/Index.md) and [doc/DevelopmentEnvironment.md](doc/DevelopmentEnvironment.md) for setting up a development environment. For setting up a server environment see the [installation instructions](INSTALL.txt).
 
 
 Contributing
